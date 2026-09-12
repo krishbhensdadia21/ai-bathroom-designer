@@ -57,43 +57,7 @@ async function main() {
   await page.evaluate(() => closeBlueprintUploadModal());
   await new Promise(r => setTimeout(r, 500));
 
-  // 4. Open Architectural 2D CAD Spec Sheet Modal
-  console.log('Opening Architectural Spec Modal...');
-  await page.evaluate(() => {
-    openArchitecturalSpecModal();
-  });
-  await new Promise(r => setTimeout(r, 1200));
-  await page.screenshot({ path: path.join(__dirname, 'feature_architectural_cad_spec.png') });
-  console.log('Saved: feature_architectural_cad_spec.png');
-
-  await page.evaluate(() => closeArchitecturalSpecModal());
-  await new Promise(r => setTimeout(r, 500));
-
-  // 5. Open Eco-Impact Dashboard Modal
-  console.log('Opening Eco-Impact Modal...');
-  await page.evaluate(() => {
-    openEcoImpactModal();
-  });
-  await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({ path: path.join(__dirname, 'feature_eco_impact_dashboard.png') });
-  console.log('Saved: feature_eco_impact_dashboard.png');
-
-  await page.evaluate(() => closeEcoImpactModal());
-  await new Promise(r => setTimeout(r, 500));
-
-  // 6. Open Mobile AR Modal
-  console.log('Opening Mobile AR Modal...');
-  await page.evaluate(() => {
-    openArPreviewModal();
-  });
-  await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({ path: path.join(__dirname, 'feature_mobile_ar_qr.png') });
-  console.log('Saved: feature_mobile_ar_qr.png');
-
-  await page.evaluate(() => closeArPreviewModal());
-  await new Promise(r => setTimeout(r, 500));
-
-  // 7. Open AI Assistant Modal to verify Groq prompt & results
+  // 4. Open AI Assistant Modal to verify Groq prompt & results
   console.log('Opening AI Assistant Modal...');
   await page.evaluate(() => {
     openAiAssistantModal();
