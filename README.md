@@ -17,60 +17,65 @@ All sanitaryware, furniture, and fittings represent **100% authentic, iconic KOH
 
 ---
 
-## 🚀 Key Capabilities
+## 🚀 Key Capabilities & 10/10 Architecture
 
-### 1. Spatial Clearance & NKBA / ADA Code Compliance Engine
-- **Automated Physical Clearance Calculation**: Checks minimum 21" front clearance for toilets and vanities, plus 24" unobstructed shower entry clearances in real time.
-- **Dynamic 3D Visual Feedback**: Translucent emerald green (`#10b981`) indicates code compliance, while crimson red (`#ef4444`) highlights spatial collisions.
-- **Live Clearance Badge**: Continuous status tracking with real-time pass percentage (`✅ NKBA: 100% Pass`).
+### 1. Explainable AI Recommendations (XAI)
+- **Item-Level Explainability Matrix**: Every recommended fixture displays a transparent 4-factor decision checklist:
+  - 📐 **Spatial Fit**: Validates exact physical dimensions and confirms front activity clearance (e.g. *Fits 26.5" envelope with 28" front clearance (Exceeds NKBA 21" min)*).
+  - 💰 **Budget Efficiency**: Explains value tiering and budget percentage allocation.
+  - 🎨 **Theme Cohesion**: Highlights aesthetic synergy with curated finishes (e.g. *Minimalist Modern*, *Japanese Zen*, *WasteLAB Eco-Luxury*).
+  - 💧 **Plumbing Rough-In**: Confirms physical alignment with soil stacks and supply lines.
+- **Transparent AI Trade-Off Analysis**: Explains architectural and economic trade-offs (e.g., allocating investment to dual floating vanities while using efficient HydroRail thermostatic columns to respect budget caps).
 
-### 2. Multimodal Blueprint & Sketch Vision Extractor (`/api/blueprint/extract`)
-- **Direct Layout Input**: Drag and drop architectural blueprints, CAD drawings, or hand-drawn sketches (`.png`, `.jpg`, `.pdf`).
-- **AI Edge & Bound Extraction**: An animated laser scanner analyzes wall bounds, wet-wall orientations, and door clearances, auto-populating 3D room dimensions with 1 click.
+### 2. Multi-Objective Optimization Engine
+Scores every candidate configuration across four objective functions to determine the highest-scoring Pareto-optimal bundle:
+$$\text{Composite Fitness} = w_1 \cdot \text{Spatial} + w_2 \cdot \text{Budget} + w_3 \cdot \text{WetWall} + w_4 \cdot \text{Theme}$$
+- **3 Selectable Candidate Architecture Tiers**:
+  - ⭐ **Signature Balanced**: Highest multi-objective composite fitness (97.1/100).
+  - 💡 **Essential Value**: Maximizes cost savings while retaining core Kohler durability (₹1.47L / $1,980).
+  - 👑 **Masterpiece Luxury**: Flagship Kohler innovation featuring Veil intelligent toilets, cast iron soaking tubs, and DTV+ thermostatic systems.
 
-### 3. Plumbing Wet-Wall Optimization & Sub-Floor 3D Conduits
-- **Installation Cost Reduction**: Clusters fixtures along primary wet-wall stacks, calculating simulated contractor savings (saving up to ₹45,000+).
-- **Sub-Floor MEP Conduits**: 3D x-ray view reveals the main 4" PVC soil drainage stack with brass cleanouts, alongside dual hot (red) and cold (blue) PEX supply lines with vertical fixture stub-outs.
+### 3. Hard Constraint Validation Engine
+Physics and building code clearance checks with automated traffic-light feedback:
+- 🟢 **Valid (100% Pass)**: All fixtures meet or exceed NKBA standards ($\ge 21"$ front clearance, showers $\ge 24"$, 0 collisions, within walls).
+- 🟡 **Warning**: Marginal clearance ($18" - 21"$), tight door swing or narrow walkway.
+- 🔴 **Invalid (Code Conflict)**: Overlapping fixture bounding boxes ($>0.05m$) or boundary overflow.
+- **Spatial Clearance Modal**: Detailed fixture-by-fixture breakdown with observed vs. required dimensions and corrective guidance.
 
-### 4. Interactive Lighting & Smart Ambiance Controls
-- **Kelvin Color Temperature Selection**: Toggle between **2700K (Warm)**, **4000K (Neutral)**, and **5000K (Daylight)**.
-- **Day / Dusk / Night Illumination**: Realistic sun, ambient, and spotlight calibration.
-- **Smart Fixture Night Accents**: In Night mode, the ambient light dims while smart fixtures illuminate:
-  - **Verdera Voice Mirror**: Emissive cyan Alexa indicator ring and perimeter task halo.
-  - **Tailored Vanity**: Warm under-cabinet floating LED wash.
-  - **Veil Smart Toilet**: Subtle interior blue bowl nightlight.
+### 4. Live Bi-Directional Reactivity
+- Modifying room width, depth, or ceiling height dynamically triggers `buildRoomArchitecture()` and real-time clearance re-validation.
+- Adding, moving, rotating, or removing fixtures instantly updates 3D clearance planes, the plumbing wet-wall score, and the live investment counter.
 
-### 5. 1-Click Standard Archetype Presets
-- **Powder Room (5.0' × 7.0')**: Compact luxury featuring Veil Intelligent Toilet and Jacquard Vanity.
-- **Family Bath (8.0' × 8.0')**: Balanced layout with Revel Glass Enclosure, Veil Toilet, and Tailored Vanity.
-- **Master Luxury Spa Suite (10.5' × 12.0')**: Full luxury suite with Veil, 60" Floating Vanity, Verdera Alexa Mirror, Evok Tub, and Revel Pivot Glass Box.
-- **Japanese Zen Wet-Room (9.0' × 10.0')**: Minimalist layout featuring Brazn Console, Veil Toilet, and HydroRail Column.
-
-### 6. Itemized Multi-Currency Kohler Bill of Materials & Quote
-- Live investment calculation in **INR (₹)**, **USD ($)**, and **CAD ($)**.
-- Itemized SKU specifications, dimensions, finish codes, and 1-click printable quote.
+### 5. Authentic Kohler Ecosystem & B2B Integration
+- ♻️ **Kohler WasteLAB® (Eco-Luxury)**: Closed-loop circular ceramics utilizing Abstra™ recycled tiles, Brazn consoles, and Katalyst air-induction fittings.
+- 💬 **KDX (Kohler Digital Experience) WhatsApp AI Concierge**: 1-click handoff to authorized Kohler Experience Centers (Mumbai, Delhi, Bengaluru, London, NYC, Singapore) with pre-filled WhatsApp project specifications.
+- 📐 **Studio KOHLER Specifier Data Sheet**: Professional B2B architectural tables providing exact rough-in dimensions (12" toilet rough-in, 1-1/4" P-trap, 1/2" NPT valves), conduit requirements, flow rates, and compliance certifications (ASME, EPA WaterSense, ADA).
 
 ---
 
-## 📸 Screenshots
+## 📸 Screenshots & Feature Showcase
 
-| 3D Luxury Master Spa & Plumbing Conduits | Night Ambiance & Smart Fixture Glow |
+| Explainable AI & Multi-Objective Engine | 3D Bathroom with NKBA 100% Pass |
 |---|---|
-| ![Master Spa](feature_master_spa_conduits.png) | ![Night Ambiance](feature_night_ambiance.png) |
+| ![Explainable AI](feature_ai_explainability_modal.png) | ![Applied 3D Scene](feature_ai_applied_3d_consensus.png) |
 
-| AI Multimodal Blueprint Scanner | AI Recommendation Engine Modal |
+| Studio KOHLER Specifier Data Sheet | KDX WhatsApp AI Concierge |
 |---|---|
-| ![Blueprint Scanner](feature_blueprint_scanner.png) | ![AI Assistant](feature_ai_assistant_modal.png) |
+| ![Studio KOHLER](feature_studio_kohler_modal.png) | ![KDX WhatsApp](feature_kdx_concierge_modal.png) |
+
+| Spatial Clearance & Code Report Modal | Night Ambiance & Smart Fixture Glow |
+|---|---|
+| ![Clearance Report](feature_clearance_report_modal.png) | ![Night Ambiance](feature_night_ambiance.png) |
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: HTML5, Vanilla JavaScript, CSS3, TailwindCSS, FontAwesome 6 Pro
-- **3D Graphics**: Three.js (WebGL), OrbitControls, PointerLockControls
+- **Frontend**: HTML5, Vanilla JavaScript (ES6+), CSS3, TailwindCSS, FontAwesome 6 Pro
+- **3D Engine**: Three.js (WebGL), OrbitControls, Procedural PBR Textures
 - **AI & Security**: Groq Cloud API, Meta Llama Prompt Guard 22M (`meta-llama/llama-prompt-guard-2-22m`), Llama 3.3 70B (`llama-3.3-70b-versatile`)
 - **Backend / Server**: Node.js HTTP Server (`server.js`)
-- **Deployment**: GitHub Pages (Client-Side Resilient) & Local Dev Server
+- **Deployment**: 100% Client-Side Resilient on GitHub Pages & Full Local Node Server
 
 ---
 
@@ -95,7 +100,8 @@ All sanitaryware, furniture, and fittings represent **100% authentic, iconic KOH
 3. Open your browser:
    Navigate to **`http://localhost:3000`**
 
-*Note: You can also open `index.html` directly in any web browser — the built-in spatial intelligence engine handles layout recommendations client-side automatically.*
+*Note: You can also open `index.html` directly in any web browser or use GitHub Pages — the built-in spatial intelligence engine handles layout recommendations and constraint validation client-side automatically.*
+
 
 ---
 

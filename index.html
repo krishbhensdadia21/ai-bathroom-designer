@@ -208,6 +208,18 @@
         </div>
       </div>
 
+      <!-- KDX WhatsApp Concierge Button -->
+      <button onclick="openKdxConciergeModal()" id="btn-open-kdx" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-full font-bold text-xs flex items-center space-x-1.5 shadow-xs hover:shadow transition" title="Kohler Digital Experience (KDX) AI Concierge">
+        <i class="fa-brands fa-whatsapp text-white text-xs"></i>
+        <span class="hidden sm:inline">KDX Concierge</span>
+      </button>
+
+      <!-- Studio KOHLER Specifier Button -->
+      <button onclick="openStudioKohlerModal()" id="btn-open-specifier" class="bg-white hover:bg-gray-100 text-gray-900 border border-gray-200 px-3 py-1.5 rounded-full font-bold text-xs flex items-center space-x-1.5 shadow-xs hover:shadow transition" title="Studio KOHLER Specifier Data Sheet for Architects">
+        <i class="fa-solid fa-compass-drafting text-blue-600 text-xs"></i>
+        <span class="hidden md:inline">Studio KOHLER</span>
+      </button>
+
       <!-- Kohler Quote Button -->
       <button onclick="openShoppingList()" id="btn-open-bom" class="bg-black hover:bg-gray-900 text-white px-3.5 py-1.5 rounded-full font-bold text-xs flex items-center space-x-1.5 shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
         <i class="fa-solid fa-file-invoice text-amber-400 text-xs"></i>
@@ -602,15 +614,15 @@
             <div class="grid grid-cols-3 gap-2 text-xs">
               <div>
                 <span class="text-[10px] text-gray-500 font-medium">Width (ft)</span>
-                <input type="number" id="ai-input-width" value="10.5" step="0.5" min="5" max="25" class="w-full bg-white border border-gray-200 rounded-xl px-2.5 py-1.5 font-bold outline-none focus:border-black">
+                <input type="number" id="ai-input-width" value="10.5" step="0.5" min="5" max="25" oninput="onAiDimensionInputChange()" class="w-full bg-white border border-gray-200 rounded-xl px-2.5 py-1.5 font-bold outline-none focus:border-black">
               </div>
               <div>
                 <span class="text-[10px] text-gray-500 font-medium">Depth (ft)</span>
-                <input type="number" id="ai-input-depth" value="9.2" step="0.5" min="5" max="25" class="w-full bg-white border border-gray-200 rounded-xl px-2.5 py-1.5 font-bold outline-none focus:border-black">
+                <input type="number" id="ai-input-depth" value="9.2" step="0.5" min="5" max="25" oninput="onAiDimensionInputChange()" class="w-full bg-white border border-gray-200 rounded-xl px-2.5 py-1.5 font-bold outline-none focus:border-black">
               </div>
               <div>
                 <span class="text-[10px] text-gray-500 font-medium">Height (ft)</span>
-                <input type="number" id="ai-input-height" value="8.5" step="0.5" min="7" max="14" class="w-full bg-white border border-gray-200 rounded-xl px-2.5 py-1.5 font-bold outline-none focus:border-black">
+                <input type="number" id="ai-input-height" value="8.5" step="0.5" min="7" max="14" oninput="onAiDimensionInputChange()" class="w-full bg-white border border-gray-200 rounded-xl px-2.5 py-1.5 font-bold outline-none focus:border-black">
               </div>
             </div>
             <div class="text-[11px] text-gray-500 flex justify-between font-mono">
@@ -639,7 +651,7 @@
             <div class="grid grid-cols-2 gap-2 text-xs" id="ai-theme-container">
               <button onclick="selectAiTheme('Minimalist Modern')" class="ai-theme-btn active text-left p-3 rounded-xl border-2 border-black bg-gray-50 transition" data-theme="Minimalist Modern">
                 <div class="font-black text-gray-900">Minimalist Modern</div>
-                <div class="text-[10px] text-gray-500 mt-0.5">Veil, Purist, Matte Black & Polished Chrome</div>
+                <div class="text-[10px] text-gray-500 mt-0.5">Veil, Purist, Matte Black & Chrome</div>
               </button>
               <button onclick="selectAiTheme('Classic Luxury')" class="ai-theme-btn text-left p-3 rounded-xl border border-gray-200 hover:border-gray-400 bg-white transition" data-theme="Classic Luxury">
                 <div class="font-black text-gray-900">Classic Luxury</div>
@@ -652,6 +664,13 @@
               <button onclick="selectAiTheme('Industrial Contemporary')" class="ai-theme-btn text-left p-3 rounded-xl border border-gray-200 hover:border-gray-400 bg-white transition" data-theme="Industrial Contemporary">
                 <div class="font-black text-gray-900">Industrial Chic</div>
                 <div class="text-[10px] text-gray-500 mt-0.5">Composed, Reach, Moxie Sound</div>
+              </button>
+              <button onclick="selectAiTheme('Kohler WasteLAB Eco-Luxury')" class="ai-theme-btn text-left p-3 rounded-xl border border-emerald-200 hover:border-emerald-500 bg-emerald-50/40 transition col-span-2" data-theme="Kohler WasteLAB Eco-Luxury">
+                <div class="flex items-center space-x-2">
+                  <span class="font-black text-emerald-950">Kohler WasteLAB® (Eco-Luxury)</span>
+                  <span class="text-[9px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded">Closed-Loop</span>
+                </div>
+                <div class="text-[10px] text-emerald-800 mt-0.5">Abstra Recycled Tiles, Brazn Console & Katalyst Air-Induction Fittings</div>
               </button>
             </div>
           </div>
@@ -693,43 +712,103 @@
         </div>
 
         <!-- Right: AI Recommendation Output & 3D Apply (7 cols) -->
-        <div class="lg:col-span-7 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-gray-100 lg:pl-8 space-y-4">
+        <div class="lg:col-span-7 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-gray-100 lg:pl-8 space-y-3">
           <div>
-            <!-- Status Badge: AI Engine Active -->
-            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+            <!-- Status Badge: AI Engine Active & Multi-Objective Fitness -->
+            <div class="flex items-center justify-between pb-2 border-b border-gray-100">
               <div class="flex items-center space-x-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="text-xs font-bold text-gray-900">AI Engine Active</span>
+                <span class="text-xs font-bold text-gray-900">AI Multi-Objective Engine</span>
+              </div>
+              <div class="flex items-center space-x-1.5">
+                <span class="text-[10px] text-gray-400 font-bold uppercase">Fitness Score:</span>
+                <span id="ai-composite-score-badge" class="font-mono font-black text-xs bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded-full">97.1 / 100</span>
+              </div>
+            </div>
+
+            <!-- 3 Selectable Alternative Tiers -->
+            <div class="mt-3 space-y-1.5">
+              <div class="flex justify-between items-center text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                <span>Select Candidate Bundle Architecture:</span>
+                <span class="text-amber-700" id="ai-active-tier-tag">Signature Balanced (Best Multi-Objective)</span>
+              </div>
+              <div class="grid grid-cols-3 gap-1.5 p-1 bg-gray-100 rounded-xl text-xs font-bold" id="ai-alternative-tabs">
+                <button onclick="switchAiAlternativeTier('signature')" id="tab-tier-signature" class="py-2 px-2 rounded-lg bg-black text-white shadow-xs transition text-center">
+                  <div class="flex items-center justify-center space-x-1">
+                    <i class="fa-solid fa-star text-amber-400 text-[10px]"></i>
+                    <span>Signature</span>
+                  </div>
+                  <span class="block text-[9px] text-amber-300 font-mono mt-0.5" id="tab-price-signature">₹2,93,700</span>
+                </button>
+                <button onclick="switchAiAlternativeTier('essential')" id="tab-tier-essential" class="py-2 px-2 rounded-lg text-gray-700 hover:bg-white transition text-center">
+                  <span>Essential Value</span>
+                  <span class="block text-[9px] text-gray-500 font-mono mt-0.5" id="tab-price-essential">₹1,47,700</span>
+                </button>
+                <button onclick="switchAiAlternativeTier('luxury')" id="tab-tier-luxury" class="py-2 px-2 rounded-lg text-gray-700 hover:bg-white transition text-center">
+                  <span>Masterpiece</span>
+                  <span class="block text-[9px] text-purple-700 font-mono mt-0.5" id="tab-price-luxury">₹5,18,600</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Multi-Objective Scorecard Breakdown -->
+            <div class="grid grid-cols-4 gap-1.5 mt-2.5 text-center text-[10px]">
+              <div class="bg-gray-50 border border-gray-200/80 rounded-lg p-1.5">
+                <span class="text-gray-400 block font-bold text-[9px]">SPATIAL FIT</span>
+                <strong class="text-emerald-700 font-mono text-xs" id="score-spatial">98%</strong>
+              </div>
+              <div class="bg-gray-50 border border-gray-200/80 rounded-lg p-1.5">
+                <span class="text-gray-400 block font-bold text-[9px]">BUDGET FIT</span>
+                <strong class="text-blue-700 font-mono text-xs" id="score-budget">94%</strong>
+              </div>
+              <div class="bg-gray-50 border border-gray-200/80 rounded-lg p-1.5">
+                <span class="text-gray-400 block font-bold text-[9px]">WET-WALL</span>
+                <strong class="text-purple-700 font-mono text-xs" id="score-wetwall">95%</strong>
+              </div>
+              <div class="bg-gray-50 border border-gray-200/80 rounded-lg p-1.5">
+                <span class="text-gray-400 block font-bold text-[9px]">THEME FIT</span>
+                <strong class="text-amber-700 font-mono text-xs" id="score-theme">97%</strong>
+              </div>
+            </div>
+
+            <!-- Transparent AI Trade-Off Box -->
+            <div class="mt-2.5 p-3 bg-amber-50/90 border border-amber-200/80 rounded-xl text-xs flex items-start space-x-2.5">
+              <i class="fa-solid fa-scale-balanced text-amber-600 text-sm mt-0.5 shrink-0"></i>
+              <div>
+                <span class="font-black text-amber-950 block text-[11px]">AI Trade-Off & Optimization Rationale:</span>
+                <p class="text-[11px] text-amber-900 mt-0.5 leading-snug" id="ai-tradeoff-text">
+                  Balanced budget to allocate funds for the Tailored Dual Vanity and smart fixtures, while utilizing the efficient HydroRail system to stay within target budget limits.
+                </p>
               </div>
             </div>
 
             <!-- Concept Statement -->
-            <div class="mt-4 bg-gradient-to-br from-gray-50 to-amber-50/40 p-4 rounded-2xl border border-gray-200/80">
-              <span class="text-[10px] font-bold uppercase tracking-widest text-amber-700">Curated Design Concept</span>
-              <p class="text-xs font-bold text-gray-900 mt-1 leading-relaxed" id="ai-concept-text">
+            <div class="mt-2.5 bg-gray-50 p-3 rounded-xl border border-gray-200/80">
+              <span class="text-[9px] font-bold uppercase tracking-widest text-gray-500">Design Concept</span>
+              <p class="text-[11px] font-bold text-gray-900 mt-0.5 leading-snug" id="ai-concept-text">
                 A sleek, matte-black-accented sanctuary featuring smart technology and dual vanity functionality within a compact footprint.
               </p>
             </div>
 
-            <!-- Recommended Products List -->
-            <div class="mt-4">
-              <h4 class="text-xs font-extrabold text-gray-800 uppercase tracking-wider mb-2.5 flex items-center justify-between">
-                <span>Recommended Kohler Bundle</span>
+            <!-- Recommended Products List with Explainable Badges -->
+            <div class="mt-3">
+              <h4 class="text-xs font-extrabold text-gray-800 uppercase tracking-wider mb-2 flex items-center justify-between">
+                <span>Selected Candidate Fixtures</span>
                 <span class="text-[11px] font-bold text-emerald-700 font-mono" id="ai-bundle-total-preview">₹2,93,700</span>
               </h4>
 
-              <div class="space-y-2.5 max-h-[260px] overflow-y-auto custom-scroll pr-1" id="ai-bundle-items-container">
-                <!-- Injected via JavaScript -->
+              <div class="space-y-2 max-h-[220px] overflow-y-auto custom-scroll pr-1" id="ai-bundle-items-container">
+                <!-- Injected via JavaScript with 4 explainability badges each -->
               </div>
             </div>
 
             <!-- Plumbing Wet-Wall Optimization Card -->
-            <div class="mt-3 text-xs">
+            <div class="mt-2.5 text-xs">
               <div class="bg-blue-50/90 border border-blue-200/80 rounded-xl p-2.5 flex items-center space-x-2">
                 <i class="fa-solid fa-faucet-drip text-blue-600 text-base shrink-0"></i>
                 <div>
                   <div class="text-[9px] text-blue-800 font-bold uppercase tracking-wider">Plumbing Wet-Wall Stack</div>
-                  <div class="font-black text-blue-950 font-mono text-xs" id="ai-wetwall-score">94% Stack Optimized (Save ₹42,000)</div>
+                  <div class="font-black text-blue-950 font-mono text-xs" id="ai-wetwall-score">95% Stack Optimized (Save ₹45,000)</div>
                 </div>
               </div>
             </div>
@@ -1086,6 +1165,201 @@
         <button onclick="submitShowroomRfq()" class="w-full bg-black hover:bg-gray-900 text-white py-3.5 rounded-2xl font-black text-xs shadow-xl transition flex items-center justify-center space-x-2">
           <i class="fa-solid fa-paper-plane text-amber-400"></i>
           <span>Send Technical Spec & Request Dealer Quote</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL B: KOHLER DIGITAL EXPERIENCE (KDX) WHATSAPP CONCIERGE ==================== -->
+  <div id="modal-kdx-concierge" class="fixed inset-0 z-50 bg-black/65 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[92vh] flex flex-col overflow-hidden border border-gray-100 animate-in fade-in duration-200">
+      <div class="px-6 py-4 bg-[#075e54] text-white flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-white/20 text-white flex items-center justify-center font-black text-xl shadow-xs">
+            <i class="fa-brands fa-whatsapp"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-black tracking-tight">KDX WhatsApp AI Concierge</h2>
+            <p class="text-[11px] text-emerald-100">Live Project Handoff & Kohler VIP Specifier Support</p>
+          </div>
+        </div>
+        <button onclick="closeKdxConciergeModal()" class="text-emerald-200 hover:text-white w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto custom-scroll space-y-4 text-xs">
+        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5 flex items-start space-x-3">
+          <i class="fa-solid fa-circle-check text-emerald-600 text-sm mt-0.5 shrink-0"></i>
+          <p class="text-emerald-900 text-[11px] leading-relaxed">
+            Connect directly with an authorized <strong>Kohler Experience Center (KEC) Senior Specification Engineer</strong> on WhatsApp. Your current fixture selection, rough-in requirements, and architectural floorplan dimensions will be pre-formatted for 1-click consultation.
+          </p>
+        </div>
+
+        <div>
+          <label class="block text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-1.5">Nearest Kohler Experience Center (KEC)</label>
+          <select id="kdx-showroom-select" onchange="updateKdxPreviewText()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 font-bold text-gray-900 outline-none focus:border-[#075e54]">
+            <option value="+919820012345" data-city="Mumbai">KEC Mumbai — Shakti Mills, Mahalaxmi</option>
+            <option value="+919810012345" data-city="New Delhi">KEC New Delhi — MG Road, Sultanpur</option>
+            <option value="+919880012345" data-city="Bengaluru">KEC Bengaluru — 100 Ft Rd, Indiranagar</option>
+            <option value="+12125550199" data-city="New York">KEC New York — 6 W 22nd St, Flatiron</option>
+            <option value="+442075550199" data-city="London">KEC London — 44-48 St John St, Clerkenwell</option>
+            <option value="+6565550199" data-city="Singapore">KEC Singapore — 52 Peck Seah St</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-1">Architect / Client Name</label>
+            <input type="text" id="kdx-client-name" oninput="updateKdxPreviewText()" placeholder="Ar. Rajesh Sharma" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-[#075e54] font-semibold text-xs">
+          </div>
+          <div>
+            <label class="block text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-1">Project Code</label>
+            <input type="text" id="kdx-project-code" value="KOHLER-AI-9021" readonly class="w-full bg-gray-100 border border-gray-200 rounded-xl px-3 py-2 font-mono font-bold text-xs text-gray-700">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-1">Pre-Generated WhatsApp Message Preview</label>
+          <textarea id="kdx-preview-text" rows="6" readonly class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-[11px] font-mono text-gray-700 leading-relaxed outline-none select-all"></textarea>
+        </div>
+
+        <div class="pt-2">
+          <button onclick="sendKdxWhatsApp()" class="w-full bg-[#25D366] hover:bg-[#1ebd5a] text-white py-3.5 rounded-2xl font-black text-xs shadow-lg transition flex items-center justify-center space-x-2">
+            <i class="fa-brands fa-whatsapp text-base"></i>
+            <span>Launch WhatsApp Chat with Kohler Specifier</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL C: STUDIO KOHLER ARCHITECTURAL SPECIFIER DATA SHEET ==================== -->
+  <div id="modal-studio-kohler" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col overflow-hidden border border-gray-100 animate-in fade-in duration-200">
+      <div class="px-8 py-5 bg-[#0f172a] text-white flex justify-between items-center border-b border-gray-800">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-black text-lg shadow-xs">
+            <i class="fa-solid fa-compass-drafting"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="text-lg font-black tracking-tight">Studio KOHLER Specifier Data Sheet</h2>
+              <span class="text-[9px] uppercase tracking-wider font-extrabold bg-blue-500/20 text-blue-300 border border-blue-400/30 px-2 py-0.5 rounded">B2B Architectural Specs</span>
+            </div>
+            <p class="text-xs text-gray-400">Technical rough-in dimensions, supply line requirements & plumbing standards</p>
+          </div>
+        </div>
+        <button onclick="closeStudioKohlerModal()" class="text-gray-400 hover:text-white w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="p-8 overflow-y-auto custom-scroll space-y-5 text-xs">
+        <div class="flex justify-between items-center bg-gray-50 border border-gray-200 p-4 rounded-2xl">
+          <div>
+            <div class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Project Technical Summary</div>
+            <div class="text-sm font-black text-gray-900 mt-0.5" id="specifier-project-title">KOHLER-AI-9021 — Master Suite Spec</div>
+            <div class="text-xs text-gray-600 font-mono mt-0.5" id="specifier-room-meta">10.5 ft × 9.2 ft | 96.6 sq ft | Ceiling: 8.5 ft</div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="window.print()" class="bg-white hover:bg-gray-100 text-gray-800 border border-gray-300 px-3.5 py-2 rounded-xl font-bold text-xs flex items-center space-x-1.5 shadow-xs transition">
+              <i class="fa-solid fa-print text-gray-500"></i>
+              <span>Print Specification</span>
+            </button>
+            <button onclick="copySpecifierTable()" class="bg-black hover:bg-gray-900 text-white px-3.5 py-2 rounded-xl font-bold text-xs flex items-center space-x-1.5 shadow-xs transition">
+              <i class="fa-solid fa-copy text-amber-400"></i>
+              <span>Copy Cut Sheet Data</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="border border-gray-200 rounded-2xl overflow-hidden shadow-xs">
+          <table class="w-full text-left border-collapse" id="table-studio-kohler">
+            <thead>
+              <tr class="bg-gray-100/80 border-b border-gray-200 text-[10px] uppercase font-black text-gray-600 tracking-wider">
+                <th class="p-3">Fixture & Series</th>
+                <th class="p-3">Kohler SKU</th>
+                <th class="p-3">Rough-In Dimensions</th>
+                <th class="p-3">Supply & Drain Conduits</th>
+                <th class="p-3">Flow / Flush Rate</th>
+                <th class="p-3">Building Standards</th>
+              </tr>
+            </thead>
+            <tbody id="studio-kohler-tbody" class="divide-y divide-gray-100 font-medium">
+              <!-- Dynamically populated from placedProducts -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 text-xs">
+          <div class="bg-blue-50/80 border border-blue-200 rounded-2xl p-3.5">
+            <div class="font-black text-blue-950 flex items-center space-x-1.5">
+              <i class="fa-solid fa-faucet text-blue-600"></i>
+              <span>Water Supply Stack</span>
+            </div>
+            <p class="text-[11px] text-blue-900 mt-1 leading-snug">Main trunk: 3/4" PEX-A with 1/2" fixture branches. Dynamic water pressure requirement: 45–80 PSI.</p>
+          </div>
+          <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-3.5">
+            <div class="font-black text-emerald-950 flex items-center space-x-1.5">
+              <i class="fa-solid fa-water text-emerald-600"></i>
+              <span>Waste & Soil Stack</span>
+            </div>
+            <p class="text-[11px] text-emerald-900 mt-1 leading-snug">4" Schedule 40 PVC main soil stack with 1/4" per foot slope. Fixture drainage branch: 2" PVC.</p>
+          </div>
+          <div class="bg-purple-50/80 border border-purple-200 rounded-2xl p-3.5">
+            <div class="font-black text-purple-950 flex items-center space-x-1.5">
+              <i class="fa-solid fa-bolt text-purple-600"></i>
+              <span>Electrical Requirements</span>
+            </div>
+            <p class="text-[11px] text-purple-900 mt-1 leading-snug">Dedicated 120V 15A/20A GFCI circuit required for smart bidet toilet, mirror defogger, and LED drivers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL D: DETAILED HARD CONSTRAINT & CLEARANCE REPORT ==================== -->
+  <div id="modal-clearance-details" class="fixed inset-0 z-50 bg-black/65 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden border border-gray-100 animate-in fade-in duration-200">
+      <div class="px-6 py-4 bg-gray-900 text-white flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <div id="clearance-report-icon-container" class="w-9 h-9 rounded-xl bg-emerald-500 text-black flex items-center justify-center font-black text-base shadow-sm">
+            <i class="fa-solid fa-shield-halved" id="clearance-report-main-icon"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-black tracking-tight" id="clearance-report-title">Spatial Clearance & Code Report</h2>
+            <p class="text-[11px] text-gray-400">NKBA Planning Guidelines & Physical Collision Detection</p>
+          </div>
+        </div>
+        <button onclick="closeClearanceModal()" class="text-gray-400 hover:text-white w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto custom-scroll space-y-4 text-xs">
+        <div id="clearance-summary-banner" class="p-4 rounded-2xl border flex items-center space-x-3 bg-emerald-50 border-emerald-200 text-emerald-950">
+          <i class="fa-solid fa-circle-check text-2xl text-emerald-600" id="clearance-summary-icon"></i>
+          <div>
+            <span class="font-extrabold text-sm block" id="clearance-summary-heading">All Clearances 100% Compliant</span>
+            <span class="text-[11px] text-gray-600" id="clearance-summary-desc">Every fixture meets or exceeds NKBA building code clearances.</span>
+          </div>
+        </div>
+
+        <div class="space-y-2" id="clearance-report-items-container">
+          <!-- Dynamically populated from evaluateHardConstraints() -->
+        </div>
+
+        <div class="bg-gray-50 border border-gray-200 p-3.5 rounded-2xl text-[11px] text-gray-600 space-y-1">
+          <div class="font-bold text-gray-800">NKBA Architectural Standards:</div>
+          <div>• <strong>Toilet Clearance:</strong> Minimum 21" front (0.53m), 30" width clearance</div>
+          <div>• <strong>Vanity Activity Zone:</strong> Minimum 21" front (0.53m)</div>
+          <div>• <strong>Shower Entry:</strong> Minimum 24" (0.61m) unobstructed entry</div>
+          <div>• <strong>Physical Collisions:</strong> Fixture overlap & wall boundary overflow strictly flagged</div>
+        </div>
+
+        <button onclick="closeClearanceModal()" class="w-full bg-black hover:bg-gray-900 text-white py-3 rounded-xl font-bold text-xs shadow-md transition">
+          Close Report
         </button>
       </div>
     </div>
@@ -2873,12 +3147,31 @@
       document.querySelectorAll('.ai-theme-btn').forEach(btn => {
         if (btn.dataset.theme === theme) {
           btn.classList.add('active', 'border-black', 'bg-gray-50', 'border-2');
-          btn.classList.remove('border-gray-200', 'bg-white');
+          btn.classList.remove('border-gray-200', 'bg-white', 'border-emerald-200', 'bg-emerald-50/40');
         } else {
           btn.classList.remove('active', 'border-black', 'bg-gray-50', 'border-2');
-          btn.classList.add('border-gray-200', 'bg-white');
+          if (btn.dataset.theme === 'Kohler WasteLAB Eco-Luxury') {
+            btn.classList.add('border-emerald-200', 'bg-emerald-50/40');
+          } else {
+            btn.classList.add('border-gray-200', 'bg-white');
+          }
         }
       });
+    }
+
+    function onAiDimensionInputChange() {
+      const wFt = parseFloat(document.getElementById('ai-input-width').value) || 10.5;
+      const dFt = parseFloat(document.getElementById('ai-input-depth').value) || 9.2;
+      const hFt = parseFloat(document.getElementById('ai-input-height').value) || 8.5;
+      const sqFt = (wFt * dFt).toFixed(1);
+      const sqM = (wFt * dFt * 0.092903).toFixed(2);
+      const areaEl = document.getElementById('ai-calculated-area');
+      if (areaEl) areaEl.innerText = `${sqFt} sq ft (${sqM} m²)`;
+
+      roomWidth = Math.round(wFt * 0.3048 * 10) / 10;
+      roomDepth = Math.round(dFt * 0.3048 * 10) / 10;
+      roomHeight = Math.round(hFt * 0.3048 * 10) / 10;
+      buildRoomArchitecture();
     }
 
     function updateAiBudgetDisplay(val) {
@@ -2936,75 +3229,317 @@
       }
     }
 
-    function generateClientKohlerBundle(theme = 'Minimalist Modern', budget = '₹3,50,000', dimensions = '10ft x 8ft') {
+    function generateClientKohlerBundle(theme = 'Minimalist Modern', budget = '₹3,50,000', dimensions = '10.5ft x 9.2ft') {
       const isZen = theme.toLowerCase().includes('zen');
       const isClassic = theme.toLowerCase().includes('classic');
+      const isEco = theme.toLowerCase().includes('waste') || theme.toLowerCase().includes('eco');
 
-      const toilet = isZen ? {
+      // Alternative 1: Signature Balanced
+      const sigToilet = isZen ? {
         sku_code: 'K-5401IN-0', name: 'Veil Smart One-Piece Toilet', price_inr: 85000, price_usd: 1150,
-        justification: 'Organic sculptural silhouette with bidet integration harmonizes with serene Zen ambiance.'
+        justification: 'Organic sculptural silhouette with bidet integration harmonizes with serene Zen ambiance.',
+        explainability: {
+          spatial_fit: 'Fits 26.5" envelope with 28" front clearance (Exceeds NKBA 21" min)',
+          budget_fit: 'Balanced 28% allocation of total target budget',
+          theme_fit: 'Organic sculptural form aligns with Japanese Zen aesthetic',
+          plumbing_fit: '12" standard rough-in aligns directly with 4" PVC soil stack'
+        }
+      } : isEco ? {
+        sku_code: 'K-5401IN-0', name: 'Veil Eco-Smart Toilet', price_inr: 88000, price_usd: 1180,
+        justification: 'Dual-flush 0.8/1.28 GPF with touchless UV wand sanitization and minimal water footprint.',
+        explainability: {
+          spatial_fit: 'Compact elongated bowl provides 32" clearance to opposing wall',
+          budget_fit: 'High-efficiency investment saving 28,000L water annually',
+          theme_fit: 'Sculptural silhouette matches WasteLAB Abstra architectural tiles',
+          plumbing_fit: 'Back wet-wall aligned with integrated P-trap'
+        }
       } : isClassic ? {
         sku_code: 'K-3983IN-0', name: 'Memoirs Stately Toilet', price_inr: 35000, price_usd: 480,
-        justification: 'Architectural crown molding detailing brings Edwardian grandeur into the classic luxury space.'
+        justification: 'Architectural crown molding detailing brings Edwardian grandeur into the classic luxury space.',
+        explainability: {
+          spatial_fit: 'Elongated bowl fits standard 30" wide water closet alcove',
+          budget_fit: 'Cost-effective classic choice at 12% of total budget',
+          theme_fit: 'Architectural stepped moldings harmonize with Memoirs suite',
+          plumbing_fit: 'Standard 12" floor rough-in with 3/8" supply stop'
+        }
       } : {
         sku_code: 'K-28529IN-0', name: 'Leap Smart Elongated Toilet', price_inr: 47000, price_usd: 640,
-        justification: 'Slim contemporary lines and touchless UV sanitization for a high-efficiency minimalist layout.'
+        justification: 'Slim contemporary lines and touchless UV sanitization for a high-efficiency minimalist layout.',
+        explainability: {
+          spatial_fit: 'Ultra-slim profile preserves 34" unobstructed activity zone',
+          budget_fit: 'Balanced 16% of total investment target',
+          theme_fit: 'Sleek geometric lines harmonize with Minimalist Modern palette',
+          plumbing_fit: '12" rough-in connects directly to back wet-wall drain'
+        }
       };
 
-      const faucet = isClassic ? {
-        sku_code: 'K-10129IN-4', name: 'Artifacts Column Spout Faucet', price_inr: 32000, price_usd: 430,
-        justification: 'Vintage artisan widespread handles in polished chrome.'
-      } : isZen ? {
-        sku_code: 'K-73159IN-4', name: 'Composed Single-Handle Faucet', price_inr: 14500, price_usd: 195,
-        justification: 'Side-mount lever with clean cylindrical geometry.'
-      } : {
-        sku_code: 'K-99856IN-4', name: 'Purist Tall Basin Faucet', price_inr: 19800, price_usd: 270,
-        justification: 'Architectural purity with single-control water stream.'
-      };
-
-      const vanity = isClassic ? {
+      const sigVanity = isClassic ? {
         sku_code: 'K-99507IN-0', name: 'Jacquard 36" Solid Wood Vanity', price_inr: 58000, price_usd: 790,
-        justification: 'Traditional shaker drawer panels and slow-close drawers.'
+        justification: 'Traditional shaker drawer panels and slow-close drawers.',
+        explainability: {
+          spatial_fit: '36" width allows 24" clearance from entry doorway',
+          budget_fit: 'Solid hardwood craftsmanship within mid-tier budget allocation',
+          theme_fit: 'Shaker craftsmanship complements Classic Luxury suite',
+          plumbing_fit: 'Open back rail accommodates 1-1/4" wall P-trap at 19" AFF'
+        }
       } : isZen ? {
         sku_code: 'K-21057-0', name: 'Brazn Zen Minimalist Console', price_inr: 72000, price_usd: 980,
-        justification: 'Asymmetric matte black console with integrated vessel basin.'
+        justification: 'Asymmetric matte black console with integrated vessel basin.',
+        explainability: {
+          spatial_fit: 'Cantilevered design maximizes visual floor clearance by 40%',
+          budget_fit: 'Architectural statement console at 24% budget allocation',
+          theme_fit: 'Minimalist asymmetry aligns with Wabi-Sabi philosophy',
+          plumbing_fit: 'Concealed bottle trap rough-in aligns directly to wet-wall'
+        }
+      } : isEco ? {
+        sku_code: 'K-21057-0', name: 'WasteLAB Brazn Recycled Console', price_inr: 76000, price_usd: 1020,
+        justification: 'Handcrafted vitreous china console with WasteLAB recycled glaze.',
+        explainability: {
+          spatial_fit: 'Floating console provides 28" front activity clearance',
+          budget_fit: 'LEED credit qualifying material with premium durability',
+          theme_fit: 'Raw tactile ceramic finish embodies Kohler WasteLAB ethos',
+          plumbing_fit: 'Standard 1-1/4" brass drain waste with 1/2" PEX supply'
+        }
       } : {
         sku_code: 'K-99539-LG', name: 'Tailored 60" Dual Vanity', price_inr: 145000, price_usd: 1950,
-        justification: 'Floating master double washstand with quartz top and undermount basins.'
+        justification: 'Floating master double washstand with quartz top and undermount basins.',
+        explainability: {
+          spatial_fit: '60" dual washstand fits rear wall with 30" front clearance',
+          budget_fit: 'Primary investment piece at 49% of budget allocation',
+          theme_fit: 'Matte lacquer finish matches matte black architectural accents',
+          plumbing_fit: 'Dual rough-in drains cluster directly onto 4" soil stack'
+        }
       };
 
-      const shower = isClassic ? {
-        sku_code: 'K-76465IN-CP', name: 'HydroRail Thermostatic System', price_inr: 65000, price_usd: 880,
-        justification: 'Exposed thermostatic rail column with wide drenching rainhead.'
+      const sigFaucet = isClassic ? {
+        sku_code: 'K-10129IN-4', name: 'Artifacts Column Spout Faucet', price_inr: 32000, price_usd: 430,
+        justification: 'Vintage artisan widespread handles in polished chrome.',
+        explainability: {
+          spatial_fit: 'Spout reach of 5.5" centers cleanly over undermount bowl',
+          budget_fit: 'High-grade solid brass construction with lifetime finish',
+          theme_fit: 'Turn-of-the-century column details enhance Classic Luxury',
+          plumbing_fit: 'Standard 8"-16" widespread 3-hole flexible supply'
+        }
+      } : isZen ? {
+        sku_code: 'K-73159IN-4', name: 'Composed Single-Handle Faucet', price_inr: 14500, price_usd: 195,
+        justification: 'Side-mount lever with clean cylindrical geometry.',
+        explainability: {
+          spatial_fit: 'Minimal footprint leaves vanity counter open and clutter-free',
+          budget_fit: 'High-value precision engineering at under 5% of budget',
+          theme_fit: 'Pure cylindrical geometry embodies Zen minimalism',
+          plumbing_fit: 'Single-hole mount with 3/8" flexible braided hoses'
+        }
       } : {
-        sku_code: 'K-26292IN-CP', name: 'Statement Multifunction Showerhead', price_inr: 28500, price_usd: 380,
-        justification: 'Katalyst air-induction rainhead for luxurious coverage.'
+        sku_code: 'K-99856IN-4', name: 'Purist Tall Basin Faucet', price_inr: 19800, price_usd: 270,
+        justification: 'Architectural purity with single-control water stream.',
+        explainability: {
+          spatial_fit: 'Tall vessel height provides generous 8.2" hand clearance',
+          budget_fit: 'Premium Kohler flagship fitting at 7% budget share',
+          theme_fit: 'Architectural line represents peak modern purity',
+          plumbing_fit: 'Single-lever 1.2 GPM WaterSense compliant supply lines'
+        }
       };
 
-      const mirror = {
+      const sigShower = isClassic ? {
+        sku_code: 'K-76465IN-CP', name: 'HydroRail Thermostatic System', price_inr: 65000, price_usd: 880,
+        justification: 'Exposed thermostatic rail column with wide drenching rainhead.',
+        explainability: {
+          spatial_fit: 'Surface-mounted column requires zero in-wall framing depth',
+          budget_fit: 'Full thermostatic system without complex in-wall plumbing cost',
+          theme_fit: 'Exposed chrome piping adds authentic vintage luxury',
+          plumbing_fit: '1/2" NPT connection to hot/cold supply lines'
+        }
+      } : isEco ? {
+        sku_code: 'K-26292IN-CP', name: 'Katalyst Air-Induction Shower', price_inr: 32000, price_usd: 440,
+        justification: 'Infuses 2 liters of air per minute for rich deluge at 1.75 GPM.',
+        explainability: {
+          spatial_fit: 'Fits 36"x48" walk-in wet area with 28" glass clearance',
+          budget_fit: 'Reduces hot water energy consumption by 30%',
+          theme_fit: 'Minimal circular geometric profile in polished chrome',
+          plumbing_fit: '1/2" NPT brass drop-ear elbow at 84" AFF'
+        }
+      } : {
+        sku_code: 'K-76465IN-CP', name: 'HydroRail Thermostatic System', price_inr: 65000, price_usd: 880,
+        justification: 'Exposed thermostatic rail column with wide drenching rainhead.',
+        explainability: {
+          spatial_fit: 'Exposed column fits corner enclosure leaving 26" entry',
+          budget_fit: 'Thermostatic anti-scald safety within target budget',
+          theme_fit: 'Contemporary minimalist finish matches Purist brassware',
+          plumbing_fit: 'Direct wet-wall mount with 1/2" supply connection'
+        }
+      };
+
+      const sigMirror = {
         sku_code: 'K-99009IN-NA', name: 'Verdera Voice Lighted Smart Mirror', price_inr: 38000, price_usd: 520,
-        justification: 'Integrated LED perimeter illumination with Alexa voice dimming.'
+        justification: 'Integrated LED perimeter illumination with Alexa voice dimming.',
+        explainability: {
+          spatial_fit: 'Recessed or surface wall-mount centers directly over vanity',
+          budget_fit: 'Dual-purpose luminaire and smart control saves fixture cost',
+          theme_fit: 'Shadowless 90+ CRI lighting complements modern aesthetic',
+          plumbing_fit: 'Requires dedicated 120V 15A GFCI electrical rough-in'
+        }
       };
 
-      const bundle = [
-        { category: 'toilet', ...toilet },
-        { category: 'vanity', ...vanity },
-        { category: 'faucet', ...faucet },
-        { category: 'shower', ...shower },
-        { category: 'mirror', ...mirror }
+      const signatureBundle = [
+        { category: 'toilet', ...sigToilet },
+        { category: 'vanity', ...sigVanity },
+        { category: 'faucet', ...sigFaucet },
+        { category: 'shower', ...sigShower },
+        { category: 'mirror', ...sigMirror }
       ];
+      const sigTotalINR = signatureBundle.reduce((s, i) => s + i.price_inr, 0);
+      const sigTotalUSD = signatureBundle.reduce((s, i) => s + i.price_usd, 0);
 
-      const total_price_inr = bundle.reduce((s, i) => s + i.price_inr, 0);
-      const total_price_usd = bundle.reduce((s, i) => s + i.price_usd, 0);
+      // Alternative 2: Essential Value
+      const essentialBundle = [
+        {
+          category: 'toilet', sku_code: 'K-3983IN-0', name: 'Memoirs Stately Toilet', price_inr: 35000, price_usd: 480,
+          justification: 'Class 5 flushing power with timeless styling and exceptional durability.',
+          explainability: {
+            spatial_fit: 'Compact footprint maximizes walkway in smaller spaces',
+            budget_fit: 'Value-optimized high durability fixture',
+            theme_fit: 'Versatile profile fits contemporary and transitional baths',
+            plumbing_fit: '12" rough-in attaches to standard soil stack'
+          }
+        },
+        {
+          category: 'vanity', sku_code: 'K-99507IN-0', name: 'Jacquard 36" Single Vanity', price_inr: 58000, price_usd: 790,
+          justification: 'Compact single washstand with solid wood construction and generous storage.',
+          explainability: {
+            spatial_fit: '36" footprint leaves ample 32" clearance in room',
+            budget_fit: 'Saves 40% compared to dual master washstand',
+            theme_fit: 'Clean lines match understated minimalist aesthetics',
+            plumbing_fit: 'Standard 1-1/4" P-trap waste rough-in'
+          }
+        },
+        {
+          category: 'faucet', sku_code: 'K-73159IN-4', name: 'Composed Single-Handle Faucet', price_inr: 14500, price_usd: 195,
+          justification: 'Streamlined cylindrical design with ceramic disc valve for lifetime drip-free use.',
+          explainability: {
+            spatial_fit: 'Slim deck mount saves counter space',
+            budget_fit: 'Outstanding Kohler engineering at accessible price',
+            theme_fit: 'Modern cylindrical geometry',
+            plumbing_fit: 'Single-hole 3/8" flexible supply connections'
+          }
+        },
+        {
+          category: 'shower', sku_code: 'K-26292IN-CP', name: 'Statement Katalyst Showerhead', price_inr: 28500, price_usd: 380,
+          justification: 'Katalyst air-induction showerhead delivering full, drenching spray.',
+          explainability: {
+            spatial_fit: 'Wall-mount arm fits standard shower stall',
+            budget_fit: 'Affordable luxury shower experience',
+            theme_fit: 'Crisp chrome circular styling',
+            plumbing_fit: '1/2" NPT threaded connection'
+          }
+        },
+        {
+          category: 'mirror', sku_code: 'K-99009IN-NA', name: 'Verdera Basic Lighted Mirror', price_inr: 24000, price_usd: 320,
+          justification: 'Clean perimeter LED illumination with integrated touch sensor.',
+          explainability: {
+            spatial_fit: 'Flush wall mount above 36" vanity',
+            budget_fit: 'Cost-efficient LED task lighting',
+            theme_fit: 'Frameless glass edge blends seamlessly',
+            plumbing_fit: 'Standard 120V wall electrical rough-in'
+          }
+        }
+      ];
+      const essTotalINR = essentialBundle.reduce((s, i) => s + i.price_inr, 0);
+      const essTotalUSD = essentialBundle.reduce((s, i) => s + i.price_usd, 0);
+
+      // Alternative 3: Masterpiece Luxury
+      const luxuryBundle = [
+        {
+          category: 'toilet', sku_code: 'K-5401IN-0', name: 'Veil Intelligent Wall-Hung Smart Suite', price_inr: 185000, price_usd: 2480,
+          justification: 'Flagship smart toilet with integrated bidet, heated seat, automated cover, and UV sanitization.',
+          explainability: {
+            spatial_fit: 'In-wall tank saves up to 12" of bathroom floor space',
+            budget_fit: 'Ultra-premium flagship centerpiece investment',
+            theme_fit: 'Sculptural organic silhouette represents Kohler luxury',
+            plumbing_fit: 'In-wall carrier system with 4" waste outlet'
+          }
+        },
+        {
+          category: 'vanity', sku_code: 'K-99539-LG', name: 'Tailored 60" Dual Vanity in Quartz', price_inr: 145000, price_usd: 1950,
+          justification: 'Floating double master washstand with solid quartz counter and slow-close solid oak drawers.',
+          explainability: {
+            spatial_fit: 'Full 60" master suite presence with 28" walkway clearance',
+            budget_fit: 'Luxury bespoke dual vanity specification',
+            theme_fit: 'Architectural floating volume with rich tactile finish',
+            plumbing_fit: 'Dual waste lines aligned along rear wet-wall'
+          }
+        },
+        {
+          category: 'faucet', sku_code: 'K-99856IN-4', name: 'Purist Dual Basin Faucets (Pair)', price_inr: 39600, price_usd: 540,
+          justification: 'Twin Purist single-control architectural faucets matching the dual basins.',
+          explainability: {
+            spatial_fit: 'Precision placement for both undermount basins',
+            budget_fit: 'Cohesive dual faucet package',
+            theme_fit: 'Architectural purity in matte finish',
+            plumbing_fit: 'Two 1/2" supply branch pairs'
+          }
+        },
+        {
+          category: 'shower', sku_code: 'K-76465IN-CP', name: 'HydroRail Thermostatic DTV+ Column', price_inr: 85000, price_usd: 1140,
+          justification: 'Dual rainhead and multifunction handshower with thermostatic precision valve.',
+          explainability: {
+            spatial_fit: 'Generous 48" shower envelope clearance',
+            budget_fit: 'Spa-grade wellness water delivery system',
+            theme_fit: 'Commercial-grade architectural luxury',
+            plumbing_fit: 'High-flow 3/4" supply with 1/2" outlets'
+          }
+        },
+        {
+          category: 'mirror', sku_code: 'K-99009IN-NA', name: 'Verdera Voice Dual Smart Mirrors', price_inr: 58000, price_usd: 780,
+          justification: 'Twin Alexa-enabled smart mirrors with tuned 90+ CRI LED illumination.',
+          explainability: {
+            spatial_fit: 'Centered individually over each undermount basin',
+            budget_fit: 'Full smart home integrated lighting',
+            theme_fit: 'Modern backlit ambiance and voice control',
+            plumbing_fit: 'Dual 120V GFCI connections'
+          }
+        }
+      ];
+      const luxTotalINR = luxuryBundle.reduce((s, i) => s + i.price_inr, 0);
+      const luxTotalUSD = luxuryBundle.reduce((s, i) => s + i.price_usd, 0);
 
       return {
         theme,
         design_concept: `Personalized ${theme} Kohler Suite tailored for ${dimensions}.`,
-        guard_score: 0.00084,
-        guard_status: "Verified Safe (Groq Prompt Guard 22M)",
-        bundle,
-        total_price_inr,
-        total_price_usd,
+        active_tier: 'signature',
+        composite_score: 97.1,
+        tradeoff_reasoning: 'Signature configuration prioritizes spatial ergonomics and wet-wall consolidation along the rear wall, reducing simulated plumbing rough-in installation costs by ₹42,000 while maintaining genuine Kohler smart bidet and thermostatic shower functionality within customer budget.',
+        multi_objective_breakdown: {
+          spatial_fit: 98,
+          budget_efficiency: 94,
+          plumbing_wet_wall: 95,
+          theme_cohesion: 97
+        },
+        alternatives: {
+          signature: {
+            name: 'Signature Balanced',
+            total_price_inr: sigTotalINR,
+            total_price_usd: sigTotalUSD,
+            fitness_score: 97.1,
+            bundle: signatureBundle
+          },
+          essential: {
+            name: 'Essential Value',
+            total_price_inr: essTotalINR,
+            total_price_usd: essTotalUSD,
+            fitness_score: 91.4,
+            bundle: essentialBundle
+          },
+          luxury: {
+            name: 'Masterpiece Luxury',
+            total_price_inr: luxTotalINR,
+            total_price_usd: luxTotalUSD,
+            fitness_score: 95.8,
+            bundle: luxuryBundle
+          }
+        },
+        bundle: signatureBundle,
+        total_price_inr: sigTotalINR,
+        total_price_usd: sigTotalUSD,
         budget_utilization_pct: 86,
         sustainability: {
           annual_water_saved_liters: 28450,
@@ -3012,64 +3547,170 @@
           epa_watersense: true,
           carbon_offset_kg: 142
         },
-        wet_wall_score: 94,
+        wet_wall_score: 95,
         estimated_plumbing_savings_inr: 42000,
         code_compliance_score: 100
       };
     }
 
     function renderAiRecommendationResults(data) {
-      // 1. Guard score badge (if present)
-      const guardEl = document.getElementById('ai-guard-score');
-      if (guardEl && data.guard_score !== undefined) {
-        guardEl.innerText = Number(data.guard_score).toFixed(4);
+      // 1. Concept text
+      const conceptEl = document.getElementById('ai-concept-text');
+      if (conceptEl) {
+        conceptEl.innerText = data.design_concept || `Personalized ${data.theme} Kohler Suite.`;
       }
 
-      // 2. Concept text
-      document.getElementById('ai-concept-text').innerText = data.design_concept || `Personalized ${data.theme} Kohler Suite.`;
+      // 2. Composite Score Badge
+      const compScore = data.composite_score || 97.1;
+      const compBadge = document.getElementById('ai-composite-score-badge');
+      if (compBadge) compBadge.innerText = `${compScore} / 100`;
 
-      // 3. Render items
-      const container = document.getElementById('ai-bundle-items-container');
-      container.innerHTML = '';
-
-      let totalFormatted = '';
-      if (currentCurrency === 'INR') {
-        totalFormatted = '₹' + (data.total_price_inr || 293700).toLocaleString('en-IN');
-      } else {
-        totalFormatted = '$' + (data.total_price_usd || 3990).toLocaleString();
+      // 3. Candidate Architecture Tab Prices
+      if (data.alternatives) {
+        if (data.alternatives.signature) {
+          const p = currentCurrency === 'INR' ? '₹' + data.alternatives.signature.total_price_inr.toLocaleString('en-IN') : '$' + data.alternatives.signature.total_price_usd.toLocaleString();
+          const el = document.getElementById('tab-price-signature');
+          if (el) el.innerText = p;
+        }
+        if (data.alternatives.essential) {
+          const p = currentCurrency === 'INR' ? '₹' + data.alternatives.essential.total_price_inr.toLocaleString('en-IN') : '$' + data.alternatives.essential.total_price_usd.toLocaleString();
+          const el = document.getElementById('tab-price-essential');
+          if (el) el.innerText = p;
+        }
+        if (data.alternatives.luxury) {
+          const p = currentCurrency === 'INR' ? '₹' + data.alternatives.luxury.total_price_inr.toLocaleString('en-IN') : '$' + data.alternatives.luxury.total_price_usd.toLocaleString();
+          const el = document.getElementById('tab-price-luxury');
+          if (el) el.innerText = p;
+        }
       }
-      document.getElementById('ai-bundle-total-preview').innerText = totalFormatted;
 
-      const items = data.bundle || [];
-      items.forEach(item => {
-        const row = document.createElement('div');
-        row.className = 'bg-white p-3 rounded-xl border border-gray-200/80 flex justify-between items-start space-x-3 shadow-xs';
-        const price = currentCurrency === 'INR' ? '₹' + item.price_inr.toLocaleString('en-IN') : '$' + item.price_usd.toLocaleString();
+      // 4. Multi-Objective Scorecard Breakdown
+      const breakdown = data.multi_objective_breakdown || {
+        spatial_fit: 98, budget_efficiency: 94, plumbing_wet_wall: 95, theme_cohesion: 97
+      };
+      const elSpatial = document.getElementById('score-spatial');
+      if (elSpatial) elSpatial.innerText = `${breakdown.spatial_fit}%`;
+      const elBudget = document.getElementById('score-budget');
+      if (elBudget) elBudget.innerText = `${breakdown.budget_efficiency}%`;
+      const elWetwall = document.getElementById('score-wetwall');
+      if (elWetwall) elWetwall.innerText = `${breakdown.plumbing_wet_wall}%`;
+      const elTheme = document.getElementById('score-theme');
+      if (elTheme) elTheme.innerText = `${breakdown.theme_cohesion}%`;
 
-        row.innerHTML = `
-          <div class="flex-1">
-            <div class="flex items-center space-x-2">
-              <span class="text-[9px] font-mono font-bold bg-black text-white px-1.5 py-0.5 rounded">${item.sku_code}</span>
-              <h5 class="font-black text-xs text-gray-900">${item.name}</h5>
-            </div>
-            <p class="text-[11px] text-gray-500 mt-1 leading-snug">${item.justification}</p>
-          </div>
-          <div class="text-right">
-            <span class="font-black text-xs text-gray-900">${price}</span>
-          </div>
-        `;
-        container.appendChild(row);
+      // 5. Transparent AI Trade-Off Analysis
+      const tradeoffEl = document.getElementById('ai-tradeoff-text');
+      if (tradeoffEl && data.tradeoff_reasoning) {
+        tradeoffEl.innerText = data.tradeoff_reasoning;
+      }
+
+      // 6. Switch to active tier (defaults to signature)
+      switchAiAlternativeTier(data.active_tier || 'signature');
+
+      // 7. Budget utilization bar
+      const pct = data.budget_utilization_pct || 85;
+      const bar = document.getElementById('ai-utilization-bar');
+      if (bar) bar.style.width = pct + '%';
+      const utilLabel = document.getElementById('ai-utilization-label');
+      if (utilLabel) utilLabel.innerText = `${pct}% of target budget`;
+
+      // 8. Wet-Wall Stack Badge in AI modal
+      const wetScore = data.wet_wall_score || breakdown.plumbing_wet_wall || 95;
+      const wetSavings = data.estimated_plumbing_savings_inr || 42000;
+      const wetEl = document.getElementById('ai-wetwall-score');
+      if (wetEl) wetEl.innerText = `${wetScore}% Stack Optimized (Save ₹${(wetSavings / 1000).toFixed(0)}K)`;
+    }
+
+    function switchAiAlternativeTier(tierKey) {
+      if (!currentAiRecommendation) return;
+      const tiers = ['signature', 'essential', 'luxury'];
+      tiers.forEach(t => {
+        const tab = document.getElementById(`tab-tier-${t}`);
+        if (tab) {
+          if (t === tierKey) {
+            tab.className = 'py-2 px-2 rounded-lg bg-black text-white shadow-xs transition text-center';
+          } else {
+            tab.className = 'py-2 px-2 rounded-lg text-gray-700 hover:bg-white transition text-center';
+          }
+        }
       });
 
-      // 4. Budget utilization
-      const pct = data.budget_utilization_pct || 85;
-      document.getElementById('ai-utilization-bar').style.width = pct + '%';
-      document.getElementById('ai-utilization-label').innerText = `${pct}% of target budget`;
+      const titles = {
+        signature: 'Signature Balanced (Best Multi-Objective)',
+        essential: 'Essential Value (Max Cost Savings)',
+        luxury: 'Masterpiece Luxury (Flagship Kohler Innovation)'
+      };
+      const titleEl = document.getElementById('ai-active-tier-tag');
+      if (titleEl) titleEl.innerText = titles[tierKey] || tierKey;
 
-      // 5. Wet-Wall Optimization Metric
-      if (data.wet_wall_score) {
-        const elWet = document.getElementById('ai-wetwall-score');
-        if (elWet) elWet.innerText = `${data.wet_wall_score}% (Save ₹${((data.estimated_plumbing_savings_inr || 42000) / 1000).toFixed(0)}K)`;
+      const alt = (currentAiRecommendation.alternatives && currentAiRecommendation.alternatives[tierKey]) 
+        ? currentAiRecommendation.alternatives[tierKey] 
+        : { bundle: currentAiRecommendation.bundle, total_price_inr: currentAiRecommendation.total_price_inr, total_price_usd: currentAiRecommendation.total_price_usd, fitness_score: currentAiRecommendation.composite_score || 97.1 };
+
+      currentAiRecommendation.active_tier = tierKey;
+      currentAiRecommendation.bundle = alt.bundle;
+      currentAiRecommendation.total_price_inr = alt.total_price_inr;
+      currentAiRecommendation.total_price_usd = alt.total_price_usd;
+
+      const scoreBadge = document.getElementById('ai-composite-score-badge');
+      if (scoreBadge && alt.fitness_score) {
+        scoreBadge.innerText = `${alt.fitness_score} / 100`;
+      }
+
+      // Update bundle total preview
+      const totalFormatted = currentCurrency === 'INR' 
+        ? '₹' + (alt.total_price_inr || 293700).toLocaleString('en-IN')
+        : '$' + (alt.total_price_usd || 3990).toLocaleString();
+      const previewEl = document.getElementById('ai-bundle-total-preview');
+      if (previewEl) previewEl.innerText = totalFormatted;
+
+      // Render items with the 4 explainable badges
+      const container = document.getElementById('ai-bundle-items-container');
+      if (container) {
+        container.innerHTML = '';
+        (alt.bundle || []).forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'bg-white p-3 rounded-xl border border-gray-200/80 space-y-2 shadow-xs';
+          const priceFormatted = currentCurrency === 'INR' 
+            ? '₹' + (item.price_inr || 25000).toLocaleString('en-IN') 
+            : '$' + (item.price_usd || 350).toLocaleString();
+          const exp = item.explainability || {
+            spatial_fit: 'Fits envelope with 21"+ NKBA clearance',
+            budget_fit: 'Optimal budget investment',
+            theme_fit: `Aligned with ${currentSelectedTheme}`,
+            plumbing_fit: 'Standard rough-in connection'
+          };
+
+          card.innerHTML = `
+            <div class="flex justify-between items-start">
+              <div class="flex items-center space-x-2">
+                <span class="text-[9px] font-mono font-bold bg-black text-white px-1.5 py-0.5 rounded">${item.sku_code || 'KOHLER'}</span>
+                <h5 class="font-black text-xs text-gray-900">${item.name}</h5>
+              </div>
+              <span class="font-black text-xs text-gray-900">${priceFormatted}</span>
+            </div>
+            <p class="text-[11px] text-gray-600 leading-snug">${item.justification || ''}</p>
+            <!-- Explainable AI Checklist Matrix -->
+            <div class="grid grid-cols-2 gap-1.5 pt-1 text-[10px]">
+              <div class="flex items-center space-x-1.5 bg-emerald-50/80 text-emerald-950 p-1.5 rounded-lg border border-emerald-200/60" title="${exp.spatial_fit}">
+                <span class="text-xs shrink-0">📐</span>
+                <span class="truncate font-medium">${exp.spatial_fit}</span>
+              </div>
+              <div class="flex items-center space-x-1.5 bg-blue-50/80 text-blue-950 p-1.5 rounded-lg border border-blue-200/60" title="${exp.budget_fit}">
+                <span class="text-xs shrink-0">💰</span>
+                <span class="truncate font-medium">${exp.budget_fit}</span>
+              </div>
+              <div class="flex items-center space-x-1.5 bg-amber-50/80 text-amber-950 p-1.5 rounded-lg border border-amber-200/60" title="${exp.theme_fit}">
+                <span class="text-xs shrink-0">🎨</span>
+                <span class="truncate font-medium">${exp.theme_fit}</span>
+              </div>
+              <div class="flex items-center space-x-1.5 bg-purple-50/80 text-purple-950 p-1.5 rounded-lg border border-purple-200/60" title="${exp.plumbing_fit}">
+                <span class="text-xs shrink-0">💧</span>
+                <span class="truncate font-medium">${exp.plumbing_fit}</span>
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
       }
     }
 
@@ -3079,7 +3720,7 @@
         return;
       }
 
-      // 1. Clear existing placed fixtures (leave architecture intact)
+      // 1. Clear existing placed fixtures
       placedProducts.forEach(p => scene.remove(p));
       placedProducts.length = 0;
       deselectActiveObject();
@@ -3094,36 +3735,43 @@
       // 3. Map AI recommended items to 3D models and position them architecturally
       const rec = currentAiRecommendation.bundle;
 
-      // Smart Toilet against back wall left
+      // Smart Toilet against back wet-wall left with ample clearance
       const toiletItem = rec.find(i => i.category === 'toilet');
       if (toiletItem) {
         const catItem = KOHLER_CATALOG.find(c => c.art === toiletItem.sku_code) || KOHLER_CATALOG[0];
-        spawnProductById(catItem.id, -0.60, -roomDepth / 2 + 0.35, 0);
+        spawnProductById(catItem.id, -0.95, -roomDepth / 2 + 0.38, 0);
       }
 
-      // Master Vanity against back wall right
+      // Master Vanity centered along back wet-wall
       const vanityItem = rec.find(i => i.category === 'vanity');
+      const vanityX = (roomWidth >= 2.8) ? 0.20 : 0.05;
       if (vanityItem) {
         const catItem = KOHLER_CATALOG.find(c => c.art === vanityItem.sku_code) || KOHLER_CATALOG[4];
-        spawnProductById(catItem.id, 0.70, -roomDepth / 2 + 0.35, 0);
+        spawnProductById(catItem.id, vanityX, -roomDepth / 2 + 0.36, 0);
       }
 
       // Smart Mirror centered directly above vanity
       const mirrorItem = rec.find(i => i.category === 'mirror');
       if (mirrorItem) {
-        spawnProductById('verdera-mirror', 0.70, -roomDepth / 2 + 0.08, 0);
+        spawnProductById('verdera-mirror', vanityX, -roomDepth / 2 + 0.08, 0);
       }
 
-      // Thermostatic Shower in corner
+      // Thermostatic Shower placed in dedicated wet alcove with generous entrance
       const showerItem = rec.find(i => i.category === 'shower');
       if (showerItem) {
-        spawnProductById('hydrorail-shower', roomWidth / 2 - 0.60, -roomDepth / 2 + 0.52, 0);
+        if (roomWidth >= 2.8 && roomDepth >= 2.4) {
+          spawnProductById('hydrorail-shower', roomWidth / 2 - 0.58, 0.30, -Math.PI / 2);
+        } else {
+          spawnProductById('hydrorail-shower', roomWidth / 2 - 0.50, -roomDepth / 2 + 0.52, 0);
+        }
       }
 
       closeAiAssistantModal();
       setViewMode('3d');
       updateTotalBOM();
-      showToast('AI Bundle applied to 3D bathroom!');
+      updateClearanceVisualizer();
+      updateWetWallScore();
+      showToast(`Applied ${currentAiRecommendation.active_tier || 'Signature'} Kohler Bundle to 3D Bathroom!`);
     }
 
     // ==================== 10. TOTAL BOM & SHOPPING LIST ====================
@@ -3401,20 +4049,27 @@
       setTimeout(() => toast.remove(), 2600);
     }
 
-    // ==================== 10. SPATIAL CLEARANCE & NKBA CODE ENGINE ====================
+    // ==================== 10. SPATIAL CLEARANCE & HARD CONSTRAINT VALIDATION ENGINE ====================
+    let latestClearanceReport = { status: 'valid', invalidCount: 0, warningCount: 0, items: [], summary: '100% Pass' };
+
     function toggleClearanceZones(forceState) {
       if (typeof forceState === 'boolean') {
         isClearanceVisible = forceState;
       } else {
-        isClearanceVisible = !isClearanceVisible;
+        // When user clicks the subnav badge, open detailed report and ensure 3D zones are visible
+        openClearanceModal();
+        isClearanceVisible = true;
       }
       const chk = document.getElementById('toggle-clearance-chk');
       if (chk) chk.checked = isClearanceVisible;
       if (clearanceGroup) clearanceGroup.visible = isClearanceVisible;
-      showToast(isClearanceVisible ? 'NKBA Clearance Zones: Visible' : 'Clearance Zones: Hidden');
     }
 
     function updateClearanceVisualizer() {
+      evaluateHardConstraints();
+    }
+
+    function evaluateHardConstraints() {
       if (!clearanceGroup) return;
       while (clearanceGroup.children.length > 0) {
         const obj = clearanceGroup.children[0];
@@ -3422,139 +4077,407 @@
       }
 
       if (!placedProducts.length) {
-        updateClearanceBadge(true, 0);
+        updateClearanceBadge('valid', 0, 'No fixtures placed');
+        latestClearanceReport = { status: 'valid', invalidCount: 0, warningCount: 0, items: [], summary: 'No fixtures placed' };
         return;
       }
 
       let hasCollision = false;
-      let conflictCount = 0;
+      let hasWarning = false;
+      let invalidCount = 0;
+      let warningCount = 0;
+      const reportItems = [];
 
-      // Extract footprints and forward clearance zones for floor fixtures (exclude wall-hung mirrors)
-      const fixtureData = placedProducts
-        .filter(p => (p.userData && p.userData.category !== 'mirrors'))
-        .map(p => {
+      const floorFixtures = placedProducts.filter(p => p.userData && p.userData.category !== 'mirrors');
+
+      floorFixtures.forEach((p, idx) => {
         const d = p.userData || {};
-        const cat = d.category || '';
+        const cat = d.category || 'fixture';
         const pos = p.position;
         const rotY = p.rotation.y;
 
-        // Bounding footprints (in meters)
+        // Nominal physical footprints (in meters)
         let fw = 0.45, fd = 0.65;
-        let cw = 0.76, cd = 0.53; // NKBA 21" front (0.53m), 30" width (0.76m)
-        let forwardOffset = 0.35;
+        let minFrontClearanceM = 0.533; // 21" NKBA standard
+        let warningThresholdM = 0.457;  // 18" warning limit
+        let standardName = 'NKBA 21" Front Clearance';
 
         if (cat === 'toilets') {
           fw = 0.42; fd = 0.68;
-          cw = 0.76; cd = 0.53; // NKBA 21" front, 30" side envelope
-          forwardOffset = fd / 2 + cd / 2;
+          minFrontClearanceM = 0.533; // 21"
+          warningThresholdM = 0.457;  // 18"
+          standardName = 'NKBA 21" (0.53m) Front Clearance';
         } else if (cat === 'vanities') {
           fw = 1.15; fd = 0.55;
-          cw = 1.15; cd = 0.53; // NKBA 21" front activity zone
-          forwardOffset = fd / 2 + cd / 2;
+          minFrontClearanceM = 0.533; // 21"
+          warningThresholdM = 0.457;
+          standardName = 'NKBA 21" Activity Zone';
         } else if (cat === 'showers') {
           fw = 1.10; fd = 0.90;
-          cw = 0.80; cd = 0.61; // NKBA 24" entry clearance
-          forwardOffset = fd / 2 + cd / 2;
+          minFrontClearanceM = 0.610; // 24" entry
+          warningThresholdM = 0.533;  // 21"
+          standardName = 'NKBA 24" (0.61m) Unobstructed Entry';
         } else if (cat === 'bathtubs') {
           fw = 1.70; fd = 0.80;
-          cw = 1.70; cd = 0.53; // NKBA 21" tub side access
-          forwardOffset = fd / 2 + cd / 2;
+          minFrontClearanceM = 0.533; // 21" side access
+          warningThresholdM = 0.457;
+          standardName = 'NKBA 21" Side Clearance';
         }
 
-        const forwardVector = new THREE.Vector3(0, 0, forwardOffset).applyAxisAngle(new THREE.Vector3(0, 1, 0), rotY);
-        const clearanceCenter = new THREE.Vector3().copy(pos).add(forwardVector);
+        // Effective rotated bounding box
+        const cosR = Math.abs(Math.cos(rotY));
+        const sinR = Math.abs(Math.sin(rotY));
+        const effW = fw * cosR + fd * sinR;
+        const effD = fw * sinR + fd * cosR;
 
-        return {
-          obj: p,
-          cat: cat,
-          pos: pos,
-          rotY: rotY,
-          fw: fw, fd: fd,
-          cw: cw, cd: cd,
-          clearanceCenter: clearanceCenter
-        };
-      });
-
-      // Collision checks: test if any clearance zone overlaps with other fixtures or bounds
-      fixtureData.forEach((item, i) => {
-        let isConflicted = false;
-
-        // Check against bathroom walls (clearance zone out of bounds)
+        // 1. Boundary Overflow Check
         const halfRoomW = roomWidth / 2;
         const halfRoomD = roomDepth / 2;
-        if (
-          Math.abs(item.clearanceCenter.x) + item.cw / 2 > halfRoomW ||
-          Math.abs(item.clearanceCenter.z) + item.cd / 2 > halfRoomD
-        ) {
-          isConflicted = true;
-        }
+        const isOutOfBounds = (
+          Math.abs(pos.x) + effW / 2 > halfRoomW + 0.05 ||
+          Math.abs(pos.z) + effD / 2 > halfRoomD + 0.05
+        );
 
-        // Check against other fixtures' footprints
-        fixtureData.forEach((other, j) => {
-          if (i === j) return;
-          const dx = Math.abs(item.clearanceCenter.x - other.pos.x);
-          const dz = Math.abs(item.clearanceCenter.z - other.pos.z);
-          if (dx < (item.cw / 2 + other.fw / 2 * 0.85) && dz < (item.cd / 2 + other.fd / 2 * 0.85)) {
-            isConflicted = true;
+        // 2. Inter-Fixture Collision Check (physical overlap)
+        let hasFixtureCollision = false;
+        let collidedWith = '';
+        floorFixtures.forEach((other, oIdx) => {
+          if (idx === oIdx) return;
+          const oCat = other.userData ? other.userData.category : '';
+          let ofw = 0.45, ofd = 0.65;
+          if (oCat === 'toilets') { ofw = 0.42; ofd = 0.68; }
+          else if (oCat === 'vanities') { ofw = 1.15; ofd = 0.55; }
+          else if (oCat === 'showers') { ofw = 1.10; ofd = 0.90; }
+          else if (oCat === 'bathtubs') { ofw = 1.70; ofd = 0.80; }
+
+          const oCos = Math.abs(Math.cos(other.rotation.y));
+          const oSin = Math.abs(Math.sin(other.rotation.y));
+          const oEffW = ofw * oCos + ofd * oSin;
+          const oEffD = ofw * oSin + ofd * oCos;
+
+          const dx = Math.abs(pos.x - other.position.x);
+          const dz = Math.abs(pos.z - other.position.z);
+          const overlapX = (effW / 2 + oEffW / 2) - dx;
+          const overlapZ = (effD / 2 + oEffD / 2) - dz;
+
+          if (overlapX > 0.05 && overlapZ > 0.05) {
+            hasFixtureCollision = true;
+            collidedWith = other.userData ? other.userData.name : 'Another Fixture';
           }
         });
 
-        if (isConflicted) {
+        // 3. Forward Clearance Check
+        const forwardVector = new THREE.Vector3(0, 0, fd / 2 + minFrontClearanceM / 2).applyAxisAngle(new THREE.Vector3(0, 1, 0), rotY);
+        const clearanceCenter = new THREE.Vector3().copy(pos).add(forwardVector);
+
+        // Calculate distance from front edge of fixture to opposite wall or obstacle
+        const frontEdgePos = new THREE.Vector3().copy(pos).add(new THREE.Vector3(0, 0, fd / 2).applyAxisAngle(new THREE.Vector3(0, 1, 0), rotY));
+        const distToFrontWall = halfRoomD - frontEdgePos.z;
+        const observedFrontM = Math.max(0.2, distToFrontWall);
+
+        let fixtureStatus = 'valid';
+        let statusReason = `Compliant: ${(observedFrontM * 39.3701).toFixed(1)}" clearance exceeds required ${(minFrontClearanceM * 39.3701).toFixed(0)}"`;
+
+        if (isOutOfBounds) {
+          fixtureStatus = 'invalid';
+          statusReason = 'Violation: Fixture extends beyond bathroom walls';
           hasCollision = true;
-          conflictCount++;
+          invalidCount++;
+        } else if (hasFixtureCollision) {
+          fixtureStatus = 'invalid';
+          statusReason = `Collision: Overlaps with ${collidedWith}`;
+          hasCollision = true;
+          invalidCount++;
+        } else if (observedFrontM < warningThresholdM) {
+          fixtureStatus = 'invalid';
+          statusReason = `Code Violation: Front space (${(observedFrontM * 39.3701).toFixed(1)}") is below minimum ${(warningThresholdM * 39.3701).toFixed(0)}"`;
+          hasCollision = true;
+          invalidCount++;
+        } else if (observedFrontM < minFrontClearanceM) {
+          fixtureStatus = 'warning';
+          statusReason = `Warning: Tight clearance (${(observedFrontM * 39.3701).toFixed(1)}"), recommend at least ${(minFrontClearanceM * 39.3701).toFixed(0)}"`;
+          hasWarning = true;
+          warningCount++;
         }
 
-        // Render clearance plane on floor (y = 0.009)
-        const planeColor = isConflicted ? 0xef4444 : 0x10b981;
-        const planeOpacity = isConflicted ? 0.45 : 0.28;
+        reportItems.push({
+          fixtureName: d.name || 'Kohler Fixture',
+          category: cat,
+          sku: d.art || '',
+          status: fixtureStatus,
+          standard: standardName,
+          observedClearance: `${(observedFrontM * 39.3701).toFixed(1)}" (${observedFrontM.toFixed(2)}m)`,
+          requiredClearance: `${(minFrontClearanceM * 39.3701).toFixed(0)}" (${minFrontClearanceM.toFixed(2)}m)`,
+          reason: statusReason
+        });
 
-        const planeGeo = new THREE.PlaneGeometry(item.cw, item.cd);
+        // Render clearance plane on floor (y = 0.009)
+        const planeGeo = new THREE.PlaneGeometry(fw * 1.3, minFrontClearanceM);
+        const colorHex = fixtureStatus === 'invalid' ? 0xef4444 : (fixtureStatus === 'warning' ? 0xf59e0b : 0x10b981);
+        const opacityVal = fixtureStatus === 'invalid' ? 0.45 : (fixtureStatus === 'warning' ? 0.35 : 0.22);
+
         const planeMat = new THREE.MeshBasicMaterial({
-          color: planeColor,
+          color: colorHex,
           transparent: true,
-          opacity: planeOpacity,
+          opacity: opacityVal,
           side: THREE.DoubleSide,
           depthWrite: false
         });
         const planeMesh = new THREE.Mesh(planeGeo, planeMat);
         planeMesh.rotation.x = -Math.PI / 2;
-        planeMesh.rotation.z = item.rotY;
-        planeMesh.position.set(item.clearanceCenter.x, 0.009, item.clearanceCenter.z);
+        planeMesh.rotation.z = rotY;
+        planeMesh.position.set(clearanceCenter.x, 0.009, clearanceCenter.z);
         clearanceGroup.add(planeMesh);
 
-        // Dashed outline border
+        // Dashed border outline
         const edges = new THREE.EdgesGeometry(planeGeo);
         const lineMat = new THREE.LineBasicMaterial({
-          color: isConflicted ? 0xdc2626 : 0x059669,
+          color: colorHex,
           linewidth: 2,
           transparent: true,
           opacity: 0.85
         });
         const wireframe = new THREE.LineSegments(edges, lineMat);
         wireframe.rotation.x = -Math.PI / 2;
-        wireframe.rotation.z = item.rotY;
-        wireframe.position.set(item.clearanceCenter.x, 0.0095, item.clearanceCenter.z);
+        wireframe.rotation.z = rotY;
+        wireframe.position.set(clearanceCenter.x, 0.0095, clearanceCenter.z);
         clearanceGroup.add(wireframe);
       });
 
-      updateClearanceBadge(!hasCollision, conflictCount);
+      const overallStatus = hasCollision ? 'invalid' : (hasWarning ? 'warning' : 'valid');
+      latestClearanceReport = {
+        status: overallStatus,
+        invalidCount,
+        warningCount,
+        items: reportItems,
+        summary: overallStatus === 'valid' 
+          ? 'All Clearances 100% Compliant with NKBA Code'
+          : (overallStatus === 'warning' ? `${warningCount} Tight Clearance Warning(s)` : `${invalidCount} Code Violation / Collision Detected`)
+      };
+
+      updateClearanceBadge(overallStatus, invalidCount || warningCount, latestClearanceReport.summary);
     }
 
-    function updateClearanceBadge(isCompliant, conflictCount) {
+    function updateClearanceBadge(status, count, summaryText) {
       const badge = document.getElementById('btn-clearance-badge');
       const label = document.getElementById('label-clearance-status');
       const icon = document.getElementById('icon-clearance');
       if (!badge || !label || !icon) return;
 
-      if (isCompliant) {
-        badge.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-300 flex items-center space-x-1.5 hover:bg-emerald-100 transition shadow-xs';
+      if (status === 'valid') {
+        badge.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-300 flex items-center space-x-1.5 hover:bg-emerald-100 transition shadow-xs cursor-pointer';
         label.innerText = 'NKBA: 100% Pass';
         icon.className = 'fa-solid fa-circle-check text-emerald-600';
+      } else if (status === 'warning') {
+        badge.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-300 flex items-center space-x-1.5 hover:bg-amber-100 transition shadow-xs cursor-pointer';
+        label.innerText = `NKBA: ${count} Tight Spacing`;
+        icon.className = 'fa-solid fa-triangle-exclamation text-amber-600';
       } else {
-        badge.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-300 flex items-center space-x-1.5 hover:bg-rose-100 transition shadow-xs animate-pulse';
-        label.innerText = `NKBA Alert: ${conflictCount} Conflict${conflictCount > 1 ? 's' : ''}`;
-        icon.className = 'fa-solid fa-triangle-exclamation text-rose-600';
+        badge.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-300 flex items-center space-x-1.5 hover:bg-rose-100 transition shadow-xs animate-pulse cursor-pointer';
+        label.innerText = `NKBA Alert: ${count} Conflict${count > 1 ? 's' : ''}`;
+        icon.className = 'fa-solid fa-circle-xmark text-rose-600';
       }
+    }
+
+    function openClearanceModal() {
+      evaluateHardConstraints();
+      const report = latestClearanceReport || { status: 'valid', items: [], summary: '100% Pass' };
+      const container = document.getElementById('clearance-report-items-container');
+      container.innerHTML = '';
+
+      const headingEl = document.getElementById('clearance-summary-heading');
+      const descEl = document.getElementById('clearance-summary-desc');
+      const iconEl = document.getElementById('clearance-summary-icon');
+      const bannerEl = document.getElementById('clearance-summary-banner');
+      const mainIconContainer = document.getElementById('clearance-report-icon-container');
+
+      if (report.status === 'valid') {
+        headingEl.innerText = 'All Clearances 100% Compliant';
+        descEl.innerText = 'Every fixture meets or exceeds NKBA building code clearances.';
+        iconEl.className = 'fa-solid fa-circle-check text-2xl text-emerald-600';
+        bannerEl.className = 'p-4 rounded-2xl border flex items-center space-x-3 bg-emerald-50 border-emerald-200 text-emerald-950';
+        mainIconContainer.className = 'w-9 h-9 rounded-xl bg-emerald-500 text-black flex items-center justify-center font-black text-base shadow-sm';
+      } else if (report.status === 'warning') {
+        headingEl.innerText = `${report.warningCount} Clearance Warning(s)`;
+        descEl.innerText = 'One or more fixtures have marginal clearances (18"-21"). Usable but tight.';
+        iconEl.className = 'fa-solid fa-triangle-exclamation text-2xl text-amber-600';
+        bannerEl.className = 'p-4 rounded-2xl border flex items-center space-x-3 bg-amber-50 border-amber-200 text-amber-950';
+        mainIconContainer.className = 'w-9 h-9 rounded-xl bg-amber-500 text-black flex items-center justify-center font-black text-base shadow-sm';
+      } else {
+        headingEl.innerText = `${report.invalidCount} Code Violation / Collision Alert`;
+        descEl.innerText = 'Fixtures are overlapping or violate minimum NKBA 18" clearance boundaries.';
+        iconEl.className = 'fa-solid fa-circle-xmark text-2xl text-rose-600';
+        bannerEl.className = 'p-4 rounded-2xl border flex items-center space-x-3 bg-rose-50 border-rose-200 text-rose-950';
+        mainIconContainer.className = 'w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center font-black text-base shadow-sm';
+      }
+
+      report.items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = `p-3.5 rounded-2xl border flex justify-between items-start space-x-3 ${
+          item.status === 'valid' ? 'bg-emerald-50/50 border-emerald-200/80 text-emerald-950' :
+          (item.status === 'warning' ? 'bg-amber-50/50 border-amber-200/80 text-amber-950' : 'bg-rose-50/50 border-rose-200/80 text-rose-950')
+        }`;
+        const statusPill = item.status === 'valid' 
+          ? '<span class="text-[9px] font-black bg-emerald-600 text-white px-2 py-0.5 rounded-full">🟢 Pass</span>'
+          : (item.status === 'warning'
+            ? '<span class="text-[9px] font-black bg-amber-600 text-white px-2 py-0.5 rounded-full">🟡 Warning</span>'
+            : '<span class="text-[9px] font-black bg-rose-600 text-white px-2 py-0.5 rounded-full">🔴 Conflict</span>');
+
+        card.innerHTML = `
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <span class="font-extrabold text-xs text-gray-900">${item.fixtureName}</span>
+                <span class="text-[10px] font-mono text-gray-500">${item.sku}</span>
+              </div>
+              ${statusPill}
+            </div>
+            <p class="text-[11px] font-medium mt-1 leading-snug">${item.reason}</p>
+            <div class="text-[10px] font-mono text-gray-500 mt-1 flex items-center space-x-2">
+              <span>Observed: <strong>${item.observedClearance}</strong></span>
+              <span>•</span>
+              <span>Required: <strong>${item.requiredClearance}</strong></span>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      document.getElementById('modal-clearance-details').classList.remove('hidden');
+    }
+
+    function closeClearanceModal() {
+      document.getElementById('modal-clearance-details').classList.add('hidden');
+    }
+
+    // ==================== KDX WHATSAPP CONCIERGE & STUDIO KOHLER HANDLERS ====================
+    function openKdxConciergeModal() {
+      updateKdxPreviewText();
+      document.getElementById('modal-kdx-concierge').classList.remove('hidden');
+    }
+
+    function closeKdxConciergeModal() {
+      document.getElementById('modal-kdx-concierge').classList.add('hidden');
+    }
+
+    function updateKdxPreviewText() {
+      const select = document.getElementById('kdx-showroom-select');
+      const city = select.selectedOptions[0] ? select.selectedOptions[0].getAttribute('data-city') : 'Mumbai';
+      const clientName = document.getElementById('kdx-client-name').value || 'Authorized Architect';
+      const wFt = (roomWidth * 3.28084).toFixed(1);
+      const dFt = (roomDepth * 3.28084).toFixed(1);
+      const sqFt = (roomWidth * roomDepth * 10.7639).toFixed(1);
+      const totalStr = document.getElementById('header-total-price').innerText;
+
+      let msg = `*KOHLER DIGITAL EXPERIENCE (KDX) VIP SPECIFICATION*\n`;
+      msg += `Architect/Client: ${clientName}\n`;
+      msg += `Project Code: KOHLER-AI-9021\n`;
+      msg += `Target KEC Showroom: Kohler Experience Center ${city}\n`;
+      msg += `Room Footprint: ${wFt} ft x ${dFt} ft (${sqFt} sq ft)\n`;
+      msg += `Total Specification Investment: ${currentCurrencySymbol}${totalStr}\n\n`;
+      msg += `*SPECIFIED KOHLER FIXTURES:*\n`;
+      placedProducts.forEach((p, idx) => {
+        const d = p.userData || {};
+        msg += `${idx + 1}. ${d.name || 'Fixture'} (SKU: ${d.art || 'KOHLER'}) - ${d.dim || ''}\n`;
+      });
+      msg += `\nPlease transmit complete 2D/3D BIM cut-sheet packet, rough-in templates, and coordinate showroom VIP presentation.`;
+
+      document.getElementById('kdx-preview-text').value = msg;
+    }
+
+    function sendKdxWhatsApp() {
+      const select = document.getElementById('kdx-showroom-select');
+      const phone = select.value.replace(/[^0-9]/g, '');
+      const msg = document.getElementById('kdx-preview-text').value;
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+      closeKdxConciergeModal();
+      showToast('Transmitted specification to KDX WhatsApp Concierge!');
+    }
+
+    function openStudioKohlerModal() {
+      const tbody = document.getElementById('studio-kohler-tbody');
+      tbody.innerHTML = '';
+
+      const wFt = (roomWidth * 3.28084).toFixed(1);
+      const dFt = (roomDepth * 3.28084).toFixed(1);
+      const hFt = (roomHeight * 3.28084).toFixed(1);
+      const sqFt = (roomWidth * roomDepth * 10.7639).toFixed(1);
+      document.getElementById('specifier-room-meta').innerText = `${wFt} ft × ${dFt} ft (${sqFt} sq ft) | Ceiling: ${hFt} ft | Wet-Wall: North Stack`;
+
+      if (!placedProducts.length) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-gray-400 font-bold">No Kohler fixtures currently placed in room.</td></tr>`;
+      } else {
+        placedProducts.forEach(p => {
+          const d = p.userData || {};
+          const cat = d.category || 'toilets';
+
+          let roughIn = '12" (305mm) rough-in from wall';
+          let conduits = 'Cold: 1/2" PEX | Drain: 4" PVC';
+          let flow = '1.28 GPF (4.8 LPF)';
+          let standard = 'ASME A112.19.2 / EPA WaterSense';
+
+          if (cat === 'toilets') {
+            roughIn = '12" rough-in from finished wall, 5-1/2" bolt centers';
+            conduits = 'Supply: 1/2" PEX cold stop | Soil: 4" PVC flange';
+            flow = '1.28 GPF (4.8 LPF) Revolution 360™';
+            standard = 'ASME A112.19.2 / CSA B45.1 / ADA';
+          } else if (cat === 'vanities') {
+            roughIn = 'Waste outlet 19" AFF | Hot/Cold supplies 21" AFF, 4" spread';
+            conduits = 'Hot/Cold: 1/2" PEX stub-outs | Waste: 1-1/4" brass P-trap';
+            flow = '1.2 GPM (4.5 LPM) WaterSense aerator';
+            standard = 'IAPMO / cUPC / ASME A112.18.1';
+          } else if (cat === 'showers') {
+            roughIn = 'Valve rough-in 48" AFF | Rainhead drop ear 84" AFF';
+            conduits = 'Supply: 1/2" NPT Hot/Cold | Drain: 2" PVC shower drain';
+            flow = '1.75 GPM Katalyst™ Air-Induction';
+            standard = 'ASSE 1016 / EPA WaterSense / Title 24';
+          } else if (cat === 'bathtubs') {
+            roughIn = 'Center toe-tap drain with overflow waste kit';
+            conduits = 'Supplies: 1/2" PEX | Drain: 1-1/2" PVC trap';
+            flow = '72 Gallons ergonomic capacity';
+            standard = 'CSA B45.5 / IAPMO Z124';
+          } else if (cat === 'mirrors') {
+            roughIn = 'Recessed or surface mount at 60" AFF center';
+            conduits = 'Electrical: Dedicated 120V 15A GFCI junction box';
+            flow = '90+ CRI LED, 2700K–5000K tunable';
+            standard = 'UL 962 / FCC Part 15 / Title 24';
+          }
+
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-gray-50/80 transition text-xs';
+          tr.innerHTML = `
+            <td class="p-3">
+              <div class="font-bold text-gray-900">${d.name || 'Fixture'}</div>
+              <div class="text-[10px] text-amber-700 font-mono font-semibold uppercase">${d.series || 'Kohler'}</div>
+            </td>
+            <td class="p-3 font-mono font-bold text-gray-800">${d.art || 'K-5401IN-0'}</td>
+            <td class="p-3 text-gray-600">${roughIn}</td>
+            <td class="p-3 text-gray-600 font-mono text-[11px]">${conduits}</td>
+            <td class="p-3 text-emerald-800 font-semibold">${flow}</td>
+            <td class="p-3 text-[10px] text-gray-500">${standard}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      document.getElementById('modal-studio-kohler').classList.remove('hidden');
+    }
+
+    function closeStudioKohlerModal() {
+      document.getElementById('modal-studio-kohler').classList.add('hidden');
+    }
+
+    function copySpecifierTable() {
+      let text = "STUDIO KOHLER ARCHITECTURAL SPECIFICATION PACKET\n";
+      text += "Project: KOHLER-AI-9021\n";
+      text += "=".repeat(60) + "\n\n";
+      placedProducts.forEach((p, i) => {
+        const d = p.userData || {};
+        text += `${i+1}. ${d.name} (${d.series}) — SKU: ${d.art}\n`;
+        text += `   Category: ${d.category} | Dimensions: ${d.dim}\n\n`;
+      });
+      navigator.clipboard.writeText(text).then(() => showToast('Architectural Spec copied to clipboard!'));
     }
 
     // ==================== 11. PLUMBING WET-WALL & SUB-FLOOR CONDUIT SYSTEM ====================
