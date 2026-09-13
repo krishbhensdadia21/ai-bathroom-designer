@@ -677,25 +677,29 @@
 
           <!-- Priorities Checkboxes -->
           <div class="space-y-2">
-            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Priority Inclusions</label>
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Fixture Inclusions</label>
+              <span class="text-[10px] text-gray-400 font-medium">Toggle room items</span>
+            </div>
             <div class="grid grid-cols-2 gap-2 text-xs">
-              <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer">
-                <input type="checkbox" id="prio-smart-toilet" checked class="accent-black rounded">
+              <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
+                <input type="checkbox" id="prio-smart-toilet" checked onchange="onPriorityCheckboxChange()" class="accent-black rounded">
                 <span class="font-medium text-gray-800">Smart Bidet Toilet</span>
               </label>
-              <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer">
-                <input type="checkbox" id="prio-thermo-shower" checked class="accent-black rounded">
+              <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
+                <input type="checkbox" id="prio-thermo-shower" checked onchange="onPriorityCheckboxChange()" class="accent-black rounded">
                 <span class="font-medium text-gray-800">Thermostatic Shower</span>
               </label>
-              <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer">
-                <input type="checkbox" id="prio-dual-vanity" checked class="accent-black rounded">
+              <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
+                <input type="checkbox" id="prio-dual-vanity" checked onchange="onPriorityCheckboxChange()" class="accent-black rounded">
                 <span class="font-medium text-gray-800">Master Dual Vanity</span>
               </label>
-              <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer">
-                <input type="checkbox" id="prio-smart-mirror" class="accent-black rounded">
+              <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
+                <input type="checkbox" id="prio-smart-mirror" onchange="onPriorityCheckboxChange()" class="accent-black rounded">
                 <span class="font-medium text-gray-800">Alexa Voice Mirror</span>
               </label>
             </div>
+            <p class="text-[10px] text-gray-500 italic">Unchecked fixtures are excluded from the bundle and 3D scene (e.g. powder rooms, half baths).</p>
           </div>
 
           <!-- Customer Notes -->
@@ -3777,6 +3781,10 @@
       document.getElementById('ai-budget-label').innerText = '₹' + n.toLocaleString('en-IN');
     }
 
+    function onPriorityCheckboxChange() {
+      triggerGroqAiRecommendation();
+    }
+
     async function triggerGroqAiRecommendation() {
       const btn = document.getElementById('btn-generate-ai');
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Analyzing Constraints with Groq AI...</span>';
@@ -3788,11 +3796,18 @@
       const budget = document.getElementById('ai-budget-label').innerText;
       const notes = document.getElementById('ai-custom-notes').value;
 
+      const inclusions = {
+        toilet: document.getElementById('prio-smart-toilet') ? document.getElementById('prio-smart-toilet').checked : true,
+        shower: document.getElementById('prio-thermo-shower') ? document.getElementById('prio-thermo-shower').checked : true,
+        vanity: document.getElementById('prio-dual-vanity') ? document.getElementById('prio-dual-vanity').checked : true,
+        mirror: document.getElementById('prio-smart-mirror') ? document.getElementById('prio-smart-mirror').checked : false
+      };
+
       const priorities = [];
-      if (document.getElementById('prio-smart-toilet').checked) priorities.push('Smart Bidet Toilet');
-      if (document.getElementById('prio-thermo-shower').checked) priorities.push('Thermostatic Shower');
-      if (document.getElementById('prio-dual-vanity').checked) priorities.push('Master Dual Vanity');
-      if (document.getElementById('prio-smart-mirror').checked) priorities.push('Alexa Voice Mirror');
+      if (inclusions.toilet) priorities.push('Smart Bidet Toilet');
+      if (inclusions.shower) priorities.push('Thermostatic Shower');
+      if (inclusions.vanity) priorities.push('Master Dual Vanity');
+      if (inclusions.mirror) priorities.push('Alexa Voice Mirror');
 
       const slider = document.getElementById('ai-budget-slider');
       const budgetNum = slider ? parseInt(slider.value) : 350000;
@@ -3811,6 +3826,7 @@
             budget_num: budgetNum,
             theme: currentSelectedTheme,
             priorities: priorities.join(', '),
+            inclusions: inclusions,
             customerNotes: notes
           })
         });
@@ -3820,7 +3836,7 @@
           currentAiRecommendation = data;
           renderAiRecommendationResults(data);
           if (data.feasible) {
-            showToast('Groq Multi-Objective Bundle generated!');
+            showToast(`Groq Multi-Objective Bundle generated (${data.bundle ? data.bundle.length : 0} fixtures)!`);
           } else {
             showToast('No feasible configuration found for constraints');
           }
@@ -3829,11 +3845,11 @@
         throw new Error('Server returned non-200');
       } catch (e) {
         console.warn('Backend Groq endpoint not reachable, running client-side optimization engine:', e);
-        const clientBundle = optimizeKohlerBundle(roomW, roomD, budgetNum, currentSelectedTheme, priorities, notes);
+        const clientBundle = optimizeKohlerBundle(roomW, roomD, budgetNum, currentSelectedTheme, priorities, notes, inclusions);
         currentAiRecommendation = clientBundle;
         renderAiRecommendationResults(clientBundle);
         if (clientBundle.feasible) {
-          showToast('Generated bundle using Kohler Multi-Objective Optimizer');
+          showToast(`Generated bundle (${clientBundle.bundle ? clientBundle.bundle.length : 0} fixtures) using Kohler Optimizer`);
         } else {
           showToast('No feasible configuration found for constraints');
         }
@@ -3850,22 +3866,42 @@
       const budgetNum = slider ? parseInt(slider.value) : 350000;
       const roomW = Math.round(wFt * 0.3048 * 10) / 10;
       const roomD = Math.round(dFt * 0.3048 * 10) / 10;
-      return optimizeKohlerBundle(roomW, roomD, budgetNum, theme);
+      const inclusions = {
+        toilet: document.getElementById('prio-smart-toilet') ? document.getElementById('prio-smart-toilet').checked : true,
+        shower: document.getElementById('prio-thermo-shower') ? document.getElementById('prio-thermo-shower').checked : true,
+        vanity: document.getElementById('prio-dual-vanity') ? document.getElementById('prio-dual-vanity').checked : true,
+        mirror: document.getElementById('prio-smart-mirror') ? document.getElementById('prio-smart-mirror').checked : false
+      };
+      return optimizeKohlerBundle(roomW, roomD, budgetNum, theme, [], '', inclusions);
     }
 
     // ==================== 9. MULTI-OBJECTIVE COMBINATORIAL BUNDLE OPTIMIZER ====================
-    function optimizeKohlerBundle(roomW, roomD, budgetNum, styleTheme, userPriorities = [], notes = '') {
+    function optimizeKohlerBundle(roomW, roomD, budgetNum, styleTheme, userPriorities = [], notes = '', inclusions = null) {
       const roomArea = Math.round(roomW * roomD * 100) / 100;
       const isZen = styleTheme.toLowerCase().includes('zen');
       const isClassic = styleTheme.toLowerCase().includes('classic');
       const isEco = styleTheme.toLowerCase().includes('waste') || styleTheme.toLowerCase().includes('eco');
       const targetTheme = isZen ? 'zen' : (isClassic ? 'classic' : (isEco ? 'wastelab' : 'minimalist'));
 
-      const toilets = KOHLER_CATALOG.filter(c => c.category === 'toilets');
-      const vanities = KOHLER_CATALOG.filter(c => c.category === 'vanities');
-      const faucets = KOHLER_CATALOG.filter(c => c.category === 'faucets');
-      const showers = KOHLER_CATALOG.filter(c => c.category === 'showers');
-      const mirrors = KOHLER_CATALOG.filter(c => c.category === 'mirrors');
+      const prioStr = Array.isArray(userPriorities) ? userPriorities.join(', ').toLowerCase() : String(userPriorities || '').toLowerCase();
+      let incToilet = inclusions ? !!inclusions.toilet : (prioStr ? prioStr.includes('toilet') : true);
+      let incShower = inclusions ? !!inclusions.shower : (prioStr ? prioStr.includes('shower') : true);
+      let incVanity = inclusions ? !!inclusions.vanity : (prioStr ? prioStr.includes('vanit') : true);
+      let incMirror = inclusions ? !!inclusions.mirror : (prioStr ? prioStr.includes('mirror') : false);
+
+      // If all are false, default to all true
+      if (!incToilet && !incShower && !incVanity && !incMirror) {
+        incToilet = true;
+        incShower = true;
+        incVanity = true;
+        incMirror = true;
+      }
+
+      const toilets = incToilet ? KOHLER_CATALOG.filter(c => c.category === 'toilets') : [null];
+      const vanities = incVanity ? KOHLER_CATALOG.filter(c => c.category === 'vanities') : [null];
+      const faucets = incVanity ? KOHLER_CATALOG.filter(c => c.category === 'faucets') : [null];
+      const showers = incShower ? KOHLER_CATALOG.filter(c => c.category === 'showers') : [null];
+      const mirrors = incMirror ? KOHLER_CATALOG.filter(c => c.category === 'mirrors') : [null];
 
       const feasibleBundles = [];
       let minCostFound = Infinity;
@@ -3877,11 +3913,14 @@
       for (let t of toilets) {
         for (let v of vanities) {
           // Hard clearance rule: Back wet-wall must accommodate toilet + vanity with 15" centerline code (0.35m clearance)
-          const combinedWidth = t.width_m + v.width_m + 0.35;
-          const wallFits = combinedWidth <= roomW;
-          const depthFits = (t.depth_m + 0.533) <= roomD; // 21" front clearance
-
-          if (!wallFits || !depthFits) {
+          if (t && v) {
+            const combinedWidth = t.width_m + v.width_m + 0.35;
+            if (combinedWidth > roomW) {
+              spatialViolations++;
+              continue;
+            }
+          }
+          if (t && ((t.depth_m + 0.533) > roomD)) { // 21" front clearance
             spatialViolations++;
             continue;
           }
@@ -3889,14 +3928,16 @@
           for (let f of faucets) {
             for (let s of showers) {
               // Shower footprint feasibility: Corner Revel enclosure (1.12x0.96) requires at least 3.6 sq m
-              const showerFits = (roomArea >= 3.6) || (s.id !== 'hydrorail-shower');
-              if (!showerFits) {
-                spatialViolations++;
-                continue;
+              if (s) {
+                const showerFits = (roomArea >= 3.6) || (s.id !== 'hydrorail-shower');
+                if (!showerFits) {
+                  spatialViolations++;
+                  continue;
+                }
               }
 
               for (let m of mirrors) {
-                const bundleItems = [t, v, f, s, m];
+                const bundleItems = [t, v, f, s, m].filter(Boolean);
                 const totalINR = bundleItems.reduce((acc, item) => acc + item.price_inr, 0);
                 const totalUSD = bundleItems.reduce((acc, item) => acc + item.price_usd, 0);
 
@@ -3909,15 +3950,14 @@
                 }
 
                 // Door collision conflict:
-                // Door swings inward 0.88m along left wall. If room is narrow and vanity is 60" wide, door collision occurs
-                if (roomW < 2.3 && v.width_m > 1.2 && roomD < 2.4) {
+                if (v && roomW < 2.3 && v.width_m > 1.2 && roomD < 2.4) {
                   doorViolations++;
                   continue;
                 }
 
                 // --- Real Multi-Objective Mathematical Scoring ---
                 // 1. Spatial Fit Score (0-100)
-                const footprintArea = t.width_m * t.depth_m + v.width_m * v.depth_m + s.width_m * s.depth_m;
+                const footprintArea = (t ? t.width_m * t.depth_m : 0) + (v ? v.width_m * v.depth_m : 0) + (s ? s.width_m * s.depth_m : 0);
                 const freeRatio = (roomArea - footprintArea) / roomArea;
                 const spatialScore = Math.min(99, Math.max(45, Math.round(50 + (freeRatio - 0.35) * 120)));
 
@@ -3933,25 +3973,25 @@
 
                 // 3. Style Cohesion Score (0-100)
                 const styleMatches = bundleItems.filter(item => item.styles && item.styles.includes(targetTheme)).length;
-                const styleScore = Math.round((styleMatches / bundleItems.length) * 100);
+                const styleScore = bundleItems.length ? Math.round((styleMatches / bundleItems.length) * 100) : 95;
 
                 // 4. Functionality Score (0-100)
                 let funcScore = 50;
-                if (t.id === 'veil-smart-toilet') funcScore += 25;
-                else if (t.id === 'leap-smart-toilet') funcScore += 18;
-                if (s.id === 'hydrorail-shower') funcScore += 25;
-                if (v.id === 'tailored-dual-vanity') funcScore += 15;
-                if (m.id === 'verdera-mirror') funcScore += 15;
+                if (t && t.id === 'veil-smart-toilet') funcScore += 25;
+                else if (t && t.id === 'leap-smart-toilet') funcScore += 18;
+                if (s && s.id === 'hydrorail-shower') funcScore += 25;
+                if (v && v.id === 'tailored-dual-vanity') funcScore += 15;
+                if (m && m.id === 'verdera-mirror') funcScore += 15;
                 funcScore = Math.min(99, funcScore);
 
                 // 5. Authentic Sustainability Score (0-100) based strictly on SKU specifications
-                const waterSavingsL = (t.sustainability ? t.sustainability.annual_water_savings_l : 8840) +
-                                      (f.sustainability ? f.sustainability.annual_water_savings_l : 16580) +
-                                      (s.sustainability ? s.sustainability.annual_water_savings_l : 33160);
+                const waterSavingsL = (t && t.sustainability ? t.sustainability.annual_water_savings_l : 0) +
+                                      (f && f.sustainability ? f.sustainability.annual_water_savings_l : 0) +
+                                      (s && s.sustainability ? s.sustainability.annual_water_savings_l : 0);
                 const sustScore = Math.min(99, Math.max(40, Math.round(50 + (waterSavingsL / 58580) * 49)));
 
                 // 6. Plumbing Wet-Wall Score (0-100)
-                const wetScore = (t.compatibility && t.compatibility.requires_wet_wall && v.compatibility && v.compatibility.requires_wet_wall) ? 96 : 82;
+                const wetScore = (t && t.compatibility && t.compatibility.requires_wet_wall && v && v.compatibility && v.compatibility.requires_wet_wall) ? 96 : 88;
 
                 // Authentic Composite Fitness (Mathematically Derived)
                 const composite = Math.round((
@@ -4405,20 +4445,15 @@
       const rec = currentAiRecommendation.bundle;
 
       // Helper to match catalog item by ID, SKU (art), name, or category
-      function findCatalogFixture(item, fallbackCat) {
-        if (item) {
-          const match = KOHLER_CATALOG.find(c => 
-            (item.id && c.id === item.id) ||
-            (item.sku_code && c.art === item.sku_code) ||
-            (item.art && c.art === item.art) ||
-            (item.name && c.name.toLowerCase() === item.name.toLowerCase())
-          );
-          if (match) return match;
-        }
-        if (fallbackCat) {
-          return KOHLER_CATALOG.find(c => c.category === fallbackCat) || null;
-        }
-        return null;
+      function findCatalogFixture(item) {
+        if (!item) return null;
+        return KOHLER_CATALOG.find(c => 
+          (item.id && c.id === item.id) ||
+          (item.sku_code && c.art === item.sku_code) ||
+          (item.art && c.art === item.art) ||
+          (item.name && c.name.toLowerCase() === item.name.toLowerCase()) ||
+          (item.category && c.category === item.category)
+        ) || null;
       }
 
       // Identify entries robustly (handling both singular and plural category strings)
@@ -4428,52 +4463,60 @@
       const showerEntry = rec.find(i => (i.category || '').toLowerCase().includes('shower'));
       const tubEntry = rec.find(i => (i.category || '').toLowerCase().includes('tub') || (i.category || '').toLowerCase().includes('bath'));
 
-      // A. Place Toilet (along back wet-wall, left side)
-      const toiletCat = findCatalogFixture(toiletEntry, 'toilets');
-      if (toiletCat) {
-        const toiletX = Math.max(-roomWidth / 2 + 0.55, Math.min(-0.55, -roomWidth / 3.4));
-        spawnProductById(toiletCat.id, toiletX, -roomDepth / 2 + 0.38, 0);
+      // A. Place Toilet (along back wet-wall, left side) ONLY if in recommended bundle
+      if (toiletEntry) {
+        const toiletCat = findCatalogFixture(toiletEntry);
+        if (toiletCat) {
+          const toiletX = Math.max(-roomWidth / 2 + 0.55, Math.min(-0.55, -roomWidth / 3.4));
+          spawnProductById(toiletCat.id, toiletX, -roomDepth / 2 + 0.38, 0);
+        }
       }
 
-      // B. Place Vanity (along back wet-wall, centered / right-center)
-      const vanityCat = findCatalogFixture(vanityEntry, 'vanities');
+      // B. Place Vanity (along back wet-wall, centered / right-center) ONLY if in recommended bundle
       let vanityX = 0.20;
       if (roomWidth < 2.6) vanityX = 0.08;
-      if (vanityCat) {
-        spawnProductById(vanityCat.id, vanityX, -roomDepth / 2 + 0.36, 0);
+      if (vanityEntry) {
+        const vanityCat = findCatalogFixture(vanityEntry);
+        if (vanityCat) {
+          spawnProductById(vanityCat.id, vanityX, -roomDepth / 2 + 0.36, 0);
+        }
       }
 
-      // C. Place Mirror (centered directly above vanity)
-      const mirrorCat = findCatalogFixture(mirrorEntry, 'mirrors');
-      if (mirrorCat) {
-        spawnProductById(mirrorCat.id, vanityX, -roomDepth / 2 + 0.08, 0);
+      // C. Place Mirror (centered directly above vanity) ONLY if in recommended bundle
+      if (mirrorEntry) {
+        const mirrorCat = findCatalogFixture(mirrorEntry);
+        if (mirrorCat) {
+          spawnProductById(mirrorCat.id, vanityX, -roomDepth / 2 + 0.08, 0);
+        }
       }
 
-      // D. Place Shower (wet corner zone)
-      const showerCat = findCatalogFixture(showerEntry, 'showers');
-      if (showerCat) {
-        const showerX = Math.min(roomWidth / 2 - 0.50, Math.max(0.60, roomWidth / 2 - 0.55));
-        if (roomWidth >= 2.8 && roomDepth >= 2.5) {
-          spawnProductById(showerCat.id, showerX, 0.25, -Math.PI / 2);
-        } else {
-          spawnProductById(showerCat.id, showerX, -roomDepth / 2 + 0.52, 0);
+      // D. Place Shower (wet corner zone) ONLY if in recommended bundle
+      if (showerEntry) {
+        const showerCat = findCatalogFixture(showerEntry);
+        if (showerCat) {
+          const showerX = Math.min(roomWidth / 2 - 0.50, Math.max(0.60, roomWidth / 2 - 0.55));
+          if (roomWidth >= 2.8 && roomDepth >= 2.5) {
+            spawnProductById(showerCat.id, showerX, 0.25, -Math.PI / 2);
+          } else {
+            spawnProductById(showerCat.id, showerX, -roomDepth / 2 + 0.52, 0);
+          }
         }
       }
 
       // E. Place Bathtub (if included in luxury tier and room has enough space)
       if (tubEntry && roomWidth >= 2.9 && roomDepth >= 2.8) {
-        const tubCat = findCatalogFixture(tubEntry, 'bathtubs');
+        const tubCat = findCatalogFixture(tubEntry);
         if (tubCat) {
           spawnProductById(tubCat.id, -roomWidth / 2 + 0.85, 0.65, Math.PI / 2);
         }
       }
 
-      // Safeguard: If somehow nothing was spawned, ensure standard luxury suite is placed
-      if (placedProducts.length === 0) {
-        spawnProductById('veil-smart-toilet', -0.65, -roomDepth / 2 + 0.38, 0);
-        spawnProductById('tailored-dual-vanity', 0.20, -roomDepth / 2 + 0.36, 0);
-        spawnProductById('verdera-mirror', 0.20, -roomDepth / 2 + 0.08, 0);
-        spawnProductById('hydrorail-shower', roomWidth / 2 - 0.50, -roomDepth / 2 + 0.52, 0);
+      // Safeguard: If somehow nothing was spawned, ensure matching fixtures from bundle are placed
+      if (placedProducts.length === 0 && rec.length > 0) {
+        if (toiletEntry) spawnProductById('veil-smart-toilet', -0.65, -roomDepth / 2 + 0.38, 0);
+        if (vanityEntry) spawnProductById('tailored-dual-vanity', 0.20, -roomDepth / 2 + 0.36, 0);
+        if (mirrorEntry) spawnProductById('verdera-mirror', 0.20, -roomDepth / 2 + 0.08, 0);
+        if (showerEntry) spawnProductById('hydrorail-shower', roomWidth / 2 - 0.50, -roomDepth / 2 + 0.52, 0);
       }
 
       closeAiAssistantModal();

@@ -209,7 +209,7 @@ const server = http.createServer(async (req, res) => {
         }
 
         // 3. Multi-Objective Optimization Engine
-        const optimizedBundle = generateOfflineKohlerBundle(theme || 'Minimalist Modern', budgetNum, roomW, roomD, guardScore, priorities, customerNotes);
+        const optimizedBundle = generateOfflineKohlerBundle(theme || 'Minimalist Modern', budgetNum, roomW, roomD, guardScore, priorities, customerNotes, payload.inclusions);
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(optimizedBundle));
@@ -236,7 +236,7 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 350000, roomW = 3.2, roomD = 2.8, guardScore = 0.00079, priorities = '', customerNotes = '') {
+function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 350000, roomW = 3.2, roomD = 2.8, guardScore = 0.00079, priorities = '', customerNotes = '', inclusions = null) {
   if (typeof budgetNum === 'string') {
     budgetNum = parseInt(budgetNum.replace(/[^0-9]/g, '')) || 350000;
   }
@@ -488,14 +488,46 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     }
   ];
 
+  // Filter fixtures based on explicit user inclusions (or priorities text)
+  const prioStr = String(priorities || '').toLowerCase();
+  let incToilet = inclusions ? !!inclusions.toilet : (prioStr ? prioStr.includes('toilet') : true);
+  let incShower = inclusions ? !!inclusions.shower : (prioStr ? prioStr.includes('shower') : true);
+  let incVanity = inclusions ? !!inclusions.vanity : (prioStr ? prioStr.includes('vanit') : true);
+  let incMirror = inclusions ? !!inclusions.mirror : (prioStr ? prioStr.includes('mirror') : false);
+
+  // If user selected none, default to all included
+  if (!incToilet && !incShower && !incVanity && !incMirror) {
+    incToilet = true;
+    incShower = true;
+    incVanity = true;
+    incMirror = true;
+  }
+
+  function filterItems(items) {
+    return items.filter(it => {
+      const cat = (it.category || '').toLowerCase();
+      if (cat.includes('toilet')) return incToilet;
+      if (cat.includes('vanit')) return incVanity;
+      if (cat.includes('faucet')) return incVanity; // faucet accompanies vanity
+      if (cat.includes('shower')) return incShower;
+      if (cat.includes('mirror')) return incMirror;
+      if (cat.includes('bath') || cat.includes('tub')) return incShower;
+      return true;
+    });
+  }
+
+  const activeSignature = filterItems(signatureItems);
+  const activeEssential = filterItems(essentialItems);
+  const activeLuxury = filterItems(luxuryItems);
+
   const calcTotal = (items) => ({
     inr: items.reduce((s, i) => s + (i.price_inr || 0), 0),
     usd: items.reduce((s, i) => s + (i.price_usd || 0), 0)
   });
 
-  const sigTotals = calcTotal(signatureItems);
-  const essTotals = calcTotal(essentialItems);
-  const luxTotals = calcTotal(luxuryItems);
+  const sigTotals = calcTotal(activeSignature);
+  const essTotals = calcTotal(activeEssential);
+  const luxTotals = calcTotal(activeLuxury);
 
   const roomArea = +(roomW * roomD).toFixed(2);
   const spatialScore = Math.min(99, Math.max(88, Math.round(91 + Math.min(8, (roomArea - 5.0) * 1.5))));
@@ -546,11 +578,12 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     };
   };
 
-  const sigTier = calcTierMetrics(signatureItems, sigTotals, "Signature Balanced", "Recommended Best Multi-Objective Score");
-  const essTier = calcTierMetrics(essentialItems, essTotals, "Essential Value", "Budget-Optimized (-38% Capital Investment)");
-  const luxTier = calcTierMetrics(luxuryItems, luxTotals, "Masterpiece Luxury", "Feature-Maximized (Veil + Evok Tub + Revel Enclosure)");
+  const sigTier = calcTierMetrics(activeSignature, sigTotals, "Signature Balanced", "Recommended Best Multi-Objective Score");
+  const essTier = calcTierMetrics(activeEssential, essTotals, "Essential Value", "Budget-Optimized");
+  const luxTier = calcTierMetrics(activeLuxury, luxTotals, "Masterpiece Luxury", "Feature-Maximized");
 
   const dimensionsStr = `${(roomW * 3.28084).toFixed(1)}ft x ${(roomD * 3.28084).toFixed(1)}ft`;
+  const mainItemName = (activeSignature[0] && activeSignature[0].name) ? activeSignature[0].name : 'Kohler suite';
 
   return {
     feasible: true,
@@ -559,7 +592,7 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     guard_score: guardScore,
     guard_status: "Verified Safe (Groq Prompt Guard 22M)",
     active_tier: 'signature',
-    tradeoff_reasoning: `Multi-Objective Trade-off: Balanced capital allocation (₹${(signatureItems[1].price_inr).toLocaleString('en-IN')} for ${signatureItems[1].name}) while utilizing the high-efficiency ${signatureItems[3].name} to achieve a composite score of ${sigTier.composite_score} with ₹${(sigTotals.inr).toLocaleString('en-IN')} total expenditure (${Math.round((sigTotals.inr / budgetNum) * 100)}% of target budget).`,
+    tradeoff_reasoning: `Multi-Objective Trade-off: Filtered to your ${activeSignature.length} selected fixture inclusions (featuring ${mainItemName}) to achieve a composite fitness score of ${sigTier.composite_score}/100 with ₹${(sigTotals.inr).toLocaleString('en-IN')} total suite investment (${Math.round((sigTotals.inr / budgetNum) * 100)}% of target budget).`,
     multi_objective_scores: sigTier.multi_objective_scores,
     composite_score: sigTier.composite_score,
     hard_constraints_status: "VALID",
@@ -568,7 +601,7 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
       essential: essTier,
       luxury: luxTier
     },
-    bundle: signatureItems,
+    bundle: activeSignature,
     total_price_inr: sigTotals.inr,
     total_price_usd: sigTotals.usd,
     budget_utilization_pct: Math.min(100, Math.round((sigTotals.inr / budgetNum) * 100)),
