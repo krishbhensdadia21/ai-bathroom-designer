@@ -495,12 +495,20 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   let incVanity = inclusions ? !!inclusions.vanity : (prioStr ? prioStr.includes('vanit') : true);
   let incMirror = inclusions ? !!inclusions.mirror : (prioStr ? prioStr.includes('mirror') : false);
 
-  // If user selected none, default to all included
+  // If user selected none, do NOT default to all! Return zero fixtures selected
   if (!incToilet && !incShower && !incVanity && !incMirror) {
-    incToilet = true;
-    incShower = true;
-    incVanity = true;
-    incMirror = true;
+    return {
+      feasible: false,
+      empty_selection: true,
+      failed_constraint: 'Zero Fixtures Selected',
+      failure_reason: 'You have unchecked all fixture options. Please check at least one fixture (Toilet, Vanity, Shower, or Mirror) to generate an AI bundle.',
+      relaxation_suggestions: [
+        'Check "Toilet" for a compact Powder Room layout',
+        'Check "Vanity & Basin" to include a wash station',
+        'Check "Shower" to include a bathing enclosure'
+      ],
+      bundle: []
+    };
   }
 
   function filterItems(items) {

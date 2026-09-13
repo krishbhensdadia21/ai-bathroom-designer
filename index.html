@@ -684,22 +684,22 @@
             <div class="grid grid-cols-2 gap-2 text-xs">
               <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
                 <input type="checkbox" id="prio-smart-toilet" checked onchange="onPriorityCheckboxChange()" class="accent-black rounded">
-                <span class="font-medium text-gray-800">Smart Bidet Toilet</span>
+                <span class="font-medium text-gray-800">Toilet (Smart / Regular)</span>
               </label>
               <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
                 <input type="checkbox" id="prio-thermo-shower" checked onchange="onPriorityCheckboxChange()" class="accent-black rounded">
-                <span class="font-medium text-gray-800">Thermostatic Shower</span>
+                <span class="font-medium text-gray-800">Shower Enclosure</span>
               </label>
               <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
                 <input type="checkbox" id="prio-dual-vanity" checked onchange="onPriorityCheckboxChange()" class="accent-black rounded">
-                <span class="font-medium text-gray-800">Master Dual Vanity</span>
+                <span class="font-medium text-gray-800">Vanity & Basin</span>
               </label>
               <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
                 <input type="checkbox" id="prio-smart-mirror" onchange="onPriorityCheckboxChange()" class="accent-black rounded">
-                <span class="font-medium text-gray-800">Alexa Voice Mirror</span>
+                <span class="font-medium text-gray-800">Mirror (LED / Smart)</span>
               </label>
             </div>
-            <p class="text-[10px] text-gray-500 italic">Unchecked fixtures are excluded from the bundle and 3D scene (e.g. powder rooms, half baths).</p>
+            <p class="text-[10px] text-gray-500 italic">Select which fixtures to include. If no options are checked, no products will be added to the room.</p>
           </div>
 
           <!-- Customer Notes -->
@@ -3889,12 +3889,20 @@
       let incVanity = inclusions ? !!inclusions.vanity : (prioStr ? prioStr.includes('vanit') : true);
       let incMirror = inclusions ? !!inclusions.mirror : (prioStr ? prioStr.includes('mirror') : false);
 
-      // If all are false, default to all true
+      // If user selected none, do NOT default to all! Return zero fixtures selected
       if (!incToilet && !incShower && !incVanity && !incMirror) {
-        incToilet = true;
-        incShower = true;
-        incVanity = true;
-        incMirror = true;
+        return {
+          feasible: false,
+          empty_selection: true,
+          failed_constraint: 'Zero Fixtures Selected',
+          fail_reason: 'You have unchecked all fixture options. Please select at least one fixture category (Toilet, Vanity, Shower, or Mirror) on the left to generate an AI bundle.',
+          suggestions: [
+            'Check "Toilet" for a compact Powder Room layout',
+            'Check "Vanity & Basin" to include grooming storage',
+            'Check "Shower" to include a bathing enclosure'
+          ],
+          bundle: []
+        };
       }
 
       const toilets = incToilet ? KOHLER_CATALOG.filter(c => c.category === 'toilets') : [null];
@@ -4215,23 +4223,25 @@
       const impossibleContainer = document.getElementById('ai-impossible-container');
       const applyBtn = document.getElementById('btn-apply-ai-bundle');
 
-      // Check if optimization yielded no feasible configuration
+      // Check if optimization yielded no feasible configuration or zero fixtures
       if (!data.feasible) {
         if (feasibleContainer) feasibleContainer.classList.add('hidden');
         if (impossibleContainer) {
           impossibleContainer.classList.remove('hidden');
           const badge = document.getElementById('ai-impossible-constraint-badge');
-          if (badge) badge.innerText = `Failed: ${data.failed_constraint || 'Constraint Conflict'}`;
+          if (badge) badge.innerText = data.empty_selection ? 'No Fixtures Selected' : `Failed: ${data.failed_constraint || 'Constraint Conflict'}`;
           const reasonEl = document.getElementById('ai-impossible-reason');
-          if (reasonEl) reasonEl.innerText = data.fail_reason || 'No feasible combination of fixtures meets all physical envelope, clearance, and budget requirements.';
+          if (reasonEl) reasonEl.innerText = data.fail_reason || data.failure_reason || 'You have not checked any fixtures on the left. Please select at least one fixture category to generate a Kohler suite.';
           const suggEl = document.getElementById('ai-impossible-suggestions');
-          if (suggEl && data.suggestions) {
-            suggEl.innerHTML = data.suggestions.map(s => `<li>${s}</li>`).join('');
+          const suggs = data.suggestions || data.relaxation_suggestions;
+          if (suggEl && suggs) {
+            suggEl.innerHTML = suggs.map(s => `<li>${s}</li>`).join('');
           }
         }
         if (applyBtn) {
           applyBtn.disabled = true;
           applyBtn.classList.add('opacity-50', 'cursor-not-allowed');
+          applyBtn.innerHTML = '<i class="fa-solid fa-ban"></i><span>Select At Least 1 Fixture</span>';
         }
         return;
       }
@@ -4242,6 +4252,7 @@
       if (applyBtn) {
         applyBtn.disabled = false;
         applyBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        applyBtn.innerHTML = '<i class="fa-solid fa-pencil"></i><span>Apply AI Bundle to 3D & 2D Bathroom</span>';
       }
 
       // 1. Concept text
@@ -4409,21 +4420,9 @@
     }
 
     function applyAiBundleToBathroom() {
-      // 1. Ensure a bundle recommendation exists, or generate one immediately
-      if (!currentAiRecommendation || !currentAiRecommendation.bundle || !currentAiRecommendation.bundle.length) {
-        const wFt = parseFloat(document.getElementById('ai-input-width').value) || 10.5;
-        const dFt = parseFloat(document.getElementById('ai-input-depth').value) || 9.2;
-        const slider = document.getElementById('ai-budget-slider');
-        const budgetNum = slider ? parseInt(slider.value) : 350000;
-        const roomW = Math.round(wFt * 0.3048 * 10) / 10;
-        const roomD = Math.round(dFt * 0.3048 * 10) / 10;
-        const initialBundle = optimizeKohlerBundle(roomW, roomD, budgetNum, currentSelectedTheme);
-        currentAiRecommendation = initialBundle;
-        renderAiRecommendationResults(initialBundle);
-      }
-
-      if (!currentAiRecommendation || !currentAiRecommendation.bundle || !currentAiRecommendation.bundle.length) {
-        showToast('Please adjust dimensions or budget to generate a feasible bundle.');
+      // 1. Ensure a bundle recommendation exists and has items
+      if (!currentAiRecommendation || !currentAiRecommendation.feasible || !currentAiRecommendation.bundle || !currentAiRecommendation.bundle.length) {
+        showToast('Please check at least one fixture category on the left to place products.');
         return;
       }
 
