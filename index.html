@@ -306,6 +306,53 @@
         </div>
       </div>
 
+      <!-- Aesthetic Themes Dropdown -->
+      <div class="relative group">
+        <button id="btn-theme-selector" class="bg-gray-100/90 hover:bg-gray-200 px-3 py-1 rounded-full font-bold text-xs text-gray-800 flex items-center space-x-1.5 transition border border-gray-200/80 shadow-xs">
+          <i class="fa-solid fa-palette text-amber-600 text-[11px]"></i>
+          <span>Theme: <strong id="subnav-theme-label" class="text-black">Minimalist Modern</strong></span>
+          <i class="fa-solid fa-chevron-down text-[8px] text-gray-400"></i>
+        </button>
+        <div class="absolute left-0 top-full mt-1.5 w-64 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200 p-2 hidden group-hover:block z-40 animate-in fade-in duration-150">
+          <div class="text-[9px] uppercase font-bold text-gray-400 px-2 py-1 tracking-wider">Aesthetic Kohler Themes</div>
+          <button onclick="applyAestheticTheme('Minimalist Modern')" class="w-full text-left px-2.5 py-1.5 rounded-xl hover:bg-amber-50 hover:text-amber-900 transition flex items-center justify-between text-xs">
+            <div>
+              <div class="font-bold">Minimalist Modern</div>
+              <div class="text-[10px] text-gray-500">Travertine & Matte Black</div>
+            </div>
+            <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded font-mono font-semibold">Clean Lines</span>
+          </button>
+          <button onclick="applyAestheticTheme('Classic Luxury')" class="w-full text-left px-2.5 py-1.5 rounded-xl hover:bg-amber-50 hover:text-amber-900 transition flex items-center justify-between text-xs mt-1">
+            <div>
+              <div class="font-bold">Classic Luxury</div>
+              <div class="text-[10px] text-gray-500">Calacatta Gold & Brass</div>
+            </div>
+            <span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-mono font-bold">Timeless</span>
+          </button>
+          <button onclick="applyAestheticTheme('Japanese Zen')" class="w-full text-left px-2.5 py-1.5 rounded-xl hover:bg-amber-50 hover:text-amber-900 transition flex items-center justify-between text-xs mt-1">
+            <div>
+              <div class="font-bold">Japanese Zen</div>
+              <div class="text-[10px] text-gray-500">Teak Wood & Sandstone</div>
+            </div>
+            <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded font-mono font-semibold">Tranquility</span>
+          </button>
+          <button onclick="applyAestheticTheme('Industrial Chic')" class="w-full text-left px-2.5 py-1.5 rounded-xl hover:bg-amber-50 hover:text-amber-900 transition flex items-center justify-between text-xs mt-1">
+            <div>
+              <div class="font-bold">Industrial Chic</div>
+              <div class="text-[10px] text-gray-500">Raw Concrete & Crittall</div>
+            </div>
+            <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded font-mono font-semibold">Bold</span>
+          </button>
+          <button onclick="applyAestheticTheme('Kohler WasteLAB Eco-Luxury')" class="w-full text-left px-2.5 py-1.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-900 transition flex items-center justify-between text-xs mt-1">
+            <div>
+              <div class="font-bold text-emerald-950">Kohler WasteLAB®</div>
+              <div class="text-[10px] text-emerald-700">Closed-Loop Ceramic Tile</div>
+            </div>
+            <span class="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-mono font-bold">Eco</span>
+          </button>
+        </div>
+      </div>
+
       <div class="h-4 w-px bg-gray-200"></div>
 
       <!-- Lighting & Ambiance Controls (Day/Dusk/Night + Kelvin) -->
@@ -645,30 +692,52 @@
             </div>
           </div>
 
-          <!-- Aesthetic Theme Selector -->
+          <!-- Aesthetic Theme Selector (Matched to Reference Image) -->
           <div class="space-y-2">
-            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Aesthetic Theme</label>
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Aesthetic Theme</label>
+              <span class="text-[10px] text-amber-700 font-bold">1-Click 3D Styling</span>
+            </div>
             <div class="grid grid-cols-2 gap-2 text-xs" id="ai-theme-container">
-              <button onclick="selectAiTheme('Minimalist Modern')" class="ai-theme-btn active text-left p-3 rounded-xl border-2 border-black bg-gray-50 transition" data-theme="Minimalist Modern">
-                <div class="font-black text-gray-900">Minimalist Modern</div>
-                <div class="text-[10px] text-gray-500 mt-0.5">Veil, Purist, Matte Black & Chrome</div>
+              <button onclick="selectAiTheme('Minimalist Modern')" class="ai-theme-btn active text-left p-3 rounded-xl border-2 border-black bg-gray-50 transition hover:shadow-sm" data-theme="Minimalist Modern">
+                <div class="flex items-center justify-between">
+                  <div class="font-black text-gray-900">Minimalist Modern</div>
+                  <span class="text-[8px] bg-gray-200 text-gray-700 px-1 py-0.5 rounded font-mono font-bold">TRAVERTINE</span>
+                </div>
+                <div class="text-[10px] text-amber-800 font-semibold italic mt-0.5">"Clean lines. Simple forms. Timeless appeal."</div>
+                <div class="text-[9px] text-gray-500 mt-1 font-mono">Veil • Purist • Matte Black • Chrome</div>
               </button>
-              <button onclick="selectAiTheme('Classic Luxury')" class="ai-theme-btn text-left p-3 rounded-xl border border-gray-200 hover:border-gray-400 bg-white transition" data-theme="Classic Luxury">
-                <div class="font-black text-gray-900">Classic Luxury</div>
-                <div class="text-[10px] text-gray-500 mt-0.5">Memoirs, Artifacts, Polished Brass</div>
+              <button onclick="selectAiTheme('Classic Luxury')" class="ai-theme-btn text-left p-3 rounded-xl border border-gray-200 hover:border-gray-400 bg-white transition hover:shadow-sm" data-theme="Classic Luxury">
+                <div class="flex items-center justify-between">
+                  <div class="font-black text-gray-900">Classic Luxury</div>
+                  <span class="text-[8px] bg-amber-100 text-amber-800 px-1 py-0.5 rounded font-mono font-bold">CALACATTA</span>
+                </div>
+                <div class="text-[10px] text-amber-800 font-semibold italic mt-0.5">"Timeless elegance. Refined details."</div>
+                <div class="text-[9px] text-gray-500 mt-1 font-mono">Veil • Purist • Polished Brass • Gold Sconces</div>
               </button>
-              <button onclick="selectAiTheme('Japanese Zen')" class="ai-theme-btn text-left p-3 rounded-xl border border-gray-200 hover:border-gray-400 bg-white transition" data-theme="Japanese Zen">
-                <div class="font-black text-gray-900">Japanese Zen</div>
-                <div class="text-[10px] text-gray-500 mt-0.5">Brazn, Chalice, Evok Tub, Teak Wood</div>
+              <button onclick="selectAiTheme('Japanese Zen')" class="ai-theme-btn text-left p-3 rounded-xl border border-gray-200 hover:border-gray-400 bg-white transition hover:shadow-sm" data-theme="Japanese Zen">
+                <div class="flex items-center justify-between">
+                  <div class="font-black text-gray-900">Japanese Zen</div>
+                  <span class="text-[8px] bg-emerald-100 text-emerald-800 px-1 py-0.5 rounded font-mono font-bold">HINOKI TEAK</span>
+                </div>
+                <div class="text-[10px] text-amber-800 font-semibold italic mt-0.5">"Harmony. Natural beauty. Tranquility."</div>
+                <div class="text-[9px] text-gray-500 mt-1 font-mono">Veil • Chalice • Matte Black • Teak Slats</div>
               </button>
-              <button onclick="selectAiTheme('Industrial Contemporary')" class="ai-theme-btn text-left p-3 rounded-xl border border-gray-200 hover:border-gray-400 bg-white transition" data-theme="Industrial Contemporary">
-                <div class="font-black text-gray-900">Industrial Chic</div>
-                <div class="text-[10px] text-gray-500 mt-0.5">Composed, Reach, Moxie Sound</div>
+              <button onclick="selectAiTheme('Industrial Chic')" class="ai-theme-btn text-left p-3 rounded-xl border border-gray-200 hover:border-gray-400 bg-white transition hover:shadow-sm" data-theme="Industrial Chic">
+                <div class="flex items-center justify-between">
+                  <div class="font-black text-gray-900">Industrial Chic</div>
+                  <span class="text-[8px] bg-slate-200 text-slate-800 px-1 py-0.5 rounded font-mono font-bold">CONCRETE</span>
+                </div>
+                <div class="text-[10px] text-amber-800 font-semibold italic mt-0.5">"Bold. Modern. Unconventional."</div>
+                <div class="text-[9px] text-gray-500 mt-1 font-mono">Veil • Concrete Trough • Matte Black • Crittall Grid</div>
               </button>
               <button onclick="selectAiTheme('Kohler WasteLAB Eco-Luxury')" class="ai-theme-btn text-left p-3 rounded-xl border border-emerald-200 hover:border-emerald-500 bg-emerald-50/40 transition col-span-2" data-theme="Kohler WasteLAB Eco-Luxury">
-                <div class="flex items-center space-x-2">
-                  <span class="font-black text-emerald-950">Kohler WasteLAB® (Eco-Luxury)</span>
-                  <span class="text-[9px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded">Closed-Loop</span>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-2">
+                    <span class="font-black text-emerald-950">Kohler WasteLAB® (Eco-Luxury)</span>
+                    <span class="text-[9px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded">Closed-Loop</span>
+                  </div>
+                  <span class="text-[8px] bg-emerald-200 text-emerald-900 px-1 py-0.5 rounded font-mono font-bold">CIRCULAR</span>
                 </div>
                 <div class="text-[10px] text-emerald-800 mt-0.5">Abstra Recycled Tiles, Brazn Console & Katalyst Air-Induction Fittings</div>
               </button>
@@ -1457,12 +1526,132 @@
     let dragOffset = new THREE.Vector3();
 
     // ==================== PROCEDURAL TEXTURES & PBR MATERIALS ====================
+    let themeAccentsGroup = null;
+
     function generateWallTileTexture(type = 'square', widthM = 3.2, heightM = 2.6) {
       const canvas = document.createElement('canvas');
       canvas.width = 1024; canvas.height = 1024;
       const ctx = canvas.getContext('2d');
 
-      if (type === 'square') {
+      if (type === 'minimalist-modern') {
+        // Warm Travertine Sand Microcement Wall Panels
+        ctx.fillStyle = '#e8ded2'; ctx.fillRect(0, 0, 1024, 1024);
+        // Subtle micro mineral stipple
+        for (let i = 0; i < 4000; i++) {
+          ctx.fillStyle = Math.random() > 0.5 ? '#ded3c3' : '#f2e8dd';
+          ctx.globalAlpha = 0.22;
+          ctx.fillRect(Math.random() * 1024, Math.random() * 1024, Math.random() * 4 + 1, Math.random() * 3 + 1);
+        }
+        ctx.globalAlpha = 1.0;
+        // Large minimal panel joints
+        ctx.strokeStyle = '#d5cab8'; ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(512, 0); ctx.lineTo(512, 1024);
+        ctx.moveTo(0, 512); ctx.lineTo(1024, 512);
+        ctx.stroke();
+
+      } else if (type === 'calacatta-gold' || type === 'calacatta' || type === 'classic-luxury') {
+        // Polished Calacatta Gold Italian Marble Slab
+        ctx.fillStyle = '#fbfbfa'; ctx.fillRect(0, 0, 1024, 1024);
+        // Soft smoky undertone veining
+        ctx.strokeStyle = '#dedad2'; ctx.lineWidth = 14; ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(0, 150); ctx.bezierCurveTo(280, 220, 580, 80, 1024, 450);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(180, 1024); ctx.bezierCurveTo(450, 750, 720, 820, 1024, 880);
+        ctx.stroke();
+
+        // Elegant flowing golden-amber primary veining
+        ctx.strokeStyle = '#c5a059'; ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(0, 160); ctx.bezierCurveTo(300, 240, 600, 90, 1024, 460);
+        ctx.stroke();
+        ctx.strokeStyle = '#b8924b'; ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(350, 200); ctx.bezierCurveTo(460, 320, 650, 260, 850, 410);
+        ctx.stroke();
+        // Lower golden branch
+        ctx.strokeStyle = '#c9a45e'; ctx.lineWidth = 3.5;
+        ctx.beginPath();
+        ctx.moveTo(190, 1024); ctx.bezierCurveTo(460, 760, 730, 830, 1024, 890);
+        ctx.stroke();
+
+      } else if (type === 'japanese-zen') {
+        // Natural Earthy Sandstone with Subtle Horizontal Grain
+        ctx.fillStyle = '#dfd6c8'; ctx.fillRect(0, 0, 1024, 1024);
+        ctx.fillStyle = '#cfc5b3';
+        for (let y = 0; y < 1024; y += 12) {
+          ctx.globalAlpha = 0.18;
+          ctx.fillRect(0, y + (Math.random() - 0.5) * 6, 1024, Math.random() * 6 + 2);
+        }
+        ctx.globalAlpha = 1.0;
+        // Clean minimal stone panel joints
+        ctx.strokeStyle = '#b8ad9a'; ctx.lineWidth = 2.5;
+        for (let y = 0; y < 1024; y += 256) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1024, y); ctx.stroke();
+        }
+        for (let x = 0; x < 1024; x += 512) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 1024); ctx.stroke();
+        }
+
+      } else if (type === 'industrial-chic') {
+        // Raw Architectural Formwork Concrete Panels with Tie-Holes
+        ctx.fillStyle = '#494d53'; ctx.fillRect(0, 0, 1024, 1024);
+        // Mottled concrete texture
+        for (let i = 0; i < 6000; i++) {
+          ctx.fillStyle = Math.random() > 0.5 ? '#3e4147' : '#575b63';
+          ctx.globalAlpha = 0.18;
+          ctx.fillRect(Math.random() * 1024, Math.random() * 1024, Math.random() * 6 + 2, Math.random() * 6 + 2);
+        }
+        ctx.globalAlpha = 1.0;
+
+        // Formwork panel seams (2x2 grid)
+        ctx.strokeStyle = '#32353a'; ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(512, 0); ctx.lineTo(512, 1024);
+        ctx.moveTo(0, 512); ctx.lineTo(1024, 512);
+        ctx.stroke();
+
+        // Architectural concrete tie-holes (circular cast-in bolt indents)
+        const tiePoints = [
+          [80, 80], [432, 80], [80, 432], [432, 432],
+          [592, 80], [944, 80], [592, 432], [944, 432],
+          [80, 592], [432, 592], [80, 944], [432, 944],
+          [592, 592], [944, 592], [592, 944], [944, 944]
+        ];
+        tiePoints.forEach(([tx, ty]) => {
+          // Dark recessed ring
+          ctx.fillStyle = '#222428';
+          ctx.beginPath(); ctx.arc(tx, ty, 10, 0, Math.PI * 2); ctx.fill();
+          // Inner bolt head
+          ctx.fillStyle = '#17181a';
+          ctx.beginPath(); ctx.arc(tx, ty, 5, 0, Math.PI * 2); ctx.fill();
+          // Subtle highlight rim
+          ctx.strokeStyle = '#62676f'; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.arc(tx, ty, 10, Math.PI * 0.75, Math.PI * 1.75); ctx.stroke();
+        });
+
+      } else if (type === 'wastelab') {
+        // Kohler WasteLAB Closed-Loop Glazed Relief Tiles
+        ctx.fillStyle = '#d4ded8'; ctx.fillRect(0, 0, 1024, 1024);
+        const sz = 128;
+        for (let y = 0; y < 1024; y += sz) {
+          for (let x = 0; x < 1024; x += sz) {
+            ctx.fillStyle = ((x / sz + y / sz) % 2 === 0) ? '#c2cfc7' : '#cad6cf';
+            ctx.fillRect(x + 3, y + 3, sz - 6, sz - 6);
+          }
+        }
+
+      } else if (type === 'marquina') {
+        ctx.fillStyle = '#181b1f'; ctx.fillRect(0, 0, 1024, 1024);
+        ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(100, 0); ctx.bezierCurveTo(300, 500, 700, 400, 900, 1024);
+        ctx.stroke();
+
+      } else {
+        // Classic square white ceramic grid
         ctx.fillStyle = '#969ca2'; ctx.fillRect(0, 0, 1024, 1024);
         const tileSize = 85, grout = 2.5;
         for (let y = 0; y < 1024; y += tileSize) {
@@ -1475,18 +1664,6 @@
             ctx.fillRect(x + grout, y + grout, tileSize - grout * 2, tileSize - grout * 2);
           }
         }
-      } else if (type === 'calacatta') {
-        ctx.fillStyle = '#faf9f5'; ctx.fillRect(0, 0, 1024, 1024);
-        ctx.strokeStyle = '#c5a059'; ctx.lineWidth = 4;
-        ctx.beginPath();
-        ctx.moveTo(0, 200); ctx.bezierCurveTo(400, 300, 600, 100, 1024, 600);
-        ctx.stroke();
-      } else if (type === 'marquina') {
-        ctx.fillStyle = '#181b1f'; ctx.fillRect(0, 0, 1024, 1024);
-        ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(100, 0); ctx.bezierCurveTo(300, 500, 700, 400, 900, 1024);
-        ctx.stroke();
       }
 
       const tex = new THREE.CanvasTexture(canvas);
@@ -1503,7 +1680,83 @@
       canvas.width = 1024; canvas.height = 1024;
       const ctx = canvas.getContext('2d');
 
-      if (type === 'slate') {
+      if (type === 'minimalist-sand') {
+        // Honed Sand Limestone Floor Tiles
+        ctx.fillStyle = '#c7bca9'; ctx.fillRect(0, 0, 1024, 1024);
+        const tileSize = 256, grout = 3.0;
+        for (let y = 0; y < 1024; y += tileSize) {
+          for (let x = 0; x < 1024; x += tileSize) {
+            ctx.fillStyle = ((x + y) % 512 === 0) ? '#ded4c4' : '#d8cebe';
+            ctx.fillRect(x + grout, y + grout, tileSize - grout * 2, tileSize - grout * 2);
+          }
+        }
+
+      } else if (type === 'calacatta-gold' || type === 'calacatta') {
+        // Large Format Polished Calacatta Gold Marble Floor Slabs
+        ctx.fillStyle = '#f8f8f6'; ctx.fillRect(0, 0, 1024, 1024);
+        ctx.strokeStyle = '#c5a059'; ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(0, 300); ctx.bezierCurveTo(350, 450, 650, 200, 1024, 600);
+        ctx.stroke();
+        ctx.strokeStyle = '#dedad2'; ctx.lineWidth = 12;
+        ctx.beginPath();
+        ctx.moveTo(100, 0); ctx.bezierCurveTo(400, 600, 600, 400, 950, 1024);
+        ctx.stroke();
+        // Thin brass inlay grout line
+        ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2.0;
+        ctx.strokeRect(4, 4, 1016, 1016);
+
+      } else if (type === 'japanese-limestone') {
+        // Earthy Limestone Floor
+        ctx.fillStyle = '#beaf9a'; ctx.fillRect(0, 0, 1024, 1024);
+        const tileSize = 256, grout = 3.0;
+        for (let y = 0; y < 1024; y += tileSize) {
+          for (let x = 0; x < 1024; x += tileSize) {
+            ctx.fillStyle = ((x + y) % 512 === 0) ? '#d3c5b1' : '#cbbda9';
+            ctx.fillRect(x + grout, y + grout, tileSize - grout * 2, tileSize - grout * 2);
+          }
+        }
+
+      } else if (type === 'industrial-slate') {
+        // Anthracite Charcoal Honed Slate Floor
+        ctx.fillStyle = '#1a1c1f'; ctx.fillRect(0, 0, 1024, 1024);
+        const tileSize = 256, grout = 3.5;
+        for (let y = 0; y < 1024; y += tileSize) {
+          for (let x = 0; x < 1024; x += tileSize) {
+            const g = ctx.createLinearGradient(x, y, x + tileSize, y + tileSize);
+            g.addColorStop(0, '#2b2d31');
+            g.addColorStop(0.5, '#242629');
+            g.addColorStop(1, '#1e2023');
+            ctx.fillStyle = g;
+            ctx.fillRect(x + grout, y + grout, tileSize - grout * 2, tileSize - grout * 2);
+          }
+        }
+
+      } else if (type === 'wastelab-terrazzo') {
+        // Closed-Loop Recycled Terrazzo Floor
+        ctx.fillStyle = '#8f969e'; ctx.fillRect(0, 0, 1024, 1024);
+        for (let i = 0; i < 3000; i++) {
+          ctx.fillStyle = ['#ffffff', '#222428', '#c2b280', '#5a7a6c'][i % 4];
+          ctx.globalAlpha = 0.35;
+          ctx.fillRect(Math.random() * 1024, Math.random() * 1024, Math.random() * 5 + 2, Math.random() * 5 + 2);
+        }
+        ctx.globalAlpha = 1.0;
+
+      } else if (type === 'teak') {
+        ctx.fillStyle = '#8e623a'; ctx.fillRect(0, 0, 1024, 1024);
+        for (let y = 0; y < 1024; y += 40) {
+          ctx.fillStyle = '#6b4825'; ctx.fillRect(0, y, 1024, 3);
+        }
+
+      } else if (type === 'carrara') {
+        ctx.fillStyle = '#f0f2f5'; ctx.fillRect(0, 0, 1024, 1024);
+        ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(0, 400); ctx.bezierCurveTo(300, 200, 700, 800, 1024, 500);
+        ctx.stroke();
+
+      } else {
+        // Slate fallback
         ctx.fillStyle = '#5a5e62'; ctx.fillRect(0, 0, 1024, 1024);
         const tileSize = 146, grout = 3.5;
         for (let y = 0; y < 1024; y += tileSize) {
@@ -1516,17 +1769,6 @@
             ctx.fillRect(x + grout, y + grout, tileSize - grout * 2, tileSize - grout * 2);
           }
         }
-      } else if (type === 'teak') {
-        ctx.fillStyle = '#8e623a'; ctx.fillRect(0, 0, 1024, 1024);
-        for (let y = 0; y < 1024; y += 40) {
-          ctx.fillStyle = '#6b4825'; ctx.fillRect(0, y, 1024, 3);
-        }
-      } else if (type === 'carrara') {
-        ctx.fillStyle = '#f0f2f5'; ctx.fillRect(0, 0, 1024, 1024);
-        ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(0, 400); ctx.bezierCurveTo(300, 200, 700, 800, 1024, 500);
-        ctx.stroke();
       }
 
       const tex = new THREE.CanvasTexture(canvas);
@@ -1556,10 +1798,11 @@
 
     // High-Fidelity Kohler PBR Materials
     const porcelainMat = new THREE.MeshPhysicalMaterial({ color: 0xfbfcfe, roughness: 0.10, metalness: 0.0, clearcoat: 0.85, clearcoatRoughness: 0.03 });
-    const chromeMat = new THREE.MeshStandardMaterial({ color: 0xe0e6eb, metalness: 0.60, roughness: 0.22 });
-    const matteBlackMat = new THREE.MeshStandardMaterial({ color: 0x181a1d, roughness: 0.45, metalness: 0.1 });
-    const brushedBrassMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.75, roughness: 0.30 });
-    const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, transparent: true, opacity: 0.30, roughness: 0.05, transmission: 0.90, ior: 1.52 });
+    const chromeMat = new THREE.MeshStandardMaterial({ color: 0xe0e6eb, metalness: 0.65, roughness: 0.20 });
+    const matteBlackMat = new THREE.MeshStandardMaterial({ color: 0x181a1d, roughness: 0.42, metalness: 0.15 });
+    const brushedBrassMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.80, roughness: 0.25 });
+    const polishedBrassMat = brushedBrassMat;
+    const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, transparent: true, opacity: 0.28, roughness: 0.04, transmission: 0.92, ior: 1.52 });
     const frostedGlassMat = new THREE.MeshPhysicalMaterial({ color: 0xedf3f8, transparent: true, opacity: 0.65, roughness: 0.55 });
     
     // Crystal Clear Silver Mirror Glass
@@ -1571,14 +1814,30 @@
       emissiveIntensity: 0.38
     });
 
-    const oakWoodTex = generateWoodTexture('#cca06c', '#9b7445');
-    const oakMat = new THREE.MeshStandardMaterial({ map: oakWoodTex, roughness: 0.55 });
+    // Authentic Wood & Architectural Material Finishes
+    const oakWoodTex = generateWoodTexture('#d8b88d', '#a47c52');
+    const scandinavianOakMat = new THREE.MeshStandardMaterial({ map: oakWoodTex, roughness: 0.55 });
+    const oakMat = scandinavianOakMat;
+
+    const mahoganyWoodTex = generateWoodTexture('#382013', '#23120a');
+    const darkMahoganyMat = new THREE.MeshStandardMaterial({ map: mahoganyWoodTex, roughness: 0.45 });
+
+    const teakWoodTex = generateWoodTexture('#996535', '#6e4420');
+    const teakMat = new THREE.MeshStandardMaterial({ map: teakWoodTex, roughness: 0.52 });
+
+    const industrialSteelMat = new THREE.MeshStandardMaterial({ color: 0x1a1c1e, roughness: 0.52, metalness: 0.65 });
+    const concreteTroughMat = new THREE.MeshStandardMaterial({ color: 0x767c85, roughness: 0.82, metalness: 0.05 });
+    const calacattaMarbleMat = new THREE.MeshPhysicalMaterial({ color: 0xfbfbfa, roughness: 0.14, metalness: 0.05, clearcoat: 0.90 });
+    const whiteQuartzMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.22 });
+    const wasteLabTerrazzoMat = new THREE.MeshStandardMaterial({ color: 0x949ba3, roughness: 0.42 });
     const whiteLaminateMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.32 });
 
     function getFinishMaterial(finish) {
       if (finish === 'brass') return brushedBrassMat;
       if (finish === 'black') return matteBlackMat;
-      if (finish === 'oak') return oakMat;
+      if (finish === 'oak') return scandinavianOakMat;
+      if (finish === 'mahogany') return darkMahoganyMat;
+      if (finish === 'teak') return teakMat;
       return whiteLaminateMat;
     }
 
@@ -1599,7 +1858,7 @@
         width_m: 0.41,
         depth_m: 0.71,
         height_m: 0.72,
-        styles: ['minimalist', 'zen', 'modern', 'wastelab'],
+        styles: ['minimalist', 'zen', 'modern', 'wastelab', 'classic', 'industrial'],
         installation: {
           rough_in_in: 12,
           drain_type: '4-inch floor flange',
@@ -1833,7 +2092,7 @@
         width_m: 0.81,
         depth_m: 0.48,
         height_m: 0.84,
-        styles: ['zen', 'minimalist', 'wastelab'],
+        styles: ['zen', 'minimalist', 'wastelab', 'industrial'],
         installation: {
           rough_in_in: '20" AFF decorative bottle trap',
           drain_type: '1-1/4" exposed matte black bottle trap',
@@ -1951,7 +2210,7 @@
         width_m: 0.15,
         depth_m: 0.18,
         height_m: 0.25,
-        styles: ['minimalist', 'zen', 'modern', 'wastelab'],
+        styles: ['minimalist', 'zen', 'modern', 'wastelab', 'industrial'],
         installation: {
           rough_in_in: 'Single-hole 1-3/8" deck mount',
           drain_type: 'Push-button touch drain',
@@ -1992,7 +2251,7 @@
         width_m: 1.12,
         depth_m: 0.96,
         height_m: 2.13,
-        styles: ['minimalist', 'modern', 'classic', 'zen', 'wastelab'],
+        styles: ['minimalist', 'modern', 'classic', 'zen', 'wastelab', 'industrial'],
         installation: {
           rough_in_in: '1/2" NPT hot & cold supply inlets at 36" AFF',
           drain_type: '2-inch high-capacity corner shower drain',
@@ -2112,7 +2371,7 @@
         width_m: 0.86,
         depth_m: 0.10,
         height_m: 0.76,
-        styles: ['minimalist', 'modern', 'zen'],
+        styles: ['minimalist', 'modern', 'zen', 'classic', 'industrial', 'wastelab'],
         installation: {
           rough_in_in: 'Direct 120V hardwired junction box centered behind mirror',
           drain_type: 'None',
@@ -2159,11 +2418,12 @@
       seat.castShadow = true;
       g.add(seat);
 
-      // Chrome accent parting line between lid and body
+      // Accent parting line between lid and body
       const accentRing = new THREE.Mesh(new THREE.TorusGeometry(0.19, 0.004, 8, 36), chromeMat);
       accentRing.rotation.x = Math.PI / 2;
       accentRing.position.set(0, 0.435, 0.20);
       accentRing.scale.set(0.92, 1.42, 1.0);
+      accentRing.userData.role = 'flushPlate';
       g.add(accentRing);
 
       // Sleek rear console interface
@@ -2177,6 +2437,7 @@
         new THREE.BoxGeometry(0.26, 0.015, 0.015),
         new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
       );
+      nightlight.name = 'toilet-nightlight';
       nightlight.position.set(0, 0.04, 0.35);
       g.add(nightlight);
 
@@ -2188,6 +2449,7 @@
       // Wall-mounted touch remote actuator plate
       const remote = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.14, 0.012), chromeMat);
       remote.position.set(0.38, 0.85, -0.01);
+      remote.userData.role = 'flushPlate';
       g.add(remote);
 
       const remoteScreen = new THREE.Mesh(new THREE.PlaneGeometry(0.06, 0.10), new THREE.MeshBasicMaterial({ color: 0x0f172a }));
@@ -2200,7 +2462,6 @@
     // 2. KOHLER Leap Smart Toilet (K-28529IN-0)
     function buildLeapSmartToilet() {
       const g = new THREE.Group();
-      // Low-profile tank with touchless flush top
       const tank = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.44, 0.18), porcelainMat);
       tank.position.set(0, 0.54, -0.04);
       tank.castShadow = true;
@@ -2210,9 +2471,9 @@
       tankLid.position.set(0, 0.77, -0.04);
       g.add(tankLid);
 
-      // Touchless LED sensor ring on tank
       const sensorRing = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.024, 0.008, 24), new THREE.MeshBasicMaterial({ color: 0x60a5fa }));
       sensorRing.position.set(0, 0.785, -0.04);
+      sensorRing.userData.role = 'flushPlate';
       g.add(sensorRing);
 
       const base = new THREE.Mesh(new THREE.BoxGeometry(0.27, 0.36, 0.44), porcelainMat);
@@ -2237,7 +2498,6 @@
     // 3. KOHLER Memoirs Stately Toilet (K-3983IN-0)
     function buildMemoirsToilet() {
       const g = new THREE.Group();
-      // Architectural Crown Molding Tank
       const tank = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.44, 0.20), porcelainMat);
       tank.position.set(0, 0.58, -0.04);
       tank.castShadow = true;
@@ -2248,7 +2508,6 @@
       crownMolding.castShadow = true;
       g.add(crownMolding);
 
-      // Fluted pedestal base
       const base = new THREE.Mesh(new THREE.BoxGeometry(0.29, 0.38, 0.46), porcelainMat);
       base.position.set(0, 0.19, 0.15);
       base.castShadow = true;
@@ -2262,6 +2521,7 @@
 
       const lever = new THREE.Mesh(new THREE.BoxGeometry(0.065, 0.018, 0.018), chromeMat);
       lever.position.set(-0.23, 0.74, 0.02);
+      lever.userData.role = 'flushPlate';
       g.add(lever);
 
       return g;
@@ -2270,7 +2530,6 @@
     // 4. KOHLER Reach Wall-Hung Toilet (K-77701IN-0)
     function buildReachToilet() {
       const g = new THREE.Group();
-      // Cantilevered bowl suspended 12cm above floor
       const bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.13, 0.34, 32), porcelainMat);
       bowl.position.set(0, 0.38, 0.24);
       bowl.scale.set(1.0, 1.0, 1.32);
@@ -2282,9 +2541,9 @@
       seat.scale.set(1.0, 1.0, 1.32);
       g.add(seat);
 
-      // Dual flush actuator plate on back wall
       const plate = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.14, 0.015), chromeMat);
       plate.position.set(0, 0.95, -0.01);
+      plate.userData.role = 'flushPlate';
       g.add(plate);
 
       for (let bx of [-0.04, 0.04]) {
@@ -2301,14 +2560,15 @@
       const g = new THREE.Group();
       const mainMat = getFinishMaterial(finish);
       const w = 1.54, h = 0.52, d = 0.54;
-      const elevY = 0.30; // Floating elevation above floor
-      const cy = elevY + h / 2; // 0.56
+      const elevY = 0.30;
+      const cy = elevY + h / 2;
 
       // Sleek Floating Carcass Body
       const body = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mainMat);
       body.position.set(0, cy, 0);
       body.castShadow = true;
       body.receiveShadow = true;
+      body.userData.role = 'vanityCarcass';
       g.add(body);
 
       // Under-cabinet soft warm LED mood wash
@@ -2316,6 +2576,7 @@
         new THREE.BoxGeometry(w - 0.10, 0.01, d - 0.10),
         new THREE.MeshBasicMaterial({ color: 0xfff0d6 })
       );
+      underGlow.name = 'vanity-underglow';
       underGlow.position.set(0, elevY + 0.005, 0);
       g.add(underGlow);
 
@@ -2333,63 +2594,69 @@
           const front = new THREE.Mesh(new THREE.BoxGeometry(colW - 0.01, rowH - 0.01, 0.02), mainMat);
           front.position.set(cx, ry, d / 2 + 0.01);
           front.castShadow = true;
+          front.userData.role = 'vanityCarcass';
           g.add(front);
 
-          // Kohler Purist architectural horizontal edge pull handle
-          const handle = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.016, 0.022), brushedBrassMat);
+          // Purist architectural horizontal edge pull handle
+          const handle = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.016, 0.022), matteBlackMat);
           handle.position.set(cx, ry + (r === 1 ? rowH / 2 - 0.03 : rowH / 2 - 0.02), d / 2 + 0.025);
           handle.castShadow = true;
+          handle.userData.role = 'vanityHardware';
           g.add(handle);
         }
       }
 
-      // Countertop: Kohler Silestone Polished Quartz Slab
+      // Countertop
       const counterH = 0.038;
       const counterTopY = elevY + h + counterH / 2;
       const counter = new THREE.Mesh(new THREE.BoxGeometry(w + 0.04, counterH, d + 0.04), porcelainMat);
       counter.position.set(0, counterTopY, 0);
       counter.castShadow = true;
       counter.receiveShadow = true;
+      counter.userData.role = 'vanityCounter';
       g.add(counter);
 
-      // Twin Kohler Ladena Undermount Sinks (K-2214IN-0) & Purist Tall Faucets (K-99856IN-4)
+      // Twin Kohler Ladena Undermount Sinks & Tall Faucets
       const sinkSurfaceY = elevY + h + counterH;
       for (let sx of [-0.42, 0.42]) {
-        // Ladena Undermount Basin cavity
         const basinRim = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.015, 0.38), porcelainMat);
         basinRim.position.set(sx, sinkSurfaceY + 0.005, 0.02);
+        basinRim.userData.role = 'basin';
         g.add(basinRim);
 
         const basinCavity = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.08, 0.34), new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.1 }));
         basinCavity.position.set(sx, sinkSurfaceY - 0.035, 0.02);
+        basinCavity.userData.role = 'basin';
         g.add(basinCavity);
 
-        // Chrome pop-up drain stopper
         const drain = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.006, 16), chromeMat);
         drain.position.set(sx, sinkSurfaceY - 0.07, 0.02);
+        drain.userData.role = 'faucet';
         g.add(drain);
 
-        // Kohler Purist Tall Single-Handle Architectural Faucet (K-99856IN-4) in Brushed Brass
-        const faucetBase = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.026, 0.02, 20), brushedBrassMat);
+        // Faucet base, stem, spout, joystick lever
+        const faucetBase = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.026, 0.02, 20), matteBlackMat);
         faucetBase.position.set(sx, sinkSurfaceY + 0.01, -0.15);
         faucetBase.castShadow = true;
+        faucetBase.userData.role = 'faucet';
         g.add(faucetBase);
 
-        const faucetStem = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.24, 20), brushedBrassMat);
+        const faucetStem = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.24, 20), matteBlackMat);
         faucetStem.position.set(sx, sinkSurfaceY + 0.13, -0.15);
         faucetStem.castShadow = true;
+        faucetStem.userData.role = 'faucet';
         g.add(faucetStem);
 
-        // Horizontal gooseneck spout
-        const spout = new THREE.Mesh(new THREE.BoxGeometry(0.016, 0.014, 0.13), brushedBrassMat);
+        const spout = new THREE.Mesh(new THREE.BoxGeometry(0.016, 0.014, 0.13), matteBlackMat);
         spout.position.set(sx, sinkSurfaceY + 0.23, -0.09);
         spout.castShadow = true;
+        spout.userData.role = 'faucet';
         g.add(spout);
 
-        // Single Joystick lever handle
-        const lever = new THREE.Mesh(new THREE.CylinderGeometry(0.007, 0.007, 0.07, 16), brushedBrassMat);
+        const lever = new THREE.Mesh(new THREE.CylinderGeometry(0.007, 0.007, 0.07, 16), matteBlackMat);
         lever.rotation.z = Math.PI / 4;
         lever.position.set(sx + 0.04, sinkSurfaceY + 0.22, -0.15);
+        lever.userData.role = 'faucet';
         g.add(lever);
       }
 
@@ -2405,32 +2672,35 @@
       const body = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mainMat);
       body.position.set(0, h / 2, 0);
       body.castShadow = true;
+      body.userData.role = 'vanityCarcass';
       g.add(body);
 
       const top = new THREE.Mesh(new THREE.BoxGeometry(w + 0.04, 0.04, d + 0.04), porcelainMat);
       top.position.set(0, h + 0.02, 0);
       top.castShadow = true;
+      top.userData.role = 'vanityCounter';
       g.add(top);
 
-      // Ladena Undermount Sink
       const basin = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.08, 0.36), porcelainMat);
       basin.position.set(0, h + 0.03, 0.02);
+      basin.userData.role = 'basin';
       g.add(basin);
 
-      // Purist Faucet
       const tap = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.018, 0.24, 16), chromeMat);
       tap.position.set(0, h + 0.14, -0.14);
       tap.castShadow = true;
+      tap.userData.role = 'faucet';
       g.add(tap);
 
       const spout = new THREE.Mesh(new THREE.BoxGeometry(0.016, 0.014, 0.12), chromeMat);
       spout.position.set(0, h + 0.24, -0.09);
+      spout.userData.role = 'faucet';
       g.add(spout);
 
-      // Modern brushed metal pulls
       for (let ky of [h * 0.35, h * 0.65]) {
         const pull = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.014, 0.02), chromeMat);
         pull.position.set(0, ky, d / 2 + 0.015);
+        pull.userData.role = 'vanityHardware';
         g.add(pull);
       }
 
@@ -2442,46 +2712,47 @@
       const g = new THREE.Group();
       const w = 0.86, d = 0.50, h = 0.82;
 
-      // Architectural matte black steel frame
-      const frameTop = new THREE.Mesh(new THREE.BoxGeometry(w, 0.035, d), matteBlackMat);
+      const frameTop = new THREE.Mesh(new THREE.BoxGeometry(w, 0.035, d), industrialSteelMat);
       frameTop.position.set(0, h - 0.018, 0);
       frameTop.castShadow = true;
+      frameTop.userData.role = 'vanityCarcass';
       g.add(frameTop);
 
-      // Teak wood console surface insert
-      const woodTop = new THREE.Mesh(new THREE.BoxGeometry(w - 0.04, 0.02, d - 0.04), oakMat);
+      const woodTop = new THREE.Mesh(new THREE.BoxGeometry(w - 0.04, 0.02, d - 0.04), teakMat);
       woodTop.position.set(0, h, 0);
+      woodTop.userData.role = 'vanityCounter';
       g.add(woodTop);
 
-      // 4 Slim square metal legs
       const legSize = 0.025;
       for (let x of [-w / 2 + legSize, w / 2 - legSize]) {
         for (let z of [-d / 2 + legSize, d / 2 - legSize]) {
-          const leg = new THREE.Mesh(new THREE.BoxGeometry(legSize, h, legSize), matteBlackMat);
+          const leg = new THREE.Mesh(new THREE.BoxGeometry(legSize, h, legSize), industrialSteelMat);
           leg.position.set(x, h / 2, z);
           leg.castShadow = true;
+          leg.userData.role = 'vanityCarcass';
           g.add(leg);
         }
       }
 
-      // Lower minimalist slatted teak shelf
-      const shelf = new THREE.Mesh(new THREE.BoxGeometry(w - 0.06, 0.015, d - 0.06), oakMat);
+      const shelf = new THREE.Mesh(new THREE.BoxGeometry(w - 0.06, 0.015, d - 0.06), teakMat);
       shelf.position.set(0, 0.22, 0);
+      shelf.userData.role = 'vanityCounter';
       g.add(shelf);
 
-      // Kohler Chalice Round Vessel Basin (K-2374IN-0)
       const vesselBasin = new THREE.Mesh(new THREE.CylinderGeometry(0.20, 0.16, 0.13, 36), porcelainMat);
       vesselBasin.position.set(0, h + 0.075, 0.02);
       vesselBasin.castShadow = true;
+      vesselBasin.userData.role = 'basin';
       g.add(vesselBasin);
 
-      // Tall Composed Single-Handle Faucet in Matte Black (K-73159IN-4)
       const faucet = new THREE.Mesh(new THREE.BoxGeometry(0.024, 0.32, 0.024), matteBlackMat);
       faucet.position.set(0, h + 0.16, -0.16);
+      faucet.userData.role = 'faucet';
       g.add(faucet);
 
       const spout = new THREE.Mesh(new THREE.BoxGeometry(0.022, 0.018, 0.14), matteBlackMat);
       spout.position.set(0, h + 0.30, -0.10);
+      spout.userData.role = 'faucet';
       g.add(spout);
 
       return g;
@@ -2491,43 +2762,43 @@
     function buildVerderaMirror() {
       const g = new THREE.Group();
       const w = 1.25, h = 0.88, d = 0.028;
-      const cy = 1.62; // Centered above vanity at eye height
+      const cy = 1.62;
 
-      // Anodized aluminum backing chassis
+      // Anodized chassis / outer architectural frame
       const chassis = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.5, metalness: 0.8 }));
       chassis.position.set(0, cy, -d / 2);
+      chassis.userData.role = 'mirrorFrame';
       g.add(chassis);
 
-      // Crystal Clear Mirror Surface with CRI 90+ Clarity
+      // Crystal Clear Mirror Surface
       const mirrorGlass = new THREE.Mesh(new THREE.PlaneGeometry(w - 0.08, h - 0.08), mirrorMat);
       mirrorGlass.position.set(0, cy, 0.001);
       g.add(mirrorGlass);
 
-      // Seamless Frosted LED Perimeter Halo Frame (Daylight CRI 90+)
+      // Frosted LED Perimeter Halo Frame
       const borderThick = 0.04;
-      const ledHaloMat = new THREE.MeshBasicMaterial({ color: 0xfffbea }); // Warm bright 3000K daylight LED
+      const ledHaloMat = new THREE.MeshBasicMaterial({ color: 0xfffbea });
 
-      // Top LED Bar
       const topLed = new THREE.Mesh(new THREE.BoxGeometry(w, borderThick, 0.006), ledHaloMat);
       topLed.position.set(0, cy + h / 2 - borderThick / 2, 0.002);
+      topLed.userData.role = 'mirrorHalo';
       g.add(topLed);
 
-      // Bottom LED Bar
       const botLed = new THREE.Mesh(new THREE.BoxGeometry(w, borderThick, 0.006), ledHaloMat);
       botLed.position.set(0, cy - h / 2 + borderThick / 2, 0.002);
+      botLed.userData.role = 'mirrorHalo';
       g.add(botLed);
 
-      // Left LED Bar
       const leftLed = new THREE.Mesh(new THREE.BoxGeometry(borderThick, h - borderThick * 2, 0.006), ledHaloMat);
       leftLed.position.set(-w / 2 + borderThick / 2, cy, 0.002);
+      leftLed.userData.role = 'mirrorHalo';
       g.add(leftLed);
 
-      // Right LED Bar
       const rightLed = new THREE.Mesh(new THREE.BoxGeometry(borderThick, h - borderThick * 2, 0.006), ledHaloMat);
       rightLed.position.set(w / 2 - borderThick / 2, cy, 0.002);
+      rightLed.userData.role = 'mirrorHalo';
       g.add(rightLed);
 
-      // Verdera Voice: Integrated Amazon Alexa Glowing Cyan Circle Indicator
       const alexaRing = new THREE.Mesh(
         new THREE.TorusGeometry(0.016, 0.003, 16, 32),
         new THREE.MeshBasicMaterial({ color: 0x00d2ff })
@@ -2535,7 +2806,6 @@
       alexaRing.position.set(0, cy - h / 2 + borderThick / 2, 0.006);
       g.add(alexaRing);
 
-      // Realistic Active Task Light projecting from the Verdera Mirror down onto vanity & basins
       const taskLight = new THREE.PointLight(0xfffaea, 0.75, 2.4, 1.2);
       taskLight.position.set(0, cy - 0.10, 0.18);
       g.add(taskLight);
@@ -2546,37 +2816,31 @@
     // 9. KOHLER HydroRail-R Thermostatic Shower System (K-76465IN-CP)
     function buildHydroRailShower() {
       const g = new THREE.Group();
-      
       const trayW = 1.12, trayD = 0.96, trayH = 0.045;
       
-      // 1. Slate Composite Low-Threshold Shower Receptor Tray
       const trayMat = new THREE.MeshStandardMaterial({ color: 0x1c1f24, roughness: 0.82, metalness: 0.08 });
       const tray = new THREE.Mesh(new THREE.BoxGeometry(trayW, trayH, trayD), trayMat);
       tray.position.set(0, trayH / 2, 0);
       tray.receiveShadow = true;
       g.add(tray);
 
-      // Sloped inner basin floor with subtle bevel rim
       const basinFloor = new THREE.Mesh(new THREE.BoxGeometry(trayW - 0.06, 0.012, trayD - 0.06), new THREE.MeshStandardMaterial({ color: 0x24282f, roughness: 0.75 }));
       basinFloor.position.set(0, trayH + 0.002, 0);
       basinFloor.receiveShadow = true;
       g.add(basinFloor);
 
-      // Polished Stainless Steel Linear Trench Drain
       const drainTrench = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.008, 0.075), chromeMat);
       drainTrench.position.set(0, trayH + 0.008, -trayD / 2 + 0.12);
+      drainTrench.userData.role = 'showerMetal';
       g.add(drainTrench);
 
-      // Linear drain grate slots pattern
       for (let dx = -0.30; dx <= 0.30; dx += 0.04) {
         const slot = new THREE.Mesh(new THREE.BoxGeometry(0.018, 0.009, 0.035), new THREE.MeshBasicMaterial({ color: 0x090a0c }));
         slot.position.set(dx, trayH + 0.009, -trayD / 2 + 0.12);
         g.add(slot);
       }
 
-      // ==========================================
-      // 2. KOHLER REVEL FRAMELESS TRANSPARENT GLASS BOX ENCLOSURE (K-706015)
-      // ==========================================
+      // 2. KOHLER Revel Glass Box Enclosure
       const boxH = 2.10;
       const glassThick = 0.01;
       const glassMatCleanCoat = new THREE.MeshPhysicalMaterial({
@@ -2590,7 +2854,6 @@
         clearcoatRoughness: 0.02
       });
 
-      // --- A. RIGHT RETURN GLASS WALL PANEL (Forms the side of the transparent glass box) ---
       const returnW = trayD - 0.04;
       const returnX = trayW / 2 - 0.02;
       const returnPanel = new THREE.Mesh(new THREE.BoxGeometry(glassThick, boxH, returnW), glassMatCleanCoat);
@@ -2598,22 +2861,21 @@
       returnPanel.castShadow = true;
       g.add(returnPanel);
 
-      // Chrome wall profile jamb (anchoring return panel to back wall)
       const returnWallJamb = new THREE.Mesh(new THREE.BoxGeometry(0.028, boxH, 0.028), chromeMat);
       returnWallJamb.position.set(returnX, trayH + boxH / 2, -trayD / 2 + 0.014);
+      returnWallJamb.userData.role = 'showerMetal';
       g.add(returnWallJamb);
 
-      // Chrome bottom U-channel under return panel
       const returnBottomU = new THREE.Mesh(new THREE.BoxGeometry(0.024, 0.018, returnW), chromeMat);
       returnBottomU.position.set(returnX, trayH + 0.009, 0);
+      returnBottomU.userData.role = 'showerMetal';
       g.add(returnBottomU);
 
-      // Overhead Corner Header Clamp
       const cornerClampTop = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.035, 0.04), chromeMat);
       cornerClampTop.position.set(returnX, trayH + boxH - 0.02, trayD / 2 - 0.02);
+      cornerClampTop.userData.role = 'showerMetal';
       g.add(cornerClampTop);
 
-      // --- B. FRONT FIXED INLINE GLASS PANEL ---
       const fixedFrontW = 0.38;
       const frontZ = trayD / 2 - 0.02;
       const fixedX = returnX - fixedFrontW / 2;
@@ -2622,143 +2884,171 @@
       fixedFrontPanel.castShadow = true;
       g.add(fixedFrontPanel);
 
-      // Chrome bottom channel under fixed panel
       const fixedBottomU = new THREE.Mesh(new THREE.BoxGeometry(fixedFrontW, 0.018, 0.024), chromeMat);
       fixedBottomU.position.set(fixedX, trayH + 0.009, frontZ);
+      fixedBottomU.userData.role = 'showerMetal';
       g.add(fixedBottomU);
 
-      // Top corner stabilizer bracket
       const topTieBar = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, returnW, 16), chromeMat);
       topTieBar.rotation.x = Math.PI / 2;
       topTieBar.position.set(returnX - 0.02, trayH + boxH - 0.03, 0);
+      topTieBar.userData.role = 'showerMetal';
       g.add(topTieBar);
 
-      // --- C. KOHLER REVEL FRAMELESS PIVOT GLASS DOOR ---
+      // Glass door
       const doorW = 0.68, doorH = 2.02;
-      const doorPivotX = fixedX - fixedFrontW / 2; // Pivot line near the fixed panel
-
-      // Group for pivoting glass door (slightly ajar at ~16 degrees for realistic 3D depth)
+      const doorPivotX = fixedX - fixedFrontW / 2;
       const doorGroup = new THREE.Group();
       doorGroup.position.set(doorPivotX, trayH + 0.02, frontZ);
-      doorGroup.rotation.y = -Math.PI / 11; // ajar ~16 degrees
+      doorGroup.rotation.y = -Math.PI / 11;
 
-      // Glass door pane
       const doorPane = new THREE.Mesh(new THREE.BoxGeometry(doorW, doorH, glassThick), glassMatCleanCoat);
       doorPane.position.set(-doorW / 2, doorH / 2, 0);
       doorPane.castShadow = true;
       doorGroup.add(doorPane);
 
-      // Kohler Heavy-Duty Frameless Pivot Hinges (Top & Bottom)
       for (let hy of [0.04, doorH - 0.04]) {
         const hinge = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.055, 0.032), chromeMat);
         hinge.position.set(0, hy, 0);
         hinge.castShadow = true;
+        hinge.userData.role = 'showerMetal';
         doorGroup.add(hinge);
       }
 
-      // Kohler Revel Vertical Back-to-Back Tubular Handle (Double-Sided)
       const handleH = 0.42;
       const handleX = -doorW + 0.08;
       const handleY = doorH / 2;
 
-      // Exterior pull handle
       const extHandle = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, handleH, 20), chromeMat);
       extHandle.position.set(handleX, handleY, 0.035);
       extHandle.castShadow = true;
+      extHandle.userData.role = 'showerMetal';
       doorGroup.add(extHandle);
 
-      // Interior pull handle
       const intHandle = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, handleH, 20), chromeMat);
       intHandle.position.set(handleX, handleY, -0.035);
+      intHandle.userData.role = 'showerMetal';
       doorGroup.add(intHandle);
 
-      // Handle Standoffs passing through glass
       for (let sy of [handleY - handleH / 2 + 0.03, handleY + handleH / 2 - 0.03]) {
         const standoff = new THREE.Mesh(new THREE.CylinderGeometry(0.013, 0.013, 0.075, 16), chromeMat);
         standoff.rotation.x = Math.PI / 2;
         standoff.position.set(handleX, sy, 0);
+        standoff.userData.role = 'showerMetal';
         doorGroup.add(standoff);
       }
 
-      // Clear vinyl bottom drip rail sweep on door bottom edge
       const sweep = new THREE.Mesh(new THREE.BoxGeometry(doorW, 0.02, 0.014), new THREE.MeshPhysicalMaterial({ color: 0xffffff, transparent: true, opacity: 0.5, roughness: 0.2 }));
       sweep.position.set(-doorW / 2, 0.01, 0);
       doorGroup.add(sweep);
 
+      // --- CRITTALL GRID MULLIONS SUBGROUP (For Industrial Chic Theme) ---
+      const crittallGroup = new THREE.Group();
+      crittallGroup.userData.role = 'crittallMullions';
+      crittallGroup.visible = false;
+
+      // Mullions on return glass panel (3 horizontal bars, 1 vertical bar)
+      for (let my of [0.55, 1.08, 1.62]) {
+        const mBar = new THREE.Mesh(new THREE.BoxGeometry(0.016, 0.018, returnW), matteBlackMat);
+        mBar.position.set(returnX, trayH + my, 0);
+        mBar.userData.role = 'crittallMullions';
+        crittallGroup.add(mBar);
+      }
+      const vBar = new THREE.Mesh(new THREE.BoxGeometry(0.016, boxH, 0.018), matteBlackMat);
+      vBar.position.set(returnX, trayH + boxH / 2, 0);
+      vBar.userData.role = 'crittallMullions';
+      crittallGroup.add(vBar);
+
+      // Mullions on pivoting glass door
+      for (let my of [0.55, 1.08, 1.62]) {
+        const dHBar = new THREE.Mesh(new THREE.BoxGeometry(doorW, 0.018, 0.014), matteBlackMat);
+        dHBar.position.set(-doorW / 2, my, 0.007);
+        dHBar.userData.role = 'crittallMullions';
+        dHBar.visible = false;
+        doorGroup.add(dHBar);
+      }
+      const dVBar = new THREE.Mesh(new THREE.BoxGeometry(0.018, doorH, 0.014), matteBlackMat);
+      dVBar.position.set(-doorW / 2, doorH / 2, 0.007);
+      dVBar.userData.role = 'crittallMullions';
+      dVBar.visible = false;
+      doorGroup.add(dVBar);
+
+      g.add(crittallGroup);
       g.add(doorGroup);
 
-      // Left Wall Magnetic Jamb Receiver
       const leftJambX = -trayW / 2 + 0.02;
       const leftWallJamb = new THREE.Mesh(new THREE.BoxGeometry(0.025, boxH, 0.028), chromeMat);
       leftWallJamb.position.set(leftJambX, trayH + boxH / 2, frontZ);
+      leftWallJamb.userData.role = 'showerMetal';
       g.add(leftWallJamb);
 
-      // 3. Official KOHLER HydroRail-R Solid Brass Column System
-      const railZ = -trayD / 2 + 0.04; // Sits against back wall
-      const railX = -0.05; // Slightly offset
+      // 3. HydroRail-R Solid Brass Column System
+      const railZ = -trayD / 2 + 0.04;
+      const railX = -0.05;
 
-      // Circular Wall Mounting Escutcheons (Flanges)
       for (let ey of [0.95, 2.05]) {
         const flange = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.032, 0.025, 24), chromeMat);
         flange.rotation.x = Math.PI / 2;
         flange.position.set(railX, ey, railZ - 0.012);
         flange.castShadow = true;
+        flange.userData.role = 'showerMetal';
         g.add(flange);
       }
 
-      // Solid Vertical Column Riser Rail
       const colHeight = 1.15;
       const columnRail = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, colHeight, 24), chromeMat);
       columnRail.position.set(railX, 0.95 + colHeight / 2, railZ);
       columnRail.castShadow = true;
+      columnRail.userData.role = 'showerMetal';
       g.add(columnRail);
 
-      // Integrated HydroRail Diverter Valve at Base
       const diverterBody = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.024, 0.08, 24), chromeMat);
       diverterBody.position.set(railX, 0.95, railZ);
+      diverterBody.userData.role = 'showerMetal';
       g.add(diverterBody);
 
       const diverterKnob = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.035, 16), chromeMat);
       diverterKnob.rotation.x = Math.PI / 2;
       diverterKnob.position.set(railX, 0.95, railZ + 0.025);
+      diverterKnob.userData.role = 'showerMetal';
       g.add(diverterKnob);
 
-      // Graceful Arched Overhead Gooseneck Arm (ergonomic 2.08m height)
       const archPipe1 = new THREE.Mesh(new THREE.CylinderGeometry(0.013, 0.013, 0.14, 20), chromeMat);
       archPipe1.position.set(railX, 1.98, railZ);
+      archPipe1.userData.role = 'showerMetal';
       g.add(archPipe1);
 
       const archCorner = new THREE.Mesh(new THREE.TorusGeometry(0.09, 0.013, 16, 24, Math.PI / 2), chromeMat);
       archCorner.position.set(railX, 2.02, railZ + 0.09);
+      archCorner.userData.role = 'showerMetal';
       g.add(archCorner);
 
       const archPipe2 = new THREE.Mesh(new THREE.CylinderGeometry(0.013, 0.013, 0.32, 20), chromeMat);
       archPipe2.rotation.x = Math.PI / 2;
       archPipe2.position.set(railX, 2.11, railZ + 0.25);
       archPipe2.castShadow = true;
+      archPipe2.userData.role = 'showerMetal';
       g.add(archPipe2);
 
-      // 4. KOHLER Statement 12" (300mm) Round Multifunction Rainhead (K-26292IN-CP)
+      // Statement 12" Round Rainhead
       const headZ = railZ + 0.41;
       const headY = 2.08;
 
-      // Ball Joint Swivel
       const swivel = new THREE.Mesh(new THREE.SphereGeometry(0.018, 16, 16), chromeMat);
       swivel.position.set(railX, headY + 0.02, headZ);
+      swivel.userData.role = 'showerMetal';
       g.add(swivel);
 
-      // Ultra-Thin Statement Disc Shell
       const rainheadShell = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.015, 48), chromeMat);
       rainheadShell.position.set(railX, headY, headZ);
       rainheadShell.castShadow = true;
+      rainheadShell.userData.role = 'showerMetal';
       g.add(rainheadShell);
 
-      // Kohler Katalyst Air-Induction Spray Face with Concentric Nozzle Pattern
       const sprayFace = new THREE.Mesh(new THREE.CylinderGeometry(0.152, 0.152, 0.004, 48), new THREE.MeshStandardMaterial({ color: 0x1a1e24, roughness: 0.35 }));
       sprayFace.position.set(railX, headY - 0.009, headZ);
       g.add(sprayFace);
 
-      // Silicone Nozzle Accent Rings
       for (let r of [0.04, 0.08, 0.12]) {
         const ring = new THREE.Mesh(new THREE.TorusGeometry(r, 0.002, 8, 32), new THREE.MeshBasicMaterial({ color: 0x94a3b8 }));
         ring.rotation.x = Math.PI / 2;
@@ -2766,70 +3056,64 @@
         g.add(ring);
       }
 
-      // Realistic Translucent Cascading Water Flow
-      const waterMat = new THREE.MeshPhysicalMaterial({
-        color: 0xdbeafe,
-        transparent: true,
-        opacity: 0.35,
-        roughness: 0.05,
-        transmission: 0.94,
-        ior: 1.33
-      });
+      // Cascading water stream
+      const waterMat = new THREE.MeshPhysicalMaterial({ color: 0xdbeafe, transparent: true, opacity: 0.35, roughness: 0.05, transmission: 0.94, ior: 1.33 });
       const waterColumn = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.24, 1.95, 32, 1, true), waterMat);
       waterColumn.position.set(railX, headY - 0.98, headZ);
       g.add(waterColumn);
 
-      // 5. KOHLER Thermostatic Temperature & Volume Control Valve Plate
+      // Thermostatic Valve Plate
       const valvePlate = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.24, 0.015), chromeMat);
       valvePlate.position.set(railX, 1.05, railZ - 0.015);
+      valvePlate.userData.role = 'showerMetal';
       g.add(valvePlate);
 
-      // Volume Control Dial
       const volDial = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.024, 0.03, 24), chromeMat);
       volDial.rotation.x = Math.PI / 2;
       volDial.position.set(railX, 1.11, railZ + 0.01);
+      volDial.userData.role = 'showerMetal';
       g.add(volDial);
 
-      // Thermostatic Temp Control Dial with Safety Stop Mark
       const tempDial = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.03, 24), chromeMat);
       tempDial.rotation.x = Math.PI / 2;
       tempDial.position.set(railX, 0.99, railZ + 0.01);
+      tempDial.userData.role = 'showerMetal';
       g.add(tempDial);
 
       const redIndicator = new THREE.Mesh(new THREE.BoxGeometry(0.004, 0.008, 0.032), new THREE.MeshBasicMaterial({ color: 0xef4444 }));
       redIndicator.position.set(railX, 1.015, railZ + 0.012);
       g.add(redIndicator);
 
-      // 6. Statement Multifunction Baton Handshower on Adjustable Slider
       const sliderY = 1.38;
       const slider = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.05, 0.045), chromeMat);
       slider.position.set(railX, sliderY, railZ + 0.01);
+      slider.userData.role = 'showerMetal';
       g.add(slider);
 
       const sliderLever = new THREE.Mesh(new THREE.CylinderGeometry(0.005, 0.005, 0.04, 12), chromeMat);
       sliderLever.position.set(railX - 0.025, sliderY, railZ + 0.01);
+      sliderLever.userData.role = 'showerMetal';
       g.add(sliderLever);
 
-      // Statement Baton Handshower Wand
       const wandG = new THREE.Group();
       wandG.position.set(railX + 0.06, sliderY, railZ + 0.04);
       wandG.rotation.z = -Math.PI / 12;
 
       const wandHandle = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.011, 0.16, 16), chromeMat);
       wandHandle.castShadow = true;
+      wandHandle.userData.role = 'showerMetal';
       wandG.add(wandHandle);
 
       const wandHead = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.013, 0.09, 16), chromeMat);
       wandHead.position.set(0, 0.11, 0);
+      wandHead.userData.role = 'showerMetal';
       wandG.add(wandHead);
 
       const wandSpray = new THREE.Mesh(new THREE.PlaneGeometry(0.018, 0.08), new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.5 }));
       wandSpray.position.set(0, 0.11, 0.013);
       wandG.add(wandSpray);
-
       g.add(wandG);
 
-      // Flexible Metallic Spiral Hose looping down naturally
       const hoseCurve = new THREE.CatmullRomCurve3([
         new THREE.Vector3(railX + 0.03, 0.95, railZ + 0.02),
         new THREE.Vector3(railX + 0.08, 0.76, railZ + 0.05),
@@ -2839,23 +3123,23 @@
       const hoseGeom = new THREE.TubeGeometry(hoseCurve, 24, 0.007, 10, false);
       const hoseMesh = new THREE.Mesh(hoseGeom, chromeMat);
       hoseMesh.castShadow = true;
+      hoseMesh.userData.role = 'showerMetal';
       g.add(hoseMesh);
 
-      // 7. Luxury Amenities: Corner Chrome Wire Basket with Spa Bottles
       const caddy = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.02, 0.10), chromeMat);
       caddy.position.set(-trayW / 2 + 0.12, 1.25, railZ + 0.05);
+      caddy.userData.role = 'showerMetal';
       g.add(caddy);
 
-      // Bottle 1: Amber Luxury Wash Bottle with pump
       const bottle1 = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.08, 16), new THREE.MeshStandardMaterial({ color: 0xa16207, roughness: 0.2 }));
       bottle1.position.set(-trayW / 2 + 0.08, 1.30, railZ + 0.05);
       g.add(bottle1);
 
       const pump1 = new THREE.Mesh(new THREE.BoxGeometry(0.008, 0.02, 0.02), chromeMat);
       pump1.position.set(-trayW / 2 + 0.08, 1.35, railZ + 0.05);
+      pump1.userData.role = 'showerMetal';
       g.add(pump1);
 
-      // Bottle 2: Frosted Glass Body Cleanser
       const bottle2 = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.075, 16), frostedGlassMat);
       bottle2.position.set(-trayW / 2 + 0.14, 1.295, railZ + 0.05);
       g.add(bottle2);
@@ -2867,36 +3151,36 @@
     function buildStatementShower() {
       const g = new THREE.Group();
       
-      // Round Decorative Wall Flange / Escutcheon
       const flange = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.015, 24), chromeMat);
       flange.rotation.x = Math.PI / 2;
       flange.position.set(0, 2.20, -0.01);
       flange.castShadow = true;
+      flange.userData.role = 'showerMetal';
       g.add(flange);
 
-      // Heavy 16" Right-Angle Arched Shower Arm
       const armHoriz = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.42, 20), chromeMat);
       armHoriz.rotation.x = Math.PI / 2;
       armHoriz.position.set(0, 2.20, 0.20);
       armHoriz.castShadow = true;
+      armHoriz.userData.role = 'showerMetal';
       g.add(armHoriz);
 
       const armDrop = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.08, 20), chromeMat);
       armDrop.position.set(0, 2.16, 0.41);
+      armDrop.userData.role = 'showerMetal';
       g.add(armDrop);
 
-      // Swivel Ball Joint
       const ball = new THREE.Mesh(new THREE.SphereGeometry(0.018, 16, 16), chromeMat);
       ball.position.set(0, 2.12, 0.41);
+      ball.userData.role = 'showerMetal';
       g.add(ball);
 
-      // Statement 12" Round Rainhead Disc
       const headDisc = new THREE.Mesh(new THREE.CylinderGeometry(0.155, 0.155, 0.012, 48), chromeMat);
       headDisc.position.set(0, 2.10, 0.41);
       headDisc.castShadow = true;
+      headDisc.userData.role = 'showerMetal';
       g.add(headDisc);
 
-      // Spray Nozzle Face
       const face = new THREE.Mesh(new THREE.CylinderGeometry(0.148, 0.148, 0.003, 48), new THREE.MeshStandardMaterial({ color: 0x1e2229, roughness: 0.35 }));
       face.position.set(0, 2.093, 0.41);
       g.add(face);
@@ -2908,28 +3192,21 @@
         g.add(ring);
       }
 
-      // Translucent falling water mist/droplets
-      const waterMat = new THREE.MeshPhysicalMaterial({
-        color: 0xe0f2fe,
-        transparent: true,
-        opacity: 0.28,
-        roughness: 0.05,
-        transmission: 0.92,
-        ior: 1.33
-      });
+      const waterMat = new THREE.MeshPhysicalMaterial({ color: 0xe0f2fe, transparent: true, opacity: 0.28, roughness: 0.05, transmission: 0.92, ior: 1.33 });
       const waterStream = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.24, 2.0, 32, 1, true), waterMat);
       waterStream.position.set(0, 1.05, 0.41);
       g.add(waterStream);
 
-      // Matching Wall Thermostatic Dual Mixer Plate
       const valve = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.22, 0.015), chromeMat);
       valve.position.set(0, 1.10, -0.01);
+      valve.userData.role = 'showerMetal';
       g.add(valve);
 
       for (let ky of [1.16, 1.04]) {
         const knob = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.028, 20), chromeMat);
         knob.rotation.x = Math.PI / 2;
         knob.position.set(0, ky, 0.015);
+        knob.userData.role = 'showerMetal';
         g.add(knob);
       }
 
@@ -2939,7 +3216,6 @@
     // 11. KOHLER Evok Oval Freestanding Bathtub (K-1130IN-0)
     function buildEvokBathtub() {
       const g = new THREE.Group();
-      // Seamless acrylic ergonomic oval soaking tub body
       const tubGeom = new THREE.CylinderGeometry(0.54, 0.40, 0.62, 40);
       const tub = new THREE.Mesh(tubGeom, porcelainMat);
       tub.scale.set(1.68, 1.0, 0.94);
@@ -2947,18 +3223,20 @@
       tub.castShadow = true;
       g.add(tub);
 
-      // Floor-Mounted Freestanding Purist Tub Filler Faucet with Handheld Wand
       const fillerPole = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.96, 20), chromeMat);
       fillerPole.position.set(0, 0.48, 0.54);
       fillerPole.castShadow = true;
+      fillerPole.userData.role = 'faucet';
       g.add(fillerPole);
 
       const fillerSpout = new THREE.Mesh(new THREE.BoxGeometry(0.018, 0.016, 0.22), chromeMat);
       fillerSpout.position.set(0, 0.94, 0.44);
+      fillerSpout.userData.role = 'faucet';
       g.add(fillerSpout);
 
       const fillerWand = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, 0.20, 16), chromeMat);
       fillerWand.position.set(0.05, 0.88, 0.54);
+      fillerWand.userData.role = 'faucet';
       g.add(fillerWand);
 
       return g;
@@ -2967,19 +3245,22 @@
     // 12. KOHLER Purist Tall Basin Faucet (K-99856IN-4)
     function buildPuristFaucet() {
       const g = new THREE.Group();
-      const body = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.02, 0.28, 20), chromeMat);
+      const body = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.02, 0.28, 20), matteBlackMat);
       body.position.set(0, 0.14, 0);
       body.castShadow = true;
+      body.userData.role = 'faucet';
       g.add(body);
 
-      const spout = new THREE.Mesh(new THREE.BoxGeometry(0.016, 0.014, 0.15), chromeMat);
+      const spout = new THREE.Mesh(new THREE.BoxGeometry(0.016, 0.014, 0.15), matteBlackMat);
       spout.position.set(0, 0.26, 0.07);
       spout.castShadow = true;
+      spout.userData.role = 'faucet';
       g.add(spout);
 
-      const lever = new THREE.Mesh(new THREE.CylinderGeometry(0.007, 0.007, 0.08, 16), chromeMat);
+      const lever = new THREE.Mesh(new THREE.CylinderGeometry(0.007, 0.007, 0.08, 16), matteBlackMat);
       lever.rotation.z = Math.PI / 4;
       lever.position.set(0.035, 0.25, 0);
+      lever.userData.role = 'faucet';
       g.add(lever);
 
       return g;
@@ -2988,18 +3269,21 @@
     // 13. KOHLER Artifacts Column Spout Faucet (K-10129IN-4)
     function buildArtifactsFaucet() {
       const g = new THREE.Group();
-      const spout = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.026, 0.24, 20), chromeMat);
+      const spout = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.026, 0.24, 20), polishedBrassMat);
       spout.position.set(0, 0.12, 0);
+      spout.userData.role = 'faucet';
       g.add(spout);
 
-      const arch = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.014, 12, 24, Math.PI), chromeMat);
+      const arch = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.014, 12, 24, Math.PI), polishedBrassMat);
       arch.rotation.y = Math.PI / 2;
       arch.position.set(0, 0.22, 0.06);
+      arch.userData.role = 'faucet';
       g.add(arch);
 
       for (let hx of [-0.12, 0.12]) {
-        const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.06, 16), chromeMat);
+        const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.06, 16), polishedBrassMat);
         handle.position.set(hx, 0.03, 0);
+        handle.userData.role = 'faucet';
         g.add(handle);
       }
 
@@ -3012,13 +3296,361 @@
       const body = new THREE.Mesh(new THREE.BoxGeometry(0.026, 0.24, 0.026), matteBlackMat);
       body.position.set(0, 0.12, 0);
       body.castShadow = true;
+      body.userData.role = 'faucet';
       g.add(body);
 
       const spout = new THREE.Mesh(new THREE.BoxGeometry(0.024, 0.016, 0.13), matteBlackMat);
       spout.position.set(0, 0.23, 0.06);
+      spout.userData.role = 'faucet';
       g.add(spout);
 
       return g;
+    }
+
+    // ==================== DYNAMIC THEME TRANSFORMATION ENGINE ====================
+    function applyThemeMaterialsToProduct(group, themeName = currentSelectedTheme) {
+      if (!group) return;
+      const isMinimalist = themeName.toLowerCase().includes('minimalist');
+      const isClassic = themeName.toLowerCase().includes('classic');
+      const isZen = themeName.toLowerCase().includes('zen');
+      const isIndustrial = themeName.toLowerCase().includes('industrial');
+      const isWasteLab = themeName.toLowerCase().includes('waste') || themeName.toLowerCase().includes('eco');
+
+      group.traverse(child => {
+        const role = child.userData ? child.userData.role : null;
+        if (!role) return;
+
+        if (role === 'faucet') {
+          if (isClassic) child.material = polishedBrassMat;
+          else if (isIndustrial || isZen || isMinimalist || isWasteLab) child.material = matteBlackMat;
+        } else if (role === 'showerMetal') {
+          if (isClassic) child.material = polishedBrassMat;
+          else if (isIndustrial || isZen) child.material = matteBlackMat;
+          else if (isMinimalist) child.material = chromeMat;
+          else child.material = matteBlackMat;
+        } else if (role === 'crittallMullions') {
+          child.visible = isIndustrial;
+        } else if (role === 'vanityCarcass') {
+          if (isClassic) child.material = darkMahoganyMat;
+          else if (isZen || isWasteLab) child.material = teakMat;
+          else if (isIndustrial) child.material = industrialSteelMat;
+          else if (isMinimalist) child.material = scandinavianOakMat;
+        } else if (role === 'vanityCounter') {
+          if (isClassic) child.material = calacattaMarbleMat;
+          else if (isZen) child.material = teakMat;
+          else if (isIndustrial) child.material = concreteTroughMat;
+          else if (isMinimalist) child.material = whiteQuartzMat;
+          else if (isWasteLab) child.material = wasteLabTerrazzoMat;
+        } else if (role === 'vanityHardware') {
+          if (isClassic) child.material = polishedBrassMat;
+          else if (isIndustrial || isZen || isMinimalist) child.material = matteBlackMat;
+        } else if (role === 'basin') {
+          if (isIndustrial) child.material = concreteTroughMat;
+          else child.material = porcelainMat;
+        } else if (role === 'mirrorFrame') {
+          if (isClassic) child.material = polishedBrassMat;
+          else if (isZen) child.material = teakMat;
+          else if (isIndustrial) child.material = industrialSteelMat;
+          else child.material = matteBlackMat;
+        } else if (role === 'mirrorHalo') {
+          if (isClassic && child.material) child.material.color.set(0xffe4b5);
+          else if (isMinimalist && child.material) child.material.color.set(0xfff8ed);
+          else if (isZen && child.material) child.material.color.set(0xfff3db);
+          else if (isIndustrial && child.material) child.material.color.set(0xe2e8f0);
+        } else if (role === 'flushPlate') {
+          if (isClassic) child.material = polishedBrassMat;
+          else if (isIndustrial || isMinimalist || isZen) child.material = matteBlackMat;
+        }
+      });
+    }
+
+    function updateThemeArchitecturalAccents(themeName = currentSelectedTheme) {
+      if (!themeAccentsGroup) return;
+      while (themeAccentsGroup.children.length > 0) {
+        themeAccentsGroup.remove(themeAccentsGroup.children[0]);
+      }
+
+      const isMinimalist = themeName.toLowerCase().includes('minimalist');
+      const isClassic = themeName.toLowerCase().includes('classic');
+      const isZen = themeName.toLowerCase().includes('zen');
+      const isIndustrial = themeName.toLowerCase().includes('industrial');
+
+      const vanityObj = placedProducts.find(p => p.userData && p.userData.category === 'vanities');
+      const vanityX = vanityObj ? vanityObj.position.x : 0.20;
+
+      if (isMinimalist) {
+        // Soft textured sand/grey floor runner rug in front of vanity
+        const rugGeo = new THREE.PlaneGeometry(1.45, 0.65);
+        const rugMat = new THREE.MeshStandardMaterial({ color: 0x9399a3, roughness: 0.95 });
+        const rug = new THREE.Mesh(rugGeo, rugMat);
+        rug.rotation.x = -Math.PI / 2;
+        rug.position.set(vanityX, 0.0012, -roomDepth / 2 + 0.92);
+        rug.receiveShadow = true;
+        themeAccentsGroup.add(rug);
+      } else if (isClassic) {
+        // Dual polished brass luxury wall sconces flanking the mirror
+        for (let sx of [-0.74, 0.74]) {
+          const sconceG = new THREE.Group();
+          sconceG.position.set(vanityX + sx, 1.72, -roomDepth / 2 + 0.035);
+
+          const plate = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.015, 24), polishedBrassMat);
+          plate.rotation.x = Math.PI / 2;
+          sconceG.add(plate);
+
+          const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.009, 0.08, 16), polishedBrassMat);
+          arm.position.set(0, 0, 0.04);
+          arm.rotation.x = Math.PI / 2;
+          sconceG.add(arm);
+
+          const shade = new THREE.Mesh(
+            new THREE.ConeGeometry(0.045, 0.12, 24, 1, true),
+            new THREE.MeshStandardMaterial({
+              color: 0xfffaed,
+              emissive: 0xffd580,
+              emissiveIntensity: 1.2,
+              roughness: 0.3
+            })
+          );
+          shade.position.set(0, 0.04, 0.075);
+          sconceG.add(shade);
+
+          const sconceLight = new THREE.PointLight(0xffe8c2, 0.45, 2.0);
+          sconceLight.position.set(0, 0.05, 0.09);
+          sconceG.add(sconceLight);
+
+          themeAccentsGroup.add(sconceG);
+        }
+
+        // Brass towel ring on right wall
+        const ringG = new THREE.Group();
+        ringG.position.set(roomWidth / 2 - 0.03, 1.45, -roomDepth / 2 + 0.85);
+        const ringBase = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.02, 20), polishedBrassMat);
+        ringBase.rotation.z = Math.PI / 2;
+        ringG.add(ringBase);
+        const towelRing = new THREE.Mesh(new THREE.TorusGeometry(0.075, 0.008, 16, 32), polishedBrassMat);
+        towelRing.position.set(-0.015, -0.06, 0);
+        ringG.add(towelRing);
+        const foldedTowel = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.28, 0.035), new THREE.MeshStandardMaterial({ color: 0xfafafa, roughness: 0.9 }));
+        foldedTowel.position.set(-0.015, -0.16, 0);
+        ringG.add(foldedTowel);
+        themeAccentsGroup.add(ringG);
+
+      } else if (isZen) {
+        // Vertical Hinoki / Teak wood slatted feature wall along left wall
+        const slatW = 0.032, slatD = 0.028, slatH = roomHeight;
+        const numSlats = Math.min(18, Math.floor(roomDepth / 0.08));
+        const slatsG = new THREE.Group();
+        for (let i = 0; i < numSlats; i++) {
+          const sz = -roomDepth / 2 + 0.15 + i * 0.075;
+          if (sz > roomDepth / 2 - 0.2) break;
+          const slat = new THREE.Mesh(new THREE.BoxGeometry(slatD, slatH - 0.05, slatW), teakMat);
+          slat.position.set(-roomWidth / 2 + slatD / 2 + 0.005, slatH / 2, sz);
+          slat.castShadow = true;
+          slat.receiveShadow = true;
+          slatsG.add(slat);
+        }
+        themeAccentsGroup.add(slatsG);
+
+        // Natural woven tatami / jute runner mat in front of console
+        const matGeo = new THREE.PlaneGeometry(1.35, 0.60);
+        const matMat = new THREE.MeshStandardMaterial({ color: 0xc4a47c, roughness: 0.95 });
+        const mat = new THREE.Mesh(matGeo, matMat);
+        mat.rotation.x = -Math.PI / 2;
+        mat.position.set(vanityX, 0.0012, -roomDepth / 2 + 0.88);
+        themeAccentsGroup.add(mat);
+
+        // Potted Japanese Bamboo plant in ceramic vase in corner
+        const plantG = new THREE.Group();
+        plantG.position.set(roomWidth / 2 - 0.32, 0, roomDepth / 2 - 0.35);
+        const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.12, 0.42, 24), new THREE.MeshStandardMaterial({ color: 0x272a2e, roughness: 0.85 }));
+        pot.position.y = 0.21;
+        pot.castShadow = true;
+        plantG.add(pot);
+        const soil = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 0.02, 24), new THREE.MeshStandardMaterial({ color: 0x2b1e15, roughness: 0.95 }));
+        soil.position.y = 0.41;
+        plantG.add(soil);
+        const bambooMat = new THREE.MeshStandardMaterial({ color: 0x5a7a40, roughness: 0.5 });
+        const leafMat = new THREE.MeshStandardMaterial({ color: 0x6e964b, roughness: 0.4, side: THREE.DoubleSide });
+        for (let b = 0; b < 5; b++) {
+          const bx = (Math.random() - 0.5) * 0.14;
+          const bz = (Math.random() - 0.5) * 0.14;
+          const bh = 1.35 + Math.random() * 0.45;
+          const culm = new THREE.Mesh(new THREE.CylinderGeometry(0.011, 0.013, bh, 12), bambooMat);
+          culm.position.set(bx, 0.40 + bh / 2, bz);
+          culm.castShadow = true;
+          plantG.add(culm);
+          for (let l = 0; l < 4; l++) {
+            const ly = 0.70 + l * 0.25;
+            const leaf = new THREE.Mesh(new THREE.PlaneGeometry(0.12, 0.03), leafMat);
+            leaf.position.set(bx + 0.05, ly, bz);
+            leaf.rotation.z = (Math.random() - 0.5) * 0.6;
+            leaf.rotation.y = Math.random() * Math.PI * 2;
+            plantG.add(leaf);
+          }
+        }
+        themeAccentsGroup.add(plantG);
+
+      } else if (isIndustrial) {
+        // Suspended vintage industrial black cord pendant lights over vanity
+        for (let px of [-0.42, 0.42]) {
+          const pendantG = new THREE.Group();
+          const pz = -roomDepth / 2 + 0.38;
+          pendantG.position.set(vanityX + px, 0, pz);
+
+          const canopy = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.015, 16), industrialSteelMat);
+          canopy.position.y = roomHeight - 0.008;
+          pendantG.add(canopy);
+
+          const cordLen = 0.75;
+          const cord = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, cordLen, 8), industrialSteelMat);
+          cord.position.y = roomHeight - cordLen / 2;
+          pendantG.add(cord);
+
+          const socketY = roomHeight - cordLen;
+          const socket = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.024, 0.065, 16), industrialSteelMat);
+          socket.position.y = socketY;
+          pendantG.add(socket);
+
+          const bulb = new THREE.Mesh(
+            new THREE.SphereGeometry(0.038, 16, 16),
+            new THREE.MeshPhysicalMaterial({
+              color: 0xffdfaa,
+              emissive: 0xffaa33,
+              emissiveIntensity: 1.5,
+              roughness: 0.1,
+              transparent: true,
+              opacity: 0.85
+            })
+          );
+          bulb.position.y = socketY - 0.045;
+          bulb.scale.set(1.0, 1.35, 1.0);
+          pendantG.add(bulb);
+
+          const edisonLight = new THREE.PointLight(0xffb84d, 0.60, 2.5);
+          edisonLight.position.y = socketY - 0.05;
+          pendantG.add(edisonLight);
+
+          themeAccentsGroup.add(pendantG);
+        }
+
+        // Industrial matte black towel bar on right wall
+        const barG = new THREE.Group();
+        barG.position.set(roomWidth / 2 - 0.025, 1.20, -roomDepth / 2 + 0.85);
+        const barRail = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.02, 0.55), industrialSteelMat);
+        barG.add(barRail);
+        const barPost1 = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.02, 0.02), industrialSteelMat);
+        barPost1.position.set(0.02, 0, -0.25);
+        barG.add(barPost1);
+        const barPost2 = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.02, 0.02), industrialSteelMat);
+        barPost2.position.set(0.02, 0, 0.25);
+        barG.add(barPost2);
+        const darkTowel = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.35, 0.38), new THREE.MeshStandardMaterial({ color: 0x222428, roughness: 0.95 }));
+        darkTowel.position.set(-0.01, -0.15, 0);
+        barG.add(darkTowel);
+        themeAccentsGroup.add(barG);
+      }
+    }
+
+    function applyAestheticTheme(themeName) {
+      currentSelectedTheme = themeName;
+
+      // 1. Update walls & floor procedural textures and physical parameters
+      let wallType = 'square';
+      let floorType = 'slate';
+      let wallRoughness = 0.45, wallMetalness = 0.02;
+      let floorRoughness = 0.70, floorMetalness = 0.02;
+
+      if (themeName === 'Minimalist Modern') {
+        wallType = 'minimalist-modern';
+        floorType = 'minimalist-sand';
+        wallRoughness = 0.50;
+        floorRoughness = 0.65;
+      } else if (themeName === 'Classic Luxury') {
+        wallType = 'calacatta-gold';
+        floorType = 'calacatta-gold';
+        wallRoughness = 0.12;
+        wallMetalness = 0.04;
+        floorRoughness = 0.10;
+        floorMetalness = 0.04;
+      } else if (themeName === 'Japanese Zen') {
+        wallType = 'japanese-zen';
+        floorType = 'japanese-limestone';
+        wallRoughness = 0.65;
+        floorRoughness = 0.75;
+      } else if (themeName === 'Industrial Chic' || themeName === 'Industrial Contemporary') {
+        wallType = 'industrial-chic';
+        floorType = 'industrial-slate';
+        wallRoughness = 0.80;
+        floorRoughness = 0.85;
+      } else if (themeName.includes('WasteLAB') || themeName.includes('Eco')) {
+        wallType = 'wastelab';
+        floorType = 'wastelab-terrazzo';
+        wallRoughness = 0.35;
+        floorRoughness = 0.45;
+      }
+
+      if (backWallMesh && backWallMesh.material) {
+        const wTex = generateWallTileTexture(wallType, roomWidth, roomHeight);
+        backWallMesh.material.map = wTex;
+        backWallMesh.material.roughness = wallRoughness;
+        backWallMesh.material.metalness = wallMetalness;
+        backWallMesh.material.needsUpdate = true;
+      }
+      if (leftWallMesh && leftWallMesh.material) {
+        const wTex = generateWallTileTexture(wallType, roomWidth, roomHeight);
+        leftWallMesh.material.map = wTex;
+        leftWallMesh.material.roughness = wallRoughness;
+        leftWallMesh.material.metalness = wallMetalness;
+        leftWallMesh.material.needsUpdate = true;
+      }
+      if (floorMesh && floorMesh.material) {
+        const fTex = generateFloorTileTexture(floorType, roomWidth, roomDepth);
+        floorMesh.material.map = fTex;
+        floorMesh.material.roughness = floorRoughness;
+        floorMesh.material.metalness = floorMetalness;
+        floorMesh.material.needsUpdate = true;
+      }
+
+      // 2. Adjust lighting tone for mood
+      if (themeName === 'Classic Luxury') {
+        if (roomAmbLight) roomAmbLight.color.set(0xffeedd);
+        if (roomKeySun) roomKeySun.color.set(0xfff5ea);
+      } else if (themeName === 'Industrial Chic' || themeName === 'Industrial Contemporary') {
+        if (roomAmbLight) roomAmbLight.color.set(0xe8edf2);
+        if (roomKeySun) roomKeySun.color.set(0xf1f5f9);
+      } else if (themeName === 'Japanese Zen') {
+        if (roomAmbLight) roomAmbLight.color.set(0xfff2df);
+        if (roomKeySun) roomKeySun.color.set(0xffeed6);
+      } else {
+        if (roomAmbLight) roomAmbLight.color.set(0xfff7ec);
+        if (roomKeySun) roomKeySun.color.set(0xfff8ee);
+      }
+
+      // 3. Update theme-specific architectural accents (sconces, slats, plants, pendants, rug)
+      updateThemeArchitecturalAccents(themeName);
+
+      // 4. Update all currently placed products to match the new theme finishes
+      placedProducts.forEach(p => applyThemeMaterialsToProduct(p, themeName));
+
+      // 5. Update UI theme indicator in subnav and modal buttons
+      const subnavLabel = document.getElementById('subnav-theme-label');
+      if (subnavLabel) subnavLabel.innerText = themeName;
+
+      document.querySelectorAll('.ai-theme-btn').forEach(btn => {
+        if (btn.dataset.theme === themeName) {
+          btn.classList.add('active', 'border-black', 'bg-gray-50', 'border-2');
+          btn.classList.remove('border-gray-200', 'bg-white', 'border-emerald-200', 'bg-emerald-50/40');
+        } else {
+          btn.classList.remove('active', 'border-black', 'bg-gray-50', 'border-2');
+          if (btn.dataset.theme === 'Kohler WasteLAB Eco-Luxury') {
+            btn.classList.add('border-emerald-200', 'bg-emerald-50/40');
+          } else {
+            btn.classList.add('border-gray-200', 'bg-white');
+          }
+        }
+      });
+
+      showToast(`Aesthetic Theme Applied: ${themeName}`);
     }
 
     function buildDoorMesh() {
@@ -3081,6 +3713,11 @@
       spawnProductById('tailored-dual-vanity', 0.68, -roomDepth / 2 + 0.36, 0);
       spawnProductById('verdera-mirror', 0.68, -roomDepth / 2 + 0.08, 0);
 
+      // Apply initial theme styling (Minimalist Modern)
+      if (typeof applyAestheticTheme === 'function') {
+        applyAestheticTheme(currentSelectedTheme || 'Minimalist Modern');
+      }
+
       deselectActiveObject();
       bindInteractionEvents();
       closeCatalogDrawer();
@@ -3114,6 +3751,11 @@
       scene.add(roomBackWallSpot);
       scene.add(roomBackWallSpot.target);
 
+      if (!themeAccentsGroup) {
+        themeAccentsGroup = new THREE.Group();
+        themeAccentsGroup.name = 'theme-accents-group';
+        scene.add(themeAccentsGroup);
+      }
       if (!clearanceGroup) {
         clearanceGroup = new THREE.Group();
         clearanceGroup.name = 'clearance-group';
@@ -3215,6 +3857,9 @@
       buildPlumbingConduits();
       updateClearanceVisualizer();
       updateWetWallScore();
+      if (typeof applyAestheticTheme === 'function') {
+        applyAestheticTheme(currentSelectedTheme);
+      }
     }
 
     // ==================== 5. PRODUCT SPAWNING & OBJECT MANIPULATION ====================
@@ -3233,8 +3878,15 @@
         elevation: 0
       };
 
+      if (typeof applyThemeMaterialsToProduct === 'function') {
+        applyThemeMaterialsToProduct(group, currentSelectedTheme);
+      }
+
       scene.add(group);
       placedProducts.push(group);
+      if (typeof updateThemeArchitecturalAccents === 'function') {
+        updateThemeArchitecturalAccents(currentSelectedTheme);
+      }
       selectActiveObject(group);
       updateTotalBOM();
       updateClearanceVisualizer();
@@ -3273,6 +3925,9 @@
       if (idx > -1) placedProducts.splice(idx, 1);
       scene.remove(activeSelectedObject);
       deselectActiveObject();
+      if (typeof updateThemeArchitecturalAccents === 'function') {
+        updateThemeArchitecturalAccents(currentSelectedTheme);
+      }
       updateTotalBOM();
       updateClearanceVisualizer();
       updateWetWallScore();
@@ -3746,19 +4401,10 @@
 
     function selectAiTheme(theme) {
       currentSelectedTheme = theme;
-      document.querySelectorAll('.ai-theme-btn').forEach(btn => {
-        if (btn.dataset.theme === theme) {
-          btn.classList.add('active', 'border-black', 'bg-gray-50', 'border-2');
-          btn.classList.remove('border-gray-200', 'bg-white', 'border-emerald-200', 'bg-emerald-50/40');
-        } else {
-          btn.classList.remove('active', 'border-black', 'bg-gray-50', 'border-2');
-          if (btn.dataset.theme === 'Kohler WasteLAB Eco-Luxury') {
-            btn.classList.add('border-emerald-200', 'bg-emerald-50/40');
-          } else {
-            btn.classList.add('border-gray-200', 'bg-white');
-          }
-        }
-      });
+      if (typeof applyAestheticTheme === 'function') {
+        applyAestheticTheme(theme);
+      }
+      triggerGroqAiRecommendation();
     }
 
     function onAiDimensionInputChange() {
@@ -3878,10 +4524,12 @@
     // ==================== 9. MULTI-OBJECTIVE COMBINATORIAL BUNDLE OPTIMIZER ====================
     function optimizeKohlerBundle(roomW, roomD, budgetNum, styleTheme, userPriorities = [], notes = '', inclusions = null) {
       const roomArea = Math.round(roomW * roomD * 100) / 100;
-      const isZen = styleTheme.toLowerCase().includes('zen');
+      const isMinimalist = styleTheme.toLowerCase().includes('minimalist');
       const isClassic = styleTheme.toLowerCase().includes('classic');
+      const isZen = styleTheme.toLowerCase().includes('zen');
+      const isIndustrial = styleTheme.toLowerCase().includes('industrial');
       const isEco = styleTheme.toLowerCase().includes('waste') || styleTheme.toLowerCase().includes('eco');
-      const targetTheme = isZen ? 'zen' : (isClassic ? 'classic' : (isEco ? 'wastelab' : 'minimalist'));
+      const targetTheme = isZen ? 'zen' : (isClassic ? 'classic' : (isIndustrial ? 'industrial' : (isEco ? 'wastelab' : 'minimalist')));
 
       const prioStr = Array.isArray(userPriorities) ? userPriorities.join(', ').toLowerCase() : String(userPriorities || '').toLowerCase();
       let incToilet = inclusions ? !!inclusions.toilet : (prioStr ? prioStr.includes('toilet') : true);
@@ -4518,6 +5166,11 @@
         if (showerEntry) spawnProductById('hydrorail-shower', roomWidth / 2 - 0.50, -roomDepth / 2 + 0.52, 0);
       }
 
+      // Ensure all newly placed fixtures and architecture match the active aesthetic theme
+      if (typeof applyAestheticTheme === 'function') {
+        applyAestheticTheme(currentSelectedTheme);
+      }
+
       closeAiAssistantModal();
       setViewMode('3d');
       updateTotalBOM();
@@ -4525,7 +5178,7 @@
       updateWetWallScore();
       buildPlumbingConduits();
       if (currentViewMode === '2d') update2DFloorplanAnnotations();
-      showToast(`✨ Placed ${placedProducts.length} Kohler ${currentAiRecommendation.active_tier || 'Signature'} fixtures in 3D scene!`);
+      showToast(`✨ Placed ${placedProducts.length} Kohler ${currentAiRecommendation.active_tier || 'Signature'} fixtures matching ${currentSelectedTheme}!`);
     }
 
     // ==================== 10. TOTAL BOM & SHOPPING LIST ====================
@@ -5733,50 +6386,46 @@
         roomDepth = 2.13; // 7.0 ft
         roomHeight = 2.60;
         buildRoomArchitecture();
-        setWallFinish('calacatta');
-        setFloorFinish('slate');
         spawnProductById('veil-smart-toilet', -0.32, -roomDepth / 2 + 0.38, 0);
-        spawnProductById('purist-vessel-vanity', 0.32, -roomDepth / 2 + 0.34, 0);
+        spawnProductById('brazn-console', 0.32, -roomDepth / 2 + 0.34, 0);
         spawnProductById('verdera-mirror', 0.32, -roomDepth / 2 + 0.08, 0);
+        applyAestheticTheme('Minimalist Modern');
         showToast('Loaded: Powder Room Preset (5.0 × 7.0 ft)');
       } else if (presetKey === 'family') {
         roomWidth = 2.44; // 8.0 ft
         roomDepth = 2.44; // 8.0 ft
         roomHeight = 2.60;
         buildRoomArchitecture();
-        setWallFinish('square');
-        setFloorFinish('carrara');
         spawnProductById('veil-smart-toilet', -0.65, -roomDepth / 2 + 0.38, 0);
         spawnProductById('tailored-dual-vanity', 0.20, -roomDepth / 2 + 0.36, 0);
         spawnProductById('verdera-mirror', 0.20, -roomDepth / 2 + 0.08, 0);
         spawnProductById('hydrorail-shower', roomWidth / 2 - 0.50, -roomDepth / 2 + 0.52, 0);
+        applyAestheticTheme('Minimalist Modern');
         showToast('Loaded: Family Bathroom Preset (8.0 × 8.0 ft)');
       } else if (presetKey === 'master') {
         roomWidth = 3.20; // 10.5 ft
         roomDepth = 3.65; // 12.0 ft
         roomHeight = 2.74;
         buildRoomArchitecture();
-        setWallFinish('calacatta');
-        setFloorFinish('slate');
         spawnProductById('veil-smart-toilet', -0.95, -roomDepth / 2 + 0.38, 0);
         spawnProductById('tailored-dual-vanity', 0.35, -roomDepth / 2 + 0.36, 0);
         spawnProductById('verdera-mirror', 0.35, -roomDepth / 2 + 0.08, 0);
         spawnProductById('revel-glass-box', 1.05, -roomDepth / 2 + 0.60, 0);
         spawnProductById('hydrorail-shower', 1.05, -roomDepth / 2 + 0.60, 0);
         spawnProductById('evok-freestanding-tub', -0.75, 0.75, Math.PI / 2);
+        applyAestheticTheme('Classic Luxury');
         showToast('Loaded: Luxury Master Spa Suite (10.5 × 12.0 ft)');
       } else if (presetKey === 'zen') {
         roomWidth = 2.74; // 9.0 ft
         roomDepth = 3.05; // 10.0 ft
         roomHeight = 2.60;
         buildRoomArchitecture();
-        setWallFinish('marquina');
-        setFloorFinish('slate');
         spawnProductById('veil-smart-toilet', -0.72, -roomDepth / 2 + 0.38, 0);
-        spawnProductById('purist-vessel-vanity', 0.25, -roomDepth / 2 + 0.34, 0);
+        spawnProductById('brazn-console', 0.25, -roomDepth / 2 + 0.34, 0);
         spawnProductById('verdera-mirror', 0.25, -roomDepth / 2 + 0.08, 0);
         spawnProductById('evok-freestanding-tub', 0.65, 0.45, 0);
         spawnProductById('hydrorail-shower', 0.65, -roomDepth / 2 + 0.52, 0);
+        applyAestheticTheme('Japanese Zen');
         showToast('Loaded: Japanese Zen Wet-Room (9.0 × 10.0 ft)');
       }
 

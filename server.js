@@ -248,19 +248,68 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     const m = roomD.match(/([\d\.]+)/);
     roomD = m ? parseFloat(m[1]) : 2.8;
   }
-  const isZen = theme.toLowerCase().includes('zen');
+  const isMinimalist = theme.toLowerCase().includes('minimalist');
   const isClassic = theme.toLowerCase().includes('classic');
+  const isZen = theme.toLowerCase().includes('zen');
+  const isIndustrial = theme.toLowerCase().includes('industrial');
   const isWasteLab = theme.toLowerCase().includes('waste') || theme.toLowerCase().includes('eco');
 
   // ==================== TIER 1: SIGNATURE BALANCED (OPTIMAL MULTI-OBJECTIVE) ====================
+  const toiletName = isClassic ? 'Veil Smart Toilet (Vibrant Brass Actuator)' :
+                     isIndustrial ? 'Veil Smart Toilet (Matte Black Plate)' :
+                     isWasteLab ? 'Veil Smart Toilet (Closed-Loop Eco Dual Flush)' :
+                     'Veil Smart One-Piece Toilet';
+
+  const vanityName = isMinimalist ? 'Tailored 60" Dual Floating Vanity in Scandinavian Oak' :
+                     isClassic ? 'Jacquard 60" Shaker Vanity in Antique Walnut (Calacatta Quartz)' :
+                     isZen ? 'Brazn Zen Teak Floating Console (Chalice Basin)' :
+                     isIndustrial ? 'Brazn Architectural Steel Console (Concrete Trough Basin)' :
+                     isWasteLab ? 'WasteLAB Terrazzo Floating Console (Recycled Aggregate)' :
+                     'Tailored 60" Dual Floating Vanity in Scandinavian Oak';
+
+  const vanitySku = (isZen || isIndustrial || isWasteLab) ? 'K-21057-0' : (isClassic ? 'K-99507IN-0' : 'K-99539-LG');
+  const vanityPriceINR = (isZen || isIndustrial || isWasteLab) ? 72000 : 145000;
+  const vanityPriceUSD = (isZen || isIndustrial || isWasteLab) ? 980 : 1950;
+
+  const faucetName = isClassic ? 'Artifacts Column Spout Faucet in Vibrant Brushed Brass' :
+                     isMinimalist ? 'Purist Tall Basin Faucet in Matte Black' :
+                     isZen ? 'Composed Minimalist Basin Faucet in Matte Black' :
+                     isIndustrial ? 'Composed Geometric Single-Handle Faucet in Matte Black' :
+                     isWasteLab ? 'Purist Water-Saving Aerated Faucet in Matte Black' :
+                     'Purist Tall Basin Faucet in Matte Black';
+
+  const faucetSku = isClassic ? 'K-10129IN-4' : (isZen || isIndustrial ? 'K-73159IN-4' : 'K-99856IN-4');
+  const faucetPriceINR = isClassic ? 32000 : (isZen || isIndustrial ? 14500 : 19800);
+  const faucetPriceUSD = isClassic ? 430 : (isZen || isIndustrial ? 195 : 270);
+
+  const showerName = isClassic ? 'Revel Glass Box & HydroRail-R in Vibrant Brushed Brass' :
+                     isMinimalist ? 'Revel Frameless Glass Box Enclosure & HydroRail-R in Polished Chrome' :
+                     isZen ? 'Revel Walk-In Wet-Room Glass & HydroRail-R in Matte Black' :
+                     isIndustrial ? 'Revel Crittall Black Grid Glass Box & HydroRail-R in Matte Black' :
+                     isWasteLab ? 'Revel Glass Enclosure with Katalyst Air-Induction Shower Column' :
+                     'Revel Frameless Glass Box Enclosure & HydroRail-R in Polished Chrome';
+
+  const showerSku = isClassic ? 'K-76465IN-CP' : 'K-706015-L';
+
+  const mirrorName = isClassic ? 'Verdera Mirror with Ornate Brass Frame & Dual Glowing Sconces' :
+                     isMinimalist ? 'Verdera Frameless Backlit Halo Smart Mirror' :
+                     isZen ? 'Verdera Natural Hinoki Teak-Framed Smart Mirror' :
+                     isIndustrial ? 'Verdera Industrial Steel Mirror with Suspended Edison Pendants' :
+                     isWasteLab ? 'Verdera Sustainable Recycled Aluminum LED Mirror' :
+                     'Verdera Frameless Backlit Halo Smart Mirror';
+
   const signatureItems = [
     {
       category: 'toilet',
-      sku_code: isZen ? 'K-5401IN-0' : isClassic ? 'K-3983IN-0' : 'K-28529IN-0',
-      name: isZen ? 'Veil Smart One-Piece Toilet' : isClassic ? 'Memoirs Stately Toilet' : 'Leap Smart Elongated Toilet',
-      price_inr: isZen ? 85000 : isClassic ? 35000 : 47000,
-      price_usd: isZen ? 1150 : isClassic ? 480 : 640,
-      justification: 'Ergonomic elongated bowl with touchless dual-flush and Quiet-Close technology.',
+      sku_code: 'K-5401IN-0',
+      name: toiletName,
+      price_inr: 85000,
+      price_usd: 1150,
+      justification: isClassic ? 'Intelligent smart toilet with heated seat, bidet cleansing, and rich vibrant brushed brass actuator.' :
+                     isIndustrial ? 'Sculptural monolithic toilet contrasting against raw formwork concrete with matte black actuator.' :
+                     isZen ? 'Organic flowing curves harmonizing with Hinoki wood slats and natural woven mat.' :
+                     isWasteLab ? 'High-efficiency 1.04 GPF dual-flush with electrolyzed bidet sanitization.' :
+                     'Flagship sculptural smart toilet with clean lines, hands-free auto flush, and heated Quiet-Close seat.',
       explainability: {
         spatial_fit: 'Fits 26.5" envelope with 28" front clearance (Exceeds NKBA 21" min)',
         budget_fit: 'Balanced 16% of total investment target',
@@ -270,57 +319,67 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     },
     {
       category: 'vanity',
-      sku_code: isClassic ? 'K-99507IN-0' : isZen || isWasteLab ? 'K-21057-0' : 'K-99539-LG',
-      name: isClassic ? 'Jacquard 36" Solid Wood Vanity' : isZen || isWasteLab ? 'Brazn Zen Minimalist Console' : 'Tailored 60" Dual Floating Vanity',
-      price_inr: isClassic ? 58000 : isZen || isWasteLab ? 72000 : 145000,
-      price_usd: isClassic ? 790 : isZen || isWasteLab ? 980 : 1950,
-      justification: 'Silestone quartz countertop with dual undermount basins and slow-close storage drawers.',
+      sku_code: vanitySku,
+      name: vanityName,
+      price_inr: vanityPriceINR,
+      price_usd: vanityPriceUSD,
+      justification: isClassic ? 'Solid dark walnut Shaker vanity with Calacatta quartz top and brushed brass hardware.' :
+                     isIndustrial ? 'Open architectural steel framework with raw concrete trough basin and slatted lower shelf.' :
+                     isZen ? 'Natural solid Teak floating console topped with organic ceramic Chalice vessel basin.' :
+                     isWasteLab ? 'Closed-loop recycled aggregate terrazzo surface crafted from reclaimed Kohler ceramic shards.' :
+                     'Light Scandinavian Oak floating double vanity with Silestone white quartz top and twin undermount basins.',
       explainability: {
-        spatial_fit: 'Spans 60" wall segment with 34" ADA-compliant activity zone',
+        spatial_fit: 'Spans focal wall segment with 34" ADA-compliant activity zone',
         budget_fit: 'Prime focal allocation at 49% of investment',
-        theme_fit: `Clean architectural lines and matte hardware matching ${theme}`,
-        plumbing_fit: 'Twin 1-1/2" P-traps align directly with primary wet-wall stack'
+        theme_fit: `Materials and finish curated specifically for ${theme}`,
+        plumbing_fit: 'Dual 1-1/2" P-traps align directly with primary wet-wall stack'
       }
     },
     {
       category: 'faucet',
-      sku_code: isClassic ? 'K-10129IN-4' : isZen ? 'K-73159IN-4' : 'K-99856IN-4',
-      name: isClassic ? 'Artifacts Column Spout Faucet' : isZen ? 'Composed Single-Handle Faucet' : 'Purist Tall Basin Faucet',
-      price_inr: isClassic ? 32000 : isZen ? 14500 : 19800,
-      price_usd: isClassic ? 430 : isZen ? 195 : 270,
-      justification: 'Solid brass construction with laminar water stream aerator and ceramic disc valves.',
+      sku_code: faucetSku,
+      name: faucetName,
+      price_inr: faucetPriceINR,
+      price_usd: faucetPriceUSD,
+      justification: 'Solid brass construction with ceramic disc valves and laminar water flow stream.',
       explainability: {
-        spatial_fit: 'Tall architectural gooseneck with 8" reach centered over Ladena basin',
-        budget_fit: 'Optimal 7% hardware budget allocation',
-        theme_fit: 'Brushed modern finish complementing vanity edge-pull hardware',
+        spatial_fit: 'Architectural gooseneck centered perfectly over basin',
+        budget_fit: 'Optimal hardware budget allocation',
+        theme_fit: `Finish curated to match ${theme} hardware palette`,
         plumbing_fit: 'Standard 3/8" flexible braided stainless supply lines'
       }
     },
     {
       category: 'shower',
-      sku_code: isClassic ? 'K-76465IN-CP' : 'K-706015-L',
-      name: isClassic ? 'HydroRail Thermostatic Rail Column' : 'Revel Frameless Pivot Glass Box Enclosure & HydroRail-R',
-      price_inr: isClassic ? 65000 : 118000,
-      price_usd: isClassic ? 880 : 1580,
-      justification: '10mm CleanCoat® hydrophobic tempered glass box paired with thermostatic rainhead column.',
+      sku_code: showerSku,
+      name: showerName,
+      price_inr: 118000,
+      price_usd: 1580,
+      justification: isIndustrial ? 'Crittall-inspired black mullion grid 10mm tempered glass box paired with thermostatic rainhead column.' :
+                     isClassic ? '10mm crystal tempered glass enclosure framed by rich Vibrant Brushed Brass hardware and thermostatic column.' :
+                     isZen ? 'Open walk-in glass wet-room screen paired with matte black thermostatic rainhead column.' :
+                     '10mm CleanCoat® hydrophobic tempered glass box paired with thermostatic rainhead column.',
       explainability: {
-        spatial_fit: '48" × 36" corner footprint with 32" unobstructed pivot entry',
+        spatial_fit: '48" × 36" corner footprint with 32" unobstructed entry',
         budget_fit: 'High-value fixture providing complete wet-room separation',
-        theme_fit: 'Frameless crystal glass maintaining open spatial sightlines',
+        theme_fit: `Enclosure aesthetics and glass hardware matched to ${theme}`,
         plumbing_fit: '2" centered floor drain tied into sub-floor drainage run'
       }
     },
     {
       category: 'mirror',
       sku_code: 'K-99009IN-NA',
-      name: 'Verdera Voice Lighted Smart Mirror with Alexa',
+      name: mirrorName,
       price_inr: 38000,
       price_usd: 520,
-      justification: 'Frameless perimeter task illumination with built-in Amazon Alexa voice control.',
+      justification: isClassic ? 'Brass-framed luxury mirror accompanied by warm glowing wall sconces flanking the vanity.' :
+                     isIndustrial ? 'Matte black steel framed mirror illuminated by suspended industrial cord pendant lights.' :
+                     isZen ? 'Warm Hinoki Teak timber perimeter frame with soft 90+ CRI task lighting.' :
+                     'Frameless perimeter task illumination with built-in Amazon Alexa voice control.',
       explainability: {
         spatial_fit: '34" × 40" portrait orientation centered directly above vanity',
         budget_fit: 'Smart fixture investment (13% of budget)',
-        theme_fit: 'Minimalist shadowbox design with ambient backlighting',
+        theme_fit: `Lighting and framing styling engineered for ${theme}`,
         plumbing_fit: '110-240V junction box rough-in at 68" AFF'
       }
     }
