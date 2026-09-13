@@ -3724,6 +3724,17 @@
 
     function openAiAssistantModal() {
       document.getElementById('modal-ai-assistant').classList.remove('hidden');
+      if (!currentAiRecommendation) {
+        const wFt = parseFloat(document.getElementById('ai-input-width').value) || 10.5;
+        const dFt = parseFloat(document.getElementById('ai-input-depth').value) || 9.2;
+        const slider = document.getElementById('ai-budget-slider');
+        const budgetNum = slider ? parseInt(slider.value) : 350000;
+        const roomW = Math.round(wFt * 0.3048 * 10) / 10;
+        const roomD = Math.round(dFt * 0.3048 * 10) / 10;
+        const initialBundle = optimizeKohlerBundle(roomW, roomD, budgetNum, currentSelectedTheme);
+        currentAiRecommendation = initialBundle;
+        renderAiRecommendationResults(initialBundle);
+      }
     }
     function closeAiAssistantModal() {
       document.getElementById('modal-ai-assistant').classList.add('hidden');
@@ -4358,55 +4369,111 @@
     }
 
     function applyAiBundleToBathroom() {
-      if (!currentAiRecommendation || !currentAiRecommendation.bundle) {
-        showToast('Please generate an AI bundle first');
+      // 1. Ensure a bundle recommendation exists, or generate one immediately
+      if (!currentAiRecommendation || !currentAiRecommendation.bundle || !currentAiRecommendation.bundle.length) {
+        const wFt = parseFloat(document.getElementById('ai-input-width').value) || 10.5;
+        const dFt = parseFloat(document.getElementById('ai-input-depth').value) || 9.2;
+        const slider = document.getElementById('ai-budget-slider');
+        const budgetNum = slider ? parseInt(slider.value) : 350000;
+        const roomW = Math.round(wFt * 0.3048 * 10) / 10;
+        const roomD = Math.round(dFt * 0.3048 * 10) / 10;
+        const initialBundle = optimizeKohlerBundle(roomW, roomD, budgetNum, currentSelectedTheme);
+        currentAiRecommendation = initialBundle;
+        renderAiRecommendationResults(initialBundle);
+      }
+
+      if (!currentAiRecommendation || !currentAiRecommendation.bundle || !currentAiRecommendation.bundle.length) {
+        showToast('Please adjust dimensions or budget to generate a feasible bundle.');
         return;
       }
 
-      // 1. Clear existing placed fixtures
+      // 2. Clear existing placed fixtures from 3D scene
       placedProducts.forEach(p => scene.remove(p));
       placedProducts.length = 0;
       deselectActiveObject();
 
-      // 2. Update room dimensions from inputs
+      // 3. Update room dimensions from inputs
       const wFt = parseFloat(document.getElementById('ai-input-width').value) || 10.5;
       const dFt = parseFloat(document.getElementById('ai-input-depth').value) || 9.2;
+      const hFt = parseFloat(document.getElementById('ai-input-height').value) || 8.5;
       roomWidth = Math.round(wFt * 0.3048 * 10) / 10;
       roomDepth = Math.round(dFt * 0.3048 * 10) / 10;
+      roomHeight = Math.round(hFt * 0.3048 * 10) / 10;
       buildRoomArchitecture();
 
-      // 3. Map AI recommended items to 3D models and position them architecturally
+      // 4. Map AI recommended items to 3D catalog fixtures
       const rec = currentAiRecommendation.bundle;
 
-      // Smart Toilet against back wet-wall left with ample clearance
-      const toiletItem = rec.find(i => i.category === 'toilet');
-      if (toiletItem) {
-        const catItem = KOHLER_CATALOG.find(c => c.art === toiletItem.sku_code) || KOHLER_CATALOG[0];
-        spawnProductById(catItem.id, -0.95, -roomDepth / 2 + 0.38, 0);
-      }
-
-      // Master Vanity centered along back wet-wall
-      const vanityItem = rec.find(i => i.category === 'vanity');
-      const vanityX = (roomWidth >= 2.8) ? 0.20 : 0.05;
-      if (vanityItem) {
-        const catItem = KOHLER_CATALOG.find(c => c.art === vanityItem.sku_code) || KOHLER_CATALOG[4];
-        spawnProductById(catItem.id, vanityX, -roomDepth / 2 + 0.36, 0);
-      }
-
-      // Smart Mirror centered directly above vanity
-      const mirrorItem = rec.find(i => i.category === 'mirror');
-      if (mirrorItem) {
-        spawnProductById('verdera-mirror', vanityX, -roomDepth / 2 + 0.08, 0);
-      }
-
-      // Thermostatic Shower placed in dedicated wet alcove with generous entrance
-      const showerItem = rec.find(i => i.category === 'shower');
-      if (showerItem) {
-        if (roomWidth >= 2.8 && roomDepth >= 2.4) {
-          spawnProductById('hydrorail-shower', roomWidth / 2 - 0.58, 0.30, -Math.PI / 2);
-        } else {
-          spawnProductById('hydrorail-shower', roomWidth / 2 - 0.50, -roomDepth / 2 + 0.52, 0);
+      // Helper to match catalog item by ID, SKU (art), name, or category
+      function findCatalogFixture(item, fallbackCat) {
+        if (item) {
+          const match = KOHLER_CATALOG.find(c => 
+            (item.id && c.id === item.id) ||
+            (item.sku_code && c.art === item.sku_code) ||
+            (item.art && c.art === item.art) ||
+            (item.name && c.name.toLowerCase() === item.name.toLowerCase())
+          );
+          if (match) return match;
         }
+        if (fallbackCat) {
+          return KOHLER_CATALOG.find(c => c.category === fallbackCat) || null;
+        }
+        return null;
+      }
+
+      // Identify entries robustly (handling both singular and plural category strings)
+      const toiletEntry = rec.find(i => (i.category || '').toLowerCase().includes('toilet'));
+      const vanityEntry = rec.find(i => (i.category || '').toLowerCase().includes('vanit') || (i.category || '').toLowerCase().includes('basin'));
+      const mirrorEntry = rec.find(i => (i.category || '').toLowerCase().includes('mirror'));
+      const showerEntry = rec.find(i => (i.category || '').toLowerCase().includes('shower'));
+      const tubEntry = rec.find(i => (i.category || '').toLowerCase().includes('tub') || (i.category || '').toLowerCase().includes('bath'));
+
+      // A. Place Toilet (along back wet-wall, left side)
+      const toiletCat = findCatalogFixture(toiletEntry, 'toilets');
+      if (toiletCat) {
+        const toiletX = Math.max(-roomWidth / 2 + 0.55, Math.min(-0.55, -roomWidth / 3.4));
+        spawnProductById(toiletCat.id, toiletX, -roomDepth / 2 + 0.38, 0);
+      }
+
+      // B. Place Vanity (along back wet-wall, centered / right-center)
+      const vanityCat = findCatalogFixture(vanityEntry, 'vanities');
+      let vanityX = 0.20;
+      if (roomWidth < 2.6) vanityX = 0.08;
+      if (vanityCat) {
+        spawnProductById(vanityCat.id, vanityX, -roomDepth / 2 + 0.36, 0);
+      }
+
+      // C. Place Mirror (centered directly above vanity)
+      const mirrorCat = findCatalogFixture(mirrorEntry, 'mirrors');
+      if (mirrorCat) {
+        spawnProductById(mirrorCat.id, vanityX, -roomDepth / 2 + 0.08, 0);
+      }
+
+      // D. Place Shower (wet corner zone)
+      const showerCat = findCatalogFixture(showerEntry, 'showers');
+      if (showerCat) {
+        const showerX = Math.min(roomWidth / 2 - 0.50, Math.max(0.60, roomWidth / 2 - 0.55));
+        if (roomWidth >= 2.8 && roomDepth >= 2.5) {
+          spawnProductById(showerCat.id, showerX, 0.25, -Math.PI / 2);
+        } else {
+          spawnProductById(showerCat.id, showerX, -roomDepth / 2 + 0.52, 0);
+        }
+      }
+
+      // E. Place Bathtub (if included in luxury tier and room has enough space)
+      if (tubEntry && roomWidth >= 2.9 && roomDepth >= 2.8) {
+        const tubCat = findCatalogFixture(tubEntry, 'bathtubs');
+        if (tubCat) {
+          spawnProductById(tubCat.id, -roomWidth / 2 + 0.85, 0.65, Math.PI / 2);
+        }
+      }
+
+      // Safeguard: If somehow nothing was spawned, ensure standard luxury suite is placed
+      if (placedProducts.length === 0) {
+        spawnProductById('veil-smart-toilet', -0.65, -roomDepth / 2 + 0.38, 0);
+        spawnProductById('tailored-dual-vanity', 0.20, -roomDepth / 2 + 0.36, 0);
+        spawnProductById('verdera-mirror', 0.20, -roomDepth / 2 + 0.08, 0);
+        spawnProductById('hydrorail-shower', roomWidth / 2 - 0.50, -roomDepth / 2 + 0.52, 0);
       }
 
       closeAiAssistantModal();
@@ -4414,7 +4481,9 @@
       updateTotalBOM();
       updateClearanceVisualizer();
       updateWetWallScore();
-      showToast(`Applied ${currentAiRecommendation.active_tier || 'Signature'} Kohler Bundle to 3D Bathroom!`);
+      buildPlumbingConduits();
+      if (currentViewMode === '2d') update2DFloorplanAnnotations();
+      showToast(`✨ Placed ${placedProducts.length} Kohler ${currentAiRecommendation.active_tier || 'Signature'} fixtures in 3D scene!`);
     }
 
     // ==================== 10. TOTAL BOM & SHOPPING LIST ====================
