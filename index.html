@@ -3442,18 +3442,18 @@
         const panelWidth = 1.80;
         const numSlats = Math.floor(panelWidth / 0.07);
         const slatsG = new THREE.Group();
-        // Thin dark shadow backing panel
+        // Thin dark shadow backing panel mounted flush to front of back wall (wall front is -roomDepth/2 + 0.04)
         const backPanel = new THREE.Mesh(
           new THREE.BoxGeometry(panelWidth + 0.1, slatH - 0.02, 0.012),
           new THREE.MeshStandardMaterial({ color: 0x2b1e15, roughness: 0.9 })
         );
-        backPanel.position.set(vanityX, slatH / 2, -roomDepth / 2 + 0.008);
+        backPanel.position.set(vanityX, slatH / 2, -roomDepth / 2 + 0.046);
         slatsG.add(backPanel);
 
         for (let i = 0; i < numSlats; i++) {
           const sx = vanityX - panelWidth / 2 + 0.04 + i * 0.07;
           const slat = new THREE.Mesh(new THREE.BoxGeometry(slatW, slatH - 0.04, slatD), teakMat);
-          slat.position.set(sx, slatH / 2, -roomDepth / 2 + 0.022);
+          slat.position.set(sx, slatH / 2, -roomDepth / 2 + 0.064);
           slat.castShadow = true;
           slat.receiveShadow = true;
           slatsG.add(slat);
@@ -3465,7 +3465,7 @@
         const matMat = new THREE.MeshStandardMaterial({ color: 0xc4a47c, roughness: 0.95 });
         const mat = new THREE.Mesh(matGeo, matMat);
         mat.rotation.x = -Math.PI / 2;
-        mat.position.set(vanityX, 0.0012, -roomDepth / 2 + 0.92);
+        mat.position.set(vanityX, 0.0022, -roomDepth / 2 + 0.92);
         mat.receiveShadow = true;
         themeAccentsGroup.add(mat);
 
@@ -5118,16 +5118,51 @@
       // 4. Map AI recommended items to 3D catalog fixtures
       const rec = currentAiRecommendation.bundle;
 
-      // Helper to match catalog item by ID, SKU (art), name, or category
+      // Helper to match catalog item by ID, SKU (art), name, or theme-aware category
       function findCatalogFixture(item) {
         if (!item) return null;
-        return KOHLER_CATALOG.find(c => 
-          (item.id && c.id === item.id) ||
-          (item.sku_code && c.art === item.sku_code) ||
-          (item.art && c.art === item.art) ||
-          (item.name && c.name.toLowerCase() === item.name.toLowerCase()) ||
-          (item.category && c.category === item.category)
-        ) || null;
+        // 1. Direct ID match
+        if (item.id) {
+          const byId = KOHLER_CATALOG.find(c => c.id === item.id);
+          if (byId) return byId;
+        }
+        // 2. SKU / art match
+        const sku = item.sku_code || item.art;
+        if (sku) {
+          const byArt = KOHLER_CATALOG.find(c => c.art === sku || c.art.replace(/-/g, '').toLowerCase() === sku.replace(/-/g, '').toLowerCase());
+          if (byArt) return byArt;
+        }
+        // 3. Exact or keyword name match
+        if (item.name) {
+          const nLow = item.name.toLowerCase();
+          const byName = KOHLER_CATALOG.find(c => c.name.toLowerCase() === nLow || nLow.includes(c.name.toLowerCase()));
+          if (byName) return byName;
+          if (nLow.includes('brazn')) return KOHLER_CATALOG.find(c => c.id === 'brazn-console');
+          if (nLow.includes('veil')) return KOHLER_CATALOG.find(c => c.id === 'veil-smart-toilet');
+          if (nLow.includes('jacquard')) return KOHLER_CATALOG.find(c => c.id === 'jacquard-vanity');
+          if (nLow.includes('tailor')) return KOHLER_CATALOG.find(c => c.id === 'tailored-dual-vanity');
+          if (nLow.includes('reach')) return KOHLER_CATALOG.find(c => c.id === 'reach-wall-hung');
+          if (nLow.includes('memoir')) return KOHLER_CATALOG.find(c => c.id === 'memoirs-stately-toilet');
+          if (nLow.includes('leap')) return KOHLER_CATALOG.find(c => c.id === 'leap-smart-toilet');
+          if (nLow.includes('composed')) return KOHLER_CATALOG.find(c => c.id === 'composed-faucet');
+          if (nLow.includes('purist')) return KOHLER_CATALOG.find(c => c.id === 'purist-faucet');
+          if (nLow.includes('artifacts')) return KOHLER_CATALOG.find(c => c.id === 'artifacts-faucet');
+          if (nLow.includes('evok')) return KOHLER_CATALOG.find(c => c.id === 'evok-bathtub');
+          if (nLow.includes('verdera')) return KOHLER_CATALOG.find(c => c.id === 'verdera-mirror');
+          if (nLow.includes('hydrorail')) return KOHLER_CATALOG.find(c => c.id === 'hydrorail-shower');
+          if (nLow.includes('statement')) return KOHLER_CATALOG.find(c => c.id === 'statement-shower');
+        }
+        // 4. Safe theme-aware category match (prioritizing currentSelectedTheme)
+        if (item.category) {
+          const cat = item.category.toLowerCase();
+          const matching = KOHLER_CATALOG.filter(c => c.category.toLowerCase().includes(cat) || cat.includes(c.category.toLowerCase()));
+          if (matching.length > 0) {
+            const themeTag = (currentSelectedTheme || '').toLowerCase();
+            const themeMatch = matching.find(c => c.styles && c.styles.some(s => themeTag.includes(s)));
+            return themeMatch || matching[0];
+          }
+        }
+        return null;
       }
 
       // Identify entries robustly (handling both singular and plural category strings)
@@ -5196,6 +5231,9 @@
       // Ensure all newly placed fixtures and architecture match the active aesthetic theme
       if (typeof applyAestheticTheme === 'function') {
         applyAestheticTheme(currentSelectedTheme);
+      }
+      if (typeof updateThemeArchitecturalAccents === 'function') {
+        updateThemeArchitecturalAccents(currentSelectedTheme);
       }
 
       closeAiAssistantModal();
