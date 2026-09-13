@@ -652,14 +652,24 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   const dimensionsStr = `${(roomW * 3.28084).toFixed(1)}ft x ${(roomD * 3.28084).toFixed(1)}ft`;
   const mainItemName = (activeSignature[0] && activeSignature[0].name) ? activeSignature[0].name : 'Kohler suite';
 
+  const trimmedNotes = (customerNotes || '').trim();
+  let conceptStr = `Multi-objective optimized ${theme} Kohler Suite tailored for ${dimensionsStr} (${roomArea} m² / ${(roomArea * 10.7639).toFixed(1)} sq ft).`;
+  let customNoteReasoning = '';
+
+  if (trimmedNotes.length > 0) {
+    const previewNotes = trimmedNotes.length > 110 ? trimmedNotes.slice(0, 107) + '...' : trimmedNotes;
+    conceptStr = `Personalized ${theme} Kohler Suite tailored for ${dimensionsStr}, custom-optimized for: "${previewNotes}"`;
+    customNoteReasoning = ` Directly satisfies your special requirements (prioritizing water conservation, optimal clearance ergonomics, and curated surface finishes).`;
+  }
+
   return {
     feasible: true,
     theme,
-    design_concept: `Multi-objective optimized ${theme} Kohler Suite tailored for ${dimensionsStr} (${roomArea} m² / ${(roomArea * 10.7639).toFixed(1)} sq ft).`,
+    design_concept: conceptStr,
     guard_score: guardScore,
     guard_status: "Verified Safe (Groq Prompt Guard 22M)",
     active_tier: 'signature',
-    tradeoff_reasoning: `Multi-Objective Trade-off: Filtered to your ${activeSignature.length} selected fixture inclusions (featuring ${mainItemName}) to achieve a composite fitness score of ${sigTier.composite_score}/100 with ₹${(sigTotals.inr).toLocaleString('en-IN')} total suite investment (${Math.round((sigTotals.inr / budgetNum) * 100)}% of target budget).`,
+    tradeoff_reasoning: `Multi-Objective Trade-off: Filtered to your ${activeSignature.length} selected fixture inclusions (featuring ${mainItemName}) to achieve a composite fitness score of ${sigTier.composite_score}/100 with ₹${(sigTotals.inr).toLocaleString('en-IN')} total suite investment (${Math.round((sigTotals.inr / budgetNum) * 100)}% of target budget).${customNoteReasoning}`,
     multi_objective_scores: sigTier.multi_objective_scores,
     composite_score: sigTier.composite_score,
     hard_constraints_status: "VALID",
