@@ -1527,6 +1527,7 @@
 
     // ==================== PROCEDURAL TEXTURES & PBR MATERIALS ====================
     let themeAccentsGroup = null;
+    let currentSelectedTheme = 'Minimalist Modern';
 
     function generateWallTileTexture(type = 'square', widthM = 3.2, heightM = 2.6) {
       const canvas = document.createElement('canvas');
@@ -3436,15 +3437,23 @@
         themeAccentsGroup.add(ringG);
 
       } else if (isZen) {
-        // Vertical Hinoki / Teak wood slatted feature wall along left wall
-        const slatW = 0.032, slatD = 0.028, slatH = roomHeight;
-        const numSlats = Math.min(18, Math.floor(roomDepth / 0.08));
+        // Vertical Hinoki / Teak wood slatted feature wall along back wall behind/around vanity
+        const slatW = 0.038, slatD = 0.024, slatH = roomHeight;
+        const panelWidth = 1.80;
+        const numSlats = Math.floor(panelWidth / 0.07);
         const slatsG = new THREE.Group();
+        // Thin dark shadow backing panel
+        const backPanel = new THREE.Mesh(
+          new THREE.BoxGeometry(panelWidth + 0.1, slatH - 0.02, 0.012),
+          new THREE.MeshStandardMaterial({ color: 0x2b1e15, roughness: 0.9 })
+        );
+        backPanel.position.set(vanityX, slatH / 2, -roomDepth / 2 + 0.008);
+        slatsG.add(backPanel);
+
         for (let i = 0; i < numSlats; i++) {
-          const sz = -roomDepth / 2 + 0.15 + i * 0.075;
-          if (sz > roomDepth / 2 - 0.2) break;
-          const slat = new THREE.Mesh(new THREE.BoxGeometry(slatD, slatH - 0.05, slatW), teakMat);
-          slat.position.set(-roomWidth / 2 + slatD / 2 + 0.005, slatH / 2, sz);
+          const sx = vanityX - panelWidth / 2 + 0.04 + i * 0.07;
+          const slat = new THREE.Mesh(new THREE.BoxGeometry(slatW, slatH - 0.04, slatD), teakMat);
+          slat.position.set(sx, slatH / 2, -roomDepth / 2 + 0.022);
           slat.castShadow = true;
           slat.receiveShadow = true;
           slatsG.add(slat);
@@ -3452,17 +3461,18 @@
         themeAccentsGroup.add(slatsG);
 
         // Natural woven tatami / jute runner mat in front of console
-        const matGeo = new THREE.PlaneGeometry(1.35, 0.60);
+        const matGeo = new THREE.PlaneGeometry(1.40, 0.65);
         const matMat = new THREE.MeshStandardMaterial({ color: 0xc4a47c, roughness: 0.95 });
         const mat = new THREE.Mesh(matGeo, matMat);
         mat.rotation.x = -Math.PI / 2;
-        mat.position.set(vanityX, 0.0012, -roomDepth / 2 + 0.88);
+        mat.position.set(vanityX, 0.0012, -roomDepth / 2 + 0.92);
+        mat.receiveShadow = true;
         themeAccentsGroup.add(mat);
 
-        // Potted Japanese Bamboo plant in ceramic vase in corner
+        // Potted Japanese Bamboo plant in ceramic vase in right corner
         const plantG = new THREE.Group();
-        plantG.position.set(roomWidth / 2 - 0.32, 0, roomDepth / 2 - 0.35);
-        const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.12, 0.42, 24), new THREE.MeshStandardMaterial({ color: 0x272a2e, roughness: 0.85 }));
+        plantG.position.set(roomWidth / 2 - 0.38, 0, -roomDepth / 2 + 0.45);
+        const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.12, 0.42, 24), new THREE.MeshStandardMaterial({ color: 0x22252a, roughness: 0.85 }));
         pot.position.y = 0.21;
         pot.castShadow = true;
         plantG.add(pot);
@@ -3471,19 +3481,19 @@
         plantG.add(soil);
         const bambooMat = new THREE.MeshStandardMaterial({ color: 0x5a7a40, roughness: 0.5 });
         const leafMat = new THREE.MeshStandardMaterial({ color: 0x6e964b, roughness: 0.4, side: THREE.DoubleSide });
-        for (let b = 0; b < 5; b++) {
-          const bx = (Math.random() - 0.5) * 0.14;
-          const bz = (Math.random() - 0.5) * 0.14;
-          const bh = 1.35 + Math.random() * 0.45;
-          const culm = new THREE.Mesh(new THREE.CylinderGeometry(0.011, 0.013, bh, 12), bambooMat);
+        for (let b = 0; b < 6; b++) {
+          const bx = (Math.random() - 0.5) * 0.16;
+          const bz = (Math.random() - 0.5) * 0.16;
+          const bh = 1.45 + Math.random() * 0.45;
+          const culm = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.014, bh, 12), bambooMat);
           culm.position.set(bx, 0.40 + bh / 2, bz);
           culm.castShadow = true;
           plantG.add(culm);
-          for (let l = 0; l < 4; l++) {
+          for (let l = 0; l < 5; l++) {
             const ly = 0.70 + l * 0.25;
-            const leaf = new THREE.Mesh(new THREE.PlaneGeometry(0.12, 0.03), leafMat);
+            const leaf = new THREE.Mesh(new THREE.PlaneGeometry(0.14, 0.035), leafMat);
             leaf.position.set(bx + 0.05, ly, bz);
-            leaf.rotation.z = (Math.random() - 0.5) * 0.6;
+            leaf.rotation.z = (Math.random() - 0.5) * 0.7;
             leaf.rotation.y = Math.random() * Math.PI * 2;
             plantG.add(leaf);
           }
@@ -3784,11 +3794,28 @@
 
       scene.children.filter(c => c.userData && c.userData.isRoomStructure).forEach(c => scene.remove(c));
 
-      const wallTex = generateWallTileTexture('square', roomWidth, roomHeight);
-      const floorTex = generateFloorTileTexture('slate', roomWidth, roomDepth);
+      let curWallType = 'square';
+      let curFloorType = 'slate';
+      let curWallRough = 0.45, curFloorRough = 0.70;
+      if (typeof currentSelectedTheme === 'string') {
+        if (currentSelectedTheme === 'Minimalist Modern') {
+          curWallType = 'minimalist-modern'; curFloorType = 'minimalist-sand'; curWallRough = 0.50; curFloorRough = 0.65;
+        } else if (currentSelectedTheme === 'Classic Luxury') {
+          curWallType = 'calacatta-gold'; curFloorType = 'calacatta-gold'; curWallRough = 0.12; curFloorRough = 0.10;
+        } else if (currentSelectedTheme === 'Japanese Zen') {
+          curWallType = 'japanese-zen'; curFloorType = 'japanese-limestone'; curWallRough = 0.65; curFloorRough = 0.75;
+        } else if (currentSelectedTheme === 'Industrial Chic' || currentSelectedTheme === 'Industrial Contemporary') {
+          curWallType = 'industrial-chic'; curFloorType = 'industrial-slate'; curWallRough = 0.80; curFloorRough = 0.85;
+        } else if (currentSelectedTheme.includes('WasteLAB') || currentSelectedTheme.includes('Eco')) {
+          curWallType = 'wastelab'; curFloorType = 'wastelab-terrazzo'; curWallRough = 0.35; curFloorRough = 0.45;
+        }
+      }
 
-      const wallMat = new THREE.MeshStandardMaterial({ map: wallTex, roughness: 0.28, metalness: 0.02 });
-      const floorMat = new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.82, metalness: 0.02 });
+      const wallTex = generateWallTileTexture(curWallType, roomWidth, roomHeight);
+      const floorTex = generateFloorTileTexture(curFloorType, roomWidth, roomDepth);
+
+      const wallMat = new THREE.MeshStandardMaterial({ map: wallTex, roughness: curWallRough, metalness: 0.02 });
+      const floorMat = new THREE.MeshStandardMaterial({ map: floorTex, roughness: curFloorRough, metalness: 0.02 });
       const cutawayMat = new THREE.MeshStandardMaterial({ color: 0xd8d4cb, roughness: 0.7 });
       const floorBorderMat = new THREE.MeshStandardMaterial({ color: 0xe8e4dc, roughness: 0.5 });
 
@@ -4378,7 +4405,7 @@
     }
 
     // ==================== 9. GROQ AI ASSISTANT (TRACK 1 CORE LOGIC) ====================
-    let currentSelectedTheme = 'Minimalist Modern';
+    // currentSelectedTheme declared at line 1530
     let currentAiRecommendation = null;
 
     function openAiAssistantModal() {
