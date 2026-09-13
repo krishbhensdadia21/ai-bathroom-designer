@@ -771,24 +771,10 @@
             <p class="text-[10px] text-gray-500 italic">Select which fixtures to include. If no options are checked, no products will be added to the room.</p>
           </div>
 
-          <!-- 📝 Tell AI what you want -->
-          <div class="space-y-1.5 bg-gray-50/90 p-3.5 rounded-2xl border border-gray-200 shadow-2xs transition hover:border-gray-300">
-            <div class="flex items-center justify-between">
-              <label for="ai-custom-notes" class="block text-xs font-black text-gray-900 flex items-center space-x-1.5">
-                <span class="text-sm">📝</span>
-                <span class="tracking-tight uppercase">Tell AI what you want</span>
-              </label>
-              <span class="text-[9px] font-bold text-amber-800 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full uppercase tracking-wider">Natural Prompt</span>
-            </div>
-            <p class="text-[11px] text-gray-500 font-normal leading-relaxed">Describe your dream bathroom, special requirements, or anything else you want the AI to consider.</p>
-            <textarea id="ai-custom-notes" rows="4" placeholder="Example: “I want a premium Japanese Zen bathroom with a spacious walk-in shower. Keep the toilet away from the entrance, maximize open space, use warm natural finishes, and prioritize water-saving fixtures. My parents will also use the bathroom, so make it comfortable and easy to access.”" class="w-full bg-white border border-gray-200 rounded-xl p-3 text-xs text-gray-800 placeholder-gray-400 outline-none focus:border-black focus:ring-1 focus:ring-black transition resize-y leading-relaxed shadow-2xs"></textarea>
-            
-            <div class="flex items-center flex-wrap gap-1.5 pt-1">
-              <span class="text-[10px] text-gray-400 font-medium">Quick Suggestions:</span>
-              <button type="button" onclick="insertPromptInspiration('Spacious walk-in shower with matte black fixtures')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 rounded-lg transition hover:border-black shadow-2xs">🚿 Walk-in shower</button>
-              <button type="button" onclick="insertPromptInspiration('Prioritize water-saving WaterSense fixtures and eco dual-flush')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 rounded-lg transition hover:border-black shadow-2xs">💧 Water-saving</button>
-              <button type="button" onclick="insertPromptInspiration('Elderly accessible design with wide walkways and chair-height toilet')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 rounded-lg transition hover:border-black shadow-2xs">♿ Accessible</button>
-            </div>
+          <!-- Customer Notes -->
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Custom Preferences / Notes</label>
+            <input type="text" id="ai-custom-notes" placeholder="e.g. Spacious open feel, matte black finishes" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-800 outline-none focus:border-black">
           </div>
 
           <!-- Submit Action Button -->
@@ -4468,17 +4454,6 @@
       document.getElementById('ai-budget-label').innerText = '₹' + n.toLocaleString('en-IN');
     }
 
-    function insertPromptInspiration(text) {
-      const el = document.getElementById('ai-custom-notes');
-      if (!el) return;
-      if (el.value.trim().length > 0) {
-        el.value = el.value.trim() + ' ' + text;
-      } else {
-        el.value = text;
-      }
-      el.focus();
-    }
-
     function onPriorityCheckboxChange() {
       triggerGroqAiRecommendation();
     }
@@ -4834,21 +4809,12 @@
       const curSymbol = currentCurrencySymbol || '₹';
       const budgetFormatted = curSymbol + budgetNum.toLocaleString(currentCurrency === 'INR' ? 'en-IN' : 'en-US');
 
-      const trimmedNotes = (notes || '').trim();
-      let customConcept = `Personalized ${styleTheme} Kohler Suite tailored for ${(roomW * 3.28084).toFixed(1)}ft × ${(roomD * 3.28084).toFixed(1)}ft space.`;
-      let promptReasoning = '';
-      if (trimmedNotes.length > 0) {
-        const previewNotes = trimmedNotes.length > 110 ? trimmedNotes.slice(0, 107) + '...' : trimmedNotes;
-        customConcept = `Personalized ${styleTheme} Kohler Suite tailored for ${(roomW * 3.28084).toFixed(1)}ft × ${(roomD * 3.28084).toFixed(1)}ft, custom-optimized for: "${previewNotes}"`;
-        promptReasoning = ` Directly aligns to your special requirements (prioritizing water conservation, optimal clearance ergonomics, and curated surface finishes).`;
-      }
-
-      const tradeoffReasoning = `Selected because it achieved the highest composite fitness score (${signature.fitness_score}/100) among ${feasibleBundles.length} evaluated configurations: fits the ${(roomW * 3.28084).toFixed(1)}ft wet-wall with compliant NKBA clearances, allocates ${budgetPctUsed}% of your ${budgetFormatted} target budget, achieves ${signature.scores.theme_cohesion}% style alignment with ${styleTheme}, and saves ${signature.water_savings_l.toLocaleString()} Liters of water annually via Kohler WaterSense engineering.${promptReasoning}`;
+      const tradeoffReasoning = `Selected because it achieved the highest composite fitness score (${signature.fitness_score}/100) among ${feasibleBundles.length} evaluated configurations: fits the ${(roomW * 3.28084).toFixed(1)}ft wet-wall with compliant NKBA clearances, allocates ${budgetPctUsed}% of your ${budgetFormatted} target budget, achieves ${signature.scores.theme_cohesion}% style alignment with ${styleTheme}, and saves ${signature.water_savings_l.toLocaleString()} Liters of water annually via Kohler WaterSense engineering.`;
 
       return {
         feasible: true,
         theme: styleTheme,
-        design_concept: customConcept,
+        design_concept: `Personalized ${styleTheme} Kohler Suite tailored for ${(roomW * 3.28084).toFixed(1)}ft × ${(roomD * 3.28084).toFixed(1)}ft space.`,
         active_tier: 'signature',
         composite_score: signature.fitness_score,
         tradeoff_reasoning: tradeoffReasoning,
