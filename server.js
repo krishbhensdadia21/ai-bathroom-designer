@@ -132,8 +132,72 @@ const server = http.createServer(async (req, res) => {
         const payload = JSON.parse(body || '{}');
         const { dimensions, budget, theme, priorities, customerNotes } = payload;
 
-        // 1. Guard check with meta-llama/llama-prompt-guard-2-22m
-        const guardPrompt = `User prompt: Theme: ${theme}, Budget: ${budget}, Dimensions: ${dimensions}, Notes: ${customerNotes || 'none'}`;
+        let roomW = payload.room_width_m;
+        let roomD = payload.room_depth_m;
+        if (!roomW && dimensions) {
+          const m = dimensions.match(/([\d\.]+)\s*ft\s*[x×]\s*([\d\.]+)\s*ft/i);
+          if (m) {
+            roomW = Math.round(parseFloat(m[1]) * 0.3048 * 10) / 10;
+            roomD = Math.round(parseFloat(m[2]) * 0.3048 * 10) / 10;
+          }
+        }
+        roomW = roomW || 3.2;
+        roomD = roomD || 2.8;
+
+        let budgetNum = payload.budget_num;
+        if (!budgetNum && budget) {
+          budgetNum = parseInt(String(budget).replace(/[^0-9]/g, '')) || 350000;
+        }
+        budgetNum = budgetNum || 350000;
+
+        // 1. Hard Constraint Feasibility Verification
+        const roomArea = +(roomW * roomD).toFixed(2);
+        const minDim = Math.min(roomW, roomD);
+        if (minDim < 1.4 || roomArea < 2.5) {
+          const wFt = (roomW * 3.28084).toFixed(1);
+          const dFt = (roomD * 3.28084).toFixed(1);
+          const areaSqFt = (roomArea * 10.7639).toFixed(1);
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({
+            feasible: false,
+            failed_constraint: 'Room Dimensions Envelope (Area < 2.5m² / 27 sq ft)',
+            failure_reason: `Bathroom dimensions (${wFt}ft × ${dFt}ft = ${areaSqFt} sq ft) physically cannot accommodate standard fixtures while preserving NKBA 21" front clearance and 15" centerline code.`,
+            relaxation_suggestions: [
+              'Expand bathroom footprint to at least 7.5ft × 6.5ft (48+ sq ft) for standard 4-fixture suite',
+              'Convert layout to Powder Room (Toilet + Compact Console, removing Shower & Bathtub)',
+              'Utilize ultra-compact wall-hung carrier toilet (Reach K-77701IN) and corner vessel vanity'
+            ],
+            relaxation_actions: {
+              expand_room: { width_ft: 8.5, depth_ft: 7.0 },
+              adjust_budget: { min_budget_inr: 120000 },
+              switch_powder: { type: 'powder_room' }
+            }
+          }));
+          return;
+        }
+
+        if (budgetNum < 70000) {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({
+            feasible: false,
+            failed_constraint: 'Budget Below Kohler Entry Threshold',
+            failure_reason: `Target budget of ₹${budgetNum.toLocaleString('en-IN')} is below the entry threshold (₹75,000) required for authentic Kohler vitreous china sanitaryware, solid-brass valving, and ceramic disc fittings.`,
+            relaxation_suggestions: [
+              'Increase target budget to ₹1,25,000 to enable Kohler Essential Value Suite',
+              'Select Kohler Reach Wall-Hung and Parallel Single-Control brassware for maximum capital efficiency',
+              'Phase your renovation: Install primary wet-wall fixtures first, upgrade vanity in Phase 2'
+            ],
+            relaxation_actions: {
+              expand_room: { width_ft: 8.5, depth_ft: 7.0 },
+              adjust_budget: { min_budget_inr: 125000 },
+              switch_powder: { type: 'powder_room' }
+            }
+          }));
+          return;
+        }
+
+        // 2. Guard check with meta-llama/llama-prompt-guard-2-22m
+        const guardPrompt = `User prompt: Theme: ${theme}, Budget: ${budgetNum}, Dimensions: ${dimensions}, Notes: ${customerNotes || 'none'}`;
         const guardResult = await callGroq('meta-llama/llama-prompt-guard-2-22m', [
           { role: 'user', content: guardPrompt }
         ]);
@@ -144,115 +208,11 @@ const server = http.createServer(async (req, res) => {
           guardScore = parseFloat(raw) || 0.0008;
         }
 
-        // 2. Chat Recommendation with qwen/qwen3.8-27b or openai/gpt-oss-20b
-        const systemPrompt = `You are the Official KOHLER AI Bathroom Architect. Your task is to recommend an optimized luxury product bundle from the Kohler catalog matching the customer's constraints.
-Available Kohler Products:
-- Toilets:
-  - K-5401IN-0: Veil Smart One-Piece (₹85,000 / $1,150) - Minimalist Modern / Japanese Zen
-  - K-28529IN-0: Leap Smart Toilet (₹47,000 / $640) - Minimalist Modern
-  - K-77701IN-0: Reach Wall-Hung Toilet (₹24,000 / $320) - Minimalist / Contemporary
-  - K-3983IN-0: Memoirs Stately Toilet (₹35,000 / $480) - Classic Luxury / Traditional
-- Faucets:
-  - K-73159IN-4: Composed Single-Handle (₹14,500 / $195) - Minimalist / Zen
-  - K-99856IN-4: Purist Tall Basin Faucet (₹19,800 / $270) - Minimalist Modern
-  - K-10129IN-4: Artifacts Column Faucet (₹32,000 / $430) - Classic Luxury
-  - K-22536IN-4: Parallel Monoblock (₹11,200 / $150) - Contemporary
-- Basins:
-  - K-2660IN-0: Vox Rectangle Vessel (₹12,500 / $170) - Modern / Zen
-  - K-2214IN-0: Ladena Undermount (₹15,400 / $210) - Classic / Modern
-  - K-2374IN-0: Chalice Round Vessel (₹9,800 / $135) - Japanese Zen
-- Showers:
-  - K-26292IN-CP: Statement Multifunction Showerhead (₹28,500 / $380) - Modern
-  - K-76465IN-CP: HydroRail Thermostatic System (₹65,000 / $880) - Classic Luxury / Modern
-  - K-706015-L: Revel Frameless Glass Box Enclosure (₹53,000 / $700) - Luxury Modern
-  - K-18393IN-CP: Moxie Bluetooth Showerhead (₹22,000 / $300) - Contemporary
-- Vanities:
-  - K-99507IN-0: Jacquard 36 inch Vanity (₹58,000 / $790) - Classic Luxury
-  - K-99539-LG: Tailored 60" Dual Vanity (₹1,45,000 / $1,950) - Minimalist Modern
-  - K-21057-0: Brazn Zen Console (₹72,000 / $980) - Japanese Zen
-- Bathtubs:
-  - K-1130IN-0: Evok Oval Freestanding Bathtub (₹1,15,000 / $1,550) - Zen / Modern
-  - K-18485IN-0: Asking Acrylic Rectangular Bath (₹42,000 / $570) - Contemporary
-- Mirrors:
-  - K-99009IN-NA: Verdera Voice Lighted Smart Mirror (₹38,000 / $520) - Smart Alexa
-
-Respond ONLY with valid JSON in this exact schema:
-{
-  "theme": "${theme}",
-  "design_concept": "Short 1-sentence luxury concept statement",
-  "guard_score": ${guardScore},
-  "guard_status": "Verified Safe (Groq Prompt Guard 22M)",
-  "bundle": [
-    {
-      "category": "toilet|faucet|basin|shower|vanity|bathtub|mirror",
-      "sku_code": "...",
-      "name": "...",
-      "price_inr": 12345,
-      "price_usd": 123,
-      "justification": "Why this specific item fits space, aesthetic, and budget"
-    }
-  ],
-  "total_price_inr": 123456,
-  "total_price_usd": 1234,
-  "budget_utilization_pct": 88,
-  "sustainability": {
-    "annual_water_saved_liters": 28450,
-    "leed_credit_points": 4,
-    "epa_watersense": true,
-    "carbon_offset_kg": 142
-  },
-  "wet_wall_score": 94,
-  "estimated_plumbing_savings_inr": 42000,
-  "code_compliance_score": 100
-}`;
-
-        let chatResult = await callGroq('qwen/qwen3.8-27b', [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Please design a Kohler bathroom. Dimensions: ${dimensions}, Budget: ${budget}, Theme: ${theme}, Priorities: ${priorities || 'Balanced'}, Customer Notes: ${customerNotes || 'Create an elegant sanctuary'}` }
-        ]);
-
-        if (!chatResult.ok) {
-          chatResult = await callGroq('openai/gpt-oss-20b', [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: `Please design a Kohler bathroom. Dimensions: ${dimensions}, Budget: ${budget}, Theme: ${theme}` }
-          ]);
-        }
-
-        let recommendation = null;
-        if (chatResult.ok && chatResult.data.choices && chatResult.data.choices[0]) {
-          const content = chatResult.data.choices[0].message.content;
-          try {
-            const jsonMatch = content.match(/\{[\s\S]*\}/);
-            if (jsonMatch) recommendation = JSON.parse(jsonMatch[0]);
-          } catch (e) {}
-        }
-
-        // Always ensure Multi-Objective alternatives & explainability are populated
-        const offlineData = generateOfflineKohlerBundle(theme, budget, dimensions, guardScore);
-        if (!recommendation) {
-          recommendation = offlineData;
-        } else {
-          if (!recommendation.alternatives) recommendation.alternatives = offlineData.alternatives;
-          if (!recommendation.multi_objective_scores) recommendation.multi_objective_scores = offlineData.multi_objective_scores;
-          if (!recommendation.tradeoff_reasoning) recommendation.tradeoff_reasoning = offlineData.tradeoff_reasoning;
-          recommendation.active_tier = 'signature';
-          if (recommendation.bundle) {
-            recommendation.bundle.forEach((item, idx) => {
-              if (!item.explainability) {
-                const sampleExpl = offlineData.bundle[idx] ? offlineData.bundle[idx].explainability : null;
-                item.explainability = sampleExpl || {
-                  spatial_fit: 'Fits physical space envelope with compliant clearances',
-                  budget_fit: 'Meets target expenditure allocation',
-                  theme_fit: `Harmonizes with ${theme} aesthetic profile`,
-                  plumbing_fit: 'Connects with standard rough-in plumbing lines'
-                };
-              }
-            });
-          }
-        }
+        // 3. Multi-Objective Optimization Engine
+        const optimizedBundle = generateOfflineKohlerBundle(theme || 'Minimalist Modern', budgetNum, roomW, roomD, guardScore, priorities, customerNotes);
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(recommendation));
+        res.end(JSON.stringify(optimizedBundle));
       } catch (err) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: err.message }));
@@ -276,7 +236,18 @@ Respond ONLY with valid JSON in this exact schema:
   }
 });
 
-function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budget = '₹3,50,000', dimensions = '10ft x 8ft', guardScore = 0.00079) {
+function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 350000, roomW = 3.2, roomD = 2.8, guardScore = 0.00079, priorities = '', customerNotes = '') {
+  if (typeof budgetNum === 'string') {
+    budgetNum = parseInt(budgetNum.replace(/[^0-9]/g, '')) || 350000;
+  }
+  if (typeof roomW === 'string') {
+    const m = roomW.match(/([\d\.]+)/);
+    roomW = m ? parseFloat(m[1]) : 3.2;
+  }
+  if (typeof roomD === 'string') {
+    const m = roomD.match(/([\d\.]+)/);
+    roomD = m ? parseFloat(m[1]) : 2.8;
+  }
   const isZen = theme.toLowerCase().includes('zen');
   const isClassic = theme.toLowerCase().includes('classic');
   const isWasteLab = theme.toLowerCase().includes('waste') || theme.toLowerCase().includes('eco');
@@ -526,61 +497,83 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budget = '₹3
   const essTotals = calcTotal(essentialItems);
   const luxTotals = calcTotal(luxuryItems);
 
-  // Parse budget number from string e.g. "₹3,50,000" -> 350000
-  const budgetNum = parseInt(budget.replace(/[^0-9]/g, '')) || 350000;
-  const budgetRatio = (sigTotals.inr / budgetNum);
-  const budgetScore = Math.max(75, Math.min(99, Math.round(100 - Math.abs(1 - budgetRatio) * 35)));
+  const roomArea = +(roomW * roomD).toFixed(2);
+  const spatialScore = Math.min(99, Math.max(88, Math.round(91 + Math.min(8, (roomArea - 5.0) * 1.5))));
+
+  const calcTierMetrics = (items, totals, tierName, tag) => {
+    const budgetRatio = totals.inr / budgetNum;
+    const budgetScore = Math.max(65, Math.min(99, Math.round(100 - Math.abs(1 - budgetRatio) * 35)));
+    const themeScore = isZen ? 98 : (isClassic ? 97 : 96);
+    const plumbingScore = 96;
+    const ecoScore = items.some(it => it.sku_code === 'K-5401IN-0' || it.sku_code === 'K-77701IN-0') ? 98 : 94;
+    const compositeScore = +(0.25 * spatialScore + 0.20 * budgetScore + 0.20 * themeScore + 0.20 * plumbingScore + 0.15 * ecoScore).toFixed(1);
+
+    let annualWaterSavedL = 0;
+    items.forEach(it => {
+      if (it.category === 'toilet') {
+        const gpf = it.sku_code === 'K-5401IN-0' ? 1.0 : (it.sku_code === 'K-77701IN-0' ? 1.1 : 1.28);
+        annualWaterSavedL += Math.round((1.60 - gpf) * 7300 * 3.78541);
+      } else if (it.category === 'faucet') {
+        annualWaterSavedL += Math.round((2.20 - 1.20) * 12 * 365 * 3.78541);
+      } else if (it.category === 'shower') {
+        annualWaterSavedL += Math.round((2.50 - 1.75) * 32 * 365 * 3.78541);
+      }
+    });
+    const carbonOffsetKg = +(annualWaterSavedL * 0.005).toFixed(1);
+
+    return {
+      tier_name: tierName,
+      tag: tag,
+      composite_score: compositeScore,
+      total_price_inr: totals.inr,
+      total_price_usd: totals.usd,
+      budget_utilization_pct: Math.min(100, Math.round((totals.inr / budgetNum) * 100)),
+      multi_objective_scores: {
+        spatial_fit: spatialScore,
+        budget_efficiency: budgetScore,
+        theme_cohesion: themeScore,
+        plumbing_wet_wall: plumbingScore,
+        sustainability_score: ecoScore,
+        composite_score: compositeScore
+      },
+      sustainability: {
+        annual_water_saved_liters: annualWaterSavedL,
+        carbon_offset_kg: carbonOffsetKg,
+        epa_watersense: true,
+        leed_credit_points: 4
+      },
+      bundle: items
+    };
+  };
+
+  const sigTier = calcTierMetrics(signatureItems, sigTotals, "Signature Balanced", "Recommended Best Multi-Objective Score");
+  const essTier = calcTierMetrics(essentialItems, essTotals, "Essential Value", "Budget-Optimized (-38% Capital Investment)");
+  const luxTier = calcTierMetrics(luxuryItems, luxTotals, "Masterpiece Luxury", "Feature-Maximized (Veil + Evok Tub + Revel Enclosure)");
+
+  const dimensionsStr = `${(roomW * 3.28084).toFixed(1)}ft x ${(roomD * 3.28084).toFixed(1)}ft`;
 
   return {
+    feasible: true,
     theme,
-    design_concept: `Multi-objective optimized ${theme} Kohler Suite tailored for ${dimensions}.`,
+    design_concept: `Multi-objective optimized ${theme} Kohler Suite tailored for ${dimensionsStr} (${roomArea} m² / ${(roomArea * 10.7639).toFixed(1)} sq ft).`,
     guard_score: guardScore,
     guard_status: "Verified Safe (Groq Prompt Guard 22M)",
     active_tier: 'signature',
-    tradeoff_reasoning: `Multi-Objective Trade-off: Balanced budget to allocate ₹${(signatureItems[1].price_inr).toLocaleString('en-IN')} for the ${signatureItems[1].name} and smart fixtures, while utilizing the efficient HydroRail system to stay within ₹${(sigTotals.inr).toLocaleString('en-IN')} (${Math.round((sigTotals.inr / budgetNum) * 100)}% of target budget).`,
-    multi_objective_scores: {
-      spatial_fit: 98,
-      budget_efficiency: budgetScore,
-      plumbing_wet_wall: 95,
-      theme_cohesion: 97,
-      composite_score: +(0.30 * 98 + 0.25 * budgetScore + 0.25 * 95 + 0.20 * 97).toFixed(1)
-    },
-    hard_constraints_status: "VALID", // VALID | WARNING | INVALID
+    tradeoff_reasoning: `Multi-Objective Trade-off: Balanced capital allocation (₹${(signatureItems[1].price_inr).toLocaleString('en-IN')} for ${signatureItems[1].name}) while utilizing the high-efficiency ${signatureItems[3].name} to achieve a composite score of ${sigTier.composite_score} with ₹${(sigTotals.inr).toLocaleString('en-IN')} total expenditure (${Math.round((sigTotals.inr / budgetNum) * 100)}% of target budget).`,
+    multi_objective_scores: sigTier.multi_objective_scores,
+    composite_score: sigTier.composite_score,
+    hard_constraints_status: "VALID",
     alternatives: {
-      signature: {
-        tier_name: "Signature Balanced",
-        tag: "Recommended Best Multi-Objective Score",
-        composite_score: +(0.30 * 98 + 0.25 * budgetScore + 0.25 * 95 + 0.20 * 97).toFixed(1),
-        total_price_inr: sigTotals.inr,
-        total_price_usd: sigTotals.usd,
-        budget_utilization_pct: Math.min(100, Math.round((sigTotals.inr / budgetNum) * 100)),
-        bundle: signatureItems
-      },
-      essential: {
-        tier_name: "Essential Value",
-        tag: "Budget-Optimized (-38% Capital Investment)",
-        composite_score: 93.4,
-        total_price_inr: essTotals.inr,
-        total_price_usd: essTotals.usd,
-        budget_utilization_pct: Math.min(100, Math.round((essTotals.inr / budgetNum) * 100)),
-        bundle: essentialItems
-      },
-      luxury: {
-        tier_name: "Masterpiece Luxury",
-        tag: "Feature-Maximized (Veil + Evok Tub + Revel Enclosure)",
-        composite_score: 97.8,
-        total_price_inr: luxTotals.inr,
-        total_price_usd: luxTotals.usd,
-        budget_utilization_pct: Math.min(100, Math.round((luxTotals.inr / budgetNum) * 100)),
-        bundle: luxuryItems
-      }
+      signature: sigTier,
+      essential: essTier,
+      luxury: luxTier
     },
-    // Top-level bundle maps to the recommended Signature tier
     bundle: signatureItems,
     total_price_inr: sigTotals.inr,
     total_price_usd: sigTotals.usd,
     budget_utilization_pct: Math.min(100, Math.round((sigTotals.inr / budgetNum) * 100)),
-    wet_wall_score: 95,
+    sustainability: sigTier.sustainability,
+    wet_wall_score: 96,
     estimated_plumbing_savings_inr: 45000,
     code_compliance_score: 100
   };
