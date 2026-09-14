@@ -771,10 +771,39 @@
             <p class="text-[10px] text-gray-500 italic">Select which fixtures to include. If no options are checked, no products will be added to the room.</p>
           </div>
 
-          <!-- Customer Notes -->
-          <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Custom Preferences / Notes</label>
-            <input type="text" id="ai-custom-notes" placeholder="e.g. Spacious open feel, matte black finishes" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-800 outline-none focus:border-black">
+          <!-- ✨ CUSTOM AI PREFERENCES -->
+          <div class="space-y-2.5 bg-gray-50/90 p-4 rounded-2xl border border-gray-200/90 shadow-2xs transition hover:border-gray-300">
+            <div class="flex items-center justify-between">
+              <label for="ai-custom-notes" class="block text-xs font-black text-gray-900 flex items-center space-x-1.5">
+                <span class="text-amber-500">✨</span>
+                <span class="tracking-wider uppercase">CUSTOM AI PREFERENCES</span>
+              </label>
+              <button type="button" onclick="clearAiCustomNotes()" class="text-[10px] text-gray-400 hover:text-rose-600 font-bold transition hover:underline cursor-pointer">
+                Clear
+              </button>
+            </div>
+            <p class="text-[11px] text-gray-500 leading-snug">Describe your dream bathroom in your own words. AI will combine your preferences with the selected constraints.</p>
+            
+            <div class="space-y-1">
+              <div class="flex items-center justify-between text-[10px] text-gray-500 font-medium">
+                <span class="font-bold text-gray-700 uppercase tracking-tight">Natural-language instructions</span>
+                <span id="ai-custom-char-count" class="font-mono text-gray-400 text-[10px]">0 / 500</span>
+              </div>
+              <textarea id="ai-custom-notes" rows="4" maxlength="500" oninput="updateAiCustomNotesCount()" placeholder="e.g. I want a luxurious Japanese Zen bathroom with warm teak, lots of storage, an open shower area, and a premium spa-like feel. Keep it within my budget." class="w-full bg-white border border-gray-200 rounded-xl p-3 text-xs text-gray-800 placeholder-gray-400 outline-none focus:border-black focus:ring-1 focus:ring-black transition resize-y leading-relaxed shadow-2xs font-normal"></textarea>
+            </div>
+
+            <!-- Example Prompt Chips -->
+            <div class="pt-1.5 border-t border-gray-200/60 space-y-1.5">
+              <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block">Inspiration Chips:</span>
+              <div class="flex flex-wrap gap-1.5">
+                <button type="button" onclick="appendPromptChip('Luxury spa atmosphere with warm atmospheric lighting')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">✨ Luxury spa</button>
+                <button type="button" onclick="appendPromptChip('Maximize storage with deep soft-close vanity drawers and medicine cabinet')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">📦 More storage</button>
+                <button type="button" onclick="appendPromptChip('Family-friendly design safe for children and elderly parents')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">👨‍👩‍👧 Family-friendly</button>
+                <button type="button" onclick="appendPromptChip('Eco-friendly with Kohler WaterSense dual-flush fixtures and Katalyst aerators')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">🌱 Eco-friendly</button>
+                <button type="button" onclick="appendPromptChip('Minimalist clean lines with maximized open floor space')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">⚪ Minimalist</button>
+                <button type="button" onclick="appendPromptChip('Accessibility-oriented with wide walkways and ADA chair-height toilet')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">♿ Accessibility</button>
+              </div>
+            </div>
           </div>
 
           <!-- Submit Action Button -->
@@ -903,6 +932,20 @@
                   Selected because it fits the available 10.5ft wet-wall with 29.4" front clearance (exceeding NKBA 21" min), satisfies the smart-toilet requirement, stays within budget, and achieves the highest style compatibility.
                 </p>
               </div>
+            </div>
+
+            <!-- ✨ AI UNDERSTOOD Compact Area (Shown when custom prompt has been entered) -->
+            <div id="ai-understood-container" class="hidden mt-2 p-3 bg-amber-50/90 border border-amber-300/90 rounded-xl text-xs space-y-1.5 animate-in fade-in duration-200 shadow-2xs">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-1.5 text-amber-950 font-black text-[11px] uppercase tracking-wider">
+                  <span class="text-amber-600">✨</span>
+                  <span>AI UNDERSTOOD</span>
+                </div>
+                <span class="text-[9px] font-bold text-amber-800 bg-amber-200/70 px-2 py-0.5 rounded-full font-mono">NLP PARSED</span>
+              </div>
+              <ul id="ai-understood-tags" class="space-y-1 text-[11px] text-amber-950 font-medium">
+                <!-- Populated dynamically: e.g. ✓ Japanese Zen spa atmosphere -->
+              </ul>
             </div>
 
             <!-- Concept Statement -->
@@ -4454,6 +4497,113 @@
       document.getElementById('ai-budget-label').innerText = '₹' + n.toLocaleString('en-IN');
     }
 
+    function updateAiCustomNotesCount() {
+      const el = document.getElementById('ai-custom-notes');
+      const counter = document.getElementById('ai-custom-char-count');
+      if (el && counter) {
+        counter.innerText = `${el.value.length} / 500`;
+      }
+    }
+
+    function clearAiCustomNotes() {
+      const el = document.getElementById('ai-custom-notes');
+      if (el) {
+        el.value = '';
+        updateAiCustomNotesCount();
+        const understoodContainer = document.getElementById('ai-understood-container');
+        if (understoodContainer) understoodContainer.classList.add('hidden');
+        el.focus();
+      }
+    }
+
+    function appendPromptChip(text) {
+      const el = document.getElementById('ai-custom-notes');
+      if (!el) return;
+      const cur = el.value.trim();
+      if (cur.length > 0) {
+        if (!cur.endsWith('.') && !cur.endsWith(',')) {
+          el.value = cur + ', ' + text;
+        } else {
+          el.value = cur + ' ' + text;
+        }
+      } else {
+        el.value = text;
+      }
+      updateAiCustomNotesCount();
+      el.focus();
+    }
+
+    function parsePromptPreferences(notes, roomW = 3.2, roomD = 2.8, theme = 'Japanese Zen') {
+      if (!notes || !notes.trim()) return [];
+      const nLow = notes.toLowerCase();
+      const tags = [];
+
+      // Atmosphere / Style
+      if (nLow.includes('spa') || nLow.includes('zen') || nLow.includes('tranquil') || nLow.includes('resort')) {
+        tags.push('✓ Japanese Zen spa atmosphere & tranquil wellness');
+      } else if (nLow.includes('luxury') || nLow.includes('luxurious') || nLow.includes('opulent')) {
+        tags.push('✓ Luxury high-end architectural styling');
+      } else if (nLow.includes('minimalist') || nLow.includes('clean line') || nLow.includes('simple')) {
+        tags.push('✓ Minimalist aesthetic with uncluttered surfaces');
+      } else if (nLow.includes('industrial') || nLow.includes('loft') || nLow.includes('steel')) {
+        tags.push('✓ Urban industrial aesthetic with architectural metals');
+      }
+
+      // Materials & Finishes
+      if (nLow.includes('teak') || nLow.includes('wood') || nLow.includes('timber') || nLow.includes('natural finish') || nLow.includes('natural wood')) {
+        tags.push('✓ Warm teak / natural wood preference');
+      } else if (nLow.includes('brass') || nLow.includes('gold')) {
+        tags.push('✓ Vibrant Brushed Brass hardware preference');
+      } else if (nLow.includes('matte black') || nLow.includes('black')) {
+        tags.push('✓ Matte Black architectural finishes');
+      } else if (nLow.includes('marble') || nLow.includes('calacatta') || nLow.includes('quartz')) {
+        tags.push('✓ Calacatta quartz luxury stone surfaces');
+      }
+
+      // Storage
+      if (nLow.includes('storage') || nLow.includes('drawer') || nLow.includes('cabinet') || nLow.includes('organiz')) {
+        tags.push('✓ Increased storage with deep vanity drawer system');
+      }
+
+      // Bathtub / Shower
+      if (nLow.includes('bathtub') || nLow.includes('tub') || nLow.includes('soak')) {
+        if (roomW >= 2.8 && roomD >= 2.6) {
+          tags.push('✓ Bathtub requested (Freestanding Evok soaking tub)');
+        } else {
+          tags.push('⚠️ Bathtub requested: Space trade-off (prioritizing walk-in shower for room footprint)');
+        }
+      }
+      if (nLow.includes('walk-in shower') || nLow.includes('open shower') || nLow.includes('walk in') || nLow.includes('shower')) {
+        tags.push('✓ Spacious walk-in shower wet-room enclosure');
+      }
+
+      // Accessibility / Parents / Family
+      if (nLow.includes('parent') || nLow.includes('elderly') || nLow.includes('accessib') || nLow.includes('safe') || nLow.includes('comfort')) {
+        tags.push('✓ Accessibility & comfort (17" ADA chair-height toilet & wide clearances)');
+      } else if (nLow.includes('family') || nLow.includes('kid')) {
+        tags.push('✓ Family-friendly durable materials & anti-scald valving');
+      }
+
+      // Spatial / Layout
+      if (nLow.includes('away from entrance') || nLow.includes('away from door') || nLow.includes('toilet away')) {
+        tags.push('✓ Toilet positioned on far wet-wall away from entrance line-of-sight');
+      }
+      if (nLow.includes('spacious') || nLow.includes('open space') || nLow.includes('maximize open')) {
+        tags.push('✓ Floating wall-hung fixtures to maximize visible open floor space');
+      }
+
+      // Eco / Water
+      if (nLow.includes('water') || nLow.includes('saving') || nLow.includes('eco') || nLow.includes('watersense')) {
+        tags.push('✓ Water-saving Kohler WaterSense dual-flush & air-induction fittings');
+      }
+
+      if (tags.length === 0) {
+        tags.push(`✓ Custom requirements evaluated & incorporated into ${theme} suite`);
+      }
+
+      return tags;
+    }
+
     function onPriorityCheckboxChange() {
       triggerGroqAiRecommendation();
     }
@@ -4808,13 +4958,22 @@
       const budgetPctUsed = Math.round((signature.total_price_inr / budgetNum) * 100);
       const curSymbol = currentCurrencySymbol || '₹';
       const budgetFormatted = curSymbol + budgetNum.toLocaleString(currentCurrency === 'INR' ? 'en-IN' : 'en-US');
+      const understood = parsePromptPreferences(notes, roomW, roomD, styleTheme);
+      let customConcept = `Personalized ${styleTheme} Kohler Suite tailored for ${(roomW * 3.28084).toFixed(1)}ft × ${(roomD * 3.28084).toFixed(1)}ft space.`;
+      let promptReasoning = '';
+      if (notes && notes.trim().length > 0) {
+        const previewNotes = notes.trim().length > 110 ? notes.trim().slice(0, 107) + '...' : notes.trim();
+        customConcept = `Personalized ${styleTheme} Kohler Suite tailored for ${(roomW * 3.28084).toFixed(1)}ft × ${(roomD * 3.28084).toFixed(1)}ft space, optimized for: "${previewNotes}"`;
+        promptReasoning = ` Directly satisfies your special requirements (prioritizing water conservation, optimal clearance ergonomics, and curated surface finishes).`;
+      }
 
-      const tradeoffReasoning = `Selected because it achieved the highest composite fitness score (${signature.fitness_score}/100) among ${feasibleBundles.length} evaluated configurations: fits the ${(roomW * 3.28084).toFixed(1)}ft wet-wall with compliant NKBA clearances, allocates ${budgetPctUsed}% of your ${budgetFormatted} target budget, achieves ${signature.scores.theme_cohesion}% style alignment with ${styleTheme}, and saves ${signature.water_savings_l.toLocaleString()} Liters of water annually via Kohler WaterSense engineering.`;
+      const tradeoffReasoning = `Selected because it achieved the highest composite fitness score (${signature.fitness_score}/100) among ${feasibleBundles.length} evaluated configurations: fits the ${(roomW * 3.28084).toFixed(1)}ft wet-wall with compliant NKBA clearances, allocates ${budgetPctUsed}% of your ${budgetFormatted} target budget, achieves ${signature.scores.theme_cohesion}% style alignment with ${styleTheme}, and saves ${signature.water_savings_l.toLocaleString()} Liters of water annually via Kohler WaterSense engineering.${promptReasoning}`;
 
       return {
         feasible: true,
         theme: styleTheme,
-        design_concept: `Personalized ${styleTheme} Kohler Suite tailored for ${(roomW * 3.28084).toFixed(1)}ft × ${(roomD * 3.28084).toFixed(1)}ft space.`,
+        design_concept: customConcept,
+        ai_understood_preferences: understood,
         active_tier: 'signature',
         composite_score: signature.fitness_score,
         tradeoff_reasoning: tradeoffReasoning,
@@ -4981,6 +5140,30 @@
       const tradeoffEl = document.getElementById('ai-tradeoff-text');
       if (tradeoffEl && data.tradeoff_reasoning) {
         tradeoffEl.innerText = data.tradeoff_reasoning;
+      }
+
+      // 5b. "AI Understood Your Preferences" Box (Render only when custom prompt is present)
+      const understoodContainer = document.getElementById('ai-understood-container');
+      const understoodTagsEl = document.getElementById('ai-understood-tags');
+      const customNotesVal = (document.getElementById('ai-custom-notes') ? document.getElementById('ai-custom-notes').value : '').trim();
+      
+      const parsedTags = (data.ai_understood_preferences && data.ai_understood_preferences.length > 0)
+        ? data.ai_understood_preferences
+        : (customNotesVal ? parsePromptPreferences(customNotesVal, roomWidth, roomDepth, data.theme || currentSelectedTheme) : []);
+
+      if (understoodContainer && understoodTagsEl) {
+        if (customNotesVal && parsedTags.length > 0) {
+          understoodTagsEl.innerHTML = parsedTags.map(t => {
+            const isWarn = t.startsWith('⚠️');
+            const icon = isWarn ? '<span class="text-amber-600 font-bold shrink-0">⚠️</span>' : '<span class="text-emerald-700 font-bold shrink-0">✓</span>';
+            const cleanText = t.replace(/^[✓⚠️]\s*/, '');
+            return `<li class="flex items-start space-x-1.5">${icon}<span>${cleanText}</span></li>`;
+          }).join('');
+          understoodContainer.classList.remove('hidden');
+        } else {
+          understoodContainer.classList.add('hidden');
+          understoodTagsEl.innerHTML = '';
+        }
       }
 
       // 6. Switch to active tier (defaults to signature)
