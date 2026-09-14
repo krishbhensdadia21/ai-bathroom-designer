@@ -68,6 +68,153 @@ function callGroq(model, messages, temperature = 0.2) {
   });
 }
 
+function extractRoomDimensionsFromPrompt(notes) {
+  if (!notes || typeof notes !== 'string') return null;
+  const str = notes.trim();
+  if (!str) return null;
+  const nLow = str.toLowerCase();
+
+  // Pattern 1: Explicit dimensions (e.g. 16x11, 16 x 11 ft, 16.5 x 10.5 feet, 14 by 10 ft, 14 ft by 10 ft, 14' x 10', 14ft x 10ft)
+  const dimRegex = /\b(\d{1,2}(?:\.\d+)?)\s*(?:ft|feet|'|m|meter)?\s*(?:x|×|by|\*)\s*(\d{1,2}(?:\.\d+)?)\s*(?:ft|feet|'|m|meter)?\b/i;
+  const m1 = nLow.match(dimRegex);
+  if (m1) {
+    let w = parseFloat(m1[1]);
+    let d = parseFloat(m1[2]);
+    if (nLow.includes('meter') || nLow.includes(' m ') || nLow.endsWith(' m')) {
+      w *= 3.28084;
+      d *= 3.28084;
+    }
+    w = Math.max(5.5, Math.min(26.0, w));
+    d = Math.max(5.0, Math.min(20.0, d));
+    let h = 8.5;
+    const hMatch = nLow.match(/(\d{1,2}(?:\.\d+)?)\s*(?:ft|feet|'|m)?\s*(?:height|tall|ceiling)/i);
+    if (hMatch) h = Math.max(7.5, Math.min(13.0, parseFloat(hMatch[1])));
+    return {
+      widthFt: Math.round(w * 10) / 10,
+      depthFt: Math.round(d * 10) / 10,
+      heightFt: Math.round(h * 10) / 10,
+      reason: `Custom dimensions from prompt (${(Math.round(w * 10) / 10).toFixed(1)}ft × ${(Math.round(d * 10) / 10).toFixed(1)}ft)`,
+      explicit: true
+    };
+  }
+
+  // Pattern 2: "width 14 ft ... depth 10 ft" or "14 ft wide ... 10 ft deep"
+  const wMatch = nLow.match(/(?:width|wide)\s*(?:of|:)?\s*(\d{1,2}(?:\.\d+)?)\s*(?:ft|feet|')?/i);
+  const dMatch = nLow.match(/(?:depth|deep)\s*(?:of|:)?\s*(\d{1,2}(?:\.\d+)?)\s*(?:ft|feet|')?/i);
+  if (wMatch && dMatch) {
+    let w = Math.max(5.5, Math.min(26.0, parseFloat(wMatch[1])));
+    let d = Math.max(5.0, Math.min(20.0, parseFloat(dMatch[1])));
+    let h = 8.5;
+    const hMatch = nLow.match(/(\d{1,2}(?:\.\d+)?)\s*(?:ft|feet|'|m)?\s*(?:height|tall|ceiling)/i);
+    if (hMatch) h = Math.max(7.5, Math.min(13.0, parseFloat(hMatch[1])));
+    return {
+      widthFt: Math.round(w * 10) / 10,
+      depthFt: Math.round(d * 10) / 10,
+      heightFt: Math.round(h * 10) / 10,
+      reason: `Custom dimensions from prompt (${(Math.round(w * 10) / 10).toFixed(1)}ft × ${(Math.round(d * 10) / 10).toFixed(1)}ft)`,
+      explicit: true
+    };
+  }
+
+  // Pattern 3: Qualitative / Semantic room envelope indicators
+  if (nLow.includes('powder room') || nLow.includes('half bath') || nLow.includes('tiny bathroom') || nLow.includes('small powder')) {
+    return { widthFt: 6.5, depthFt: 6.0, heightFt: 8.5, reason: 'Compact Powder Room envelope (6.5ft × 6.0ft)', explicit: false };
+  }
+  if (nLow.includes('compact') || nLow.includes('small bathroom') || nLow.includes('space-saving') || nLow.includes('condo') || nLow.includes('studio')) {
+    return { widthFt: 8.5, depthFt: 7.0, heightFt: 8.5, reason: 'Space-saving compact footprint (8.5ft × 7.0ft)', explicit: false };
+  }
+  if (nLow.includes('grand') || nLow.includes('palatial') || nLow.includes('huge') || nLow.includes('villa') || nLow.includes('presidential')) {
+    return { widthFt: 18.0, depthFt: 12.0, heightFt: 9.5, reason: 'Grand luxury master footprint (18.0ft × 12.0ft)', explicit: false };
+  }
+  if (nLow.includes('spacious') || nLow.includes('master') || nLow.includes('japanese zen') || nLow.includes('spa') || nLow.includes('walk-in shower and tub') || nLow.includes('freestanding tub')) {
+    return { widthFt: 15.0, depthFt: 10.5, heightFt: 9.0, reason: 'Spacious master spa envelope (15.0ft × 10.5ft)', explicit: false };
+  }
+  if (nLow.includes('family') || nLow.includes('children') || nLow.includes('elderly')) {
+    return { widthFt: 13.0, depthFt: 9.5, heightFt: 8.5, reason: 'Comfortable family bathroom footprint (13.0ft × 9.5ft)', explicit: false };
+  }
+  if (nLow.includes('minimalist')) {
+    return { widthFt: 11.5, depthFt: 9.0, heightFt: 8.5, reason: 'Clean minimalist layout envelope (11.5ft × 9.0ft)', explicit: false };
+  }
+
+  return null;
+}
+
+function parsePromptPreferences(notes, roomW = 3.2, roomD = 2.8, theme = 'Japanese Zen', autoDim = null) {
+  if (!notes || !notes.trim()) return [];
+  const nLow = notes.toLowerCase();
+  const tags = [];
+
+  if (autoDim) {
+    const sqFt = (autoDim.widthFt * autoDim.depthFt).toFixed(1);
+    tags.push(`✓ Room size auto-adapted: ${autoDim.widthFt.toFixed(1)}ft × ${autoDim.depthFt.toFixed(1)}ft (${sqFt} sq ft) — ${autoDim.reason}`);
+  }
+
+  // Atmosphere / Style
+  if (nLow.includes('spa') || nLow.includes('zen') || nLow.includes('tranquil') || nLow.includes('resort')) {
+    tags.push('✓ Japanese Zen spa atmosphere & tranquil wellness');
+  } else if (nLow.includes('luxury') || nLow.includes('luxurious') || nLow.includes('opulent')) {
+    tags.push('✓ Luxury high-end architectural styling');
+  } else if (nLow.includes('minimalist') || nLow.includes('clean line') || nLow.includes('simple')) {
+    tags.push('✓ Minimalist aesthetic with uncluttered surfaces');
+  } else if (nLow.includes('industrial') || nLow.includes('loft') || nLow.includes('steel')) {
+    tags.push('✓ Urban industrial aesthetic with architectural metals');
+  }
+
+  // Materials & Finishes
+  if (nLow.includes('teak') || nLow.includes('wood') || nLow.includes('timber') || nLow.includes('natural finish') || nLow.includes('natural wood')) {
+    tags.push('✓ Warm teak / natural wood preference');
+  } else if (nLow.includes('brass') || nLow.includes('gold')) {
+    tags.push('✓ Vibrant Brushed Brass hardware preference');
+  } else if (nLow.includes('matte black') || nLow.includes('black')) {
+    tags.push('✓ Matte Black architectural finishes');
+  } else if (nLow.includes('marble') || nLow.includes('calacatta') || nLow.includes('quartz')) {
+    tags.push('✓ Calacatta quartz luxury stone surfaces');
+  }
+
+  // Storage
+  if (nLow.includes('storage') || nLow.includes('drawer') || nLow.includes('cabinet') || nLow.includes('organiz')) {
+    tags.push('✓ Increased storage with deep vanity drawer system');
+  }
+
+  // Bathtub / Shower
+  if (nLow.includes('bathtub') || nLow.includes('tub') || nLow.includes('soak')) {
+    if (roomW >= 2.8 && roomD >= 2.6) {
+      tags.push('✓ Bathtub requested (Freestanding Evok soaking tub)');
+    } else {
+      tags.push('⚠️ Bathtub requested: Space trade-off (prioritizing walk-in shower for room footprint)');
+    }
+  }
+  if (nLow.includes('walk-in shower') || nLow.includes('open shower') || nLow.includes('walk in') || nLow.includes('shower')) {
+    tags.push('✓ Spacious walk-in shower wet-room enclosure');
+  }
+
+  // Accessibility / Parents / Family
+  if (nLow.includes('parent') || nLow.includes('elderly') || nLow.includes('accessib') || nLow.includes('safe') || nLow.includes('comfort')) {
+    tags.push('✓ Accessibility & comfort (17" ADA chair-height toilet & wide clearances)');
+  } else if (nLow.includes('family') || nLow.includes('kid')) {
+    tags.push('✓ Family-friendly durable materials & anti-scald valving');
+  }
+
+  // Spatial / Layout
+  if (nLow.includes('away from entrance') || nLow.includes('away from door') || nLow.includes('toilet away')) {
+    tags.push('✓ Toilet positioned on far wet-wall away from entrance line-of-sight');
+  }
+  if (nLow.includes('spacious') || nLow.includes('open space') || nLow.includes('maximize open')) {
+    tags.push('✓ Floating wall-hung fixtures to maximize visible open floor space');
+  }
+
+  // Eco / Water
+  if (nLow.includes('water') || nLow.includes('saving') || nLow.includes('eco') || nLow.includes('watersense')) {
+    tags.push('✓ Water-saving Kohler WaterSense dual-flush & air-induction fittings');
+  }
+
+  if (tags.length === 0) {
+    tags.push(`✓ Custom requirements evaluated & incorporated into ${theme} suite`);
+  }
+
+  return tags;
+}
+
 const server = http.createServer(async (req, res) => {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -131,10 +278,19 @@ const server = http.createServer(async (req, res) => {
       try {
         const payload = JSON.parse(body || '{}');
         const { dimensions, budget, theme, priorities, customerNotes } = payload;
+        const inputMode = payload.input_mode || (customerNotes ? 'natural' : 'predefined');
+
+        let autoDim = null;
+        if (inputMode === 'natural' && customerNotes) {
+          autoDim = extractRoomDimensionsFromPrompt(customerNotes);
+        }
 
         let roomW = payload.room_width_m;
         let roomD = payload.room_depth_m;
-        if (!roomW && dimensions) {
+        if (autoDim) {
+          roomW = Math.round(autoDim.widthFt * 0.3048 * 10) / 10;
+          roomD = Math.round(autoDim.depthFt * 0.3048 * 10) / 10;
+        } else if (!roomW && dimensions) {
           const m = dimensions.match(/([\d\.]+)\s*ft\s*[x×]\s*([\d\.]+)\s*ft/i);
           if (m) {
             roomW = Math.round(parseFloat(m[1]) * 0.3048 * 10) / 10;
@@ -209,7 +365,7 @@ const server = http.createServer(async (req, res) => {
         }
 
         // 3. Multi-Objective Optimization Engine
-        const optimizedBundle = generateOfflineKohlerBundle(theme || 'Minimalist Modern', budgetNum, roomW, roomD, guardScore, priorities, customerNotes, payload.inclusions);
+        const optimizedBundle = generateOfflineKohlerBundle(theme || 'Minimalist Modern', budgetNum, roomW, roomD, guardScore, priorities, customerNotes, payload.inclusions, autoDim);
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(optimizedBundle));
@@ -236,7 +392,7 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 350000, roomW = 3.2, roomD = 2.8, guardScore = 0.00079, priorities = '', customerNotes = '', inclusions = null) {
+function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 350000, roomW = 3.2, roomD = 2.8, guardScore = 0.00079, priorities = '', customerNotes = '', inclusions = null, autoDim = null) {
   if (typeof budgetNum === 'string') {
     budgetNum = parseInt(budgetNum.replace(/[^0-9]/g, '')) || 350000;
   }
@@ -649,81 +805,10 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   const essTier = calcTierMetrics(activeEssential, essTotals, "Essential Value", "Budget-Optimized");
   const luxTier = calcTierMetrics(activeLuxury, luxTotals, "Masterpiece Luxury", "Feature-Maximized");
 
-function parsePromptPreferences(notes, roomW = 3.2, roomD = 2.8, theme = 'Japanese Zen') {
-  if (!notes || !notes.trim()) return [];
-  const nLow = notes.toLowerCase();
-  const tags = [];
-
-  // Atmosphere / Style
-  if (nLow.includes('spa') || nLow.includes('zen') || nLow.includes('tranquil') || nLow.includes('resort')) {
-    tags.push('✓ Japanese Zen spa atmosphere & tranquil wellness');
-  } else if (nLow.includes('luxury') || nLow.includes('luxurious') || nLow.includes('opulent')) {
-    tags.push('✓ Luxury high-end architectural styling');
-  } else if (nLow.includes('minimalist') || nLow.includes('clean line') || nLow.includes('simple')) {
-    tags.push('✓ Minimalist aesthetic with uncluttered surfaces');
-  } else if (nLow.includes('industrial') || nLow.includes('loft') || nLow.includes('steel')) {
-    tags.push('✓ Urban industrial aesthetic with architectural metals');
-  }
-
-  // Materials & Finishes
-  if (nLow.includes('teak') || nLow.includes('wood') || nLow.includes('timber') || nLow.includes('natural finish') || nLow.includes('natural wood')) {
-    tags.push('✓ Warm teak / natural wood preference');
-  } else if (nLow.includes('brass') || nLow.includes('gold')) {
-    tags.push('✓ Vibrant Brushed Brass hardware preference');
-  } else if (nLow.includes('matte black') || nLow.includes('black')) {
-    tags.push('✓ Matte Black architectural finishes');
-  } else if (nLow.includes('marble') || nLow.includes('calacatta') || nLow.includes('quartz')) {
-    tags.push('✓ Calacatta quartz luxury stone surfaces');
-  }
-
-  // Storage
-  if (nLow.includes('storage') || nLow.includes('drawer') || nLow.includes('cabinet') || nLow.includes('organiz')) {
-    tags.push('✓ Increased storage with deep vanity drawer system');
-  }
-
-  // Bathtub / Shower
-  if (nLow.includes('bathtub') || nLow.includes('tub') || nLow.includes('soak')) {
-    if (roomW >= 2.8 && roomD >= 2.6) {
-      tags.push('✓ Bathtub requested (Freestanding Evok soaking tub)');
-    } else {
-      tags.push('⚠️ Bathtub requested: Space trade-off (prioritizing walk-in shower for room footprint)');
-    }
-  }
-  if (nLow.includes('walk-in shower') || nLow.includes('open shower') || nLow.includes('walk in') || nLow.includes('shower')) {
-    tags.push('✓ Spacious walk-in shower wet-room enclosure');
-  }
-
-  // Accessibility / Parents / Family
-  if (nLow.includes('parent') || nLow.includes('elderly') || nLow.includes('accessib') || nLow.includes('safe') || nLow.includes('comfort')) {
-    tags.push('✓ Accessibility & comfort (17" ADA chair-height toilet & wide clearances)');
-  } else if (nLow.includes('family') || nLow.includes('kid')) {
-    tags.push('✓ Family-friendly durable materials & anti-scald valving');
-  }
-
-  // Spatial / Layout
-  if (nLow.includes('away from entrance') || nLow.includes('away from door') || nLow.includes('toilet away')) {
-    tags.push('✓ Toilet positioned on far wet-wall away from entrance line-of-sight');
-  }
-  if (nLow.includes('spacious') || nLow.includes('open space') || nLow.includes('maximize open')) {
-    tags.push('✓ Floating wall-hung fixtures to maximize visible open floor space');
-  }
-
-  // Eco / Water
-  if (nLow.includes('water') || nLow.includes('saving') || nLow.includes('eco') || nLow.includes('watersense')) {
-    tags.push('✓ Water-saving Kohler WaterSense dual-flush & air-induction fittings');
-  }
-
-  if (tags.length === 0) {
-    tags.push(`✓ Custom requirements evaluated & incorporated into ${theme} suite`);
-  }
-
-  return tags;
-}
-
   const dimensionsStr = `${(roomW * 3.28084).toFixed(1)}ft x ${(roomD * 3.28084).toFixed(1)}ft`;
   const mainItemName = (activeSignature[0] && activeSignature[0].name) ? activeSignature[0].name : 'Kohler suite';
 
-  const understoodTags = parsePromptPreferences(customerNotes, roomW, roomD, theme);
+  const understoodTags = parsePromptPreferences(customerNotes, roomW, roomD, theme, autoDim);
   const trimmedNotes = (customerNotes || '').trim();
   let conceptStr = `Multi-objective optimized ${theme} Kohler Suite tailored for ${dimensionsStr} (${roomArea} m² / ${(roomArea * 10.7639).toFixed(1)} sq ft).`;
   let customNoteReasoning = '';
@@ -758,6 +843,13 @@ function parsePromptPreferences(notes, roomW = 3.2, roomD = 2.8, theme = 'Japane
     sustainability: sigTier.sustainability,
     wet_wall_score: 96,
     estimated_plumbing_savings_inr: 45000,
+    auto_adjusted_dimensions: autoDim,
+    room_dimensions: {
+      width_ft: autoDim ? autoDim.widthFt : +(roomW * 3.28084).toFixed(1),
+      depth_ft: autoDim ? autoDim.depthFt : +(roomD * 3.28084).toFixed(1),
+      height_ft: autoDim ? autoDim.heightFt : 8.5,
+      area_sq_ft: autoDim ? +(autoDim.widthFt * autoDim.depthFt).toFixed(1) : +(roomW * roomD * 10.7639).toFixed(1)
+    },
     code_compliance_score: 100
   };
 }

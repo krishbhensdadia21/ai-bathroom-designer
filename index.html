@@ -804,6 +804,21 @@
               <textarea id="ai-custom-notes" rows="6" maxlength="500" oninput="updateAiCustomNotesCount()" placeholder="e.g. I want a luxurious Japanese Zen bathroom with warm teak, lots of storage, an open shower area, and a premium spa-like feel. Keep it within my budget." class="w-full bg-gray-50/70 border border-gray-200 rounded-xl p-3.5 text-xs text-gray-800 placeholder-gray-400 outline-none focus:bg-white focus:border-black focus:ring-1 focus:ring-black transition resize-y leading-relaxed shadow-2xs font-normal"></textarea>
             </div>
 
+            <!-- Dynamic AI Room Size Indicator (Active only in Custom AI Prompt when dimensions/size are detected) -->
+            <div id="ai-auto-room-badge" class="hidden flex items-center justify-between p-3 bg-emerald-50/90 border border-emerald-200/90 rounded-2xl text-xs text-emerald-950 shadow-2xs transition">
+              <div class="flex items-center space-x-2.5">
+                <span class="w-7 h-7 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xs font-black shadow-xs shrink-0">📐</span>
+                <div>
+                  <div class="font-black text-emerald-950 text-xs flex items-center space-x-1.5">
+                    <span>AI Auto-Adapted Room:</span>
+                    <span id="ai-auto-room-dimensions" class="font-mono text-emerald-800 font-extrabold text-xs">15.0 ft × 10.5 ft (157.5 sq ft)</span>
+                  </div>
+                  <div class="text-[10px] text-emerald-700 font-medium" id="ai-auto-room-reason">Custom dimensions from prompt</div>
+                </div>
+              </div>
+              <span class="text-[9px] font-black text-emerald-800 uppercase tracking-wider bg-emerald-200/80 px-2 py-0.5 rounded-lg shrink-0">Auto-Applied</span>
+            </div>
+
             <!-- Inspiration Prompt Chips -->
             <div class="space-y-1.5 bg-gray-50/80 p-3.5 rounded-2xl border border-gray-200/80 shadow-2xs">
               <div class="flex items-center justify-between text-[10px] text-gray-500 font-bold uppercase tracking-wider">
@@ -4524,7 +4539,129 @@
       document.getElementById('ai-budget-label').innerText = '₹' + n.toLocaleString('en-IN');
     }
 
+    let currentInputMode = 'predefined';
+    let lastAutoDetectedDim = null;
+
+    function extractRoomDimensionsFromPrompt(notes) {
+      if (!notes || typeof notes !== 'string') return null;
+      const str = notes.trim();
+      if (!str) return null;
+      const nLow = str.toLowerCase();
+
+      // Pattern 1: Explicit dimensions (e.g. 16x11, 16 x 11 ft, 16.5 x 10.5 feet, 14 by 10 ft, 14 ft by 10 ft, 14' x 10', 14ft x 10ft)
+      const dimRegex = /\b(\d{1,2}(?:\.\d+)?)\s*(?:ft|feet|'|m|meter)?\s*(?:x|×|by|\*)\s*(\d{1,2}(?:\.\d+)?)\s*(?:ft|feet|'|m|meter)?\b/i;
+      const m1 = nLow.match(dimRegex);
+      if (m1) {
+        let w = parseFloat(m1[1]);
+        let d = parseFloat(m1[2]);
+        if (nLow.includes('meter') || nLow.includes(' m ') || nLow.endsWith(' m')) {
+          w *= 3.28084;
+          d *= 3.28084;
+        }
+        w = Math.max(5.5, Math.min(26.0, w));
+        d = Math.max(5.0, Math.min(20.0, d));
+        let h = 8.5;
+        const hMatch = nLow.match(/(\d{1,2}(?:\.\d+)?)\s*(?:ft|feet|'|m)?\s*(?:height|tall|ceiling)/i);
+        if (hMatch) h = Math.max(7.5, Math.min(13.0, parseFloat(hMatch[1])));
+        return {
+          widthFt: Math.round(w * 10) / 10,
+          depthFt: Math.round(d * 10) / 10,
+          heightFt: Math.round(h * 10) / 10,
+          reason: `Custom dimensions from prompt (${(Math.round(w * 10) / 10).toFixed(1)}ft × ${(Math.round(d * 10) / 10).toFixed(1)}ft)`,
+          explicit: true
+        };
+      }
+
+      // Pattern 2: "width 14 ft ... depth 10 ft" or "14 ft wide ... 10 ft deep"
+      const wMatch = nLow.match(/(?:width|wide)\s*(?:of|:)?\s*(\d{1,2}(?:\.\d+)?)\s*(?:ft|feet|')?/i);
+      const dMatch = nLow.match(/(?:depth|deep)\s*(?:of|:)?\s*(\d{1,2}(?:\.\d+)?)\s*(?:ft|feet|')?/i);
+      if (wMatch && dMatch) {
+        let w = Math.max(5.5, Math.min(26.0, parseFloat(wMatch[1])));
+        let d = Math.max(5.0, Math.min(20.0, parseFloat(dMatch[1])));
+        let h = 8.5;
+        const hMatch = nLow.match(/(\d{1,2}(?:\.\d+)?)\s*(?:ft|feet|'|m)?\s*(?:height|tall|ceiling)/i);
+        if (hMatch) h = Math.max(7.5, Math.min(13.0, parseFloat(hMatch[1])));
+        return {
+          widthFt: Math.round(w * 10) / 10,
+          depthFt: Math.round(d * 10) / 10,
+          heightFt: Math.round(h * 10) / 10,
+          reason: `Custom dimensions from prompt (${(Math.round(w * 10) / 10).toFixed(1)}ft × ${(Math.round(d * 10) / 10).toFixed(1)}ft)`,
+          explicit: true
+        };
+      }
+
+      // Pattern 3: Qualitative / Semantic room envelope indicators
+      if (nLow.includes('powder room') || nLow.includes('half bath') || nLow.includes('tiny bathroom') || nLow.includes('small powder')) {
+        return { widthFt: 6.5, depthFt: 6.0, heightFt: 8.5, reason: 'Compact Powder Room envelope (6.5ft × 6.0ft)', explicit: false };
+      }
+      if (nLow.includes('compact') || nLow.includes('small bathroom') || nLow.includes('space-saving') || nLow.includes('condo') || nLow.includes('studio')) {
+        return { widthFt: 8.5, depthFt: 7.0, heightFt: 8.5, reason: 'Space-saving compact footprint (8.5ft × 7.0ft)', explicit: false };
+      }
+      if (nLow.includes('grand') || nLow.includes('palatial') || nLow.includes('huge') || nLow.includes('villa') || nLow.includes('presidential')) {
+        return { widthFt: 18.0, depthFt: 12.0, heightFt: 9.5, reason: 'Grand luxury master footprint (18.0ft × 12.0ft)', explicit: false };
+      }
+      if (nLow.includes('spacious') || nLow.includes('master') || nLow.includes('japanese zen') || nLow.includes('spa') || nLow.includes('walk-in shower and tub') || nLow.includes('freestanding tub')) {
+        return { widthFt: 15.0, depthFt: 10.5, heightFt: 9.0, reason: 'Spacious master spa envelope (15.0ft × 10.5ft)', explicit: false };
+      }
+      if (nLow.includes('family') || nLow.includes('children') || nLow.includes('elderly')) {
+        return { widthFt: 13.0, depthFt: 9.5, heightFt: 8.5, reason: 'Comfortable family bathroom footprint (13.0ft × 9.5ft)', explicit: false };
+      }
+      if (nLow.includes('minimalist')) {
+        return { widthFt: 11.5, depthFt: 9.0, heightFt: 8.5, reason: 'Clean minimalist layout envelope (11.5ft × 9.0ft)', explicit: false };
+      }
+
+      return null;
+    }
+
+    function applyAutoRoomDimensions(wFt, dFt, hFt, reason) {
+      const wEl = document.getElementById('ai-input-width');
+      const dEl = document.getElementById('ai-input-depth');
+      const hEl = document.getElementById('ai-input-height');
+      if (wEl) wEl.value = wFt.toFixed(1);
+      if (dEl) dEl.value = dFt.toFixed(1);
+      if (hEl) hEl.value = hFt.toFixed(1);
+
+      const sqFt = (wFt * dFt).toFixed(1);
+      const sqM = (wFt * dFt * 0.092903).toFixed(2);
+      const areaEl = document.getElementById('ai-calculated-area');
+      if (areaEl) areaEl.innerText = `${sqFt} sq ft (${sqM} m²)`;
+
+      roomWidth = Math.round(wFt * 0.3048 * 10) / 10;
+      roomDepth = Math.round(dFt * 0.3048 * 10) / 10;
+      roomHeight = Math.round(hFt * 0.3048 * 10) / 10;
+
+      // Sync with dimensions modal controls if present
+      const dimW = document.getElementById('input-dim-width');
+      const dimD = document.getElementById('input-dim-depth');
+      const dimH = document.getElementById('input-dim-height');
+      if (dimW) dimW.value = roomWidth.toFixed(1);
+      if (dimD) dimD.value = roomDepth.toFixed(1);
+      if (dimH) dimH.value = roomHeight.toFixed(1);
+
+      const lblW = document.getElementById('modal-label-width');
+      const lblD = document.getElementById('modal-label-depth');
+      const lblH = document.getElementById('modal-label-height');
+      const lblArea = document.getElementById('modal-calc-area');
+      if (lblW) lblW.innerText = `${wFt.toFixed(1)} ft (${roomWidth.toFixed(1)} m)`;
+      if (lblD) lblD.innerText = `${dFt.toFixed(1)} ft (${roomDepth.toFixed(1)} m)`;
+      if (lblH) lblH.innerText = `${hFt.toFixed(1)} ft (${roomHeight.toFixed(1)} m)`;
+      if (lblArea) lblArea.innerText = `${sqFt} sq ft / ${sqM} m²`;
+
+      buildRoomArchitecture();
+
+      // Update badge in Custom AI Prompt pane
+      const autoBadge = document.getElementById('ai-auto-room-badge');
+      const autoDimText = document.getElementById('ai-auto-room-dimensions');
+      const autoReasonText = document.getElementById('ai-auto-room-reason');
+      if (autoBadge && autoDimText && autoReasonText) {
+        autoDimText.innerText = `${wFt.toFixed(1)} ft × ${dFt.toFixed(1)} ft (${sqFt} sq ft)`;
+        autoReasonText.innerText = reason || 'Auto-adapted to your prompt';
+        autoBadge.classList.remove('hidden');
+      }
+    }
+
     function switchInputMode(mode) {
+      currentInputMode = mode;
       const btnPredefined = document.getElementById('btn-mode-predefined');
       const btnNatural = document.getElementById('btn-mode-natural');
       const panePredefined = document.getElementById('pane-predefined-constraints');
@@ -4542,7 +4679,10 @@
         }
 
         const tx = document.getElementById('ai-custom-notes');
-        if (tx) tx.focus();
+        if (tx) {
+          tx.focus();
+          updateAiCustomNotesCount();
+        }
       } else {
         if (panePredefined) panePredefined.classList.remove('hidden');
         if (paneNatural) paneNatural.classList.add('hidden');
@@ -4553,6 +4693,10 @@
         if (btnNatural) {
           btnNatural.className = 'flex-1 py-2 px-2.5 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 text-gray-600 hover:text-black font-extrabold text-xs cursor-pointer';
         }
+
+        // In Predefined Constraints mode, do not display auto room badge
+        const autoBadge = document.getElementById('ai-auto-room-badge');
+        if (autoBadge) autoBadge.classList.add('hidden');
       }
     }
 
@@ -4562,6 +4706,24 @@
       if (el && counter) {
         counter.innerText = `${el.value.length} / 500`;
       }
+
+      // ONLY IN CUSTOM AI PROMPT MODE: preview detected room size intent
+      if (currentInputMode === 'natural' && el) {
+        const autoDim = extractRoomDimensionsFromPrompt(el.value);
+        const autoBadge = document.getElementById('ai-auto-room-badge');
+        const autoDimText = document.getElementById('ai-auto-room-dimensions');
+        const autoReasonText = document.getElementById('ai-auto-room-reason');
+        if (autoDim && autoBadge && autoDimText && autoReasonText) {
+          const sqFt = (autoDim.widthFt * autoDim.depthFt).toFixed(1);
+          autoDimText.innerText = `${autoDim.widthFt.toFixed(1)} ft × ${autoDim.depthFt.toFixed(1)} ft (${sqFt} sq ft)`;
+          autoReasonText.innerText = autoDim.reason;
+          autoBadge.classList.remove('hidden');
+          lastAutoDetectedDim = autoDim;
+        } else if (autoBadge) {
+          autoBadge.classList.add('hidden');
+          lastAutoDetectedDim = null;
+        }
+      }
     }
 
     function clearAiCustomNotes() {
@@ -4569,6 +4731,9 @@
       if (el) {
         el.value = '';
         updateAiCustomNotesCount();
+        const autoBadge = document.getElementById('ai-auto-room-badge');
+        if (autoBadge) autoBadge.classList.add('hidden');
+        lastAutoDetectedDim = null;
         const understoodContainer = document.getElementById('ai-understood-container');
         if (understoodContainer) understoodContainer.classList.add('hidden');
         el.focus();
@@ -4596,6 +4761,15 @@
       if (!notes || !notes.trim()) return [];
       const nLow = notes.toLowerCase();
       const tags = [];
+
+      // If in Custom AI Prompt mode, prepend auto-adapted room size tag if detected
+      if (currentInputMode === 'natural') {
+        const autoDim = extractRoomDimensionsFromPrompt(notes);
+        if (autoDim) {
+          const sqFt = (autoDim.widthFt * autoDim.depthFt).toFixed(1);
+          tags.push(`✓ Room size auto-adapted: ${autoDim.widthFt.toFixed(1)}ft × ${autoDim.depthFt.toFixed(1)}ft (${sqFt} sq ft) — ${autoDim.reason}`);
+        }
+      }
 
       // Atmosphere / Style
       if (nLow.includes('spa') || nLow.includes('zen') || nLow.includes('tranquil') || nLow.includes('resort')) {
@@ -4672,11 +4846,20 @@
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Analyzing Constraints with Groq AI...</span>';
       btn.disabled = true;
 
+      const notes = (document.getElementById('ai-custom-notes') ? document.getElementById('ai-custom-notes').value : '').trim();
+
+      // ONLY IN CUSTOM AI PROMPT MODE: automatically adjust room size based on user prompt
+      if (currentInputMode === 'natural' && notes) {
+        const autoDim = extractRoomDimensionsFromPrompt(notes);
+        if (autoDim) {
+          applyAutoRoomDimensions(autoDim.widthFt, autoDim.depthFt, autoDim.heightFt, autoDim.reason);
+        }
+      }
+
       const wFt = document.getElementById('ai-input-width').value;
       const dFt = document.getElementById('ai-input-depth').value;
       const hFt = document.getElementById('ai-input-height').value;
       const budget = document.getElementById('ai-budget-label').innerText;
-      const notes = document.getElementById('ai-custom-notes').value;
 
       const inclusions = {
         toilet: document.getElementById('prio-smart-toilet') ? document.getElementById('prio-smart-toilet').checked : true,
@@ -4709,16 +4892,22 @@
             theme: currentSelectedTheme,
             priorities: priorities.join(', '),
             inclusions: inclusions,
-            customerNotes: notes
+            customerNotes: notes,
+            input_mode: currentInputMode
           })
         });
 
         if (response.ok) {
           const data = await response.json();
+          if (currentInputMode === 'natural' && data.auto_adjusted_dimensions) {
+            const ad = data.auto_adjusted_dimensions;
+            applyAutoRoomDimensions(ad.widthFt, ad.depthFt, ad.heightFt, ad.reason);
+          }
           currentAiRecommendation = data;
           renderAiRecommendationResults(data);
           if (data.feasible) {
-            showToast(`Groq Multi-Objective Bundle generated (${data.bundle ? data.bundle.length : 0} fixtures)!`);
+            const roomMsg = (currentInputMode === 'natural' && data.auto_adjusted_dimensions) ? ` (Room auto-set to ${data.auto_adjusted_dimensions.widthFt}ft × ${data.auto_adjusted_dimensions.depthFt}ft)` : '';
+            showToast(`Groq Multi-Objective Bundle generated (${data.bundle ? data.bundle.length : 0} fixtures)${roomMsg}!`);
           } else {
             showToast('No feasible configuration found for constraints');
           }
