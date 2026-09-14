@@ -631,178 +631,205 @@
       <div class="flex-1 overflow-y-auto p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 custom-scroll">
         <!-- Left: Customer Constraints Input (5 cols) -->
         <div class="lg:col-span-5 space-y-5">
-          <div>
-            <h3 class="font-extrabold text-sm text-gray-900 uppercase tracking-wider flex items-center space-x-2">
-              <i class="fa-solid fa-sliders text-amber-600"></i>
-              <span>Customer Constraints</span>
-            </h3>
-            <p class="text-xs text-gray-500 mt-0.5">Specify bathroom dimensions, budget, and aesthetic style</p>
-          </div>
-
-          <!-- Blueprint / Sketch Quick Trigger -->
-          <div class="flex items-center justify-between bg-amber-50/90 border border-amber-200/90 rounded-2xl p-3 shadow-xs">
-            <div class="flex items-center space-x-2.5">
-              <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-800 flex items-center justify-center font-bold text-sm">
-                <i class="fa-solid fa-camera-viewfinder"></i>
-              </div>
-              <div>
-                <span class="font-extrabold text-xs text-amber-950 block">Have a blueprint or floorplan sketch?</span>
-                <span class="text-[10px] text-amber-800/80 font-medium">Extract dimensions automatically with Vision AI</span>
-              </div>
-            </div>
-            <button onclick="closeAiAssistantModal(); openBlueprintUploadModal();" class="bg-amber-500 hover:bg-amber-400 text-black px-3 py-1.5 rounded-xl font-black text-xs transition shadow-xs shrink-0">
-              Scan
+          <!-- Switchable Mode Toggle (Segmented Switcher inspired by Login / Create Account toggle) -->
+          <div class="p-1 bg-gray-100/90 border border-gray-200/90 rounded-2xl flex items-center shadow-2xs">
+            <button type="button" id="btn-mode-predefined" onclick="switchInputMode('predefined')" class="flex-1 py-2 px-2.5 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 bg-black text-white shadow-xs font-black text-xs cursor-pointer">
+              <i class="fa-solid fa-sliders text-amber-400 text-xs"></i>
+              <span class="tracking-tight">Predefined Constraints</span>
+            </button>
+            <button type="button" id="btn-mode-natural" onclick="switchInputMode('natural')" class="flex-1 py-2 px-2.5 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 text-gray-600 hover:text-black font-extrabold text-xs cursor-pointer">
+              <span class="text-amber-500 text-xs">✨</span>
+              <span class="tracking-tight">Custom AI Prompt</span>
             </button>
           </div>
 
-          <!-- Dimensions (ft x ft) -->
-          <div class="bg-gray-50 p-4 rounded-2xl border border-gray-200/80 space-y-3">
-            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Bathroom Dimensions (ft)</label>
-            <div class="grid grid-cols-3 gap-2 text-xs">
-              <div>
-                <span class="text-[10px] text-gray-500 font-medium">Width (ft)</span>
-                <input type="number" id="ai-input-width" value="10.5" step="0.5" min="5" max="25" oninput="onAiDimensionInputChange()" class="w-full bg-white border border-gray-200 rounded-xl px-2.5 py-1.5 font-bold outline-none focus:border-black">
+          <!-- PANE 1: Predefined Constraints -->
+          <div id="pane-predefined-constraints" class="space-y-4">
+            <!-- Blueprint / Sketch Quick Trigger -->
+            <div class="flex items-center justify-between bg-amber-50/90 border border-amber-200/90 rounded-2xl p-3 shadow-xs">
+              <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-800 flex items-center justify-center font-bold text-sm">
+                  <i class="fa-solid fa-camera-viewfinder"></i>
+                </div>
+                <div>
+                  <span class="font-extrabold text-xs text-amber-950 block">Have a blueprint or floorplan sketch?</span>
+                  <span class="text-[10px] text-amber-800/80 font-medium">Extract dimensions automatically with Vision AI</span>
+                </div>
               </div>
-              <div>
-                <span class="text-[10px] text-gray-500 font-medium">Depth (ft)</span>
-                <input type="number" id="ai-input-depth" value="9.2" step="0.5" min="5" max="25" oninput="onAiDimensionInputChange()" class="w-full bg-white border border-gray-200 rounded-xl px-2.5 py-1.5 font-bold outline-none focus:border-black">
-              </div>
-              <div>
-                <span class="text-[10px] text-gray-500 font-medium">Height (ft)</span>
-                <input type="number" id="ai-input-height" value="8.5" step="0.5" min="7" max="14" oninput="onAiDimensionInputChange()" class="w-full bg-white border border-gray-200 rounded-xl px-2.5 py-1.5 font-bold outline-none focus:border-black">
-              </div>
+              <button onclick="closeAiAssistantModal(); openBlueprintUploadModal();" class="bg-amber-500 hover:bg-amber-400 text-black px-3 py-1.5 rounded-xl font-black text-xs transition shadow-xs shrink-0 cursor-pointer">
+                Scan
+              </button>
             </div>
-            <div class="text-[11px] text-gray-500 flex justify-between font-mono">
-              <span>Calculated Floor Area:</span>
-              <strong class="text-gray-900" id="ai-calculated-area">96.6 sq ft (8.96 m²)</strong>
-            </div>
-          </div>
 
-          <!-- Budget Limit Selector -->
-          <div class="bg-gray-50 p-4 rounded-2xl border border-gray-200/80 space-y-2">
-            <div class="flex justify-between items-center text-xs font-bold text-gray-700 uppercase tracking-wider">
-              <span>Target Budget Limit</span>
-              <span id="ai-budget-label" class="font-extrabold text-black font-mono">₹3,50,000</span>
+            <!-- Dimensions (ft x ft) -->
+            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-200/80 space-y-3">
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Bathroom Dimensions (ft)</label>
+              <div class="grid grid-cols-3 gap-2 text-xs">
+                <div>
+                  <span class="text-[10px] text-gray-500 font-medium">Width (ft)</span>
+                  <input type="number" id="ai-input-width" value="10.5" step="0.5" min="5" max="25" oninput="onAiDimensionInputChange()" class="w-full bg-white border border-gray-200 rounded-xl px-2.5 py-1.5 font-bold outline-none focus:border-black">
+                </div>
+                <div>
+                  <span class="text-[10px] text-gray-500 font-medium">Depth (ft)</span>
+                  <input type="number" id="ai-input-depth" value="9.2" step="0.5" min="5" max="25" oninput="onAiDimensionInputChange()" class="w-full bg-white border border-gray-200 rounded-xl px-2.5 py-1.5 font-bold outline-none focus:border-black">
+                </div>
+                <div>
+                  <span class="text-[10px] text-gray-500 font-medium">Height (ft)</span>
+                  <input type="number" id="ai-input-height" value="8.5" step="0.5" min="7" max="14" oninput="onAiDimensionInputChange()" class="w-full bg-white border border-gray-200 rounded-xl px-2.5 py-1.5 font-bold outline-none focus:border-black">
+                </div>
+              </div>
+              <div class="text-[11px] text-gray-500 flex justify-between font-mono">
+                <span>Calculated Floor Area:</span>
+                <strong class="text-gray-900" id="ai-calculated-area">96.6 sq ft (8.96 m²)</strong>
+              </div>
             </div>
-            <input type="range" id="ai-budget-slider" min="100000" max="1200000" step="25000" value="350000" oninput="updateAiBudgetDisplay(this.value)" class="w-full accent-black cursor-pointer">
-            <div class="flex justify-between text-[10px] text-gray-400 font-bold">
-              <span>₹1.0L (Essential)</span>
-              <span>₹5.0L (Signature)</span>
-              <span>₹12.0L+ (Luxury)</span>
-            </div>
-          </div>
 
-          <!-- Aesthetic Theme Selector (Matched to Reference Image) -->
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Aesthetic Theme</label>
-              <span class="text-[10px] text-amber-700 font-bold">1-Click 3D Styling</span>
+            <!-- Budget Slider -->
+            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-200/80 space-y-2.5">
+              <div class="flex justify-between items-center">
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Target Budget Limit</label>
+                <span id="ai-budget-label" class="font-mono font-black text-sm text-black bg-white px-2.5 py-1 rounded-xl border border-gray-200 shadow-xs">₹3,50,000</span>
+              </div>
+              <input type="range" id="ai-budget-slider" min="100000" max="1500000" step="25000" value="350000" oninput="updateAiBudgetDisplay(this.value)" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-black">
+              <div class="flex justify-between text-[10px] text-gray-400 font-bold">
+                <span>₹1.0L (Essential)</span>
+                <span>₹5.0L (Signature)</span>
+                <span>₹12.0L+ (Luxury)</span>
+              </div>
             </div>
-            <div class="grid grid-cols-2 gap-2 text-xs" id="ai-theme-container">
-              <button onclick="selectAiTheme('Minimalist Modern')" class="ai-theme-btn active text-left p-3 rounded-xl border-2 border-black bg-gray-50 transition hover:shadow-sm" data-theme="Minimalist Modern">
-                <div class="flex items-center justify-between">
-                  <div class="font-black text-gray-900">Minimalist Modern</div>
-                  <span class="text-[8px] bg-gray-200 text-gray-700 px-1 py-0.5 rounded font-mono font-bold">TRAVERTINE</span>
-                </div>
-                <div class="text-[10px] text-amber-800 font-semibold italic mt-0.5">"Clean lines. Simple forms. Timeless appeal."</div>
-                <div class="text-[9px] text-gray-500 mt-1 font-mono">Veil • Purist • Matte Black • Chrome</div>
-              </button>
-              <button onclick="selectAiTheme('Classic Luxury')" class="ai-theme-btn text-left p-3 rounded-xl border border-gray-200 hover:border-gray-400 bg-white transition hover:shadow-sm" data-theme="Classic Luxury">
-                <div class="flex items-center justify-between">
-                  <div class="font-black text-gray-900">Classic Luxury</div>
-                  <span class="text-[8px] bg-amber-100 text-amber-800 px-1 py-0.5 rounded font-mono font-bold">CALACATTA</span>
-                </div>
-                <div class="text-[10px] text-amber-800 font-semibold italic mt-0.5">"Timeless elegance. Refined details."</div>
-                <div class="text-[9px] text-gray-500 mt-1 font-mono">Veil • Purist • Polished Brass • Gold Sconces</div>
-              </button>
-              <button onclick="selectAiTheme('Japanese Zen')" class="ai-theme-btn text-left p-3 rounded-xl border border-gray-200 hover:border-gray-400 bg-white transition hover:shadow-sm" data-theme="Japanese Zen">
-                <div class="flex items-center justify-between">
-                  <div class="font-black text-gray-900">Japanese Zen</div>
-                  <span class="text-[8px] bg-emerald-100 text-emerald-800 px-1 py-0.5 rounded font-mono font-bold">HINOKI TEAK</span>
-                </div>
-                <div class="text-[10px] text-amber-800 font-semibold italic mt-0.5">"Harmony. Natural beauty. Tranquility."</div>
-                <div class="text-[9px] text-gray-500 mt-1 font-mono">Veil • Chalice • Matte Black • Teak Slats</div>
-              </button>
-              <button onclick="selectAiTheme('Industrial Chic')" class="ai-theme-btn text-left p-3 rounded-xl border border-gray-200 hover:border-gray-400 bg-white transition hover:shadow-sm" data-theme="Industrial Chic">
-                <div class="flex items-center justify-between">
-                  <div class="font-black text-gray-900">Industrial Chic</div>
-                  <span class="text-[8px] bg-slate-200 text-slate-800 px-1 py-0.5 rounded font-mono font-bold">CONCRETE</span>
-                </div>
-                <div class="text-[10px] text-amber-800 font-semibold italic mt-0.5">"Bold. Modern. Unconventional."</div>
-                <div class="text-[9px] text-gray-500 mt-1 font-mono">Veil • Concrete Trough • Matte Black • Crittall Grid</div>
-              </button>
-              <button onclick="selectAiTheme('Kohler WasteLAB Eco-Luxury')" class="ai-theme-btn text-left p-3 rounded-xl border border-emerald-200 hover:border-emerald-500 bg-emerald-50/40 transition col-span-2" data-theme="Kohler WasteLAB Eco-Luxury">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center space-x-2">
-                    <span class="font-black text-emerald-950">Kohler WasteLAB® (Eco-Luxury)</span>
-                    <span class="text-[9px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded">Closed-Loop</span>
+
+            <!-- Aesthetic Style Selector -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Aesthetic Theme</label>
+                <span class="text-[10px] text-amber-700 font-bold">1-Click 3D Styling</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2" id="ai-theme-grid">
+                <button onclick="selectAiTheme('Minimalist Modern')" class="ai-theme-btn active text-left p-3 rounded-xl border-2 border-black bg-gray-50 transition hover:shadow-sm" data-theme="Minimalist Modern">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-xs text-gray-900">Minimalist Modern</span>
+                    <span class="text-[8px] bg-gray-200 text-gray-700 px-1 py-0.5 rounded font-mono font-bold">TRAVERTINE</span>
                   </div>
-                  <span class="text-[8px] bg-emerald-200 text-emerald-900 px-1 py-0.5 rounded font-mono font-bold">CIRCULAR</span>
+                  <div class="text-[10px] text-gray-500 italic mt-0.5 font-serif">"Clean lines. Simple forms. Timeless appeal."</div>
+                  <div class="text-[10px] text-gray-400 mt-1">Veil • Purist • Matte Black • Chrome</div>
+                </button>
+                <button onclick="selectAiTheme('Classic Luxury')" class="ai-theme-btn text-left p-3 rounded-xl border border-gray-200 hover:border-gray-400 bg-white transition hover:shadow-sm" data-theme="Classic Luxury">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-xs text-gray-900">Classic Luxury</span>
+                    <span class="text-[8px] bg-amber-100 text-amber-800 px-1 py-0.5 rounded font-mono font-bold">CALACATTA</span>
+                  </div>
+                  <div class="text-[10px] text-gray-500 italic mt-0.5 font-serif">"Timeless elegance. Refined details."</div>
+                  <div class="text-[10px] text-gray-400 mt-1">Veil • Purist • Polished Brass • Gold Sconces</div>
+                </button>
+                <button onclick="selectAiTheme('Japanese Zen')" class="ai-theme-btn text-left p-3 rounded-xl border border-gray-200 hover:border-gray-400 bg-white transition hover:shadow-sm" data-theme="Japanese Zen">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-xs text-gray-900">Japanese Zen</span>
+                    <span class="text-[8px] bg-emerald-100 text-emerald-800 px-1 py-0.5 rounded font-mono font-bold">HINOKI TEAK</span>
+                  </div>
+                  <div class="text-[10px] text-gray-500 italic mt-0.5 font-serif">"Harmony. Natural beauty. Tranquility."</div>
+                  <div class="text-[10px] text-gray-400 mt-1">Veil • Chalice • Matte Black • Teak Slats</div>
+                </button>
+                <button onclick="selectAiTheme('Industrial Chic')" class="ai-theme-btn text-left p-3 rounded-xl border border-gray-200 hover:border-gray-400 bg-white transition hover:shadow-sm" data-theme="Industrial Chic">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-xs text-gray-900">Industrial Chic</span>
+                    <span class="text-[8px] bg-stone-200 text-stone-800 px-1 py-0.5 rounded font-mono font-bold">CONCRETE</span>
+                  </div>
+                  <div class="text-[10px] text-gray-500 italic mt-0.5 font-serif">"Bold. Modern. Unconventional."</div>
+                  <div class="text-[10px] text-gray-400 mt-1">Veil • Concrete Trough • Matte Black • Crittall Grid</div>
+                </button>
+                <button onclick="selectAiTheme('Kohler WasteLAB Eco-Luxury')" class="ai-theme-btn text-left p-3 rounded-xl border border-emerald-200 hover:border-emerald-500 bg-emerald-50/40 transition col-span-2" data-theme="Kohler WasteLAB Eco-Luxury">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-xs text-emerald-900">Kohler WasteLAB® (Eco-Luxury)</span>
+                    <span class="text-[8px] bg-emerald-200 text-emerald-900 px-1 py-0.5 rounded font-mono font-bold">CIRCULAR</span>
+                  </div>
+                  <div class="text-[10px] text-emerald-800 mt-0.5">Abstra Recycled Tiles, Brazn Console & Katalyst Air-Induction Fittings</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Priorities Checkboxes -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Fixture Inclusions</label>
+                <span class="text-[10px] text-gray-400 font-medium">Toggle room items</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
+                  <input type="checkbox" id="prio-smart-toilet" checked onchange="onPriorityCheckboxChange()" class="accent-black rounded">
+                  <span class="font-medium text-gray-800">Toilet (Smart / Regular)</span>
+                </label>
+                <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
+                  <input type="checkbox" id="prio-thermo-shower" checked onchange="onPriorityCheckboxChange()" class="accent-black rounded">
+                  <span class="font-medium text-gray-800">Shower Enclosure</span>
+                </label>
+                <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
+                  <input type="checkbox" id="prio-dual-vanity" checked onchange="onPriorityCheckboxChange()" class="accent-black rounded">
+                  <span class="font-medium text-gray-800">Vanity & Basin</span>
+                </label>
+                <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
+                  <input type="checkbox" id="prio-smart-mirror" onchange="onPriorityCheckboxChange()" class="accent-black rounded">
+                  <span class="font-medium text-gray-800">Mirror (LED / Smart)</span>
+                </label>
+              </div>
+              <p class="text-[10px] text-gray-500 italic">Select which fixtures to include. If no options are checked, no products will be added to the room.</p>
+            </div>
+          </div>
+
+          <!-- PANE 2: Custom Natural-Language AI Prompt -->
+          <div id="pane-natural-language" class="space-y-4 hidden">
+            <!-- Assistant Description Card -->
+            <div class="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-3.5 space-y-1 shadow-2xs">
+              <div class="flex items-center space-x-2 text-amber-950 font-black text-xs">
+                <span class="text-amber-600 text-sm">✨</span>
+                <span class="uppercase tracking-wider">Natural-Language Design Assistant</span>
+              </div>
+              <p class="text-[11px] text-amber-900 leading-snug">Describe your dream bathroom in your own words. AI will interpret your intent, extract materials, storage, and layout rules, and synthesize a compliant Kohler suite.</p>
+            </div>
+
+            <!-- Large Textarea -->
+            <div class="space-y-1.5 bg-white p-4 rounded-2xl border border-gray-200/90 shadow-2xs">
+              <div class="flex items-center justify-between">
+                <label for="ai-custom-notes" class="block text-xs font-black text-gray-900 flex items-center space-x-1.5">
+                  <span class="text-sm">📝</span>
+                  <span class="tracking-tight uppercase">Your Instructions & Wishlist</span>
+                </label>
+                <div class="flex items-center space-x-2">
+                  <span id="ai-custom-char-count" class="font-mono text-gray-400 text-[10px]">0 / 500</span>
+                  <span class="text-gray-300">|</span>
+                  <button type="button" onclick="clearAiCustomNotes()" class="text-[10px] text-gray-400 hover:text-rose-600 font-bold transition hover:underline cursor-pointer">
+                    Clear
+                  </button>
                 </div>
-                <div class="text-[10px] text-emerald-800 mt-0.5">Abstra Recycled Tiles, Brazn Console & Katalyst Air-Induction Fittings</div>
-              </button>
-            </div>
-          </div>
-
-          <!-- Priorities Checkboxes -->
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Fixture Inclusions</label>
-              <span class="text-[10px] text-gray-400 font-medium">Toggle room items</span>
-            </div>
-            <div class="grid grid-cols-2 gap-2 text-xs">
-              <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
-                <input type="checkbox" id="prio-smart-toilet" checked onchange="onPriorityCheckboxChange()" class="accent-black rounded">
-                <span class="font-medium text-gray-800">Toilet (Smart / Regular)</span>
-              </label>
-              <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
-                <input type="checkbox" id="prio-thermo-shower" checked onchange="onPriorityCheckboxChange()" class="accent-black rounded">
-                <span class="font-medium text-gray-800">Shower Enclosure</span>
-              </label>
-              <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
-                <input type="checkbox" id="prio-dual-vanity" checked onchange="onPriorityCheckboxChange()" class="accent-black rounded">
-                <span class="font-medium text-gray-800">Vanity & Basin</span>
-              </label>
-              <label class="flex items-center space-x-2 bg-white p-2 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
-                <input type="checkbox" id="prio-smart-mirror" onchange="onPriorityCheckboxChange()" class="accent-black rounded">
-                <span class="font-medium text-gray-800">Mirror (LED / Smart)</span>
-              </label>
-            </div>
-            <p class="text-[10px] text-gray-500 italic">Select which fixtures to include. If no options are checked, no products will be added to the room.</p>
-          </div>
-
-          <!-- ✨ CUSTOM AI PREFERENCES -->
-          <div class="space-y-2.5 bg-gray-50/90 p-4 rounded-2xl border border-gray-200/90 shadow-2xs transition hover:border-gray-300">
-            <div class="flex items-center justify-between">
-              <label for="ai-custom-notes" class="block text-xs font-black text-gray-900 flex items-center space-x-1.5">
-                <span class="text-amber-500">✨</span>
-                <span class="tracking-wider uppercase">CUSTOM AI PREFERENCES</span>
-              </label>
-              <button type="button" onclick="clearAiCustomNotes()" class="text-[10px] text-gray-400 hover:text-rose-600 font-bold transition hover:underline cursor-pointer">
-                Clear
-              </button>
-            </div>
-            <p class="text-[11px] text-gray-500 leading-snug">Describe your dream bathroom in your own words. AI will combine your preferences with the selected constraints.</p>
-            
-            <div class="space-y-1">
-              <div class="flex items-center justify-between text-[10px] text-gray-500 font-medium">
-                <span class="font-bold text-gray-700 uppercase tracking-tight">Natural-language instructions</span>
-                <span id="ai-custom-char-count" class="font-mono text-gray-400 text-[10px]">0 / 500</span>
               </div>
-              <textarea id="ai-custom-notes" rows="4" maxlength="500" oninput="updateAiCustomNotesCount()" placeholder="e.g. I want a luxurious Japanese Zen bathroom with warm teak, lots of storage, an open shower area, and a premium spa-like feel. Keep it within my budget." class="w-full bg-white border border-gray-200 rounded-xl p-3 text-xs text-gray-800 placeholder-gray-400 outline-none focus:border-black focus:ring-1 focus:ring-black transition resize-y leading-relaxed shadow-2xs font-normal"></textarea>
+              <textarea id="ai-custom-notes" rows="6" maxlength="500" oninput="updateAiCustomNotesCount()" placeholder="e.g. I want a luxurious Japanese Zen bathroom with warm teak, lots of storage, an open shower area, and a premium spa-like feel. Keep it within my budget." class="w-full bg-gray-50/70 border border-gray-200 rounded-xl p-3.5 text-xs text-gray-800 placeholder-gray-400 outline-none focus:bg-white focus:border-black focus:ring-1 focus:ring-black transition resize-y leading-relaxed shadow-2xs font-normal"></textarea>
             </div>
 
-            <!-- Example Prompt Chips -->
-            <div class="pt-1.5 border-t border-gray-200/60 space-y-1.5">
-              <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block">Inspiration Chips:</span>
+            <!-- Inspiration Prompt Chips -->
+            <div class="space-y-1.5 bg-gray-50/80 p-3.5 rounded-2xl border border-gray-200/80 shadow-2xs">
+              <div class="flex items-center justify-between text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                <span>Inspiration Chips (Click to append):</span>
+              </div>
               <div class="flex flex-wrap gap-1.5">
-                <button type="button" onclick="appendPromptChip('Luxury spa atmosphere with warm atmospheric lighting')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">✨ Luxury spa</button>
-                <button type="button" onclick="appendPromptChip('Maximize storage with deep soft-close vanity drawers and medicine cabinet')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">📦 More storage</button>
-                <button type="button" onclick="appendPromptChip('Family-friendly design safe for children and elderly parents')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">👨‍👩‍👧 Family-friendly</button>
-                <button type="button" onclick="appendPromptChip('Eco-friendly with Kohler WaterSense dual-flush fixtures and Katalyst aerators')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">🌱 Eco-friendly</button>
-                <button type="button" onclick="appendPromptChip('Minimalist clean lines with maximized open floor space')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">⚪ Minimalist</button>
-                <button type="button" onclick="appendPromptChip('Accessibility-oriented with wide walkways and ADA chair-height toilet')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">♿ Accessibility</button>
+                <button type="button" onclick="appendPromptChip('Luxury spa atmosphere with warm atmospheric lighting')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2.5 py-1 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">✨ Luxury spa</button>
+                <button type="button" onclick="appendPromptChip('Maximize storage with deep soft-close vanity drawers and medicine cabinet')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2.5 py-1 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">📦 More storage</button>
+                <button type="button" onclick="appendPromptChip('Family-friendly design safe for children and elderly parents')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2.5 py-1 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">👨‍👩‍👧 Family-friendly</button>
+                <button type="button" onclick="appendPromptChip('Eco-friendly with Kohler WaterSense dual-flush fixtures and Katalyst aerators')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2.5 py-1 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">🌱 Eco-friendly</button>
+                <button type="button" onclick="appendPromptChip('Minimalist clean lines with maximized open floor space')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2.5 py-1 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">⚪ Minimalist</button>
+                <button type="button" onclick="appendPromptChip('Accessibility-oriented with wide walkways and ADA chair-height toilet')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2.5 py-1 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">♿ Accessibility</button>
               </div>
+            </div>
+
+            <!-- Pro Tips -->
+            <div class="p-3 bg-white rounded-2xl border border-gray-200/80 shadow-2xs text-[11px] text-gray-600 space-y-1">
+              <span class="font-bold text-gray-900 block text-xs flex items-center space-x-1.5">
+                <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                <span>Pro Tips for Custom Prompts:</span>
+              </span>
+              <ul class="list-disc list-inside space-y-0.5 text-gray-500 text-[10px] pl-1">
+                <li>Mention desired materials: <em>teak, marble, matte black, brushed brass</em></li>
+                <li>Specify family needs: <em>elderly accessibility, children safety</em></li>
+                <li>Layout wishes: <em>toilet away from entrance, open walking space</em></li>
+              </ul>
             </div>
           </div>
 
@@ -4495,6 +4522,38 @@
     function updateAiBudgetDisplay(val) {
       const n = parseInt(val);
       document.getElementById('ai-budget-label').innerText = '₹' + n.toLocaleString('en-IN');
+    }
+
+    function switchInputMode(mode) {
+      const btnPredefined = document.getElementById('btn-mode-predefined');
+      const btnNatural = document.getElementById('btn-mode-natural');
+      const panePredefined = document.getElementById('pane-predefined-constraints');
+      const paneNatural = document.getElementById('pane-natural-language');
+
+      if (mode === 'natural') {
+        if (panePredefined) panePredefined.classList.add('hidden');
+        if (paneNatural) paneNatural.classList.remove('hidden');
+
+        if (btnPredefined) {
+          btnPredefined.className = 'flex-1 py-2 px-2.5 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 text-gray-600 hover:text-black font-extrabold text-xs cursor-pointer';
+        }
+        if (btnNatural) {
+          btnNatural.className = 'flex-1 py-2 px-2.5 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 bg-black text-white shadow-xs font-black text-xs cursor-pointer';
+        }
+
+        const tx = document.getElementById('ai-custom-notes');
+        if (tx) tx.focus();
+      } else {
+        if (panePredefined) panePredefined.classList.remove('hidden');
+        if (paneNatural) paneNatural.classList.add('hidden');
+
+        if (btnPredefined) {
+          btnPredefined.className = 'flex-1 py-2 px-2.5 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 bg-black text-white shadow-xs font-black text-xs cursor-pointer';
+        }
+        if (btnNatural) {
+          btnNatural.className = 'flex-1 py-2 px-2.5 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 text-gray-600 hover:text-black font-extrabold text-xs cursor-pointer';
+        }
+      }
     }
 
     function updateAiCustomNotesCount() {
