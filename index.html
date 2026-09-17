@@ -145,6 +145,10 @@
         <span class="text-[10px] tracking-widest uppercase font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200/60">
           <i class="fa-solid fa-sparkles text-[9px] mr-1 text-amber-600"></i>AI Studio
         </span>
+        <button onclick="openAboutModal()" class="text-[10px] tracking-wider font-bold text-gray-700 hover:text-black bg-gray-100 hover:bg-gray-200/80 px-2.5 py-1 rounded-full border border-gray-200 transition flex items-center space-x-1.5 cursor-pointer shadow-xs" title="About KOHLER-MITWPU AI Research Lab Program Case Study">
+          <i class="fa-solid fa-graduation-cap text-amber-600 text-[11px]"></i>
+          <span>About Program</span>
+        </button>
       </div>
     </div>
 
@@ -1192,6 +1196,165 @@
 
         <button onclick="closeClearanceModal()" class="w-full bg-black hover:bg-gray-900 text-white py-3 rounded-xl font-bold text-xs shadow-md transition">
           Close Report
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL F: KOHLER-MITWPU AI RESEARCH LAB PROGRAM (ABOUT) ==================== -->
+  <div id="modal-about-program" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[92vh] flex flex-col overflow-hidden border border-gray-100 animate-in fade-in duration-200">
+      <div class="px-6 py-4 bg-gradient-to-r from-gray-950 via-neutral-900 to-black text-white flex justify-between items-center border-b border-gray-800">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center font-black text-lg shadow-sm">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="text-base font-black tracking-tight text-white">KOHLER-MITWPU AI Research Lab Program</h2>
+              <span class="text-[9px] uppercase font-extrabold bg-amber-400/20 text-amber-300 border border-amber-400/40 px-2 py-0.5 rounded-full">Track 1</span>
+            </div>
+            <p class="text-[11px] text-gray-300">Case Study Challenge: KOHLER AI Bathroom Designer & Planner</p>
+          </div>
+        </div>
+        <button onclick="closeAboutModal()" class="text-gray-400 hover:text-white w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center transition cursor-pointer">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto custom-scroll space-y-5 text-xs">
+        <!-- Challenge Callout Banner -->
+        <div class="bg-amber-50/80 border border-amber-200/90 rounded-2xl p-4 flex items-start space-x-3 text-amber-950">
+          <i class="fa-solid fa-trophy text-amber-600 text-lg mt-0.5 shrink-0"></i>
+          <div class="space-y-1">
+            <h3 class="font-extrabold text-xs text-amber-900 uppercase tracking-wider">Candidate Solution: Track 1 Case Study</h3>
+            <p class="text-[11px] leading-relaxed text-amber-900">
+              Developed as an individual submission for the <strong>KOHLER-MITWPU AI Research Lab Program</strong> selection process. Tackling generative design automation, physical constraint optimization, and modern connected smart living.
+            </p>
+          </div>
+        </div>
+
+        <!-- Objective & Core Mission -->
+        <div class="space-y-2">
+          <h4 class="font-extrabold text-xs text-gray-900 uppercase tracking-wider flex items-center space-x-1.5">
+            <i class="fa-solid fa-bullseye text-amber-600"></i>
+            <span>Track 1 Objective & Expected Outcome</span>
+          </h4>
+          <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 text-[11px] text-gray-700 space-y-2 leading-relaxed">
+            <p><strong>Objective:</strong> Build an interactive AI design assistant that takes a customer's constraints (dimensions, budget limits, aesthetic themes, and device catalog specifications) and automates personalized product bundle recommendations.</p>
+            <p><strong>Expected Outcome:</strong> An intelligent recommendation engine outputting optimized product combinations (smart toilets, vanities, thermostatic showers, mirrors, bathtubs) fitting exact physical space and budget parameters, accompanied by an interactive 3D WebGL and 2D CAD representation.</p>
+          </div>
+        </div>
+
+        <!-- 4 Evaluation Criteria Mapping Grid -->
+        <div class="space-y-2">
+          <h4 class="font-extrabold text-xs text-gray-900 uppercase tracking-wider flex items-center space-x-1.5">
+            <i class="fa-solid fa-chart-pie text-amber-600"></i>
+            <span>Evaluation Criteria Alignment (100% Weightage)</span>
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <!-- Criterion 1 -->
+            <div class="p-3.5 bg-white border border-gray-200 rounded-2xl shadow-xs space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-black text-gray-900 text-xs flex items-center space-x-1">
+                  <i class="fa-solid fa-brain text-amber-600"></i>
+                  <span>Approach & Innovation</span>
+                </span>
+                <span class="text-[10px] font-black bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">45% Weight</span>
+              </div>
+              <p class="text-[11px] text-gray-600 leading-normal">
+                Dual-mode AI assistant (Predefined constraints & natural-language prompt), NLP dimension & budget extraction, Meta Llama Prompt Guard 22M security, and Multi-Objective optimization with explainable AI cards.
+              </p>
+            </div>
+
+            <!-- Criterion 2 -->
+            <div class="p-3.5 bg-white border border-gray-200 rounded-2xl shadow-xs space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-black text-gray-900 text-xs flex items-center space-x-1">
+                  <i class="fa-solid fa-laptop-code text-blue-600"></i>
+                  <span>Technical Execution</span>
+                </span>
+                <span class="text-[10px] font-black bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">25% Weight</span>
+              </div>
+              <p class="text-[11px] text-gray-600 leading-normal">
+                Three.js WebGL rendering, real-time procedural PBR materials, dynamic architectural rebuilding on dimension change, zero-pricing discrepancy sync, and Vercel edge deployment.
+              </p>
+            </div>
+
+            <!-- Criterion 3 -->
+            <div class="p-3.5 bg-white border border-gray-200 rounded-2xl shadow-xs space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-black text-gray-900 text-xs flex items-center space-x-1">
+                  <i class="fa-solid fa-wand-magic-sparkles text-purple-600"></i>
+                  <span>User Experience & Feasibility</span>
+                </span>
+                <span class="text-[10px] font-black bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full">20% Weight</span>
+              </div>
+              <p class="text-[11px] text-gray-600 leading-normal">
+                Clean default empty room, 1-click Clear Room with dimension reset, manual generate trigger, unified quote BOM with multi-currency (INR, USD, CAD), and Studio Kohler specifier table.
+              </p>
+            </div>
+
+            <!-- Criterion 4 -->
+            <div class="p-3.5 bg-white border border-gray-200 rounded-2xl shadow-xs space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-black text-gray-900 text-xs flex items-center space-x-1">
+                  <i class="fa-solid fa-leaf text-emerald-600"></i>
+                  <span>Business & Sustainability</span>
+                </span>
+                <span class="text-[10px] font-black bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">10% Weight</span>
+              </div>
+              <p class="text-[11px] text-gray-600 leading-normal">
+                Kohler WaterSense annual water savings calculation, carbon offset tracking, and plumbing wet-wall alignment optimization to reduce installation piping costs.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Mandatory Submission Deliverables -->
+        <div class="space-y-2">
+          <h4 class="font-extrabold text-xs text-gray-900 uppercase tracking-wider flex items-center space-x-1.5">
+            <i class="fa-solid fa-clipboard-check text-emerald-600"></i>
+            <span>Submission Requirements Checklist (Deadline: Sep 20, 2026)</span>
+          </h4>
+          <div class="bg-gray-50 border border-gray-200 rounded-2xl p-3.5 text-[11px] text-gray-700 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="flex items-center space-x-2">
+                <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                <span class="font-bold">1. Working Model:</span>
+                <span>Source code, live WebGL prototype & local/Vercel quickstart</span>
+              </span>
+              <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">Delivered</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="flex items-center space-x-2">
+                <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                <span class="font-bold">2. Prompts Documentation:</span>
+                <span>AI system prompts, Llama Guard rules, and workflow PDF</span>
+              </span>
+              <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">Documented</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="flex items-center space-x-2">
+                <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                <span class="font-bold">3. Video Walkthrough:</span>
+                <span>1–3 minute demonstration of the 3D planner & AI suite generator</span>
+              </span>
+              <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">Included</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="flex items-center space-x-2">
+                <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                <span class="font-bold">4. Presentation Deck:</span>
+                <span>4-slide PDF deck on approach, system architecture, & tech stack</span>
+              </span>
+              <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">Ready</span>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="closeAboutModal()" class="w-full bg-black hover:bg-neutral-900 text-white py-3 rounded-2xl font-bold text-xs shadow-md transition cursor-pointer">
+          Back to 3D Bathroom Planner
         </button>
       </div>
     </div>
@@ -6881,6 +7044,17 @@
 
     function closeClearanceModal() {
       document.getElementById('modal-clearance-details').classList.add('hidden');
+    }
+
+    // ==================== KOHLER-MITWPU AI RESEARCH LAB ABOUT MODAL HANDLERS ====================
+    function openAboutModal() {
+      const modal = document.getElementById('modal-about-program');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeAboutModal() {
+      const modal = document.getElementById('modal-about-program');
+      if (modal) modal.classList.add('hidden');
     }
 
     // ==================== STUDIO KOHLER ARCHITECTURAL SPECIFIER HANDLERS ====================
