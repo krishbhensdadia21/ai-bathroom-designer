@@ -11,7 +11,7 @@
 
 ## 🌟 Overview
 
-The **KOHLER AI Bathroom Designer & Planner** is an interactive spatial AI design assistant engineered to take customer constraints (dimensions, budgets, aesthetic themes, and priority fixtures) and automate personalized product bundle recommendations. It combines multimodal architectural blueprint parsing, automated NKBA / ADA building code clearance validation, MEP plumbing wet-wall optimization, interactive 3D WebGL rendering, and generative product bundle intelligence powered by **Groq AI** and secured by **Meta Llama Prompt Guard 22M**.
+The **KOHLER AI Bathroom Designer & Planner** is an interactive spatial AI design assistant engineered to take customer constraints (dimensions, budgets, aesthetic themes, and priority fixtures) and automate personalized product bundle recommendations. It combines natural-language wishlist parsing, automated NKBA / ADA building code clearance validation, MEP plumbing wet-wall optimization, interactive 3D WebGL rendering, and generative product bundle intelligence powered by **Groq AI** and secured by **Meta Llama Prompt Guard 22M**.
 
 All sanitaryware, furniture, and fittings represent **100% authentic, iconic KOHLER products** (*The Bold Look of Kohler*).
 

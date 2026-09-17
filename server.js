@@ -373,48 +373,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // API: Blueprint / Sketch Vision Dimension Extractor
-  if (req.url === '/api/blueprint/extract' && req.method === 'POST') {
-    let body = '';
-    req.on('data', chunk => body += chunk);
-    req.on('end', async () => {
-      try {
-        const payload = JSON.parse(body || '{}');
-        const { fileName, fileSize } = payload;
-        
-        // Deterministic extraction simulation based on file characteristics or standard master suite bounds
-        const extractedWidth = 10.5;
-        const extractedDepth = 9.2;
-        const extractedHeight = 8.5;
-        const wetWallOrientation = 'North Wall (Rear Stack)';
-
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({
-          success: true,
-          fileName: fileName || 'bathroom_sketch.png',
-          dimensions: {
-            width_ft: extractedWidth,
-            depth_ft: extractedDepth,
-            height_ft: extractedHeight,
-            area_sq_ft: +(extractedWidth * extractedDepth).toFixed(1),
-            area_sq_m: +(extractedWidth * extractedDepth * 0.092903).toFixed(2)
-          },
-          detected_elements: [
-            { type: 'wall_bounds', status: 'verified', confidence: 0.96 },
-            { type: 'primary_wet_wall', location: wetWallOrientation, confidence: 0.92 },
-            { type: 'door_swing', location: 'West Wall (Left)', confidence: 0.89 },
-            { type: 'plumbing_rough_in', location: 'North-East Corner', confidence: 0.91 }
-          ],
-          recommended_layout_preset: 'Master Luxury Spa Suite',
-          message: 'Blueprint successfully parsed via AI vision engine. Room bounds and wet-wall stack mapped.'
-        }));
-      } catch (err) {
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ success: false, error: err.message }));
-      }
-    });
-    return;
-  }
 
   // API: Groq Prompt Guard & Chat Recommendation
   if (req.url === '/api/groq/recommend' && req.method === 'POST') {
