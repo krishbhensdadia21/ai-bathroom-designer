@@ -1,5 +1,4 @@
 # KOHLER AI Bathroom Designer & Planner 🛁✨
-### *KOHLER-MITWPU AI Research Lab Program — Track 1 Case Study Challenge*
 
 ---
 
