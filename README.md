@@ -158,8 +158,6 @@ Every product model in the planner corresponds to an authentic, production Kohle
 
 ---
 
----
-
 ## 🛠️ Tech Stack
 
 * **Frontend**: HTML5, Vanilla JavaScript (ES6+), CSS3, Tailwind CSS, Three.js (r128), FontAwesome 6 Pro
@@ -299,16 +297,6 @@ node server.js
 
 ### 4. Open in Browser
 Navigate to **`http://localhost:3000`** in any web browser.
-
----
-
-## 🌐 Deploying to Vercel
-
-1. Push your repository to GitHub.
-2. Import the repository into [Vercel](https://vercel.com/new).
-3. In **Environment Variables**, add:
-   * `GROQ_API_KEY`: *(Your Groq API key)*
-4. Click **Deploy**. Vercel will automatically serve the static assets from `/public` and route serverless requests via `vercel.json`.
 
 ---
 
