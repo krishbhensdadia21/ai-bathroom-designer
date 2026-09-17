@@ -1064,69 +1064,7 @@
     </div>
   </div>
 
-  <!-- ==================== MODAL B: KOHLER DIGITAL EXPERIENCE (KDX) WHATSAPP CONCIERGE ==================== -->
-  <div id="modal-kdx-concierge" class="fixed inset-0 z-50 bg-black/65 backdrop-blur-md flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[92vh] flex flex-col overflow-hidden border border-gray-100 animate-in fade-in duration-200">
-      <div class="px-6 py-4 bg-[#075e54] text-white flex justify-between items-center">
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-2xl bg-white/20 text-white flex items-center justify-center font-black text-xl shadow-xs">
-            <i class="fa-brands fa-whatsapp"></i>
-          </div>
-          <div>
-            <h2 class="text-base font-black tracking-tight">KDX WhatsApp AI Concierge</h2>
-            <p class="text-[11px] text-emerald-100">Live Project Handoff & Kohler VIP Specifier Support</p>
-          </div>
-        </div>
-        <button onclick="closeKdxConciergeModal()" class="text-emerald-200 hover:text-white w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center transition">
-          <i class="fa-solid fa-xmark text-base"></i>
-        </button>
-      </div>
 
-      <div class="p-6 overflow-y-auto custom-scroll space-y-4 text-xs">
-        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5 flex items-start space-x-3">
-          <i class="fa-solid fa-circle-check text-emerald-600 text-sm mt-0.5 shrink-0"></i>
-          <p class="text-emerald-900 text-[11px] leading-relaxed">
-            Connect directly with an authorized <strong>Kohler Experience Center (KEC) Senior Specification Engineer</strong> on WhatsApp. Your current fixture selection, rough-in requirements, and architectural floorplan dimensions will be pre-formatted for 1-click consultation.
-          </p>
-        </div>
-
-        <div>
-          <label class="block text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-1.5">Nearest Kohler Experience Center (KEC)</label>
-          <select id="kdx-showroom-select" onchange="updateKdxPreviewText()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 font-bold text-gray-900 outline-none focus:border-[#075e54]">
-            <option value="+919820012345" data-city="Mumbai">KEC Mumbai — Shakti Mills, Mahalaxmi</option>
-            <option value="+919810012345" data-city="New Delhi">KEC New Delhi — MG Road, Sultanpur</option>
-            <option value="+919880012345" data-city="Bengaluru">KEC Bengaluru — 100 Ft Rd, Indiranagar</option>
-            <option value="+12125550199" data-city="New York">KEC New York — 6 W 22nd St, Flatiron</option>
-            <option value="+442075550199" data-city="London">KEC London — 44-48 St John St, Clerkenwell</option>
-            <option value="+6565550199" data-city="Singapore">KEC Singapore — 52 Peck Seah St</option>
-          </select>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-1">Architect / Client Name</label>
-            <input type="text" id="kdx-client-name" oninput="updateKdxPreviewText()" placeholder="Ar. Rajesh Sharma" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-[#075e54] font-semibold text-xs">
-          </div>
-          <div>
-            <label class="block text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-1">Project Code</label>
-            <input type="text" id="kdx-project-code" value="KOHLER-AI-9021" readonly class="w-full bg-gray-100 border border-gray-200 rounded-xl px-3 py-2 font-mono font-bold text-xs text-gray-700">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-1">Pre-Generated WhatsApp Message Preview</label>
-          <textarea id="kdx-preview-text" rows="6" readonly class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-[11px] font-mono text-gray-700 leading-relaxed outline-none select-all"></textarea>
-        </div>
-
-        <div class="pt-2">
-          <button onclick="sendKdxWhatsApp()" class="w-full bg-[#25D366] hover:bg-[#1ebd5a] text-white py-3.5 rounded-2xl font-black text-xs shadow-lg transition flex items-center justify-center space-x-2">
-            <i class="fa-brands fa-whatsapp text-base"></i>
-            <span>Launch WhatsApp Chat with Kohler Specifier</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- ==================== MODAL C: STUDIO KOHLER ARCHITECTURAL SPECIFIER DATA SHEET ==================== -->
   <div id="modal-studio-kohler" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 hidden">
@@ -6945,50 +6883,7 @@
       document.getElementById('modal-clearance-details').classList.add('hidden');
     }
 
-    // ==================== KDX WHATSAPP CONCIERGE & STUDIO KOHLER HANDLERS ====================
-    function openKdxConciergeModal() {
-      updateKdxPreviewText();
-      document.getElementById('modal-kdx-concierge').classList.remove('hidden');
-    }
-
-    function closeKdxConciergeModal() {
-      document.getElementById('modal-kdx-concierge').classList.add('hidden');
-    }
-
-    function updateKdxPreviewText() {
-      const select = document.getElementById('kdx-showroom-select');
-      const city = select.selectedOptions[0] ? select.selectedOptions[0].getAttribute('data-city') : 'Mumbai';
-      const clientName = document.getElementById('kdx-client-name').value || 'Authorized Architect';
-      const wFt = (roomWidth * 3.28084).toFixed(1);
-      const dFt = (roomDepth * 3.28084).toFixed(1);
-      const sqFt = (roomWidth * roomDepth * 10.7639).toFixed(1);
-      const totalStr = document.getElementById('header-total-price').innerText;
-
-      let msg = `*KOHLER DIGITAL EXPERIENCE (KDX) VIP SPECIFICATION*\n`;
-      msg += `Architect/Client: ${clientName}\n`;
-      msg += `Project Code: KOHLER-AI-9021\n`;
-      msg += `Target KEC Showroom: Kohler Experience Center ${city}\n`;
-      msg += `Room Footprint: ${wFt} ft x ${dFt} ft (${sqFt} sq ft)\n`;
-      msg += `Total Specification Investment: ${currentCurrencySymbol}${totalStr}\n\n`;
-      msg += `*SPECIFIED KOHLER FIXTURES:*\n`;
-      placedProducts.forEach((p, idx) => {
-        const d = p.userData || {};
-        msg += `${idx + 1}. ${d.name || 'Fixture'} (SKU: ${d.art || 'KOHLER'}) - ${d.dim || ''}\n`;
-      });
-      msg += `\nPlease transmit complete 2D/3D BIM cut-sheet packet, rough-in templates, and coordinate showroom VIP presentation.`;
-
-      document.getElementById('kdx-preview-text').value = msg;
-    }
-
-    function sendKdxWhatsApp() {
-      const select = document.getElementById('kdx-showroom-select');
-      const phone = select.value.replace(/[^0-9]/g, '');
-      const msg = document.getElementById('kdx-preview-text').value;
-      const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
-      window.open(url, '_blank');
-      closeKdxConciergeModal();
-      showToast('Transmitted specification to KDX WhatsApp Concierge!');
-    }
+    // ==================== STUDIO KOHLER ARCHITECTURAL SPECIFIER HANDLERS ====================
 
     function openStudioKohlerModal() {
       const tbody = document.getElementById('studio-kohler-tbody');
