@@ -1,0 +1,61 @@
+  <!-- ==================== 8. KOHLER SPECIFICATION & BILL OF MATERIALS (BOM) ==================== -->
+  <div id="shopping-list-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full max-h-[88vh] flex flex-col overflow-hidden border border-gray-100" id="bom-modal">
+      <!-- Header -->
+      <div class="p-6 bg-black text-white flex justify-between items-center">
+        <div>
+          <h2 class="text-lg font-extrabold">KOHLER Design & Specification Quote</h2>
+          <span class="text-xs text-gray-400 font-mono" id="bom-room-dimensions-label">Room: 10.5 ft × 9.2 ft</span>
+        </div>
+        <button onclick="closeShoppingList()" class="text-gray-400 hover:text-white w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center transition no-print">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Integrated Tools Quick Bar (Studio Kohler) -->
+      <div class="bg-gray-900 px-6 py-2.5 flex items-center justify-between border-t border-gray-800 text-xs">
+        <div class="text-gray-300 text-[11px] font-medium flex items-center space-x-2">
+          <i class="fa-solid fa-layer-group text-amber-500 text-xs"></i>
+          <span>Design Services</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button onclick="openStudioKohlerModal()" class="bg-blue-600/20 hover:bg-blue-600/40 text-blue-300 border border-blue-400/40 px-3 py-1 rounded-lg font-bold text-[11px] flex items-center space-x-1.5 transition" title="Studio KOHLER Specifier Data Sheet">
+            <i class="fa-solid fa-compass-drafting text-blue-400"></i>
+            <span>Studio KOHLER</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Item List Container -->
+      <div class="flex-1 overflow-y-auto p-6 space-y-3 custom-scroll" id="shopping-list-items-body"></div>
+
+      <!-- Footer / Actions -->
+      <div class="p-6 bg-gray-50 border-t border-gray-200 flex justify-between items-center no-print">
+        <div class="flex items-center space-x-3">
+          <button onclick="copyShoppingListText()" class="px-4 py-2.5 rounded-xl border border-gray-300 text-gray-800 hover:bg-gray-100 text-xs font-bold transition flex items-center space-x-1.5">
+            <i class="fa-regular fa-copy"></i>
+            <span>Copy Spec</span>
+          </button>
+          <button onclick="window.print()" class="px-4 py-2.5 rounded-xl border border-gray-300 text-gray-800 hover:bg-gray-100 text-xs font-bold transition flex items-center space-x-1.5">
+            <i class="fa-solid fa-print"></i>
+            <span>Print Sheet</span>
+          </button>
+          <button onclick="exportKohlerRfqJson()" class="px-4 py-2.5 rounded-xl border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100 text-xs font-bold transition flex items-center space-x-1.5">
+            <i class="fa-solid fa-file-code text-amber-600"></i>
+            <span>Export RFQ JSON</span>
+          </button>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <div class="text-right">
+            <span class="text-[10px] uppercase font-bold text-gray-400 block">Total Investment</span>
+            <div class="text-xl font-black text-gray-900 tracking-tight" id="modal-total-price">₹2,93,700</div>
+          </div>
+          <button onclick="closeShoppingList()" class="bg-black hover:bg-gray-900 text-white px-6 py-2.5 rounded-full text-xs font-black shadow-lg transition">
+            Continue Designing
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+

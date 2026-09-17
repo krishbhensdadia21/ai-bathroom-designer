@@ -1,0 +1,46 @@
+  <!-- ==================== MODAL D: DETAILED HARD CONSTRAINT & CLEARANCE REPORT ==================== -->
+  <div id="modal-clearance-details" class="fixed inset-0 z-50 bg-black/65 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden border border-gray-100 animate-in fade-in duration-200">
+      <div class="px-6 py-4 bg-gray-900 text-white flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <div id="clearance-report-icon-container" class="w-9 h-9 rounded-xl bg-emerald-500 text-black flex items-center justify-center font-black text-base shadow-sm">
+            <i class="fa-solid fa-shield-halved" id="clearance-report-main-icon"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-black tracking-tight" id="clearance-report-title">Spatial Clearance & Code Report</h2>
+            <p class="text-[11px] text-gray-400">NKBA Planning Guidelines & Physical Collision Detection</p>
+          </div>
+        </div>
+        <button onclick="closeClearanceModal()" class="text-gray-400 hover:text-white w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto custom-scroll space-y-4 text-xs">
+        <div id="clearance-summary-banner" class="p-4 rounded-2xl border flex items-center space-x-3 bg-emerald-50 border-emerald-200 text-emerald-950">
+          <i class="fa-solid fa-circle-check text-2xl text-emerald-600" id="clearance-summary-icon"></i>
+          <div>
+            <span class="font-extrabold text-sm block" id="clearance-summary-heading">All Clearances 100% Compliant</span>
+            <span class="text-[11px] text-gray-600" id="clearance-summary-desc">Every fixture meets or exceeds NKBA building code clearances.</span>
+          </div>
+        </div>
+
+        <div class="space-y-2" id="clearance-report-items-container">
+          <!-- Dynamically populated from evaluateHardConstraints() -->
+        </div>
+
+        <div class="bg-gray-50 border border-gray-200 p-3.5 rounded-2xl text-[11px] text-gray-600 space-y-1">
+          <div class="font-bold text-gray-800">NKBA Architectural Standards:</div>
+          <div>• <strong>Toilet Clearance:</strong> Minimum 21" front (0.53m), 30" width clearance</div>
+          <div>• <strong>Vanity Activity Zone:</strong> Minimum 21" front (0.53m)</div>
+          <div>• <strong>Shower Entry:</strong> Minimum 24" (0.61m) unobstructed entry</div>
+          <div>• <strong>Physical Collisions:</strong> Fixture overlap & wall boundary overflow strictly flagged</div>
+        </div>
+
+        <button onclick="closeClearanceModal()" class="w-full bg-black hover:bg-gray-900 text-white py-3 rounded-xl font-bold text-xs shadow-md transition">
+          Close Report
+        </button>
+      </div>
+    </div>
+  </div>
+

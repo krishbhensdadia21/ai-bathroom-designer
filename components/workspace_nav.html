@@ -1,0 +1,83 @@
+  <!-- ==================== 2. WORKSPACE SPECIFICATION BAR ==================== -->
+  <nav id="workspace-subnav" class="h-11 bg-white/85 backdrop-blur-sm border-b border-gray-200/80 px-6 flex items-center justify-between text-xs select-none z-30 overflow-x-auto">
+    <!-- Left: Viewport Modes (3D Orbit, 2D Floorplan, Walk-In) & Camera Controls -->
+    <div class="flex items-center space-x-2 shrink-0">
+      <!-- Mode Switcher -->
+      <div class="bg-gray-100/90 p-0.5 rounded-full flex items-center space-x-1 border border-gray-200/80 shadow-xs">
+        <button onclick="setViewMode('3d')" id="view-mode-3d" class="view-btn px-3 py-1 rounded-full font-bold text-xs text-white bg-black shadow-xs transition flex items-center space-x-1.5">
+          <i class="fa-solid fa-cube text-[11px] text-amber-600"></i>
+          <span>3D Orbit</span>
+        </button>
+        <button onclick="setViewMode('2d')" id="view-mode-2d" class="view-btn px-3 py-1 rounded-full font-medium text-xs text-gray-600 hover:text-black hover:bg-white transition flex items-center space-x-1.5">
+          <i class="fa-solid fa-border-all text-[11px]"></i>
+          <span>2D Floorplan</span>
+        </button>
+        <button onclick="setViewMode('walkin')" id="view-mode-walkin" class="view-btn px-3 py-1 rounded-full font-medium text-xs text-gray-600 hover:text-black hover:bg-white transition flex items-center space-x-1.5">
+          <i class="fa-solid fa-person-walking text-[11px]"></i>
+          <span>Walk-In</span>
+        </button>
+      </div>
+
+      <div class="h-4 w-px bg-gray-200"></div>
+
+      <!-- Camera Zoom & Reset Controls -->
+      <div class="flex items-center space-x-1 bg-gray-100/90 p-0.5 rounded-full border border-gray-200/80 shadow-xs">
+        <button onclick="resetToInitialView()" class="w-6 h-6 rounded-full flex items-center justify-center text-gray-600 hover:text-black hover:bg-white transition" title="Refresh / Reset Camera View">
+          <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
+        </button>
+        <button onclick="zoomCamera(1)" class="w-6 h-6 rounded-full flex items-center justify-center text-gray-600 hover:text-black hover:bg-white transition" title="Maximize / Zoom In">
+          <i class="fa-solid fa-plus text-[10px]"></i>
+        </button>
+        <button onclick="zoomCamera(-1)" class="w-6 h-6 rounded-full flex items-center justify-center text-gray-600 hover:text-black hover:bg-white transition" title="Minimize / Zoom Out">
+          <i class="fa-solid fa-minus text-[10px]"></i>
+        </button>
+      </div>
+
+      <div class="h-4 w-px bg-gray-200"></div>
+
+      <!-- Selected Aesthetic Theme Display Badge (Static Text Pill) -->
+      <div class="flex items-center space-x-1.5 px-3 py-1 bg-gray-100/90 rounded-full border border-gray-200/80 text-xs font-semibold text-gray-700 shadow-xs">
+        <i class="fa-solid fa-palette text-amber-600 text-[11px]"></i>
+        <span>Theme: <strong id="subnav-theme-label" class="text-black font-extrabold">None</strong></span>
+      </div>
+
+      <div class="h-4 w-px bg-gray-200"></div>
+
+      <!-- Lighting & Ambiance Controls (Day/Dusk/Night + Kelvin) -->
+      <div class="flex items-center space-x-1 bg-gray-100/90 p-0.5 rounded-full border border-gray-200/80 shadow-xs">
+        <button onclick="setLightingAmbiance('day')" id="btn-light-day" class="light-btn px-2.5 py-1 rounded-full text-[11px] font-bold bg-white text-black shadow-xs transition" title="Daylight 5000K">☀️ Day</button>
+        <button onclick="setLightingAmbiance('dusk')" id="btn-light-dusk" class="light-btn px-2.5 py-1 rounded-full text-[11px] font-medium text-gray-600 hover:text-black transition" title="Sunset Dusk 2700K">🌅 Dusk</button>
+        <button onclick="setLightingAmbiance('night')" id="btn-light-night" class="light-btn px-2.5 py-1 rounded-full text-[11px] font-medium text-gray-600 hover:text-black transition" title="Night Ambiance & Smart Mirror Glow">🌙 Night</button>
+      </div>
+
+      <div class="hidden xl:flex items-center space-x-1 bg-gray-100/90 p-0.5 rounded-full border border-gray-200/80 shadow-xs text-[10px]">
+        <button onclick="setLightingKelvin(2700)" id="btn-kelvin-2700" class="kelvin-btn px-2 py-0.5 rounded-full font-bold text-gray-600 hover:text-black transition">2700K</button>
+        <button onclick="setLightingKelvin(4000)" id="btn-kelvin-4000" class="kelvin-btn px-2 py-0.5 rounded-full font-bold bg-white text-black shadow-xs transition">4000K</button>
+        <button onclick="setLightingKelvin(5000)" id="btn-kelvin-5000" class="kelvin-btn px-2 py-0.5 rounded-full font-bold text-gray-600 hover:text-black transition">5000K</button>
+      </div>
+
+      <div class="h-4 w-px bg-gray-200"></div>
+
+      <!-- Quick Room Dimensions Badge (Option B) -->
+      <button onclick="openDimensionsModal()" class="flex items-center space-x-1.5 px-3 py-1 bg-gray-100/90 hover:bg-gray-200/80 rounded-full border border-gray-200/80 text-xs font-semibold text-gray-700 shadow-xs transition cursor-pointer" title="Click to view & customize room dimensions">
+        <i class="fa-solid fa-ruler-combined text-amber-600 text-[11px]"></i>
+        <span>Room: <strong id="badge-room-size" class="text-black font-extrabold">10.5 ft × 9.2 ft</strong> <span class="text-gray-500 font-normal">(<span id="badge-room-area">96.6 sq ft</span>)</span></span>
+      </button>
+    </div>
+
+    <!-- Right: NKBA Code Compliance, Wet-Wall & Room Area -->
+    <div class="flex items-center space-x-2.5 shrink-0">
+      <!-- NKBA Clearance Badge -->
+      <button onclick="toggleClearanceZones()" id="btn-clearance-badge" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-300 flex items-center space-x-1.5 hover:bg-emerald-100 transition shadow-xs" title="Toggle NKBA Spatial Clearance Zones">
+        <i id="icon-clearance" class="fa-solid fa-circle-check text-emerald-600"></i>
+        <span id="label-clearance-status">NKBA: 100% Pass</span>
+      </button>
+
+      <!-- Wet-Wall Badge -->
+      <button onclick="toggleWetWallInspection()" id="btn-wetwall-badge" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-300 flex items-center space-x-1.5 hover:bg-blue-100 transition shadow-xs" title="Inspect Plumbing Wet-Wall Conduits & Cost Optimization">
+        <i class="fa-solid fa-faucet-drip text-blue-600"></i>
+        <span id="label-wetwall-status">Wet-Wall: N/A</span>
+      </button>
+    </div>
+  </nav>
+

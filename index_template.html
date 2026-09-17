@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KOHLER AI Space Platform — Official 3D & 2D Bathroom Designer</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Three.js & OrbitControls -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- Modular Design System -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-[#0d0f12] text-gray-900 font-sans antialiased overflow-hidden select-none h-screen w-screen flex flex-col justify-between">
+
+  <!-- ==================== 1. TOP KOHLER PLATFORM HEADER ==================== -->
+  <!-- #include "components/header.html" -->
+
+  <!-- ==================== 2. WORKSPACE SPECIFICATION BAR ==================== -->
+  <!-- #include "components/workspace_nav.html" -->
+
+  <!-- ==================== 3. MAIN INTERACTIVE 3D & 2D CANVAS CONTAINER ==================== -->
+  <!-- #include "components/canvas_container.html" -->
+
+  <!-- ==================== 4. RIGHT-SIDE KOHLER PRODUCT CATALOG DOCK & DRAWER ==================== -->
+  <!-- #include "components/catalog_drawer.html" -->
+
+  <!-- ==================== 5. GROQ AI ASSISTANT MODAL (TRACK 1 CORE) ==================== -->
+  <!-- #include "components/ai_modal.html" -->
+
+  <!-- ==================== 6. DIMENSIONS MODAL ==================== -->
+  <!-- #include "components/dimensions_modal.html" -->
+
+  <!-- ==================== 7. LUXURY FINISHES CUSTOMIZER MODAL ==================== -->
+  <!-- #include "components/finishes_modal.html" -->
+
+  <!-- ==================== 8. KOHLER SPECIFICATION & BILL OF MATERIALS (BOM) ==================== -->
+  <!-- #include "components/bom_modal.html" -->
+
+  <!-- ==================== MODAL E: KOHLER EXPERIENCE CENTER LOCATOR & RFQ ==================== -->
+  <!-- #include "components/experience_center_modal.html" -->
+
+  <!-- ==================== MODAL C: STUDIO KOHLER ARCHITECTURAL SPECIFIER DATA SHEET ==================== -->
+  <!-- #include "components/studio_specifier_modal.html" -->
+
+  <!-- ==================== MODAL D: DETAILED HARD CONSTRAINT & CLEARANCE REPORT ==================== -->
+  <!-- #include "components/clearance_report_modal.html" -->
+
+  <!-- ==================== MODAL F: KOHLER-MITWPU AI RESEARCH LAB PROGRAM (ABOUT) ==================== -->
+  <!-- #include "components/about_modal.html" -->
+
+  <!-- ==================== MODULAR JAVASCRIPT APPLICATION CORE ==================== -->
+  <script src="js/state.js"></script>
+  <script src="js/materials.js"></script>
+  <script src="js/catalog.js"></script>
+  <script src="js/fixtures.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/room.js"></script>
+  <script src="js/interaction.js"></script>
+  <script src="js/viewports.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/optimizer.js"></script>
+  <script src="js/ai_assistant.js"></script>
+  <script src="js/bom.js"></script>
+  <script src="js/storage_export.js"></script>
+  <script src="js/clearance.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

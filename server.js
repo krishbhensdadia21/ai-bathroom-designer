@@ -2,6 +2,15 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const { buildHtml } = require('./build');
+
+// Auto-assemble modular HTML components into index.html
+try {
+  buildHtml();
+} catch (err) {
+  console.warn('[!] Auto-build warning:', err.message);
+}
+
 let GROQ_API_KEY = process.env.GROQ_API_KEY || '';
 const envPath = path.join(__dirname, '.env');
 if (!GROQ_API_KEY && fs.existsSync(envPath)) {

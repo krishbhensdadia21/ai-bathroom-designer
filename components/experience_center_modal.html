@@ -1,0 +1,67 @@
+  <!-- ==================== MODAL E: KOHLER EXPERIENCE CENTER LOCATOR & RFQ ==================== -->
+  <div id="modal-showroom-locator" class="fixed inset-0 z-50 bg-black/65 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[92vh] flex flex-col overflow-hidden border border-gray-100 animate-in fade-in duration-200">
+      <!-- Header -->
+      <div class="px-6 py-4 bg-black text-white flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 border border-amber-200/80 flex items-center justify-center font-black text-base shadow-sm">
+            <i class="fa-solid fa-store"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-extrabold tracking-tight">Kohler Experience Center (KEC)</h2>
+            <p class="text-[11px] text-gray-400">Book VIP consultation & transmit dealer technical RFQ</p>
+          </div>
+        </div>
+        <button onclick="closeShowroomModal()" class="text-gray-400 hover:text-white w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="p-6 overflow-y-auto custom-scroll space-y-4 text-xs">
+        <div>
+          <label class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-1.5">Select Flagship Experience Center</label>
+          <select id="showroom-select" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 font-bold text-gray-900 outline-none focus:border-black">
+            <option value="mumbai">KEC Mumbai (Shakti Mills, Mahalaxmi / Worli)</option>
+            <option value="delhi">KEC New Delhi (MG Road, Sultanpur)</option>
+            <option value="bangalore">KEC Bengaluru (100 Ft Rd, Indiranagar)</option>
+            <option value="pune">Kohler Studio Pune (Senapati Bapat Rd)</option>
+            <option value="nyc">KEC New York (6 W 22nd St, Flatiron)</option>
+            <option value="london">KEC London (44-48 St John St, Clerkenwell)</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-1">Your Name</label>
+            <input type="text" id="rfq-name" placeholder="Ar. Rajesh Sharma" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-black font-semibold">
+          </div>
+          <div>
+            <label class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-1">Phone / Mobile</label>
+            <input type="tel" id="rfq-phone" placeholder="+91 98200 12345" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-black font-semibold">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-1">Email for CAD Packet & Formal Quote</label>
+          <input type="email" id="rfq-email" placeholder="client@architects.in" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-black font-semibold">
+        </div>
+
+        <div class="bg-gray-50 p-3.5 rounded-2xl border border-gray-200 space-y-1">
+          <div class="flex justify-between font-bold text-gray-800">
+            <span>Estimated Project Investment:</span>
+            <span id="rfq-total-amount" class="text-amber-700 font-mono">₹2,93,700</span>
+          </div>
+          <div id="rfq-items-summary-note" class="text-[10px] text-gray-500">Includes 4 Kohler luxury fixtures, rough-in cut sheets, and warranty packet.</div>
+        </div>
+
+        <button onclick="submitShowroomRfq()" class="w-full bg-black hover:bg-gray-900 text-white py-3.5 rounded-2xl font-black text-xs shadow-xl transition flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-paper-plane text-amber-500"></i>
+          <span>Send Technical Spec & Request Dealer Quote</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+

@@ -1,0 +1,50 @@
+  <!-- ==================== 6. DIMENSIONS MODAL ==================== -->
+  <div id="modal-dimensions" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 space-y-5 border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-black text-lg text-gray-900 flex items-center space-x-2">
+          <i class="fa-solid fa-ruler-combined text-amber-600"></i>
+          <span>Room Dimensions</span>
+        </h3>
+        <button onclick="closeDimensionsModal()" class="text-gray-400 hover:text-black w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <div class="flex justify-between text-xs font-bold text-gray-700 mb-1">
+            <span>Room Width (Back Wall):</span>
+            <span id="modal-label-width" class="font-mono text-black font-bold">10.5 ft (3.2 m)</span>
+          </div>
+          <input type="range" id="input-dim-width" min="2.0" max="6.0" step="0.1" value="3.2" oninput="onDimensionSliderChange()" class="w-full accent-black cursor-pointer">
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs font-bold text-gray-700 mb-1">
+            <span>Room Depth (Left Wall):</span>
+            <span id="modal-label-depth" class="font-mono text-black font-bold">9.2 ft (2.8 m)</span>
+          </div>
+          <input type="range" id="input-dim-depth" min="2.0" max="5.5" step="0.1" value="2.8" oninput="onDimensionSliderChange()" class="w-full accent-black cursor-pointer">
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs font-bold text-gray-700 mb-1">
+            <span>Ceiling Height:</span>
+            <span id="modal-label-height" class="font-mono text-black font-bold">8.5 ft (2.6 m)</span>
+          </div>
+          <input type="range" id="input-dim-height" min="2.2" max="3.6" step="0.1" value="2.6" oninput="onDimensionSliderChange()" class="w-full accent-black cursor-pointer">
+        </div>
+
+        <div class="bg-gray-50 p-3.5 rounded-2xl border border-gray-200 text-xs flex justify-between items-center">
+          <span class="text-gray-600 font-medium">Floor Surface Area:</span>
+          <span class="font-black text-black font-mono text-sm" id="modal-calc-area">96.6 sq ft / 8.96 m²</span>
+        </div>
+      </div>
+
+      <button onclick="closeDimensionsModal()" class="w-full bg-black hover:bg-gray-900 text-white py-3 rounded-xl font-bold text-xs shadow-lg transition">
+        Apply Dimensions
+      </button>
+    </div>
+  </div>
+

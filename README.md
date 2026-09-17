@@ -17,6 +17,42 @@ This project is submitted as an individual case study solution for the selection
 
 ```text
 kohler-ai-bathroom-designer/
+├── components/                   # Modular HTML Component Partials (12 files)
+│   ├── header.html               # Platform header, logo, currency selector, and investment counter
+│   ├── workspace_nav.html        # Viewport switcher (3D/2D/Walk-in), clear room, dimensions, finishes
+│   ├── canvas_container.html     # Three.js 3D WebGL canvas, HUD, dimension badges, compass
+│   ├── catalog_drawer.html       # Categorized fixture dock & product drawer
+│   ├── ai_modal.html             # Groq AI Assistant modal (Dual-mode, XAI explainability cards)
+│   ├── dimensions_modal.html     # Parametric room envelope customizer (Width, Depth, Ceiling)
+│   ├── finishes_modal.html       # Luxury stone, wood, and tile procedural surface selector
+│   ├── bom_modal.html            # Consolidated quote & Bill of Materials (BOM) modal
+│   ├── experience_center_modal.html # Kohler Experience Center locator & dealer RFQ modal
+│   ├── studio_specifier_modal.html  # Studio Kohler B2B MEP architectural specifier sheet
+│   ├── clearance_report_modal.html  # Detailed NKBA / ADA building code clearance report
+│   └── about_modal.html          # KOHLER-MITWPU AI Research Lab challenge overview modal
+├── js/                           # Modular Client-Side JavaScript Engine (15 files)
+│   ├── state.js                  # Global application state, currency multipliers, raycaster
+│   ├── materials.js              # Procedural PBR materials & texture canvas generators
+│   ├── catalog.js                # Authentic Kohler product catalog specification database
+│   ├── fixtures.js               # 3D procedural fixture geometry builders (Veil, Reach, Revel, etc.)
+│   ├── theme.js                  # Dynamic theme transformation engine & palette coordinator
+│   ├── room.js                   # 3D architectural envelope builder (walls, floor, door, trim)
+│   ├── interaction.js            # Fixture dragging, 3D selection, deletion, wall-snapping
+│   ├── viewports.js              # 3D Orbit, 2D Floorplan, Walk-In camera perspectives & 2D CAD
+│   ├── ui.js                     # Workflow controller, catalog drawer filters, and toasts
+│   ├── ai_assistant.js           # Groq AI assistant controller, NLP parser, tier switching
+│   ├── optimizer.js              # Client-side multi-objective combinatorial Pareto optimizer
+│   ├── bom.js                    # Multi-currency BOM table, Studio Kohler toggle, RFQ export
+│   ├── storage_export.js         # Room presets, clear room, localStorage, layout export
+│   ├── clearance.js              # NKBA / ADA clearance validation engine & 3D visualizer rings
+│   └── app.js                    # Circadian lighting, wet-wall system, animation loop & bootstrapper
+├── css/                          # Modular Design System & Styles
+│   └── styles.css                # Custom Kohler typography, glassmorphism, animations, scrollbars
+├── index_template.html           # Master HTML template with component include directives
+├── build.js                      # Automated component assembler compiling template into index.html
+├── test_modular.js               # Comprehensive 6-point modular architecture verification test
+├── index.html                    # Assembled production SPA (linked to modular js/ & css/)
+├── server.js                     # Node.js Server (auto-builds components, Groq API, static serving)
 ├── ai_engine/                    # Modular Python AI Spatial Intelligence Engine
 │   ├── __init__.py               # Package entry point & high-level exports
 │   ├── catalog.py                # Authentic Kohler specs, dimensions & WaterSense metrics
@@ -25,17 +61,15 @@ kohler-ai-bathroom-designer/
 │   ├── clearance_validator.py    # NKBA / ADA building code clearance validator (21", 24", 15")
 │   ├── optimizer.py              # Multi-objective Pareto bundle optimizer (O(1) auxiliary space)
 │   └── groq_client.py            # Zero-dependency Groq Cloud LLM client (Llama 3.3 70B)
-├── tests/                        # Automated unit test suite (9 test cases)
+├── tests/                        # Automated Python unit test suite (9 test cases)
 │   └── test_ai_engine.py         # Catalog, NLP, clearance & Pareto mathematical verification
 ├── main.py                       # Python CLI runner & HTTP API microservice
 ├── requirements.txt              # Zero-dependency Python specification (Standard Library only)
 ├── public/                       # Static assets for Vercel CDN deployment
 │   ├── ai-bot-icon.png           # AI Assistant brand icon
 │   └── logo.png                  # Kohler AI Designer brand logo
-├── index.html                    # Core SPA (Three.js WebGL, UI, AI Modal & Spatial Engine)
-├── server.js                     # Node.js Server (Groq Llama 3.3 API & Prompt Guard 22M)
 ├── vercel.json                   # Vercel deployment routing & edge cache headers
-├── package.json                  # Dependencies & project metadata
+├── package.json                  # Dependencies, test scripts & build lifecycle
 ├── package-lock.json             # Dependency lockfile
 ├── .env.example                  # Environment variable template for GROQ_API_KEY
 ├── .gitignore                    # Git exclusion rules
@@ -148,6 +182,54 @@ Every product model in the planner corresponds to an authentic, production Kohle
 * **Security & Prompt Safety**: Meta Llama Prompt Guard 22M (`meta-llama/llama-prompt-guard-2-22m`)
 * **Testing & Quality Assurance**: Python `unittest` suite (9 test cases, 100% pass rate in <5ms)
 * **Deployment**: Vercel (`vercel.json` + `/public` CDN) & GitHub Pages compatible
+
+## 🏛️ Modular Frontend Architecture (HTML Components & JavaScript Modules)
+
+To prevent monolithic file bloat and optimize maintainability and separation of concerns, both the **HTML markup** and the **client-side JavaScript** have been completely modularized into focused, single-responsibility files:
+
+### 📑 1. HTML Component Partials (`components/`)
+The user interface is decomposed into 12 decoupled HTML partials located in `components/`:
+
+| Component | Responsibility |
+|---|---|
+| [`components/header.html`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/components/header.html) | Brand logo, active currency selector, investment tally, and quick-action triggers. |
+| [`components/workspace_nav.html`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/components/workspace_nav.html) | 3D Orbit, 2D Floorplan, Walk-In mode switcher, dimension editor, and finishes buttons. |
+| [`components/canvas_container.html`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/components/canvas_container.html) | WebGL 3D rendering viewport, interactive HUD, dimension badges, and compass. |
+| [`components/catalog_drawer.html`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/components/catalog_drawer.html) | Product picker dock & categorized drawer (Toilets, Vanities, Showers, Mirrors, Tubs, Faucets). |
+| [`components/ai_modal.html`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/components/ai_modal.html) | Groq AI Assistant modal with dual-mode tabs (Predefined & Prompt), tier switchers, and XAI cards. |
+| [`components/dimensions_modal.html`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/components/dimensions_modal.html) | Real-time parametric room envelope dimension customizer (Width, Depth, Ceiling Height). |
+| [`components/finishes_modal.html`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/components/finishes_modal.html) | Procedural stone, wood, tile surface selectors (Calacatta, Carrara, Slate, Teak). |
+| [`components/bom_modal.html`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/components/bom_modal.html) | Consolidated quote modal with multi-currency BOM itemization and print features. |
+| [`components/experience_center_modal.html`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/components/experience_center_modal.html) | Kohler Experience Center showroom locator and dealer RFQ submission modal. |
+| [`components/studio_specifier_modal.html`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/components/studio_specifier_modal.html) | Professional B2B architectural data sheet detailing plumbing rough-in specs and valving. |
+| [`components/clearance_report_modal.html`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/components/clearance_report_modal.html) | Detailed NKBA / ADA building code clearance evaluation report. |
+| [`components/about_modal.html`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/components/about_modal.html) | In-app modal summarizing the KOHLER-MITWPU AI Research Lab Program track & criteria. |
+
+### ⚙️ 2. Client-Side JavaScript Modules (`js/`)
+The 6,200+ lines of monolithic script have been partitioned into 15 focused JavaScript modules:
+
+| Script Module | Purpose & Scope |
+|---|---|
+| [`js/state.js`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/js/state.js) | Global state, currency multipliers, camera handles, and mouse raycasting state. |
+| [`js/materials.js`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/js/materials.js) | Procedural canvas texture generators (marble, wood, travertine, tiles) and PBR materials. |
+| [`js/catalog.js`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/js/catalog.js) | Production Kohler catalog database with dimensions, prices, finishes, and rough-in specs. |
+| [`js/fixtures.js`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/js/fixtures.js) | Procedural 3D geometry builders for authentic Kohler products (Veil, Reach, Revel, Evok, etc.). |
+| [`js/theme.js`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/js/theme.js) | Dynamic theme transformation engine coordinating color palettes and accent meshes. |
+| [`js/room.js`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/js/room.js) | 3D architectural envelope builder (dynamic wall meshes, floor tiles, door, and baseboards). |
+| [`js/interaction.js`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/js/interaction.js) | 3D object manipulation, pointer raycasting, drag & drop, and automatic wall-snapping. |
+| [`js/viewports.js`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/js/viewports.js) | Camera perspective controller (3D Orbit, 2D Floorplan, Walk-In) and 2D CAD annotations. |
+| [`js/ui.js`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/js/ui.js) | Workflow stepper, catalog drawer filters, and toast notifications. |
+| [`js/ai_assistant.js`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/js/ai_assistant.js) | Groq AI assistant controller, prompt parsing, NLP badges, and bundle placement. |
+| [`js/optimizer.js`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/js/optimizer.js) | Client-side multi-objective combinatorial Pareto optimizer scoring all 6 objective functions. |
+| [`js/bom.js`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/js/bom.js) | Bill of Materials generator, multi-currency live calculations (INR, USD, CAD), and RFQ export. |
+| [`js/storage_export.js`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/js/storage_export.js) | Room presets (Powder Room, Master Spa), clear room, custom finishes, and JSON export. |
+| [`js/clearance.js`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/js/clearance.js) | NKBA 21" front and 15" centerline code validator with interactive 3D visualizer rings. |
+| [`js/app.js`](file:///C:/Users/User/.gemini/antigravity-ide/scratch/ikea-bathroom-planner/js/app.js) | Circadian lighting (Day/Dusk/Night), wet-wall plumbing conduit system, and animation loop. |
+
+### 🔨 3. Build & Automated Assembly (`build.js`)
+* Run `npm run build` to assemble `components/*.html` into the production `index.html`.
+* `server.js` automatically calls `buildHtml()` on startup, ensuring edits to any component partial take effect instantly.
+* Run `npm run test:modular` to execute the automated 6-point modular integrity verification test.
 
 ---
 
