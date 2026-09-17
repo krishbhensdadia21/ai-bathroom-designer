@@ -1,4 +1,4 @@
-# KOHLER AI Bathroom Designer & Planner 🛁✨
+# KOHLER AI Bathroom Designer & Planner 
 
 ---
 
@@ -8,8 +8,7 @@ This project is submitted as an individual case study solution for the selection
 
 * **Challenge Track**: **Track 1: KOHLER AI Bathroom Designer & Planner**
 * **Core Objective**: Build an interactive AI design assistant that takes a customer's constraints (dimensions, budget limits, aesthetic themes, and device catalog specifications) and automates personalized product bundle recommendations.
-* **Expected Outcome**: An intelligent recommendation engine that outputs optimized product combinations (smart toilets, vanities, thermostatic showers, mirrors, bathtubs) fitting exact physical space and budget parameters, accompanied by an interactive 3D WebGL and 2D CAD representation.
-* **Submission Deadline**: September 20th, 2026 (11:59 PM IST)
+* **Expected Outcome**: An intelligent recommendation engine that outputs optimized product combinations (smart toilets, vanities, thermostatic showers, mirrors, bathtubs) fitting exact physical space and budget parameters, accompanied by an interactive 3D WebGL representation
 
 ---
 
@@ -158,18 +157,6 @@ Every product model in the planner corresponds to an authentic, production Kohle
 | **Minimalist Faucet** | Composed® Single-Control Faucet | `K-73159IN-4` | Pure geometric minimalism, laminar water flow |
 
 ---
-
-## 📋 Mandatory Submission Deliverables Checklist
-
-* **Deadline**: September 20th, 2026 (11:59 PM IST)
-* **Format**: Single GitHub Repository Link
-
-| Requirement | Description | Status |
-|---|---|:---:|
-| **1. Working Model** | Complete source code, local runner (`node server.js`), and Vercel edge deployment configuration. | ✅ **Included** |
-| **2. Prompts Documentation** | Comprehensive documentation of all AI system prompts, NLP extraction heuristics, and Meta Prompt Guard filters. | ✅ **Documented** |
-| **3. Video Demonstration** | 1–3 minute walkthrough demonstrating input constraints, Groq AI suite generation, 3D interaction, and BOM export. | ✅ **Link Ready** |
-| **4. Presentation Deck** | 4-slide executive PDF deck highlighting core approach, system architecture, tech stack, and innovation pitch. | ✅ **Deck Ready** |
 
 ---
 
