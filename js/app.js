@@ -525,4 +525,17 @@
       renderer.render(scene, camera);
     }
 
-    window.onload = initApp;
+    // Robust Application Bootstrapper
+    let isAppInitialized = false;
+    function safeInitApp() {
+      if (isAppInitialized) return;
+      isAppInitialized = true;
+      initApp();
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      setTimeout(safeInitApp, 10);
+    } else {
+      document.addEventListener('DOMContentLoaded', safeInitApp);
+      window.addEventListener('load', safeInitApp);
+    }

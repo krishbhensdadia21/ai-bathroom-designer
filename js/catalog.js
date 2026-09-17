@@ -38,7 +38,7 @@
           epa_watersense: true,
           annual_water_savings_l: 8840 // (1.6 - 1.28) * 7300 flushes * 3.78541
         },
-        builder: buildVeilSmartToilet
+        builder: (...args) => buildVeilSmartToilet(...args)
       },
       {
         id: 'leap-smart-toilet',
@@ -77,7 +77,7 @@
           epa_watersense: true,
           annual_water_savings_l: 8840
         },
-        builder: buildLeapSmartToilet
+        builder: (...args) => buildLeapSmartToilet(...args)
       },
       {
         id: 'memoirs-stately-toilet',
@@ -116,7 +116,7 @@
           epa_watersense: true,
           annual_water_savings_l: 8840
         },
-        builder: buildMemoirsToilet
+        builder: (...args) => buildMemoirsToilet(...args)
       },
       {
         id: 'reach-wall-hung',
@@ -155,7 +155,7 @@
           epa_watersense: true,
           annual_water_savings_l: 15480 // Saves (1.60 - 1.04) * 7300 * 3.78541
         },
-        builder: buildReachToilet
+        builder: (...args) => buildReachToilet(...args)
       },
 
       // VANITIES & CONSOLES
@@ -195,7 +195,7 @@
           epa_watersense: false,
           annual_water_savings_l: 0
         },
-        builder: buildTailoredVanity
+        builder: (...args) => buildTailoredVanity(...args)
       },
       {
         id: 'jacquard-vanity',
@@ -233,7 +233,7 @@
           epa_watersense: false,
           annual_water_savings_l: 0
         },
-        builder: buildJacquardVanity
+        builder: (...args) => buildJacquardVanity(...args)
       },
       {
         id: 'brazn-console',
@@ -271,7 +271,7 @@
           epa_watersense: false,
           annual_water_savings_l: 0
         },
-        builder: buildBraznConsole
+        builder: (...args) => buildBraznConsole(...args)
       },
 
       // FAUCETS & BRASSWARE
@@ -312,7 +312,7 @@
           epa_watersense: true,
           annual_water_savings_l: 16580 // (2.2 - 1.2) * 12 min/day * 365 * 3.78541
         },
-        builder: buildPuristFaucet
+        builder: (...args) => buildPuristFaucet(...args)
       },
       {
         id: 'artifacts-faucet',
@@ -351,7 +351,7 @@
           epa_watersense: true,
           annual_water_savings_l: 11600 // (2.2 - 1.5) * 12 min/day * 365 * 3.78541
         },
-        builder: buildArtifactsFaucet
+        builder: (...args) => buildArtifactsFaucet(...args)
       },
       {
         id: 'composed-faucet',
@@ -390,7 +390,7 @@
           epa_watersense: true,
           annual_water_savings_l: 16580
         },
-        builder: buildComposedFaucet
+        builder: (...args) => buildComposedFaucet(...args)
       },
       {
         id: 'parallel-faucet',
@@ -429,7 +429,7 @@
           epa_watersense: true,
           annual_water_savings_l: 16580
         },
-        builder: buildPuristFaucet
+        builder: (...args) => buildPuristFaucet(...args)
       },
 
       // THERMOSTATIC SHOWERS
@@ -470,7 +470,7 @@
           epa_watersense: true,
           annual_water_savings_l: 33160 // (2.5 - 1.75) * 32 min/day * 365 * 3.78541
         },
-        builder: buildHydroRailShower
+        builder: (...args) => buildHydroRailShower(...args)
       },
       {
         id: 'statement-shower',
@@ -509,7 +509,7 @@
           epa_watersense: true,
           annual_water_savings_l: 33160
         },
-        builder: buildStatementShower
+        builder: (...args) => buildStatementShower(...args)
       },
 
       // BATHTUBS
@@ -549,7 +549,7 @@
           epa_watersense: false,
           annual_water_savings_l: 0
         },
-        builder: buildEvokBathtub
+        builder: (...args) => buildEvokBathtub(...args)
       },
 
       // SMART MIRRORS
@@ -589,7 +589,7 @@
           epa_watersense: false,
           annual_water_savings_l: 0
         },
-        builder: buildVerderaMirror
+        builder: (...args) => buildVerderaMirror(...args)
       },
       {
         id: 'verdera-30-mirror',
@@ -627,7 +627,7 @@
           epa_watersense: false,
           annual_water_savings_l: 0
         },
-        builder: buildVerderaMirror
+        builder: (...args) => buildVerderaMirror(...args)
       }
     ];
 
