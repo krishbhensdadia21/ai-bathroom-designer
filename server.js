@@ -892,7 +892,7 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
       const cat = (it.category || '').toLowerCase();
       if (cat.includes('toilet')) return incToilet;
       if (cat.includes('vanit')) return incVanity;
-      if (cat.includes('faucet')) return incVanity; // faucet accompanies vanity
+      if (cat.includes('faucet')) return (customerNotes && (customerNotes.toLowerCase().includes('faucet') || customerNotes.toLowerCase().includes('tap')));
       if (cat.includes('shower')) return incShower;
       if (cat.includes('mirror')) return incMirror;
       if (cat.includes('bath') || cat.includes('tub')) return incShower || (customerNotes && (customerNotes.toLowerCase().includes('tub') || customerNotes.toLowerCase().includes('bathtub') || customerNotes.toLowerCase().includes('soak')));

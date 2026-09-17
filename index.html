@@ -5185,7 +5185,8 @@
 
       const toilets = incToilet ? KOHLER_CATALOG.filter(c => c.category === 'toilets') : [null];
       const vanities = incVanity ? KOHLER_CATALOG.filter(c => c.category === 'vanities') : [null];
-      const faucets = incVanity ? KOHLER_CATALOG.filter(c => c.category === 'faucets') : [null];
+      const wantsFaucet = (inclusions && inclusions.faucet) || (notes && (notes.toLowerCase().includes('faucet') || notes.toLowerCase().includes('tap')));
+      const faucets = wantsFaucet ? KOHLER_CATALOG.filter(c => c.category === 'faucets') : [null];
       const showers = incShower ? KOHLER_CATALOG.filter(c => c.category === 'showers') : [null];
       const mirrors = incMirror ? KOHLER_CATALOG.filter(c => c.category === 'mirrors') : [null];
 
