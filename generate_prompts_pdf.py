@@ -158,7 +158,9 @@ def build_pdf(filename="KOHLER_AI_Prompts_System_Instructions_Workflows.pdf"):
     # =========================================================================
     # PAGE 1: TITLE, META, EXECUTIVE SUMMARY & SYSTEM ARCHITECTURE
     # =========================================================================
-    logo_path = os.path.join(os.path.dirname(__file__), 'logo.png')
+    logo_path = os.path.join(os.path.dirname(__file__), 'public', 'logo.png')
+    if not os.path.exists(logo_path):
+        logo_path = os.path.join(os.path.dirname(__file__), 'logo.png')
     logo_flowable = None
     if os.path.exists(logo_path):
         logo_flowable = RLImage(logo_path, width=0.80 * inch, height=0.80 * inch)

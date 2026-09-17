@@ -503,15 +503,15 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // Static File Serving
+  // Static File Serving (from public/)
   let reqPath = req.url.split('?')[0];
   if (reqPath === '/' || reqPath === '') reqPath = '/index.html';
-  let filePath = path.join(__dirname, reqPath);
+  let filePath = path.join(__dirname, 'public', reqPath);
 
   if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
-    const publicPath = path.join(__dirname, 'public', reqPath);
-    if (fs.existsSync(publicPath) && fs.statSync(publicPath).isFile()) {
-      filePath = publicPath;
+    const rootPath = path.join(__dirname, reqPath);
+    if (fs.existsSync(rootPath) && fs.statSync(rootPath).isFile()) {
+      filePath = rootPath;
     }
   }
 

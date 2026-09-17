@@ -20,7 +20,6 @@ function copyFolderRecursive(source, target) {
 
 function buildHtml() {
   const templatePath = path.join(__dirname, 'index_template.html');
-  const targetPath = path.join(__dirname, 'index.html');
   const publicDir = path.join(__dirname, 'public');
   const publicTargetPath = path.join(publicDir, 'index.html');
 
@@ -43,44 +42,15 @@ function buildHtml() {
     }
   });
 
-  // Write root index.html (for local node server)
-  fs.writeFileSync(targetPath, template, 'utf8');
-  console.log(`[✓] Successfully assembled root index.html (${template.length} bytes) from modular components!`);
-
   // Ensure public directory exists
   if (!fs.existsSync(publicDir)) {
     fs.mkdirSync(publicDir, { recursive: true });
   }
 
-  // Write public/index.html (for Vercel static CDN)
+  // Write compiled template to public/index.html
   fs.writeFileSync(publicTargetPath, template, 'utf8');
-  console.log(`[✓] Synced index.html to public/index.html`);
-
-  // Sync css/ to public/css/
-  const cssDir = path.join(__dirname, 'css');
-  if (fs.existsSync(cssDir)) {
-    copyFolderRecursive(cssDir, path.join(publicDir, 'css'));
-    console.log(`[✓] Synced css/ to public/css/`);
-  }
-
-  // Sync js/ to public/js/
-  const jsDir = path.join(__dirname, 'js');
-  if (fs.existsSync(jsDir)) {
-    copyFolderRecursive(jsDir, path.join(publicDir, 'js'));
-    console.log(`[✓] Synced js/ to public/js/`);
-  }
-
-  // Sync root image and documentation assets to public/
-  for (const assetName of ['logo.png', 'ai-bot-icon.png', 'KOHLER_AI_Prompts_System_Instructions_Workflows.pdf']) {
-    const srcAsset = path.join(__dirname, assetName);
-    const destAsset = path.join(publicDir, assetName);
-    if (fs.existsSync(srcAsset)) {
-      fs.copyFileSync(srcAsset, destAsset);
-      console.log(`[✓] Synced ${assetName} to public/${assetName}`);
-    }
-  }
-
-  console.log('[✓] All assets fully prepared for both local server and Vercel edge deployment!');
+  console.log(`[✓] Successfully assembled public/index.html (${template.length} bytes) from modular components!`);
+  console.log('[✓] All assets consolidated cleanly inside public/ directory!');
 }
 
 if (require.main === module) {

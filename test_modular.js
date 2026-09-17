@@ -11,14 +11,14 @@ components.forEach(c => {
   console.log(`  [✓] ${c} (${size} bytes)`);
 });
 
-console.log('\n--- 2. VERIFYING JS MODULES ---');
+console.log('\n--- 2. VERIFYING JS MODULES (in public/js) ---');
 const jsFiles = [
   'state.js', 'materials.js', 'fixtures.js', 'catalog.js', 'theme.js',
   'room.js', 'interaction.js', 'viewports.js', 'ui.js', 'ai_assistant.js',
   'optimizer.js', 'bom.js', 'storage_export.js', 'clearance.js', 'app.js'
 ];
 jsFiles.forEach(f => {
-  const p = path.join('js', f);
+  const p = path.join('public', 'js', f);
   if (!fs.existsSync(p)) {
     console.error(`  [✗] MISSING: ${p}`);
   } else {
@@ -33,11 +33,13 @@ jsFiles.forEach(f => {
 });
 
 console.log('\n--- 3. VERIFYING CSS DESIGN SYSTEM ---');
-const cssSize = fs.statSync('css/styles.css').size;
-console.log(`  [✓] css/styles.css (${cssSize} bytes)`);
+const cssPath = path.join('public', 'css', 'styles.css');
+const cssSize = fs.statSync(cssPath).size;
+console.log(`  [✓] ${cssPath} (${cssSize} bytes)`);
 
-console.log('\n--- 4. VERIFYING ASSEMBLED INDEX.HTML ---');
-const html = fs.readFileSync('index.html', 'utf8');
+console.log('\n--- 4. VERIFYING ASSEMBLED INDEX.HTML (in public/) ---');
+const htmlPath = path.join('public', 'index.html');
+const html = fs.readFileSync(htmlPath, 'utf8');
 const requiredIds = [
   'canvas-container', 'modal-ai-assistant', 'shopping-list-modal',
   'modal-about-program', 'modal-studio-kohler', 'modal-clearance-details',
@@ -72,7 +74,7 @@ while ((match = onclickRegex.exec(html)) !== null) {
 // Concatenate all JS content
 let allJs = '';
 jsFiles.forEach(f => {
-  allJs += fs.readFileSync(path.join('js', f), 'utf8') + '\n';
+  allJs += fs.readFileSync(path.join('public', 'js', f), 'utf8') + '\n';
 });
 
 let missingHandlers = [];
@@ -151,7 +153,7 @@ const vmCtx = vm.createContext(mockGlobal);
 
 // Load files in the exact order specified in index.html
 jsFiles.forEach(f => {
-  const code = fs.readFileSync(path.join('js', f), 'utf8');
+  const code = fs.readFileSync(path.join('public', 'js', f), 'utf8');
   vm.runInContext(code, vmCtx);
 });
 
