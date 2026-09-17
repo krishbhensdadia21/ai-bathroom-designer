@@ -1,13 +1,6 @@
 # KOHLER AI Bathroom Designer & Planner 🛁✨
 ### *KOHLER-MITWPU AI Research Lab Program — Track 1 Case Study Challenge*
 
-[![Vercel Deployment](https://img.shields.io/badge/Live%20Demo-Vercel%20Edge-black?style=for-the-badge&logo=vercel)](https://vercel.com/)
-[![Three.js](https://img.shields.io/badge/3D%20Engine-Three.js%20WebGL-blue?style=for-the-badge&logo=threedotjs)](https://threejs.org/)
-[![Groq AI](https://img.shields.io/badge/AI%20Engine-Groq%20Llama%203.3%2070B-orange?style=for-the-badge)](https://groq.com/)
-[![Prompt Guard](https://img.shields.io/badge/Security-Meta%20Prompt%20Guard%2022M-red?style=for-the-badge)](https://huggingface.co/meta-llama/Prompt-Guard-86M)
-[![NKBA Certified](https://img.shields.io/badge/Standards-NKBA%20%26%20ADA%20Clearance-emerald?style=for-the-badge)](https://nkba.org/)
-[![Evaluation Weight](https://img.shields.io/badge/Innovation%2045%25%20%7C%20Tech%2025%25%20%7C%20UX%2020%25%20%7C%20Impact%2010%25-amber?style=for-the-badge)](#-evaluation-criteria-alignment)
-
 ---
 
 ## 🏛️ Program & Challenge Overview
