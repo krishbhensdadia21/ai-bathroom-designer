@@ -12,10 +12,22 @@ This project is submitted as an individual case study solution for the selection
 
 ---
 
+## 📑 Official Deliverables & Submission Assets
+
+| Deliverable | Description | File / Access Link |
+|---|---|---|
+| **1. Working Model** | Live interactive 3D WebGL space planner & AI assistant deployed to production | 🔗 **[Live Vercel Application](https://kohler-ai-bathroom-designer.vercel.app/)** |
+| **2. Prompts & Workflows PDF** | Comprehensive 6-page publication-quality technical report detailing all AI prompts, system instructions, Llama Guard rules, NLP parsers, and multi-objective workflows | 📄 **[KOHLER_AI_Prompts_System_Instructions_Workflows.pdf](./KOHLER_AI_Prompts_System_Instructions_Workflows.pdf)** |
+| **3. Video Walkthrough** | Demonstration of the 3D space planner and generative AI recommendation engine | 🎥 **[Video Walkthrough Documentation](#-video-walkthrough)** |
+| **4. Presentation Deck** | Structured presentation deck on system approach, architecture, innovation, and business impact | 📊 **[Presentation Deck Summary](#-presentation-deck)** |
+
+---
+
 ## 📁 Repository Structure
 
 ```text
 kohler-ai-bathroom-designer/
+├── KOHLER_AI_Prompts_System_Instructions_Workflows.pdf  # Deliverable 2: Complete Prompts & Workflows Report
 ├── components/                   # Modular HTML Component Partials (12 files)
 │   ├── header.html               # Platform header, logo, currency selector, and investment counter
 │   ├── workspace_nav.html        # Viewport switcher (3D/2D/Walk-in), clear room, dimensions, finishes
@@ -124,8 +136,7 @@ kohler-ai-bathroom-designer/
   * Multi-currency support (**INR ₹**, **USD $**, **CAD $**).
   * Bill of Materials table with SKU part numbers, quantities, and individual prices.
   * **Studio KOHLER Specifier Data Sheet**: Professional B2B architectural tables detailing rough-in dimensions (12" toilet rough-in, 1-1/4" P-trap, 1/2" NPT valves), conduit requirements, and certifications.
-  * Export options: Print quote, copy shopping list to clipboard, export RFQ JSON, and showroom RFQ submission.
-* **In-App "About Program" Modal**: Dedicated modal accessible from the top header summarizing challenge guidelines, criteria, and deliverables.
+* **In-App Studio Specifier Modal**: Dedicated modal accessible from the top header summarizing challenge guidelines, criteria, and engineering specifications.
 
 ### 4. Business & Sustainability Impact (10% Weight)
 * **Kohler Environmental Stewardship**: Integrated calculations based on Kohler WaterSense® and Katalyst® air-induction technologies (2.2M air bubbles/minute), displaying annual water savings in liters and equivalent carbon offset (kg CO₂e).

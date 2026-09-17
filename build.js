@@ -70,13 +70,13 @@ function buildHtml() {
     console.log(`[✓] Synced js/ to public/js/`);
   }
 
-  // Sync root image assets to public/ if missing
-  for (const imgName of ['logo.png', 'ai-bot-icon.png']) {
-    const srcImg = path.join(__dirname, imgName);
-    const destImg = path.join(publicDir, imgName);
-    if (fs.existsSync(srcImg) && !fs.existsSync(destImg)) {
-      fs.copyFileSync(srcImg, destImg);
-      console.log(`[✓] Synced ${imgName} to public/${imgName}`);
+  // Sync root image and documentation assets to public/
+  for (const assetName of ['logo.png', 'ai-bot-icon.png', 'KOHLER_AI_Prompts_System_Instructions_Workflows.pdf']) {
+    const srcAsset = path.join(__dirname, assetName);
+    const destAsset = path.join(publicDir, assetName);
+    if (fs.existsSync(srcAsset)) {
+      fs.copyFileSync(srcAsset, destAsset);
+      console.log(`[✓] Synced ${assetName} to public/${assetName}`);
     }
   }
 
