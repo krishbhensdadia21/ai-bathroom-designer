@@ -6394,19 +6394,57 @@
       });
     }
 
+    function resetRoomDimensionsToDefault() {
+      roomWidth = 3.2;  // 10.5 ft
+      roomDepth = 2.8;  // 9.2 ft
+      roomHeight = 2.6; // 8.5 ft
+
+      // Reset dimensions modal sliders
+      const sliderW = document.getElementById('input-dim-width');
+      if (sliderW) sliderW.value = 3.2;
+      const sliderD = document.getElementById('input-dim-depth');
+      if (sliderD) sliderD.value = 2.8;
+      const sliderH = document.getElementById('input-dim-height');
+      if (sliderH) sliderH.value = 2.6;
+
+      // Reset modal labels
+      const lblW = document.getElementById('modal-label-width');
+      if (lblW) lblW.innerText = '10.5 ft (3.2 m)';
+      const lblD = document.getElementById('modal-label-depth');
+      if (lblD) lblD.innerText = '9.2 ft (2.8 m)';
+      const lblH = document.getElementById('modal-label-height');
+      if (lblH) lblH.innerText = '8.5 ft (2.6 m)';
+      const lblArea = document.getElementById('modal-calc-area');
+      if (lblArea) lblArea.innerText = '96.6 sq ft / 8.96 m²';
+
+      // Reset AI Assistant modal dimension inputs
+      const aiW = document.getElementById('ai-input-width');
+      if (aiW) aiW.value = '10.5';
+      const aiD = document.getElementById('ai-input-depth');
+      if (aiD) aiD.value = '9.2';
+      const aiH = document.getElementById('ai-input-height');
+      if (aiH) aiH.value = '8.5';
+      const aiArea = document.getElementById('ai-calculated-area');
+      if (aiArea) aiArea.innerText = '96.6 sq ft (8.96 m²)';
+
+      updateDimensionLabels();
+      buildRoomArchitecture();
+    }
+
     function confirmClearRoom() {
       if (confirm('Clear all placed products and reset Kohler suite?')) {
         placedProducts.forEach(p => scene.remove(p));
         placedProducts.length = 0;
         deselectActiveObject();
         setPlannerConfigurationState('reset');
+        resetRoomDimensionsToDefault();
         updateTotalBOM();
         updateClearanceVisualizer();
         updateWetWallScore();
         buildPlumbingConduits();
         resetThemeToDefault();
         resetAiEngineAndConstraints();
-        showToast('Room, Theme & AI Engine Cleared');
+        showToast('Room, Dimensions & Theme Reset to Default');
       }
     }
 
