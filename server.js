@@ -20,10 +20,10 @@ if (!GROQ_API_KEY && fs.existsSync(envPath)) {
 }
 
 const MIME = {
-  '.html': 'text/html',
-  '.css': 'text/css',
-  '.js': 'application/javascript',
-  '.json': 'application/json',
+  '.html': 'text/html; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.js': 'application/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.svg': 'image/svg+xml'
@@ -506,7 +506,14 @@ const server = http.createServer(async (req, res) => {
   // Static File Serving
   let reqPath = req.url.split('?')[0];
   if (reqPath === '/' || reqPath === '') reqPath = '/index.html';
-  const filePath = path.join(__dirname, reqPath);
+  let filePath = path.join(__dirname, reqPath);
+
+  if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+    const publicPath = path.join(__dirname, 'public', reqPath);
+    if (fs.existsSync(publicPath) && fs.statSync(publicPath).isFile()) {
+      filePath = publicPath;
+    }
+  }
 
   if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
     const ext = path.extname(filePath);
