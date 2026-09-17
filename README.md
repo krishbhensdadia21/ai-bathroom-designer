@@ -9,9 +9,7 @@ This project is submitted as an individual case study solution for the selection
 * **Core Objective**: Build an interactive AI design assistant that takes a customer's constraints (dimensions, budget limits, aesthetic themes, and device catalog specifications) and automates personalized product bundle recommendations.
 * **Expected Outcome**: An intelligent recommendation engine that outputs optimized product combinations (smart toilets, vanities, thermostatic showers, mirrors, bathtubs) fitting exact physical space and budget parameters, accompanied by an interactive 3D WebGL representation
 
----
-
-## 📑 Official Deliverables & Submission Assets
+### 📑 Official Deliverables & Submission Assets
 
 | Deliverable | Description | File / Access Link |
 |---|---|---|
@@ -20,9 +18,7 @@ This project is submitted as an individual case study solution for the selection
 | **3. Video Walkthrough** | Demonstration of the 3D space planner and generative AI recommendation engine | 🎥 **[Video Walkthrough Documentation](#-video-walkthrough)** |
 | **4. Presentation Deck** | Structured presentation deck on system approach, architecture, innovation, and business impact | 📊 **[Presentation Deck Summary](#-presentation-deck)** |
 
----
-
-## 📁 Repository Structure
+### 📁 Repository Structure
 
 ```text
 kohler-ai-bathroom-designer/
@@ -88,9 +84,7 @@ kohler-ai-bathroom-designer/
 └── logo.png                      # Root brand logo
 ```
 
----
-
-## 📊 Evaluation Criteria Alignment (100% Total Weightage)
+### 📊 Evaluation Criteria Alignment (100% Total Weightage)
 
 | Evaluation Criteria | Weight | Implementation in this Solution |
 |---|:---:|---|
@@ -99,9 +93,8 @@ kohler-ai-bathroom-designer/
 | **User Experience & Feasibility** | **20%** | Clean default empty room on load, 1-click Clear Room with automated dimension reset, manual generate trigger, unified quote BOM with multi-currency (INR, USD, CAD), and Studio Kohler specifier data sheet. |
 | **Business & Sustainability Impact** | **10%** | Alignment with Kohler's water conservation initiatives (WaterSense annual savings, carbon offset tracking) and MEP plumbing wet-wall alignment optimization reducing labor costs. |
 
----
 
-## 🚀 Architectural Breakdown & Key Innovations
+### 🚀 Architectural Breakdown & Key Innovations
 
 ### 1. Approach & Innovation (45% Weight)
 * **Dual-Pathway AI Architecture**:
@@ -142,9 +135,7 @@ kohler-ai-bathroom-designer/
 * **Plumbing Wet-Wall (MEP) Optimization**: Evaluates fixture alignment along the primary wet-wall stack, calculating a live alignment score (up to 94%) and projecting reduced plumbing labor and material costs.
 * **Direct Commercial Feasibility**: Enables Kohler showrooms and B2B trade partners to accelerate customer consultation cycles from days to minutes.
 
----
-
-## 🛁 Authentic Kohler Catalog Specifications
+### 🛁 Authentic Kohler Catalog Specifications
 
 Every product model in the planner corresponds to an authentic, production Kohler catalog item:
 
@@ -166,9 +157,7 @@ Every product model in the planner corresponds to an authentic, production Kohle
 | **Column Faucet** | Artifacts® Column Spout Faucet | `K-10129IN-4` | Vintage Edwardian column silhouette in vibrant brushed brass |
 | **Minimalist Faucet** | Composed® Single-Control Faucet | `K-73159IN-4` | Pure geometric minimalism, laminar water flow |
 
----
-
-## 🛠️ Tech Stack
+### 🛠️ Tech Stack
 
 * **Frontend**: HTML5, Vanilla JavaScript (ES6+), CSS3, Tailwind CSS, Three.js (r128), FontAwesome 6 Pro
 * **Node.js Web Server**: Node.js HTTP Server (`server.js`) with Groq Llama 3.3 proxy & Prompt Guard
@@ -178,10 +167,7 @@ Every product model in the planner corresponds to an authentic, production Kohle
 * **Testing & Quality Assurance**: Python `unittest` suite (9 test cases, 100% pass rate in <5ms)
 * **Deployment**: Vercel (`vercel.json` + `/public` CDN) & GitHub Pages compatible
 
-
----
-
-## 💻 Local Quickstart
+### 💻 Local Quickstart
 
 ### Prerequisites
 * **Node.js** (v18 or higher installed)
@@ -212,7 +198,5 @@ node server.js
 ### 4. Open in Browser
 Navigate to **`http://localhost:3000`** in any web browser.
 
----
-
-## 📄 License & Attribution
+### 📄 License & Attribution
 This project is open-source under the **MIT License**. Genuine Kohler product models, names, and design trademarks are property of **Kohler Co.** Submitted for the **KOHLER-MITWPU AI Research Lab Program**.
