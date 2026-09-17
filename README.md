@@ -33,8 +33,7 @@ kohler-ai-bathroom-designer/
 ├── package.json                  # Node dependencies & project metadata
 ├── package-lock.json             # Dependency lockfile
 ├── .env.example                  # Environment template for Groq API key
-├── README.md                     # Comprehensive technical documentation
-└── [asset images]                # UI screenshots & showcase renders
+└── README.md                     # Comprehensive technical documentation
 ```
 
 ---
