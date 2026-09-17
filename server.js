@@ -139,7 +139,149 @@ function extractRoomDimensionsFromPrompt(notes) {
   return null;
 }
 
-function parsePromptPreferences(notes, roomW = 3.2, roomD = 2.8, theme = 'Japanese Zen', autoDim = null) {
+function extractThemeFromPrompt(notes) {
+  if (!notes || typeof notes !== 'string') return null;
+  const nLow = notes.toLowerCase();
+  if (nLow.includes('zen') || nLow.includes('japanese') || nLow.includes('spa') || nLow.includes('tranquil') || nLow.includes('teak')) {
+    return 'Japanese Zen';
+  }
+  if (nLow.includes('classic') || nLow.includes('luxury') || nLow.includes('luxurious') || nLow.includes('marble') || nLow.includes('calacatta') || nLow.includes('palatial') || nLow.includes('gold') || nLow.includes('brass')) {
+    return 'Classic Luxury';
+  }
+  if (nLow.includes('industrial') || nLow.includes('chic') || nLow.includes('urban') || nLow.includes('loft') || nLow.includes('steel') || nLow.includes('crittall')) {
+    return 'Industrial Chic';
+  }
+  if (nLow.includes('waste') || nLow.includes('wastelab') || nLow.includes('eco') || nLow.includes('terrazzo') || nLow.includes('recycled')) {
+    return 'Kohler WasteLAB Eco-Luxury';
+  }
+  if (nLow.includes('minimalist') || nLow.includes('modern') || nLow.includes('clean line') || nLow.includes('simple')) {
+    return 'Minimalist Modern';
+  }
+  return null;
+}
+
+function extractInclusionsFromPrompt(notes) {
+  if (!notes || typeof notes !== 'string') return null;
+  const nLow = notes.toLowerCase().trim();
+  if (!nLow) return null;
+
+  const isPowder = nLow.includes('powder room') || nLow.includes('half bath') || nLow.includes('powder');
+  const mentionsToilet = nLow.includes('toilet') || nLow.includes('commode') || nLow.includes('bidet') || nLow.includes('wc') || nLow.includes('veil') || nLow.includes('reach');
+  const mentionsVanity = nLow.includes('vanity') || nLow.includes('sink') || nLow.includes('basin') || nLow.includes('console') || nLow.includes('brazn') || nLow.includes('jacquard') || nLow.includes('tailored');
+  const mentionsShower = nLow.includes('shower') || nLow.includes('wet room') || nLow.includes('wet-room') || nLow.includes('rainhead') || nLow.includes('revel') || nLow.includes('hydrorail');
+  const mentionsMirror = nLow.includes('mirror') || nLow.includes('verdera');
+  const mentionsTub = nLow.includes('tub') || nLow.includes('bathtub') || nLow.includes('soak') || nLow.includes('evok');
+  const noShower = nLow.includes('no shower') || nLow.includes('without shower') || nLow.includes('no-shower') || nLow.includes('remove shower') || nLow.includes('omit shower');
+
+  if (isPowder) {
+    return {
+      toilet: true,
+      vanity: true,
+      mirror: true,
+      shower: (mentionsShower && !noShower && nLow.includes('with shower')) ? true : false,
+      tub: false
+    };
+  }
+
+  if (noShower) {
+    return {
+      toilet: mentionsToilet || true,
+      vanity: mentionsVanity || true,
+      mirror: mentionsMirror || true,
+      shower: false,
+      tub: mentionsTub
+    };
+  }
+
+  // If user specified targeted fixtures without shower (e.g. "toilet, vanity, and mirror")
+  if ((mentionsToilet || mentionsVanity) && !mentionsShower && (nLow.includes('only') || nLow.includes('just') || nLow.includes('toilet and vanity') || nLow.includes('toilet, vanity') || nLow.includes('with toilet') || nLow.includes('vanity, and mirror') || nLow.includes('vanity and mirror'))) {
+    return {
+      toilet: mentionsToilet,
+      vanity: mentionsVanity,
+      mirror: mentionsMirror || true,
+      shower: false,
+      tub: mentionsTub
+    };
+  }
+
+  // Full suite default
+  return {
+    toilet: true,
+    vanity: true,
+    shower: true,
+    mirror: true,
+    tub: mentionsTub
+  };
+}
+
+function extractBudgetFromPrompt(notes) {
+  if (!notes || typeof notes !== 'string') return null;
+  const str = notes.toLowerCase();
+
+  // 1. Lakhs (e.g. "under ₹2.5 lakh", "budget 2.5 lakh", "under 2.5L", "within 2 lakh", "under 2.5 lakhs", "upto 3 lac")
+  const lakhMatch = str.match(/(?:under|below|within|budget(?:\s*of|\s*under|\s*around)?|max(?:imum)?|upto|up\s*to|target|cap|less\s*than)?\s*(?:₹|rs\.?|inr)?\s*([0-9]+(?:\.[0-9]+)?)\s*(?:lakhs?|lacs?|lac|l)\b/i);
+  if (lakhMatch && parseFloat(lakhMatch[1]) > 0 && parseFloat(lakhMatch[1]) <= 100) {
+    const val = parseFloat(lakhMatch[1]);
+    const inr = Math.round(val * 100000);
+    return {
+      amountINR: inr,
+      val: val,
+      unit: 'lakh',
+      formatted: `₹${val} Lakh (₹${inr.toLocaleString('en-IN')})`,
+      reason: `Budget capped under ₹${val} Lakh`
+    };
+  }
+
+  // 2. Thousands / K (e.g. "under 250k", "budget 200k", "under ₹250k")
+  const kMatch = str.match(/(?:under|below|within|budget(?:\s*of|\s*under)?|max(?:imum)?|upto|up\s*to)?\s*(?:₹|rs\.?|inr)?\s*([0-9]+(?:\.[0-9]+)?)\s*k\b/i);
+  if (kMatch && parseFloat(kMatch[1]) >= 10) {
+    const val = parseFloat(kMatch[1]);
+    const inr = Math.round(val * 1000);
+    return {
+      amountINR: inr,
+      val: val,
+      unit: 'k',
+      formatted: `₹${inr.toLocaleString('en-IN')}`,
+      reason: `Budget capped under ₹${inr.toLocaleString('en-IN')}`
+    };
+  }
+
+  // 3. Full Rupee amounts (e.g. "under ₹2,50,000", "budget 250000", "within ₹200000")
+  const fullInrMatch = str.match(/(?:under|below|within|budget(?:\s*of|\s*under|\s*target)?|max(?:imum)?|upto|up\s*to|less\s*than)\s*(?:₹|rs\.?|inr)?\s*([0-9]{1,3}(?:,[0-9]{2,3})+|[0-9]{5,8})\b/i);
+  if (fullInrMatch) {
+    const inr = parseInt(fullInrMatch[1].replace(/,/g, ''));
+    if (inr >= 50000 && inr <= 5000000) {
+      return {
+        amountINR: inr,
+        val: inr,
+        unit: 'inr',
+        formatted: `₹${inr.toLocaleString('en-IN')}`,
+        reason: `Budget capped under ₹${inr.toLocaleString('en-IN')}`
+      };
+    }
+  }
+
+  // 4. USD format (e.g. "under $3,000", "budget $2500")
+  const usdMatch = str.match(/(?:under|below|within|budget(?:\s*of)?|max(?:imum)?|upto|up\s*to)?\s*\$\s*([0-9]{1,3}(?:,[0-9]{3})+|[0-9]{3,6})\b/i);
+  if (usdMatch) {
+    const usd = parseInt(usdMatch[1].replace(/,/g, ''));
+    if (usd >= 500) {
+      const inr = Math.round(usd * 75);
+      return {
+        amountINR: inr,
+        amountUSD: usd,
+        val: usd,
+        unit: 'usd',
+        formatted: `$${usd.toLocaleString('en-US')}`,
+        reason: `Budget capped under $${usd.toLocaleString('en-US')}`
+      };
+    }
+  }
+
+  return null;
+}
+
+function parsePromptPreferences(notes, roomW = 3.2, roomD = 2.8, theme = 'Japanese Zen', autoDim = null, autoBudget = null) {
   if (!notes || !notes.trim()) return [];
   const nLow = notes.toLowerCase();
   const tags = [];
@@ -147,6 +289,10 @@ function parsePromptPreferences(notes, roomW = 3.2, roomD = 2.8, theme = 'Japane
   if (autoDim) {
     const sqFt = (autoDim.widthFt * autoDim.depthFt).toFixed(1);
     tags.push(`✓ Room size auto-adapted: ${autoDim.widthFt.toFixed(1)}ft × ${autoDim.depthFt.toFixed(1)}ft (${sqFt} sq ft) — ${autoDim.reason}`);
+  }
+
+  if (autoBudget) {
+    tags.push(`✓ Budget target enforced: ${autoBudget.formatted} — selected budget-compliant suite`);
   }
 
   // Atmosphere / Style
@@ -281,8 +427,10 @@ const server = http.createServer(async (req, res) => {
         const inputMode = payload.input_mode || (customerNotes ? 'natural' : 'predefined');
 
         let autoDim = null;
+        let autoBudget = null;
         if (inputMode === 'natural' && customerNotes) {
           autoDim = extractRoomDimensionsFromPrompt(customerNotes);
+          autoBudget = extractBudgetFromPrompt(customerNotes);
         }
 
         let roomW = payload.room_width_m;
@@ -301,7 +449,9 @@ const server = http.createServer(async (req, res) => {
         roomD = roomD || 2.8;
 
         let budgetNum = payload.budget_num;
-        if (!budgetNum && budget) {
+        if (autoBudget) {
+          budgetNum = autoBudget.amountINR;
+        } else if (!budgetNum && budget) {
           budgetNum = parseInt(String(budget).replace(/[^0-9]/g, '')) || 350000;
         }
         budgetNum = budgetNum || 350000;
@@ -365,7 +515,16 @@ const server = http.createServer(async (req, res) => {
         }
 
         // 3. Multi-Objective Optimization Engine
-        const optimizedBundle = generateOfflineKohlerBundle(theme || 'Minimalist Modern', budgetNum, roomW, roomD, guardScore, priorities, customerNotes, payload.inclusions, autoDim);
+        const themeFromPrompt = extractThemeFromPrompt(customerNotes);
+        const effectiveTheme = themeFromPrompt || ((theme && theme !== 'None' && theme !== 'none') ? theme : 'Minimalist Modern');
+        let effectiveInclusions = payload.inclusions;
+        if (inputMode === 'natural' && customerNotes) {
+          const promptInclusions = extractInclusionsFromPrompt(customerNotes);
+          if (promptInclusions) {
+            effectiveInclusions = promptInclusions;
+          }
+        }
+        const optimizedBundle = generateOfflineKohlerBundle(effectiveTheme, budgetNum, roomW, roomD, guardScore, priorities, customerNotes, effectiveInclusions, autoDim, autoBudget);
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(optimizedBundle));
@@ -392,7 +551,7 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 350000, roomW = 3.2, roomD = 2.8, guardScore = 0.00079, priorities = '', customerNotes = '', inclusions = null, autoDim = null) {
+function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 350000, roomW = 3.2, roomD = 2.8, guardScore = 0.00079, priorities = '', customerNotes = '', inclusions = null, autoDim = null, autoBudget = null) {
   if (typeof budgetNum === 'string') {
     budgetNum = parseInt(budgetNum.replace(/[^0-9]/g, '')) || 350000;
   }
@@ -541,7 +700,57 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     }
   ];
 
-  // ==================== TIER 2: ESSENTIAL VALUE (BUDGET-OPTIMIZED) ====================
+  const wantsTub = customerNotes && (customerNotes.toLowerCase().includes('bathtub') || customerNotes.toLowerCase().includes('tub') || customerNotes.toLowerCase().includes('soak'));
+  if (wantsTub && roomW >= 2.6 && roomD >= 2.4) {
+    signatureItems.push({
+      category: 'bathtub',
+      sku_code: 'K-1130IN-0',
+      name: 'Evok Oval Freestanding Soaking Bathtub',
+      price_inr: 115000,
+      price_usd: 1550,
+      justification: 'Cast acrylic ergonomic soaking tub with center toe-tap drain and overflow.',
+      explainability: {
+        spatial_fit: '66" × 32" freestanding footprint positioned along outer light wall',
+        budget_fit: 'Ultimate spa indulgence fixture',
+        theme_fit: `Clean organic oval geometry complementing ${theme}`,
+        plumbing_fit: 'Sub-floor center drain trap with floor-mounted tub filler rough-in'
+      }
+    });
+  }
+
+  const nLowNotes = (customerNotes || '').toLowerCase();
+  const wantsWalkInShower = nLowNotes.includes('walk-in') || nLowNotes.includes('walk in') || nLowNotes.includes('glass enclosure') || nLowNotes.includes('glass box');
+  // Check if upgrading shower to Revel walk-in glass enclosure (₹1,18,000 instead of ₹28,500) still fits under budgetNum
+  const canFitWalkInInEssential = wantsWalkInShower && (24000 + 58000 + 11200 + 118000 + 26000 <= budgetNum);
+
+  const essentialShower = canFitWalkInInEssential ? {
+    category: 'shower',
+    sku_code: 'K-706015-L',
+    name: 'Revel Walk-In Wet-Room Glass & HydroRail-R',
+    price_inr: 118000,
+    price_usd: 1580,
+    justification: 'Architectural walk-in tempered glass wet-room screen paired with HydroRail-R column, engineered to honor your walk-in shower request while strictly respecting your budget ceiling.',
+    explainability: {
+      spatial_fit: 'Open walk-in entry with zero door swing encroachment',
+      budget_fit: 'Allocates remaining budget ceiling to satisfy walk-in shower preference',
+      theme_fit: `Clean minimalist architectural glass paired with ${theme}`,
+      plumbing_fit: 'Direct wet-wall thermostatic connection'
+    }
+  } : {
+    category: 'shower',
+    sku_code: 'K-26292IN-CP',
+    name: 'Statement Multifunction Wall-Mount Showerhead',
+    price_inr: 28500,
+    price_usd: 380,
+    justification: 'Katalyst® air-induction spray delivers full drenching coverage at high efficiency.',
+    explainability: {
+      spatial_fit: 'Zero floor encroachment; installs on existing shower wall arm',
+      budget_fit: 'Saves ₹89,000 compared to full glass box enclosure',
+      theme_fit: 'Polished chrome finish matches sink hardware',
+      plumbing_fit: 'Standard 1/2" NPT female inlet connects to existing riser'
+    }
+  };
+
   const essentialItems = [
     {
       category: 'toilet',
@@ -585,20 +794,7 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
         plumbing_fit: 'Integrated flexible supply hoses for quick installation'
       }
     },
-    {
-      category: 'shower',
-      sku_code: 'K-26292IN-CP',
-      name: 'Statement Multifunction Wall-Mount Showerhead',
-      price_inr: 28500,
-      price_usd: 380,
-      justification: 'Katalyst® air-induction spray delivers full drenching coverage at high efficiency.',
-      explainability: {
-        spatial_fit: 'Zero floor encroachment; installs on existing shower wall arm',
-        budget_fit: 'Saves ₹89,000 compared to full glass box enclosure',
-        theme_fit: 'Polished chrome finish matches sink hardware',
-        plumbing_fit: 'Standard 1/2" NPT female inlet connects to existing riser'
-      }
-    },
+    essentialShower,
     {
       category: 'mirror',
       sku_code: 'K-99009IN-NA',
@@ -710,20 +906,27 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   let incVanity = inclusions ? !!inclusions.vanity : (prioStr ? prioStr.includes('vanit') : true);
   let incMirror = inclusions ? !!inclusions.mirror : (prioStr ? prioStr.includes('mirror') : false);
 
-  // If user selected none, do NOT default to all! Return zero fixtures selected
+  // If user selected none, but provided customerNotes in Custom Prompt mode, let prompt guide full suite
   if (!incToilet && !incShower && !incVanity && !incMirror) {
-    return {
-      feasible: false,
-      empty_selection: true,
-      failed_constraint: 'Zero Fixtures Selected',
-      failure_reason: 'You have unchecked all fixture options. Please check at least one fixture (Toilet, Vanity, Shower, or Mirror) to generate an AI bundle.',
-      relaxation_suggestions: [
-        'Check "Toilet" for a compact Powder Room layout',
-        'Check "Vanity & Basin" to include a wash station',
-        'Check "Shower" to include a bathing enclosure'
-      ],
-      bundle: []
-    };
+    if (customerNotes && customerNotes.trim()) {
+      incToilet = true;
+      incShower = true;
+      incVanity = true;
+      incMirror = true;
+    } else {
+      return {
+        feasible: false,
+        empty_selection: true,
+        failed_constraint: 'Zero Fixtures Selected',
+        failure_reason: 'You have unchecked all fixture options. Please check at least one fixture (Toilet, Vanity, Shower, or Mirror) to generate an AI bundle.',
+        relaxation_suggestions: [
+          'Check "Toilet" for a compact Powder Room layout',
+          'Check "Vanity & Basin" to include a wash station',
+          'Check "Shower" to include a bathing enclosure'
+        ],
+        bundle: []
+      };
+    }
   }
 
   function filterItems(items) {
@@ -734,7 +937,7 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
       if (cat.includes('faucet')) return incVanity; // faucet accompanies vanity
       if (cat.includes('shower')) return incShower;
       if (cat.includes('mirror')) return incMirror;
-      if (cat.includes('bath') || cat.includes('tub')) return incShower;
+      if (cat.includes('bath') || cat.includes('tub')) return incShower || (customerNotes && (customerNotes.toLowerCase().includes('tub') || customerNotes.toLowerCase().includes('bathtub') || customerNotes.toLowerCase().includes('soak')));
       return true;
     });
   }
@@ -808,7 +1011,7 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   const dimensionsStr = `${(roomW * 3.28084).toFixed(1)}ft x ${(roomD * 3.28084).toFixed(1)}ft`;
   const mainItemName = (activeSignature[0] && activeSignature[0].name) ? activeSignature[0].name : 'Kohler suite';
 
-  const understoodTags = parsePromptPreferences(customerNotes, roomW, roomD, theme, autoDim);
+  const understoodTags = parsePromptPreferences(customerNotes, roomW, roomD, theme, autoDim, autoBudget);
   const trimmedNotes = (customerNotes || '').trim();
   let conceptStr = `Multi-objective optimized ${theme} Kohler Suite tailored for ${dimensionsStr} (${roomArea} m² / ${(roomArea * 10.7639).toFixed(1)} sq ft).`;
   let customNoteReasoning = '';
@@ -819,6 +1022,27 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     customNoteReasoning = ` Directly satisfies your custom preferences (prioritizing comfort, water conservation, and curated material finishes).`;
   }
 
+  let activeTierKey = 'signature';
+  let defaultActiveItems = activeSignature;
+  let defaultTotals = sigTotals;
+  let defaultTierObj = sigTier;
+
+  // If budget cap from prompt is present or budgetNum is less than Signature total:
+  if (autoBudget || budgetNum < sigTotals.inr) {
+    if (essTotals.inr <= budgetNum) {
+      activeTierKey = 'essential';
+      defaultActiveItems = activeEssential;
+      defaultTotals = essTotals;
+      defaultTierObj = essTier;
+    }
+  }
+
+  let tradeoffText = `Multi-Objective Trade-off: Filtered to your ${defaultActiveItems.length} selected fixture inclusions (featuring ${mainItemName}) to achieve a composite fitness score of ${defaultTierObj.composite_score}/100 with ₹${(defaultTotals.inr).toLocaleString('en-IN')} total suite investment (${Math.round((defaultTotals.inr / budgetNum) * 100)}% of target budget).${customNoteReasoning}`;
+
+  if (autoBudget) {
+    tradeoffText = `Multi-Objective Trade-off: Budget constraint strictly enforced (${autoBudget.formatted}). Selected the ${defaultTierObj.tier_name} suite totaling ₹${(defaultTotals.inr).toLocaleString('en-IN')} (allocating ${Math.round((defaultTotals.inr / budgetNum) * 100)}% of your target budget ceiling) to achieve a composite fitness score of ${defaultTierObj.composite_score}/100.${customNoteReasoning}`;
+  }
+
   return {
     feasible: true,
     theme,
@@ -826,21 +1050,22 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     ai_understood_preferences: understoodTags,
     guard_score: guardScore,
     guard_status: "Verified Safe (Groq Prompt Guard 22M)",
-    active_tier: 'signature',
-    tradeoff_reasoning: `Multi-Objective Trade-off: Filtered to your ${activeSignature.length} selected fixture inclusions (featuring ${mainItemName}) to achieve a composite fitness score of ${sigTier.composite_score}/100 with ₹${(sigTotals.inr).toLocaleString('en-IN')} total suite investment (${Math.round((sigTotals.inr / budgetNum) * 100)}% of target budget).${customNoteReasoning}`,
-    multi_objective_scores: sigTier.multi_objective_scores,
-    composite_score: sigTier.composite_score,
+    active_tier: activeTierKey,
+    auto_adjusted_budget: autoBudget,
+    tradeoff_reasoning: tradeoffText,
+    multi_objective_scores: defaultTierObj.multi_objective_scores,
+    composite_score: defaultTierObj.composite_score,
     hard_constraints_status: "VALID",
     alternatives: {
       signature: sigTier,
       essential: essTier,
       luxury: luxTier
     },
-    bundle: activeSignature,
-    total_price_inr: sigTotals.inr,
-    total_price_usd: sigTotals.usd,
-    budget_utilization_pct: Math.min(100, Math.round((sigTotals.inr / budgetNum) * 100)),
-    sustainability: sigTier.sustainability,
+    bundle: defaultActiveItems,
+    total_price_inr: defaultTotals.inr,
+    total_price_usd: defaultTotals.usd,
+    budget_utilization_pct: Math.min(100, Math.round((defaultTotals.inr / budgetNum) * 100)),
+    sustainability: defaultTierObj.sustainability,
     wet_wall_score: 96,
     estimated_plumbing_savings_inr: 45000,
     auto_adjusted_dimensions: autoDim,

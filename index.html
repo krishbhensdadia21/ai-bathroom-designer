@@ -21,9 +21,9 @@
     :root {
       --kohler-black: #0d0f12;
       --kohler-dark: #16191e;
-      --kohler-gold: #c59b27;
-      --kohler-gold-hover: #b38a1e;
-      --kohler-gold-light: #f4e8c1;
+      --kohler-gold: #b45309;
+      --kohler-gold-hover: #92400e;
+      --kohler-gold-light: #fffbeb;
       --kohler-silver: #e2e8f0;
       --kohler-chrome: #f8fafc;
     }
@@ -70,13 +70,13 @@
       transform: translateX(-3px);
     }
     .dock-btn:hover svg {
-      stroke: #fcd34d !important;
+      stroke: #b45309 !important;
       transform: scale(1.08);
     }
     .dock-btn.active {
       background: linear-gradient(135deg, #ffffff 0%, #f4f6f8 100%) !important;
       color: #0d0f12 !important;
-      box-shadow: 0 6px 20px rgba(197, 155, 39, 0.45), 0 0 0 1.5px #c59b27 !important;
+      box-shadow: 0 6px 20px rgba(180, 83, 9, 0.40), 0 0 0 1.5px #b45309 !important;
       transform: translateX(-4px);
     }
     .dock-btn.active svg {
@@ -103,7 +103,7 @@
     }
 
     .gold-shimmer {
-      background: linear-gradient(135deg, #c59b27 0%, #ecd078 50%, #c59b27 100%);
+      background: linear-gradient(135deg, #b45309 0%, #fde68a 50%, #b45309 100%);
       background-size: 200% 200%;
       animation: shimmer 3s ease infinite;
     }
@@ -145,8 +145,8 @@
 <body class="w-screen h-screen relative overflow-hidden flex flex-col">
 
   <!-- ==================== 1. TOP KOHLER PLATFORM HEADER ==================== -->
-  <header class="h-16 bg-white/95 backdrop-blur-md border-b border-gray-200 z-40 px-6 flex items-center justify-between shadow-xs relative">
-    <!-- Left: Kohler Luxury Logo & Plan Title -->
+  <header id="main-header" class="h-16 bg-white/95 backdrop-blur-md border-b border-gray-200 z-40 px-6 flex items-center justify-between shadow-xs relative">
+    <!-- Left: Brand & Studio Pill -->
     <div class="flex items-center space-x-5">
       <div class="flex items-center space-x-2">
         <div class="bg-black text-white px-3.5 py-1 rounded tracking-widest font-black text-sm uppercase flex items-center space-x-1.5 shadow-sm">
@@ -156,34 +156,12 @@
           <i class="fa-solid fa-sparkles text-[9px] mr-1 text-amber-600"></i>AI Studio
         </span>
       </div>
-
-      <div class="h-6 w-px bg-gray-200 hidden sm:block"></div>
-
-      <!-- Project Name & Plan Code -->
-      <div class="hidden md:flex flex-col">
-        <div class="flex items-center space-x-2">
-          <span class="font-bold text-sm text-gray-900 tracking-tight" id="plan-name-display">Kohler Luxury Master Suite</span>
-          <button onclick="promptRenamePlan()" class="text-gray-400 hover:text-black transition" title="Rename bathroom project">
-            <i class="fa-solid fa-pen-to-square text-xs"></i>
-          </button>
-        </div>
-        <div class="flex items-center space-x-2 text-[11px] text-gray-500">
-          <span class="font-mono font-medium text-amber-800 bg-amber-50/80 px-1.5 py-0.2 rounded">KOHLER-AI-9021</span>
-          <span>•</span>
-          <span class="flex items-center space-x-1 text-emerald-600 font-medium">
-            <i class="fa-solid fa-cloud-arrow-up text-[10px]"></i>
-            <span id="save-status-label">Auto-saved</span>
-          </span>
-        </div>
-      </div>
     </div>
 
     <!-- Center: AI Assistant (Centrally Aligned) -->
     <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center">
-      <!-- AI Assistant Button -->
-      <button onclick="openAiAssistantModal()" class="bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white hover:from-black hover:to-black px-4 py-1.5 rounded-full font-bold text-xs shadow-lg flex items-center space-x-2 border border-amber-500/40 hover:border-amber-400 transition transform hover:-translate-y-0.5 group">
-        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-        <i class="fa-solid fa-wand-magic-sparkles text-amber-400 group-hover:scale-110 transition"></i>
+      <button onclick="openAiAssistantModal()" class="bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white hover:from-black hover:to-black px-4 py-1.5 rounded-full font-bold text-xs shadow-lg flex items-center space-x-2 border border-amber-600/40 hover:border-amber-500 transition transform hover:-translate-y-0.5 group">
+        <img src="ai-bot-icon.png" alt="AI Assistant" class="w-5 h-5 object-contain group-hover:scale-110 transition shrink-0">
         <span>AI Assistant</span>
       </button>
     </div>
@@ -201,42 +179,33 @@
 
       <!-- Live Price Counter & BOM Pill -->
       <div class="hidden sm:flex flex-col items-end mr-1">
-        <span class="text-[8px] uppercase tracking-wider text-gray-400 font-bold">Investment</span>
+        <div class="flex items-center space-x-1.5">
+          <span class="text-[8px] uppercase tracking-wider text-gray-400 font-bold">Investment</span>
+          <span id="planner-config-status" class="hidden text-[9px] font-bold px-2 py-0.5 rounded-full transition-all duration-300"></span>
+        </div>
         <div class="text-sm font-black text-gray-900 tracking-tight flex items-baseline space-x-0.5">
           <span id="currency-symbol-display">₹</span>
           <span id="header-total-price" class="text-sm font-extrabold text-black">2,93,700</span>
         </div>
       </div>
 
-      <!-- KDX WhatsApp Concierge Button -->
-      <button onclick="openKdxConciergeModal()" id="btn-open-kdx" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-full font-bold text-xs flex items-center space-x-1.5 shadow-xs hover:shadow transition" title="Kohler Digital Experience (KDX) AI Concierge">
-        <i class="fa-brands fa-whatsapp text-white text-xs"></i>
-        <span class="hidden sm:inline">KDX Concierge</span>
-      </button>
-
-      <!-- Studio KOHLER Specifier Button -->
-      <button onclick="openStudioKohlerModal()" id="btn-open-specifier" class="bg-white hover:bg-gray-100 text-gray-900 border border-gray-200 px-3 py-1.5 rounded-full font-bold text-xs flex items-center space-x-1.5 shadow-xs hover:shadow transition" title="Studio KOHLER Specifier Data Sheet for Architects">
-        <i class="fa-solid fa-compass-drafting text-blue-600 text-xs"></i>
-        <span class="hidden md:inline">Studio KOHLER</span>
-      </button>
-
-      <!-- Kohler Quote Button -->
-      <button onclick="openShoppingList()" id="btn-open-bom" class="bg-black hover:bg-gray-900 text-white px-3.5 py-1.5 rounded-full font-bold text-xs flex items-center space-x-1.5 shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
-        <i class="fa-solid fa-file-invoice text-amber-400 text-xs"></i>
-        <span>Quote</span>
-        <span id="badge-item-count" class="bg-amber-500 text-black w-4 h-4 rounded-full text-[10px] font-black flex items-center justify-center">3</span>
+      <!-- Consolidated KOHLER Design & Quote Button -->
+      <button onclick="openShoppingList()" id="btn-open-bom" class="bg-black hover:bg-gray-900 text-white px-4 py-1.5 rounded-full font-bold text-xs flex items-center space-x-2 shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5" title="KOHLER Design & Quote (Includes BOM, Studio KOHLER Specs & KDX Concierge)">
+        <i class="fa-solid fa-file-invoice text-amber-600 text-xs"></i>
+        <span>KOHLER Design & Quote</span>
+        <span id="badge-item-count" class="bg-amber-50 text-amber-800 border border-amber-200/80 w-4 h-4 rounded-full text-[10px] font-black flex items-center justify-center">3</span>
       </button>
     </div>
   </header>
 
   <!-- ==================== 2. WORKSPACE SPECIFICATION BAR ==================== -->
-  <nav class="h-11 bg-white/85 backdrop-blur-sm border-b border-gray-200/80 px-6 flex items-center justify-between text-xs select-none z-30 overflow-x-auto">
+  <nav id="workspace-subnav" class="h-11 bg-white/85 backdrop-blur-sm border-b border-gray-200/80 px-6 flex items-center justify-between text-xs select-none z-30 overflow-x-auto">
     <!-- Left: Viewport Modes (3D Orbit, 2D Floorplan, Walk-In) & Camera Controls -->
     <div class="flex items-center space-x-2 shrink-0">
       <!-- Mode Switcher -->
       <div class="bg-gray-100/90 p-0.5 rounded-full flex items-center space-x-1 border border-gray-200/80 shadow-xs">
         <button onclick="setViewMode('3d')" id="view-mode-3d" class="view-btn px-3 py-1 rounded-full font-bold text-xs text-white bg-black shadow-xs transition flex items-center space-x-1.5">
-          <i class="fa-solid fa-cube text-[11px] text-amber-400"></i>
+          <i class="fa-solid fa-cube text-[11px] text-amber-600"></i>
           <span>3D Orbit</span>
         </button>
         <button onclick="setViewMode('2d')" id="view-mode-2d" class="view-btn px-3 py-1 rounded-full font-medium text-xs text-gray-600 hover:text-black hover:bg-white transition flex items-center space-x-1.5">
@@ -266,91 +235,10 @@
 
       <div class="h-4 w-px bg-gray-200"></div>
 
-      <!-- 1-Click Standard Layout Presets -->
-      <div class="relative group">
-        <button id="btn-presets" class="bg-gray-100/90 hover:bg-gray-200 px-3 py-1 rounded-full font-bold text-xs text-gray-800 flex items-center space-x-1.5 transition border border-gray-200/80 shadow-xs">
-          <i class="fa-solid fa-layer-group text-amber-600 text-[11px]"></i>
-          <span>Presets</span>
-          <i class="fa-solid fa-chevron-down text-[8px] text-gray-400"></i>
-        </button>
-        <div class="absolute left-0 top-full mt-1.5 w-64 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200 p-2 hidden group-hover:block z-40 animate-in fade-in duration-150">
-          <div class="text-[9px] uppercase font-bold text-gray-400 px-2 py-1 tracking-wider">Standard Bathroom Presets</div>
-          <button onclick="applyLayoutPreset('powder')" class="w-full text-left px-2.5 py-1.5 rounded-xl hover:bg-amber-50 hover:text-amber-900 transition flex items-center justify-between text-xs">
-            <div>
-              <div class="font-bold">Powder Room</div>
-              <div class="text-[10px] text-gray-500">5.0 × 7.0 ft (35 sq ft)</div>
-            </div>
-            <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded font-mono font-semibold">Veil+Purist</span>
-          </button>
-          <button onclick="applyLayoutPreset('family')" class="w-full text-left px-2.5 py-1.5 rounded-xl hover:bg-amber-50 hover:text-amber-900 transition flex items-center justify-between text-xs mt-1">
-            <div>
-              <div class="font-bold">Family Bathroom</div>
-              <div class="text-[10px] text-gray-500">8.0 × 8.0 ft (64 sq ft)</div>
-            </div>
-            <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded font-mono font-semibold">Tub/Shower</span>
-          </button>
-          <button onclick="applyLayoutPreset('master')" class="w-full text-left px-2.5 py-1.5 rounded-xl hover:bg-amber-50 hover:text-amber-900 transition flex items-center justify-between text-xs mt-1">
-            <div>
-              <div class="font-bold">Luxury Master Spa</div>
-              <div class="text-[10px] text-gray-500">10.5 × 12.0 ft (126 sq ft)</div>
-            </div>
-            <span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-mono font-bold">Full Suite</span>
-          </button>
-          <button onclick="applyLayoutPreset('zen')" class="w-full text-left px-2.5 py-1.5 rounded-xl hover:bg-amber-50 hover:text-amber-900 transition flex items-center justify-between text-xs mt-1">
-            <div>
-              <div class="font-bold">Japanese Zen Wet-Room</div>
-              <div class="text-[10px] text-gray-500">9.0 × 10.0 ft (90 sq ft)</div>
-            </div>
-            <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded font-mono font-semibold">Soaking Tub</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Aesthetic Themes Dropdown -->
-      <div class="relative group">
-        <button id="btn-theme-selector" class="bg-gray-100/90 hover:bg-gray-200 px-3 py-1 rounded-full font-bold text-xs text-gray-800 flex items-center space-x-1.5 transition border border-gray-200/80 shadow-xs">
-          <i class="fa-solid fa-palette text-amber-600 text-[11px]"></i>
-          <span>Theme: <strong id="subnav-theme-label" class="text-black">Minimalist Modern</strong></span>
-          <i class="fa-solid fa-chevron-down text-[8px] text-gray-400"></i>
-        </button>
-        <div class="absolute left-0 top-full mt-1.5 w-64 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200 p-2 hidden group-hover:block z-40 animate-in fade-in duration-150">
-          <div class="text-[9px] uppercase font-bold text-gray-400 px-2 py-1 tracking-wider">Aesthetic Kohler Themes</div>
-          <button onclick="applyAestheticTheme('Minimalist Modern')" class="w-full text-left px-2.5 py-1.5 rounded-xl hover:bg-amber-50 hover:text-amber-900 transition flex items-center justify-between text-xs">
-            <div>
-              <div class="font-bold">Minimalist Modern</div>
-              <div class="text-[10px] text-gray-500">Travertine & Matte Black</div>
-            </div>
-            <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded font-mono font-semibold">Clean Lines</span>
-          </button>
-          <button onclick="applyAestheticTheme('Classic Luxury')" class="w-full text-left px-2.5 py-1.5 rounded-xl hover:bg-amber-50 hover:text-amber-900 transition flex items-center justify-between text-xs mt-1">
-            <div>
-              <div class="font-bold">Classic Luxury</div>
-              <div class="text-[10px] text-gray-500">Calacatta Gold & Brass</div>
-            </div>
-            <span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-mono font-bold">Timeless</span>
-          </button>
-          <button onclick="applyAestheticTheme('Japanese Zen')" class="w-full text-left px-2.5 py-1.5 rounded-xl hover:bg-amber-50 hover:text-amber-900 transition flex items-center justify-between text-xs mt-1">
-            <div>
-              <div class="font-bold">Japanese Zen</div>
-              <div class="text-[10px] text-gray-500">Teak Wood & Sandstone</div>
-            </div>
-            <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded font-mono font-semibold">Tranquility</span>
-          </button>
-          <button onclick="applyAestheticTheme('Industrial Chic')" class="w-full text-left px-2.5 py-1.5 rounded-xl hover:bg-amber-50 hover:text-amber-900 transition flex items-center justify-between text-xs mt-1">
-            <div>
-              <div class="font-bold">Industrial Chic</div>
-              <div class="text-[10px] text-gray-500">Raw Concrete & Crittall</div>
-            </div>
-            <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded font-mono font-semibold">Bold</span>
-          </button>
-          <button onclick="applyAestheticTheme('Kohler WasteLAB Eco-Luxury')" class="w-full text-left px-2.5 py-1.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-900 transition flex items-center justify-between text-xs mt-1">
-            <div>
-              <div class="font-bold text-emerald-950">Kohler WasteLAB®</div>
-              <div class="text-[10px] text-emerald-700">Closed-Loop Ceramic Tile</div>
-            </div>
-            <span class="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-mono font-bold">Eco</span>
-          </button>
-        </div>
+      <!-- Selected Aesthetic Theme Display Badge (Static Text Pill) -->
+      <div class="flex items-center space-x-1.5 px-3 py-1 bg-gray-100/90 rounded-full border border-gray-200/80 text-xs font-semibold text-gray-700 shadow-xs">
+        <i class="fa-solid fa-palette text-amber-600 text-[11px]"></i>
+        <span>Theme: <strong id="subnav-theme-label" class="text-black font-extrabold">Minimalist Modern</strong></span>
       </div>
 
       <div class="h-4 w-px bg-gray-200"></div>
@@ -367,6 +255,14 @@
         <button onclick="setLightingKelvin(4000)" id="btn-kelvin-4000" class="kelvin-btn px-2 py-0.5 rounded-full font-bold bg-white text-black shadow-xs transition">4000K</button>
         <button onclick="setLightingKelvin(5000)" id="btn-kelvin-5000" class="kelvin-btn px-2 py-0.5 rounded-full font-bold text-gray-600 hover:text-black transition">5000K</button>
       </div>
+
+      <div class="h-4 w-px bg-gray-200"></div>
+
+      <!-- Quick Room Dimensions Badge (Option B) -->
+      <button onclick="openDimensionsModal()" class="flex items-center space-x-1.5 px-3 py-1 bg-gray-100/90 hover:bg-gray-200/80 rounded-full border border-gray-200/80 text-xs font-semibold text-gray-700 shadow-xs transition cursor-pointer" title="Click to view & customize room dimensions">
+        <i class="fa-solid fa-ruler-combined text-amber-600 text-[11px]"></i>
+        <span>Room: <strong id="badge-room-size" class="text-black font-extrabold">10.5 ft × 9.2 ft</strong> <span class="text-gray-500 font-normal">(<span id="badge-room-area">96.6 sq ft</span>)</span></span>
+      </button>
     </div>
 
     <!-- Right: NKBA Code Compliance, Wet-Wall & Room Area -->
@@ -382,15 +278,6 @@
         <i class="fa-solid fa-faucet-drip text-blue-600"></i>
         <span id="label-wetwall-status">Wet-Wall: 94%</span>
       </button>
-
-      <div class="h-4 w-px bg-gray-200"></div>
-
-      <!-- Quick Room Area Indicator in Feet & Meters -->
-      <div class="flex items-center space-x-2 text-xs text-gray-500 font-medium">
-        <span>Room: <strong class="text-gray-900" id="badge-room-size">10.5 ft × 9.2 ft</strong> (<span id="badge-room-area">96.6 sq ft / 8.96 m²</span>)</span>
-        <span class="text-gray-300">|</span>
-        <span class="text-gray-600">Height: <strong class="text-gray-900" id="badge-room-height">8.5 ft (2.60 m)</strong></span>
-      </div>
     </div>
   </nav>
 
@@ -403,6 +290,11 @@
     <div class="absolute bottom-6 left-6 right-24 z-20 pointer-events-none flex justify-between items-center">
       <div class="flex items-center space-x-2 pointer-events-auto">
         <div class="glass-card rounded-full shadow-lg px-4 py-2 flex items-center space-x-3 text-xs font-bold text-gray-700 border border-white/70">
+          <label class="flex items-center space-x-1.5 cursor-pointer text-gray-800 font-bold hover:text-black transition" title="Toggle Clean 3D View (Hides UI controls for full 3D viewing)">
+            <input type="checkbox" id="toggle-immersive-view" onchange="toggleImmersiveView(this.checked)" class="rounded accent-amber-600 cursor-pointer">
+            <span>3D View</span>
+          </label>
+          <span class="text-gray-300">|</span>
           <label class="flex items-center space-x-1.5 cursor-pointer">
             <input type="checkbox" id="toggle-grid" onchange="toggleGridVisibility(this.checked)" class="rounded accent-amber-600 cursor-pointer">
             <span>Grid Snap</span>
@@ -417,21 +309,11 @@
             <input type="checkbox" id="toggle-clearance-chk" checked onchange="toggleClearanceZones(this.checked)" class="rounded accent-emerald-600 cursor-pointer">
             <span>Clearance Zones</span>
           </label>
-          <span class="text-gray-300">|</span>
-          <label class="flex items-center space-x-1.5 cursor-pointer">
-            <input type="checkbox" id="toggle-plumbing" onchange="togglePlumbingMarkers(this.checked)" class="rounded accent-blue-600 cursor-pointer">
-            <span>Plumbing Inlets</span>
-          </label>
         </div>
-
-        <button onclick="openBlueprintUploadModal()" class="glass-card text-gray-900 px-4 py-2 rounded-full font-bold text-xs shadow-lg flex items-center space-x-1.5 hover:bg-white transition border border-white/70 transform hover:-translate-y-0.5">
-          <i class="fa-solid fa-camera-viewfinder text-amber-600"></i>
-          <span>Scan Blueprint</span>
-        </button>
       </div>
 
       <!-- Right: Room Size, Luxury Surfaces & Clear Room (Right-Aligned) -->
-      <div class="flex items-center space-x-3 pointer-events-auto">
+      <div id="bottom-right-tools" class="flex items-center space-x-3 pointer-events-auto">
         <button onclick="openDimensionsModal()" class="glass-card text-gray-900 px-5 py-2.5 rounded-full font-extrabold text-xs shadow-xl flex items-center space-x-2 hover:bg-white transition border border-white/80 transform hover:-translate-y-0.5">
           <i class="fa-solid fa-ruler-combined text-sm text-amber-600"></i>
           <span>Room Size (<span id="btn-size-preview">10.5×9.2 ft</span>)</span>
@@ -498,16 +380,16 @@
     </div>
 
     <!-- ==================== 4. RIGHT-SIDE KOHLER PRODUCT CATALOG DOCK & DRAWER ==================== -->
-    <aside class="absolute right-0 top-0 bottom-0 z-30 flex items-center pointer-events-none select-none">
+    <aside id="catalog-sidebar" class="absolute right-0 top-0 bottom-0 z-30 flex items-center pointer-events-none select-none">
     <!-- Vertical Category Dock Icons (Floating Centered on Right Edge) -->
     <div class="bg-[#0f1217]/95 backdrop-blur-xl text-white py-3.5 px-2 rounded-l-3xl shadow-[0_12px_40px_rgba(0,0,0,0.5)] border-y border-l border-white/10 flex flex-col items-center space-y-2 pointer-events-auto transition-all duration-300 mr-0" id="vertical-dock">
-      <div class="text-[8px] uppercase font-extrabold tracking-widest text-amber-400/90 pb-1 border-b border-white/10 w-full text-center">
+      <div class="text-[8px] uppercase font-extrabold tracking-widest text-amber-500 pb-1 border-b border-white/10 w-full text-center">
         Catalog
       </div>
 
       <!-- 1. Toilets -->
       <button onclick="openCatalogCategory('toilets')" id="dock-toilets" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Smart & Classic Toilets">
-        <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M7 11h10c1.8 0 3 1.4 3 3.5 0 3.2-2.5 5.5-8 5.5s-8-2.3-8-5.5C4 12.4 5.2 11 7 11z"/>
           <path d="M8 11V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"/>
           <circle cx="12" cy="15" r="1.2" fill="currentColor"/>
@@ -517,7 +399,7 @@
 
       <!-- 2. Vanities -->
       <button onclick="openCatalogCategory('vanities')" id="dock-vanities" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Tailored Vanities & Consoles">
-        <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="11" width="18" height="9" rx="1.5"/>
           <line x1="3" y1="15.5" x2="21" y2="15.5"/>
           <path d="M8 11V9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
@@ -529,7 +411,7 @@
 
       <!-- 3. Faucets -->
       <button onclick="openCatalogCategory('faucets')" id="dock-faucets" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Luxury Faucets & Brassware">
-        <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6 20h6"/>
           <path d="M9 20V9a5 5 0 0 1 5-5h1a3 3 0 0 1 3 3v2"/>
           <path d="M15 13h5"/>
@@ -541,7 +423,7 @@
 
       <!-- 4. Showers -->
       <button onclick="openCatalogCategory('showers')" id="dock-showers" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Thermostatic Showers & Systems">
-        <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M5 4h7a4 4 0 0 1 4 4v3"/>
           <path d="M12 11h8"/>
           <line x1="13" y1="14" x2="13" y2="16.5"/>
@@ -554,7 +436,7 @@
 
       <!-- 5. Bathtubs -->
       <button onclick="openCatalogCategory('bathtubs')" id="dock-bathtubs" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Freestanding Soaking Tubs">
-        <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 11h18c0 4.2-2.8 7.5-9 7.5S3 15.2 3 11z"/>
           <path d="M5 18.5v2"/>
           <path d="M19 18.5v2"/>
@@ -565,7 +447,7 @@
 
       <!-- 6. Mirrors -->
       <button onclick="openCatalogCategory('mirrors')" id="dock-mirrors" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Verdera Smart Mirrors">
-        <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <rect x="4" y="3" width="16" height="18" rx="2.5"/>
           <rect x="6.5" y="5.5" width="11" height="13" rx="1.5" stroke-dasharray="2 1.5"/>
           <circle cx="12" cy="15" r="1.1" fill="currentColor"/>
@@ -608,19 +490,14 @@
 
   <!-- ==================== 5. GROQ AI ASSISTANT MODAL (TRACK 1 CORE) ==================== -->
   <div id="modal-ai-assistant" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col overflow-hidden border border-gray-100 animate-in fade-in duration-200">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[95vh] flex flex-col overflow-hidden border border-gray-100 animate-in fade-in duration-200">
       <!-- Modal Header -->
       <div class="px-8 py-5 bg-black text-white flex justify-between items-center border-b border-gray-800">
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-2xl bg-amber-500 text-black flex items-center justify-center font-black text-lg shadow-lg">
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <div class="flex items-center space-x-3.5">
+          <div class="w-11 h-11 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-center justify-center p-1.5 shadow-lg shrink-0 overflow-hidden">
+            <img src="logo.png" alt="Kohler AI Logo" class="w-full h-full object-contain">
           </div>
-          <div>
-            <div class="flex items-center space-x-2">
-              <h2 class="text-xl font-black tracking-tight">KOHLER AI Bathroom Designer & Planner</h2>
-            </div>
-            <p class="text-xs text-gray-400">Intelligent product bundle optimization</p>
-          </div>
+          <h2 class="text-xl font-black tracking-tight">KOHLER AI Bathroom Designer & Planner</h2>
         </div>
         <button onclick="closeAiAssistantModal()" class="text-gray-400 hover:text-white w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center transition">
           <i class="fa-solid fa-xmark text-lg"></i>
@@ -634,32 +511,17 @@
           <!-- Switchable Mode Toggle (Segmented Switcher inspired by Login / Create Account toggle) -->
           <div class="p-1 bg-gray-100/90 border border-gray-200/90 rounded-2xl flex items-center shadow-2xs">
             <button type="button" id="btn-mode-predefined" onclick="switchInputMode('predefined')" class="flex-1 py-2 px-2.5 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 bg-black text-white shadow-xs font-black text-xs cursor-pointer">
-              <i class="fa-solid fa-sliders text-amber-400 text-xs"></i>
+              <i class="fa-solid fa-sliders text-amber-500 text-xs"></i>
               <span class="tracking-tight">Predefined Constraints</span>
             </button>
             <button type="button" id="btn-mode-natural" onclick="switchInputMode('natural')" class="flex-1 py-2 px-2.5 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 text-gray-600 hover:text-black font-extrabold text-xs cursor-pointer">
-              <span class="text-amber-500 text-xs">✨</span>
+              <span class="text-amber-600 text-xs">✨</span>
               <span class="tracking-tight">Custom AI Prompt</span>
             </button>
           </div>
 
           <!-- PANE 1: Predefined Constraints -->
           <div id="pane-predefined-constraints" class="space-y-4">
-            <!-- Blueprint / Sketch Quick Trigger -->
-            <div class="flex items-center justify-between bg-amber-50/90 border border-amber-200/90 rounded-2xl p-3 shadow-xs">
-              <div class="flex items-center space-x-2.5">
-                <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-800 flex items-center justify-center font-bold text-sm">
-                  <i class="fa-solid fa-camera-viewfinder"></i>
-                </div>
-                <div>
-                  <span class="font-extrabold text-xs text-amber-950 block">Have a blueprint or floorplan sketch?</span>
-                  <span class="text-[10px] text-amber-800/80 font-medium">Extract dimensions automatically with Vision AI</span>
-                </div>
-              </div>
-              <button onclick="closeAiAssistantModal(); openBlueprintUploadModal();" class="bg-amber-500 hover:bg-amber-400 text-black px-3 py-1.5 rounded-xl font-black text-xs transition shadow-xs shrink-0 cursor-pointer">
-                Scan
-              </button>
-            </div>
 
             <!-- Dimensions (ft x ft) -->
             <div class="bg-gray-50 p-4 rounded-2xl border border-gray-200/80 space-y-3">
@@ -737,13 +599,6 @@
                   <div class="text-[10px] text-gray-500 italic mt-0.5 font-serif">"Bold. Modern. Unconventional."</div>
                   <div class="text-[10px] text-gray-400 mt-1">Veil • Concrete Trough • Matte Black • Crittall Grid</div>
                 </button>
-                <button onclick="selectAiTheme('Kohler WasteLAB Eco-Luxury')" class="ai-theme-btn text-left p-3 rounded-xl border border-emerald-200 hover:border-emerald-500 bg-emerald-50/40 transition col-span-2" data-theme="Kohler WasteLAB Eco-Luxury">
-                  <div class="flex items-center justify-between">
-                    <span class="font-bold text-xs text-emerald-900">Kohler WasteLAB® (Eco-Luxury)</span>
-                    <span class="text-[8px] bg-emerald-200 text-emerald-900 px-1 py-0.5 rounded font-mono font-bold">CIRCULAR</span>
-                  </div>
-                  <div class="text-[10px] text-emerald-800 mt-0.5">Abstra Recycled Tiles, Brazn Console & Katalyst Air-Induction Fittings</div>
-                </button>
               </div>
             </div>
 
@@ -771,20 +626,11 @@
                   <span class="font-medium text-gray-800">Mirror (LED / Smart)</span>
                 </label>
               </div>
-              <p class="text-[10px] text-gray-500 italic">Select which fixtures to include. If no options are checked, no products will be added to the room.</p>
             </div>
           </div>
 
           <!-- PANE 2: Custom Natural-Language AI Prompt -->
           <div id="pane-natural-language" class="space-y-4 hidden">
-            <!-- Assistant Description Card -->
-            <div class="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-3.5 space-y-1 shadow-2xs">
-              <div class="flex items-center space-x-2 text-amber-950 font-black text-xs">
-                <span class="text-amber-600 text-sm">✨</span>
-                <span class="uppercase tracking-wider">Natural-Language Design Assistant</span>
-              </div>
-              <p class="text-[11px] text-amber-900 leading-snug">Describe your dream bathroom in your own words. AI will interpret your intent, extract materials, storage, and layout rules, and synthesize a compliant Kohler suite.</p>
-            </div>
 
             <!-- Large Textarea -->
             <div class="space-y-1.5 bg-white p-4 rounded-2xl border border-gray-200/90 shadow-2xs">
@@ -819,25 +665,25 @@
               <span class="text-[9px] font-black text-emerald-800 uppercase tracking-wider bg-emerald-200/80 px-2 py-0.5 rounded-lg shrink-0">Auto-Applied</span>
             </div>
 
-            <!-- Inspiration Prompt Chips -->
-            <div class="space-y-1.5 bg-gray-50/80 p-3.5 rounded-2xl border border-gray-200/80 shadow-2xs">
-              <div class="flex items-center justify-between text-[10px] text-gray-500 font-bold uppercase tracking-wider">
-                <span>Inspiration Chips (Click to append):</span>
+            <!-- Dynamic AI Target Budget Indicator (Active only in Custom AI Prompt when budget is detected) -->
+            <div id="ai-auto-budget-badge" class="hidden flex items-center justify-between p-3 bg-amber-50/90 border border-amber-200/90 rounded-2xl text-xs text-amber-950 shadow-2xs transition">
+              <div class="flex items-center space-x-2.5">
+                <span class="w-7 h-7 rounded-xl bg-amber-600 text-white flex items-center justify-center text-xs font-black shadow-xs shrink-0">💰</span>
+                <div>
+                  <div class="font-black text-amber-950 text-xs flex items-center space-x-1.5">
+                    <span>AI Target Budget Enforced:</span>
+                    <span id="ai-auto-budget-amount" class="font-mono text-amber-800 font-extrabold text-xs">Under ₹2.5 Lakh (₹2,50,000)</span>
+                  </div>
+                  <div class="text-[10px] text-amber-700 font-medium" id="ai-auto-budget-reason">Auto-selecting fixtures within your budget ceiling</div>
+                </div>
               </div>
-              <div class="flex flex-wrap gap-1.5">
-                <button type="button" onclick="appendPromptChip('Luxury spa atmosphere with warm atmospheric lighting')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2.5 py-1 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">✨ Luxury spa</button>
-                <button type="button" onclick="appendPromptChip('Maximize storage with deep soft-close vanity drawers and medicine cabinet')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2.5 py-1 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">📦 More storage</button>
-                <button type="button" onclick="appendPromptChip('Family-friendly design safe for children and elderly parents')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2.5 py-1 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">👨‍👩‍👧 Family-friendly</button>
-                <button type="button" onclick="appendPromptChip('Eco-friendly with Kohler WaterSense dual-flush fixtures and Katalyst aerators')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2.5 py-1 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">🌱 Eco-friendly</button>
-                <button type="button" onclick="appendPromptChip('Minimalist clean lines with maximized open floor space')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2.5 py-1 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">⚪ Minimalist</button>
-                <button type="button" onclick="appendPromptChip('Accessibility-oriented with wide walkways and ADA chair-height toilet')" class="text-[10px] bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 px-2.5 py-1 rounded-lg transition hover:border-black shadow-2xs cursor-pointer">♿ Accessibility</button>
-              </div>
+              <span class="text-[9px] font-black text-amber-800 uppercase tracking-wider bg-amber-200/80 px-2 py-0.5 rounded-lg shrink-0">Budget-Applied</span>
             </div>
 
             <!-- Pro Tips -->
             <div class="p-3 bg-white rounded-2xl border border-gray-200/80 shadow-2xs text-[11px] text-gray-600 space-y-1">
               <span class="font-bold text-gray-900 block text-xs flex items-center space-x-1.5">
-                <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                <i class="fa-solid fa-lightbulb text-amber-600"></i>
                 <span>Pro Tips for Custom Prompts:</span>
               </span>
               <ul class="list-disc list-inside space-y-0.5 text-gray-500 text-[10px] pl-1">
@@ -849,14 +695,31 @@
           </div>
 
           <!-- Submit Action Button -->
-          <button onclick="triggerGroqAiRecommendation()" id="btn-generate-ai" class="w-full bg-black hover:bg-gray-900 text-white py-3.5 rounded-2xl font-black text-sm shadow-xl flex items-center justify-center space-x-2 border border-amber-500/50 hover:border-amber-400 transition transform hover:-translate-y-0.5">
-            <i class="fa-solid fa-bolt text-amber-400"></i>
+          <button onclick="triggerGroqAiRecommendation()" id="btn-generate-ai" class="w-full bg-black hover:bg-gray-900 text-white py-3.5 rounded-2xl font-black text-sm shadow-xl flex items-center justify-center space-x-2 border border-amber-600/50 hover:border-amber-500 transition transform hover:-translate-y-0.5">
+            <i class="fa-solid fa-bolt text-amber-500"></i>
             <span>Generate Optimized Kohler Bundle (Groq AI)</span>
           </button>
         </div>
 
         <!-- Right: AI Recommendation Output & 3D Apply (7 cols) -->
         <div class="lg:col-span-7 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-gray-100 lg:pl-8 space-y-3">
+          <!-- Empty / Initial State (Shown when cleared or awaiting user inputs) -->
+          <div id="ai-empty-container" class="hidden flex-1 flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-gray-200 rounded-3xl bg-gray-50/60 space-y-4 my-auto animate-in fade-in duration-200 min-h-[360px]">
+            <div class="w-16 h-16 rounded-3xl bg-amber-600/15 text-amber-700 flex items-center justify-center text-2xl shadow-inner border border-amber-200/60">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <div class="space-y-1.5 max-w-sm">
+              <h4 class="text-base font-extrabold text-gray-900">AI Engine Ready</h4>
+              <p class="text-xs text-gray-500 leading-relaxed">
+                Room and constraints have been reset. Select your fixtures or type your wishlist prompt on the left, then click <strong>Generate Optimized Kohler Bundle</strong> to synthesize your custom suite.
+              </p>
+            </div>
+            <div class="flex items-center space-x-2 text-[11px] font-bold text-gray-500 bg-white px-3.5 py-1.5 rounded-full border border-gray-200 shadow-2xs">
+              <span class="w-2 h-2 rounded-full bg-amber-600 animate-pulse"></span>
+              <span>Awaiting User Inputs</span>
+            </div>
+          </div>
+
           <!-- Impossible Case Notification Container (shown when no feasible configuration found) -->
           <div id="ai-impossible-container" class="hidden p-5 bg-rose-50/95 border-2 border-rose-300 rounded-2xl space-y-3 animate-in fade-in duration-200 shadow-sm">
             <div class="flex items-center space-x-2 text-rose-900">
@@ -873,7 +736,7 @@
             </p>
             <div class="p-3 bg-white/90 rounded-xl border border-rose-200 space-y-1.5">
               <span class="text-[10px] font-black uppercase tracking-wider text-rose-900 block flex items-center space-x-1.5">
-                <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                <i class="fa-solid fa-lightbulb text-amber-600"></i>
                 <span>Actionable Relaxation Suggestions:</span>
               </span>
               <ul class="text-xs text-gray-700 space-y-1 list-disc list-inside font-medium" id="ai-impossible-suggestions">
@@ -912,72 +775,8 @@
               </div>
             </div>
 
-            <!-- 3 Selectable Alternative Tiers -->
-            <div class="mt-3 space-y-1.5">
-              <div class="flex justify-between items-center text-[10px] font-bold text-gray-500 uppercase tracking-wider">
-                <span>Select Candidate Bundle Architecture:</span>
-                <span class="text-amber-700" id="ai-active-tier-tag">Signature Balanced (Best Multi-Objective)</span>
-              </div>
-              <div class="grid grid-cols-3 gap-1.5 p-1 bg-gray-100 rounded-xl text-xs font-bold" id="ai-alternative-tabs">
-                <button onclick="switchAiAlternativeTier('signature')" id="tab-tier-signature" class="py-2 px-2 rounded-lg bg-black text-white shadow-xs transition text-center">
-                  <div class="flex items-center justify-center space-x-1">
-                    <i class="fa-solid fa-star text-amber-400 text-[10px]"></i>
-                    <span>Signature</span>
-                  </div>
-                  <span class="block text-[9px] text-amber-300 font-mono mt-0.5" id="tab-price-signature">₹2,93,700</span>
-                </button>
-                <button onclick="switchAiAlternativeTier('essential')" id="tab-tier-essential" class="py-2 px-2 rounded-lg text-gray-700 hover:bg-white transition text-center">
-                  <span>Essential Value</span>
-                  <span class="block text-[9px] text-gray-500 font-mono mt-0.5" id="tab-price-essential">₹1,47,700</span>
-                </button>
-                <button onclick="switchAiAlternativeTier('luxury')" id="tab-tier-luxury" class="py-2 px-2 rounded-lg text-gray-700 hover:bg-white transition text-center">
-                  <span>Masterpiece</span>
-                  <span class="block text-[9px] text-purple-700 font-mono mt-0.5" id="tab-price-luxury">₹5,18,600</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Authentic 6-Metric Multi-Objective Scorecard Breakdown -->
-            <div class="grid grid-cols-6 gap-1 mt-2.5 text-center text-[10px]">
-              <div class="bg-gray-50 border border-gray-200/80 rounded-lg p-1.5">
-                <span class="text-gray-400 block font-bold text-[8px] uppercase">SPATIAL</span>
-                <strong class="text-emerald-700 font-mono text-xs" id="score-spatial">98%</strong>
-              </div>
-              <div class="bg-gray-50 border border-gray-200/80 rounded-lg p-1.5">
-                <span class="text-gray-400 block font-bold text-[8px] uppercase">BUDGET</span>
-                <strong class="text-blue-700 font-mono text-xs" id="score-budget">94%</strong>
-              </div>
-              <div class="bg-gray-50 border border-gray-200/80 rounded-lg p-1.5">
-                <span class="text-gray-400 block font-bold text-[8px] uppercase">STYLE</span>
-                <strong class="text-amber-700 font-mono text-xs" id="score-theme">97%</strong>
-              </div>
-              <div class="bg-gray-50 border border-gray-200/80 rounded-lg p-1.5">
-                <span class="text-gray-400 block font-bold text-[8px] uppercase">FUNCTION</span>
-                <strong class="text-indigo-700 font-mono text-xs" id="score-function">95%</strong>
-              </div>
-              <div class="bg-gray-50 border border-gray-200/80 rounded-lg p-1.5">
-                <span class="text-gray-400 block font-bold text-[8px] uppercase">ECO-WATER</span>
-                <strong class="text-teal-700 font-mono text-xs" id="score-sustainability">92%</strong>
-              </div>
-              <div class="bg-gray-50 border border-gray-200/80 rounded-lg p-1.5">
-                <span class="text-gray-400 block font-bold text-[8px] uppercase">WET-WALL</span>
-                <strong class="text-purple-700 font-mono text-xs" id="score-wetwall">96%</strong>
-              </div>
-            </div>
-
-            <!-- "Why this recommendation?" Transparent AI Rationale Box -->
-            <div class="mt-2.5 p-3 bg-amber-50/90 border border-amber-200/80 rounded-xl text-xs flex items-start space-x-2.5">
-              <i class="fa-solid fa-scale-balanced text-amber-600 text-sm mt-0.5 shrink-0"></i>
-              <div>
-                <span class="font-black text-amber-950 block text-[11px]">Why this recommendation?</span>
-                <p class="text-[11px] text-amber-900 mt-0.5 leading-snug" id="ai-tradeoff-text">
-                  Selected because it fits the available 10.5ft wet-wall with 29.4" front clearance (exceeding NKBA 21" min), satisfies the smart-toilet requirement, stays within budget, and achieves the highest style compatibility.
-                </p>
-              </div>
-            </div>
-
             <!-- ✨ AI UNDERSTOOD Compact Area (Shown when custom prompt has been entered) -->
-            <div id="ai-understood-container" class="hidden mt-2 p-3 bg-amber-50/90 border border-amber-300/90 rounded-xl text-xs space-y-1.5 animate-in fade-in duration-200 shadow-2xs">
+            <div id="ai-understood-container" class="hidden mt-2 p-3 bg-amber-50/90 border border-amber-200/90 rounded-xl text-xs space-y-1.5 animate-in fade-in duration-200 shadow-2xs">
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-1.5 text-amber-950 font-black text-[11px] uppercase tracking-wider">
                   <span class="text-amber-600">✨</span>
@@ -998,32 +797,36 @@
               </p>
             </div>
 
-            <!-- Recommended Products List with Explainable Badges -->
-            <div class="mt-2.5">
-              <h4 class="text-xs font-extrabold text-gray-800 uppercase tracking-wider mb-1.5 flex items-center justify-between">
-                <span>Selected Candidate Fixtures</span>
-                <span class="text-[11px] font-bold text-emerald-700 font-mono" id="ai-bundle-total-preview">₹2,93,700</span>
-              </h4>
+            <!-- Recommended Products List with Explainable Badges (Expanded & Un-congested) -->
+            <div class="mt-3">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="text-xs font-black text-gray-900 uppercase tracking-wider flex items-center space-x-2">
+                  <span>Selected Candidate Fixtures</span>
+                  <span class="text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full font-mono font-bold" id="ai-bundle-count-badge">4 items</span>
+                </h4>
+                <div class="flex items-center space-x-1.5">
+                  <span class="text-[10px] text-gray-400 font-medium">Suite Total:</span>
+                  <span class="text-xs font-black text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full" id="ai-bundle-total-preview">₹2,93,700</span>
+                </div>
+              </div>
 
-              <div class="space-y-2 max-h-[190px] overflow-y-auto custom-scroll pr-1" id="ai-bundle-items-container">
-                <!-- Injected via JavaScript with 4 explainability badges each -->
+              <div class="space-y-3 max-h-[460px] overflow-y-auto custom-scroll pr-1.5 pb-1" id="ai-bundle-items-container">
+                <!-- Injected via JavaScript with spacious, un-congested cards -->
               </div>
             </div>
 
-            <!-- Plumbing Wet-Wall Optimization Card -->
-            <div class="mt-2 text-xs">
-              <div class="bg-blue-50/90 border border-blue-200/80 rounded-xl p-2 flex items-center space-x-2">
-                <i class="fa-solid fa-faucet-drip text-blue-600 text-sm shrink-0"></i>
-                <div>
-                  <div class="text-[9px] text-blue-800 font-bold uppercase tracking-wider">Plumbing Wet-Wall Stack</div>
-                  <div class="font-black text-blue-950 font-mono text-xs" id="ai-wetwall-score">96% Stack Optimized (Save ₹42,000)</div>
-                </div>
+            <!-- Plumbing Wet-Wall Optimization Strip (Compact & Clean) -->
+            <div class="mt-2.5 bg-blue-50/70 border border-blue-200/70 rounded-xl px-3 py-2 flex items-center justify-between text-xs">
+              <div class="flex items-center space-x-2 text-blue-900 font-bold text-[11px]">
+                <i class="fa-solid fa-faucet-drip text-blue-600 text-xs"></i>
+                <span>Plumbing Wet-Wall Alignment:</span>
               </div>
+              <span class="font-black text-blue-950 font-mono text-xs" id="ai-wetwall-score">96% Stack Optimized (Save ₹42,000)</span>
             </div>
           </div>
 
           <!-- Bottom: Budget Tracker & Apply Button -->
-          <div class="pt-4 border-t border-gray-100 space-y-3">
+          <div id="ai-apply-section" class="pt-4 border-t border-gray-100 space-y-3">
             <div class="flex justify-between items-center text-xs">
               <span class="text-gray-500 font-medium">Budget Utilization:</span>
               <span class="font-extrabold text-gray-900 font-mono" id="ai-utilization-label">84% (Savings: ₹56,300)</span>
@@ -1032,7 +835,7 @@
               <div id="ai-utilization-bar" class="h-full bg-black rounded-full" style="width: 84%"></div>
             </div>
 
-            <button onclick="applyAiBundleToBathroom()" class="w-full bg-amber-500 hover:bg-amber-400 text-black py-3.5 rounded-2xl font-black text-sm shadow-xl flex items-center justify-center space-x-2 transition transform hover:-translate-y-0.5">
+            <button id="btn-apply-ai-bundle" onclick="applyAiBundleToBathroom()" class="w-full bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700 hover:from-amber-800 hover:to-amber-800 text-white border border-amber-400/40 py-3.5 rounded-2xl font-black text-sm shadow-xl flex items-center justify-center space-x-2 transition transform hover:-translate-y-0.5 cursor-pointer">
               <i class="fa-solid fa-wand-magic"></i>
               <span>Apply AI Bundle to 3D & 2D Bathroom</span>
             </button>
@@ -1155,16 +958,26 @@
       <!-- Header -->
       <div class="p-6 bg-black text-white flex justify-between items-center">
         <div>
-          <div class="flex items-center space-x-2">
-            <span class="font-black tracking-widest text-base">KOHLER</span>
-            <span class="text-xs bg-amber-500 text-black px-2 py-0.5 rounded font-black">OFFICIAL SPECIFICATION</span>
-          </div>
-          <h2 class="text-lg font-extrabold mt-1">Bathroom Architectural Bill of Materials (BOM)</h2>
+          <h2 class="text-lg font-extrabold">KOHLER Design & Specification Quote</h2>
           <span class="text-xs text-gray-400 font-mono" id="bom-room-dimensions-label">Room: 10.5 ft × 9.2 ft</span>
         </div>
         <button onclick="closeShoppingList()" class="text-gray-400 hover:text-white w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center transition no-print">
           <i class="fa-solid fa-xmark text-lg"></i>
         </button>
+      </div>
+
+      <!-- Integrated Tools Quick Bar (Studio Kohler) -->
+      <div class="bg-gray-900 px-6 py-2.5 flex items-center justify-between border-t border-gray-800 text-xs">
+        <div class="text-gray-300 text-[11px] font-medium flex items-center space-x-2">
+          <i class="fa-solid fa-layer-group text-amber-500 text-xs"></i>
+          <span>Design Services</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button onclick="openStudioKohlerModal()" class="bg-blue-600/20 hover:bg-blue-600/40 text-blue-300 border border-blue-400/40 px-3 py-1 rounded-lg font-bold text-[11px] flex items-center space-x-1.5 transition" title="Studio KOHLER Specifier Data Sheet">
+            <i class="fa-solid fa-compass-drafting text-blue-400"></i>
+            <span>Studio KOHLER</span>
+          </button>
+        </div>
       </div>
 
       <!-- Item List Container -->
@@ -1181,7 +994,7 @@
             <i class="fa-solid fa-print"></i>
             <span>Print Sheet</span>
           </button>
-          <button onclick="exportKohlerRfqJson()" class="px-4 py-2.5 rounded-xl border border-amber-400 bg-amber-50 text-amber-950 hover:bg-amber-100 text-xs font-bold transition flex items-center space-x-1.5">
+          <button onclick="exportKohlerRfqJson()" class="px-4 py-2.5 rounded-xl border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100 text-xs font-bold transition flex items-center space-x-1.5">
             <i class="fa-solid fa-file-code text-amber-600"></i>
             <span>Export RFQ JSON</span>
           </button>
@@ -1206,8 +1019,8 @@
       <!-- Header -->
       <div class="px-6 py-4 bg-black text-white flex justify-between items-center">
         <div class="flex items-center space-x-3">
-          <div class="w-9 h-9 rounded-xl bg-amber-500 text-black flex items-center justify-center font-black text-base shadow-sm">
-            <i class="fa-solid fa-camera-viewfinder"></i>
+          <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 border border-amber-200/80 flex items-center justify-center font-black text-base shadow-sm">
+            <i class="fa-solid fa-drafting-compass"></i>
           </div>
           <div>
             <h2 class="text-base font-extrabold tracking-tight">Multimodal Blueprint & CAD Scanner</h2>
@@ -1222,7 +1035,7 @@
       <!-- Body -->
       <div class="p-6 overflow-y-auto custom-scroll space-y-4">
         <!-- Dropzone / Blueprint Preview Area -->
-        <div id="blueprint-dropzone" onclick="triggerBlueprintFileInput()" class="relative border-2 border-dashed border-gray-300 hover:border-amber-500 bg-gray-50/70 hover:bg-amber-50/20 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer transition group overflow-hidden">
+        <div id="blueprint-dropzone" onclick="triggerBlueprintFileInput()" class="relative border-2 border-dashed border-gray-300 hover:border-amber-600 bg-gray-50/70 hover:bg-amber-50/20 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer transition group overflow-hidden">
           <input type="file" id="blueprint-file-input" accept="image/*,.pdf" onchange="handleBlueprintFileSelected(event)" class="hidden">
           
           <!-- Blueprint Canvas & Laser Scanner -->
@@ -1232,7 +1045,7 @@
             
             <!-- Idle Placeholder Message (if no image loaded) -->
             <div id="blueprint-idle-hint" class="absolute inset-0 flex flex-col items-center justify-center text-white/70 pointer-events-none p-4 text-center">
-              <i class="fa-solid fa-cloud-arrow-up text-3xl mb-2 text-amber-400 group-hover:scale-110 transition-transform"></i>
+              <i class="fa-solid fa-cloud-arrow-up text-3xl mb-2 text-amber-500 group-hover:scale-110 transition-transform"></i>
               <span class="text-xs font-bold text-white">Click or drag architectural blueprint / sketch here</span>
               <span class="text-[10px] text-gray-400 mt-0.5">Supports PNG, JPG, CAD export, or hand-drawn layouts</span>
             </div>
@@ -1243,14 +1056,14 @@
         <div class="space-y-1.5">
           <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Or Load Instant Architectural Test Plans:</span>
           <div class="grid grid-cols-2 gap-2">
-            <button onclick="loadSampleBlueprint('master')" class="bg-gray-100 hover:bg-amber-50 hover:border-amber-300 border border-gray-200 p-2.5 rounded-xl text-left transition flex items-center space-x-2">
+            <button onclick="loadSampleBlueprint('master')" class="bg-gray-100 hover:bg-amber-50 hover:border-amber-400 border border-gray-200 p-2.5 rounded-xl text-left transition flex items-center space-x-2">
               <i class="fa-solid fa-drafting-compass text-amber-600 text-sm"></i>
               <div>
                 <div class="text-xs font-bold text-gray-900">Master Suite CAD</div>
                 <div class="text-[10px] text-gray-500">10.5 × 9.2 ft • Wet-Wall Stack</div>
               </div>
             </button>
-            <button onclick="loadSampleBlueprint('powder')" class="bg-gray-100 hover:bg-amber-50 hover:border-amber-300 border border-gray-200 p-2.5 rounded-xl text-left transition flex items-center space-x-2">
+            <button onclick="loadSampleBlueprint('powder')" class="bg-gray-100 hover:bg-amber-50 hover:border-amber-400 border border-gray-200 p-2.5 rounded-xl text-left transition flex items-center space-x-2">
               <i class="fa-solid fa-ruler-combined text-amber-600 text-sm"></i>
               <div>
                 <div class="text-xs font-bold text-gray-900">Powder Room Blueprint</div>
@@ -1308,7 +1121,7 @@
         <button onclick="closeBlueprintUploadModal()" class="px-4 py-2 rounded-xl text-gray-600 hover:text-black font-bold text-xs transition">
           Cancel
         </button>
-        <button onclick="applyExtractedBlueprint()" id="btn-apply-blueprint" class="bg-amber-500 hover:bg-amber-400 text-black px-6 py-2.5 rounded-full font-black text-xs shadow-lg transition flex items-center space-x-2">
+        <button onclick="applyExtractedBlueprint()" id="btn-apply-blueprint" class="bg-amber-600 hover:bg-amber-700 text-white border border-amber-400/30 px-6 py-2.5 rounded-full font-black text-xs shadow-lg transition flex items-center space-x-2">
           <i class="fa-solid fa-wand-magic-sparkles"></i>
           <span>Apply to 3D Planner & Auto-Furnish</span>
         </button>
@@ -1323,7 +1136,7 @@
       <!-- Header -->
       <div class="px-6 py-4 bg-black text-white flex justify-between items-center">
         <div class="flex items-center space-x-3">
-          <div class="w-9 h-9 rounded-xl bg-amber-500 text-black flex items-center justify-center font-black text-base shadow-sm">
+          <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 border border-amber-200/80 flex items-center justify-center font-black text-base shadow-sm">
             <i class="fa-solid fa-store"></i>
           </div>
           <div>
@@ -1375,7 +1188,7 @@
         </div>
 
         <button onclick="submitShowroomRfq()" class="w-full bg-black hover:bg-gray-900 text-white py-3.5 rounded-2xl font-black text-xs shadow-xl transition flex items-center justify-center space-x-2">
-          <i class="fa-solid fa-paper-plane text-amber-400"></i>
+          <i class="fa-solid fa-paper-plane text-amber-500"></i>
           <span>Send Technical Spec & Request Dealer Quote</span>
         </button>
       </div>
@@ -1480,7 +1293,7 @@
               <span>Print Specification</span>
             </button>
             <button onclick="copySpecifierTable()" class="bg-black hover:bg-gray-900 text-white px-3.5 py-2 rounded-xl font-bold text-xs flex items-center space-x-1.5 shadow-xs transition">
-              <i class="fa-solid fa-copy text-amber-400"></i>
+              <i class="fa-solid fa-copy text-amber-500"></i>
               <span>Copy Cut Sheet Data</span>
             </button>
           </div>
@@ -1588,7 +1401,8 @@
 
     let scene, camera, renderer, controls;
     let roomWidth = 3.2, roomDepth = 2.8, roomHeight = 2.6; // in meters (10.5 ft x 9.2 ft)
-    let floorMesh, backWallMesh, leftWallMesh;
+    let floorMesh, backWallMesh, leftWallMesh, rightWallMesh, frontWallMesh;
+    let roomWallDefinitions = [];
     let doorGroup, plumbingGroup;
     let clearanceGroup, wetWallGroup, floorplan2DGroup;
     let isClearanceVisible = true;
@@ -2321,6 +2135,45 @@
         },
         builder: buildComposedFaucet
       },
+      {
+        id: 'parallel-faucet',
+        series: 'PARALLEL',
+        art: 'K-22536IN-4',
+        name: 'Parallel Single-Control Monoblock Faucet',
+        dim: '6x7x8 in (15x18x20 cm)',
+        desc: 'Sleek single-lever brass faucet engineered for high durability and ease of cleaning.',
+        price_inr: 11200,
+        price_usd: 150,
+        category: 'faucets',
+        defaultFinish: 'chrome',
+        width_m: 0.15,
+        depth_m: 0.18,
+        height_m: 0.22,
+        styles: ['minimalist', 'modern', 'zen', 'classic', 'wastelab'],
+        installation: {
+          rough_in_in: 'Single-hole 1-3/8" deck mount',
+          drain_type: 'Clicker drain assembly included',
+          electrical_req: 'None',
+          water_supply: 'Flexible braided supply hoses',
+          min_clearance_front_m: 0.300,
+          min_clearance_side_m: 0.150
+        },
+        compatibility: {
+          requires_wet_wall: false,
+          max_wet_wall_dist_m: 1.20,
+          compatible_with: ['jacquard-vanity', 'brazn-console', 'tailored-dual-vanity']
+        },
+        sustainability: {
+          flush_gpf: 0,
+          flow_gpm: 1.20,
+          baseline_flow_gpm: 2.20,
+          power_watts: 0,
+          recycled_content_pct: 35,
+          epa_watersense: true,
+          annual_water_savings_l: 16580
+        },
+        builder: buildPuristFaucet
+      },
 
       // THERMOSTATIC SHOWERS
       {
@@ -2475,6 +2328,44 @@
           flush_gpf: 0,
           flow_gpm: 0,
           power_watts: 25, // High-efficiency CRI 90+ LED illumination
+          recycled_content_pct: 20,
+          epa_watersense: false,
+          annual_water_savings_l: 0
+        },
+        builder: buildVerderaMirror
+      },
+      {
+        id: 'verdera-30-mirror',
+        series: 'VERDERA',
+        art: 'K-99009IN-NA',
+        name: 'Verdera 30" Lighted LED Mirror',
+        dim: '30x30 in (76x76 cm)',
+        desc: 'Perimeter LED strip lighting with high CRI (90+) for accurate natural task lighting.',
+        price_inr: 26000,
+        price_usd: 350,
+        category: 'mirrors',
+        defaultFinish: 'chrome',
+        width_m: 0.76,
+        depth_m: 0.08,
+        height_m: 0.76,
+        styles: ['minimalist', 'modern', 'zen', 'classic', 'industrial', 'wastelab'],
+        installation: {
+          rough_in_in: 'Standard 120V hardwire junction box',
+          drain_type: 'None',
+          electrical_req: '120V hardwire outlet',
+          water_supply: 'None',
+          min_clearance_front_m: 0.300,
+          min_clearance_side_m: 0.100
+        },
+        compatibility: {
+          requires_wet_wall: true,
+          max_wet_wall_dist_m: 0.65,
+          compatible_with: ['jacquard-vanity', 'brazn-console', 'tailored-dual-vanity']
+        },
+        sustainability: {
+          flush_gpf: 0,
+          flow_gpm: 0,
+          power_watts: 20,
           recycled_content_pct: 20,
           epa_watersense: false,
           annual_water_savings_l: 0
@@ -3455,6 +3346,7 @@
       while (themeAccentsGroup.children.length > 0) {
         themeAccentsGroup.remove(themeAccentsGroup.children[0]);
       }
+      if (!themeName || themeName === 'None' || themeName === 'none') return;
 
       const isMinimalist = themeName.toLowerCase().includes('minimalist');
       const isClassic = themeName.toLowerCase().includes('classic');
@@ -3647,6 +3539,10 @@
     }
 
     function applyAestheticTheme(themeName) {
+      if (!themeName || themeName === 'None' || themeName === 'none') {
+        resetThemeToDefault();
+        return;
+      }
       currentSelectedTheme = themeName;
 
       // 1. Update walls & floor procedural textures and physical parameters
@@ -3684,20 +3580,24 @@
         floorRoughness = 0.45;
       }
 
-      if (backWallMesh && backWallMesh.material) {
-        const wTex = generateWallTileTexture(wallType, roomWidth, roomHeight);
-        backWallMesh.material.map = wTex;
-        backWallMesh.material.roughness = wallRoughness;
-        backWallMesh.material.metalness = wallMetalness;
-        backWallMesh.material.needsUpdate = true;
-      }
-      if (leftWallMesh && leftWallMesh.material) {
-        const wTex = generateWallTileTexture(wallType, roomWidth, roomHeight);
-        leftWallMesh.material.map = wTex;
-        leftWallMesh.material.roughness = wallRoughness;
-        leftWallMesh.material.metalness = wallMetalness;
-        leftWallMesh.material.needsUpdate = true;
-      }
+      const wTexX = generateWallTileTexture(wallType, roomWidth, roomHeight);
+      const wTexZ = generateWallTileTexture(wallType, roomDepth, roomHeight);
+      [backWallMesh, frontWallMesh].forEach(mesh => {
+        if (mesh && mesh.material) {
+          mesh.material.map = wTexX;
+          mesh.material.roughness = wallRoughness;
+          mesh.material.metalness = wallMetalness;
+          mesh.material.needsUpdate = true;
+        }
+      });
+      [leftWallMesh, rightWallMesh].forEach(mesh => {
+        if (mesh && mesh.material) {
+          mesh.material.map = wTexZ;
+          mesh.material.roughness = wallRoughness;
+          mesh.material.metalness = wallMetalness;
+          mesh.material.needsUpdate = true;
+        }
+      });
       if (floorMesh && floorMesh.material) {
         const fTex = generateFloorTileTexture(floorType, roomWidth, roomDepth);
         floorMesh.material.map = fTex;
@@ -3874,6 +3774,8 @@
       if (floorMesh) scene.remove(floorMesh);
       if (backWallMesh) scene.remove(backWallMesh);
       if (leftWallMesh) scene.remove(leftWallMesh);
+      if (rightWallMesh) scene.remove(rightWallMesh);
+      if (frontWallMesh) scene.remove(frontWallMesh);
       if (doorGroup) scene.remove(doorGroup);
       if (gridHelper) scene.remove(gridHelper);
 
@@ -3896,10 +3798,12 @@
         }
       }
 
-      const wallTex = generateWallTileTexture(curWallType, roomWidth, roomHeight);
+      const wallTexX = generateWallTileTexture(curWallType, roomWidth, roomHeight);
+      const wallTexZ = generateWallTileTexture(curWallType, roomDepth, roomHeight);
       const floorTex = generateFloorTileTexture(curFloorType, roomWidth, roomDepth);
 
-      const wallMat = new THREE.MeshStandardMaterial({ map: wallTex, roughness: curWallRough, metalness: 0.02 });
+      const wallMatX = new THREE.MeshStandardMaterial({ map: wallTexX, roughness: curWallRough, metalness: 0.02 });
+      const wallMatZ = new THREE.MeshStandardMaterial({ map: wallTexZ, roughness: curWallRough, metalness: 0.02 });
       const floorMat = new THREE.MeshStandardMaterial({ map: floorTex, roughness: curFloorRough, metalness: 0.02 });
       const cutawayMat = new THREE.MeshStandardMaterial({ color: 0xd8d4cb, roughness: 0.7 });
       const floorBorderMat = new THREE.MeshStandardMaterial({ color: 0xe8e4dc, roughness: 0.5 });
@@ -3922,22 +3826,17 @@
       floorMesh.rotation.x = -Math.PI / 2; floorMesh.position.y = 0.0008; floorMesh.receiveShadow = true;
       scene.add(floorMesh);
 
-      // Back Wall
-      backWallMesh = new THREE.Mesh(new THREE.BoxGeometry(roomWidth, roomHeight, 0.08), wallMat);
+      // 1. Back Wall (North: z = -roomDepth / 2)
+      backWallMesh = new THREE.Mesh(new THREE.BoxGeometry(roomWidth, roomHeight, 0.08), wallMatX);
       backWallMesh.position.set(0, roomHeight / 2, -roomDepth / 2); backWallMesh.receiveShadow = true;
       scene.add(backWallMesh);
 
-      // Back Wall End Caps
       const backTopCap = new THREE.Mesh(new THREE.BoxGeometry(roomWidth, 0.005, 0.08), cutawayMat);
       backTopCap.position.set(0, roomHeight + 0.002, -roomDepth / 2); backTopCap.userData = { isRoomStructure: true };
       scene.add(backTopCap);
 
-      const backRightCap = new THREE.Mesh(new THREE.BoxGeometry(0.08, roomHeight, 0.08), cutawayMat);
-      backRightCap.position.set(roomWidth / 2 + 0.04, roomHeight / 2, -roomDepth / 2); backRightCap.userData = { isRoomStructure: true };
-      scene.add(backRightCap);
-
-      // Left Wall
-      leftWallMesh = new THREE.Mesh(new THREE.BoxGeometry(0.08, roomHeight, roomDepth), wallMat);
+      // 2. Left Wall (West: x = -roomWidth / 2)
+      leftWallMesh = new THREE.Mesh(new THREE.BoxGeometry(0.08, roomHeight, roomDepth), wallMatZ);
       leftWallMesh.position.set(-roomWidth / 2, roomHeight / 2, 0); leftWallMesh.receiveShadow = true;
       scene.add(leftWallMesh);
 
@@ -3945,15 +3844,67 @@
       leftTopCap.position.set(-roomWidth / 2, roomHeight + 0.002, 0); leftTopCap.userData = { isRoomStructure: true };
       scene.add(leftTopCap);
 
-      const leftFrontCap = new THREE.Mesh(new THREE.BoxGeometry(0.08, roomHeight, 0.08), cutawayMat);
-      leftFrontCap.position.set(-roomWidth / 2, roomHeight / 2, roomDepth / 2 + 0.04); leftFrontCap.userData = { isRoomStructure: true };
-      scene.add(leftFrontCap);
+      // 3. Right Wall (East: x = +roomWidth / 2)
+      rightWallMesh = new THREE.Mesh(new THREE.BoxGeometry(0.08, roomHeight, roomDepth), wallMatZ.clone());
+      rightWallMesh.position.set(roomWidth / 2, roomHeight / 2, 0); rightWallMesh.receiveShadow = true;
+      scene.add(rightWallMesh);
+
+      const rightTopCap = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.005, roomDepth), cutawayMat);
+      rightTopCap.position.set(roomWidth / 2, roomHeight + 0.002, 0); rightTopCap.userData = { isRoomStructure: true };
+      scene.add(rightTopCap);
+
+      // 4. Front Wall (South: z = +roomDepth / 2)
+      frontWallMesh = new THREE.Mesh(new THREE.BoxGeometry(roomWidth, roomHeight, 0.08), wallMatX.clone());
+      frontWallMesh.position.set(0, roomHeight / 2, roomDepth / 2); frontWallMesh.receiveShadow = true;
+      scene.add(frontWallMesh);
+
+      const frontTopCap = new THREE.Mesh(new THREE.BoxGeometry(roomWidth, 0.005, 0.08), cutawayMat);
+      frontTopCap.position.set(0, roomHeight + 0.002, roomDepth / 2); frontTopCap.userData = { isRoomStructure: true };
+      scene.add(frontTopCap);
 
       // Entry Door on Left Wall
       doorGroup = buildDoorMesh();
       doorGroup.position.set(-roomWidth / 2 + 0.04, 0, 0.25);
       doorGroup.rotation.y = Math.PI / 2;
       scene.add(doorGroup);
+
+      // Register wall definitions for dynamic view-angle occlusion culling
+      roomWallDefinitions = [
+        {
+          id: 'back',
+          mesh: backWallMesh,
+          caps: [backTopCap],
+          normal: new THREE.Vector3(0, 0, -1),
+          center: new THREE.Vector3(0, roomHeight / 2, -roomDepth / 2),
+          door: null
+        },
+        {
+          id: 'left',
+          mesh: leftWallMesh,
+          caps: [leftTopCap],
+          normal: new THREE.Vector3(-1, 0, 0),
+          center: new THREE.Vector3(-roomWidth / 2, roomHeight / 2, 0),
+          door: doorGroup
+        },
+        {
+          id: 'right',
+          mesh: rightWallMesh,
+          caps: [rightTopCap],
+          normal: new THREE.Vector3(1, 0, 0),
+          center: new THREE.Vector3(roomWidth / 2, roomHeight / 2, 0),
+          door: null
+        },
+        {
+          id: 'front',
+          mesh: frontWallMesh,
+          caps: [frontTopCap],
+          normal: new THREE.Vector3(0, 0, 1),
+          center: new THREE.Vector3(0, roomHeight / 2, roomDepth / 2),
+          door: null
+        }
+      ];
+
+      updateDynamicWallVisibility();
 
       // Grid Helper (Hidden by default)
       gridHelper = new THREE.GridHelper(Math.max(roomWidth, roomDepth) * 1.1, Math.round(Math.max(roomWidth, roomDepth) / 0.1), 0x9ca3af, 0xd1d5db);
@@ -3975,19 +3926,59 @@
     }
 
     // ==================== 5. PRODUCT SPAWNING & OBJECT MANIPULATION ====================
-    function spawnProductById(id, x = 0, z = 0, rotY = 0) {
+    let currentPlannerConfigState = {
+      isAiBundle: false,
+      tierName: '',
+      isModified: false
+    };
+
+    function setPlannerConfigurationState(type, tierName = '') {
+      const badge = document.getElementById('planner-config-status');
+      if (type === 'ai_bundle') {
+        currentPlannerConfigState = {
+          isAiBundle: true,
+          tierName: tierName || (currentAiRecommendation && currentAiRecommendation.active_tier) || 'Signature',
+          isModified: false
+        };
+        if (badge) {
+          badge.classList.add('hidden');
+          badge.innerHTML = '';
+        }
+      } else if (type === 'modified') {
+        currentPlannerConfigState.isModified = true;
+        if (badge) {
+          badge.className = 'text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200/90 shadow-2xs flex items-center space-x-1';
+          badge.innerHTML = `<i class="fa-solid fa-pen-ruler text-[8px] text-amber-600"></i><span>Customized</span>`;
+          badge.classList.remove('hidden');
+        }
+      } else if (type === 'reset') {
+        currentPlannerConfigState = {
+          isAiBundle: false,
+          tierName: '',
+          isModified: false
+        };
+        if (badge) {
+          badge.classList.add('hidden');
+        }
+      }
+    }
+
+    function spawnProductById(id, x = 0, z = 0, rotY = 0, customData = null) {
       const p = KOHLER_CATALOG.find(item => item.id === id);
       if (!p) return;
 
-      const group = p.builder(p.defaultFinish);
-      group.position.set(x, 0, z);
+      const finishToUse = (customData && customData.currentFinish) || p.defaultFinish;
+      const group = p.builder(finishToUse);
+      const elevation = (customData && (customData.elevation !== undefined ? customData.elevation : customData.y)) || 0;
+      group.position.set(x, elevation, z);
       group.rotation.y = rotY;
 
       group.userData = {
         ...p,
-        instanceId: Date.now() + Math.random(),
-        currentFinish: p.defaultFinish,
-        elevation: 0
+        ...(customData || {}),
+        instanceId: (customData && customData.instanceId) || (Date.now() + Math.random()),
+        currentFinish: finishToUse,
+        elevation: elevation
       };
 
       if (typeof applyThemeMaterialsToProduct === 'function') {
@@ -4004,7 +3995,7 @@
       updateClearanceVisualizer();
       updateWetWallScore();
       buildPlumbingConduits();
-      showToast(`Added ${p.name} to room`);
+      showToast(`Added ${group.userData.name || p.name} to room`);
       return group;
     }
 
@@ -4019,7 +4010,7 @@
       document.getElementById('inspector-card').classList.remove('hidden');
 
       // Highlight with glowing bounding box
-      const box = new THREE.BoxHelper(obj, 0xc59b27);
+      const box = new THREE.BoxHelper(obj, 0xb45309);
       box.name = 'selection-helper';
       scene.add(box);
     }
@@ -4040,6 +4031,7 @@
       if (typeof updateThemeArchitecturalAccents === 'function') {
         updateThemeArchitecturalAccents(currentSelectedTheme);
       }
+      setPlannerConfigurationState('modified');
       updateTotalBOM();
       updateClearanceVisualizer();
       updateWetWallScore();
@@ -4050,7 +4042,16 @@
     function duplicateActiveObject() {
       if (!activeSelectedObject) return;
       const d = activeSelectedObject.userData;
-      spawnProductById(d.id, activeSelectedObject.position.x + 0.2, activeSelectedObject.position.z + 0.2, activeSelectedObject.rotation.y);
+      setPlannerConfigurationState('modified');
+      spawnProductById(d.id, activeSelectedObject.position.x + 0.2, activeSelectedObject.position.z + 0.2, activeSelectedObject.rotation.y, {
+        name: d.name,
+        art: d.art,
+        sku_code: d.sku_code || d.art,
+        price_inr: d.price_inr,
+        price_usd: d.price_usd,
+        category: d.category,
+        elevation: activeSelectedObject.position.y
+      });
     }
 
     function rotateActiveObject(angleRad) {
@@ -4128,23 +4129,51 @@
           targetPos.z = Math.round(targetPos.z / 0.05) * 0.05;
         }
 
-        // Auto Wall Snapping
+        // Auto Wall Snapping (all 4 walls: Back, Left, Right, Front)
         if (document.getElementById('toggle-wall-snap').checked) {
-          const snapThreshold = 0.35;
+          const snapThreshold = 0.45;
           const backWallZ = -roomDepth / 2;
+          const frontWallZ = roomDepth / 2;
           const leftWallX = -roomWidth / 2;
+          const rightWallX = roomWidth / 2;
 
-          if (Math.abs(targetPos.z - backWallZ) < snapThreshold) {
-            targetPos.z = backWallZ + 0.35;
-            activeSelectedObject.rotation.y = 0;
-          } else if (Math.abs(targetPos.x - leftWallX) < snapThreshold) {
-            targetPos.x = leftWallX + 0.35;
-            activeSelectedObject.rotation.y = Math.PI / 2;
+          const distBack = Math.abs(targetPos.z - backWallZ);
+          const distFront = Math.abs(targetPos.z - frontWallZ);
+          const distLeft = Math.abs(targetPos.x - leftWallX);
+          const distRight = Math.abs(targetPos.x - rightWallX);
+
+          const minDist = Math.min(distBack, distFront, distLeft, distRight);
+
+          if (minDist < snapThreshold) {
+            const isMirror = activeSelectedObject.userData && activeSelectedObject.userData.category === 'mirrors';
+            const depth = (activeSelectedObject.userData && activeSelectedObject.userData.depth_m) || 0.6;
+            const offset = isMirror ? 0.05 : Math.max(0.25, depth / 2 + 0.04);
+
+            if (minDist === distBack) {
+              targetPos.z = backWallZ + offset;
+              activeSelectedObject.rotation.y = 0;
+              activeSelectedObject.userData.attachedWall = 'back';
+            } else if (minDist === distLeft) {
+              targetPos.x = leftWallX + offset;
+              activeSelectedObject.rotation.y = Math.PI / 2;
+              activeSelectedObject.userData.attachedWall = 'left';
+            } else if (minDist === distRight) {
+              targetPos.x = rightWallX - offset;
+              activeSelectedObject.rotation.y = -Math.PI / 2;
+              activeSelectedObject.userData.attachedWall = 'right';
+            } else if (minDist === distFront) {
+              targetPos.z = frontWallZ - offset;
+              activeSelectedObject.rotation.y = Math.PI;
+              activeSelectedObject.userData.attachedWall = 'front';
+            }
+          } else {
+            if (activeSelectedObject.userData) activeSelectedObject.userData.attachedWall = null;
           }
         }
 
         // Bounds Clamp inside bathroom
-        const margin = 0.25;
+        const isMirrorObj = activeSelectedObject.userData && activeSelectedObject.userData.category === 'mirrors';
+        const margin = isMirrorObj ? 0.05 : 0.22;
         targetPos.x = Math.max(-roomWidth / 2 + margin, Math.min(roomWidth / 2 - margin, targetPos.x));
         targetPos.z = Math.max(-roomDepth / 2 + margin, Math.min(roomDepth / 2 - margin, targetPos.z));
 
@@ -4180,7 +4209,7 @@
     }
 
     // ==================== 7. VIEW MODES (3D, 2D FLOORPLAN, WALK-IN) & 2D CAD LAYER ====================
-    function make2DTextSprite(text, bgColor = 'rgba(13, 15, 18, 0.90)', textColor = '#c59b27', fontSize = 26, width = 512, height = 128) {
+    function make2DTextSprite(text, bgColor = 'rgba(13, 15, 18, 0.90)', textColor = '#b45309', fontSize = 26, width = 512, height = 128) {
       const canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = height;
@@ -4256,11 +4285,11 @@
         new THREE.Vector3(roomWidth / 2, dimY, topDimZ + 0.10)
       ];
       const widthGeo = new THREE.BufferGeometry().setFromPoints(widthPts);
-      const dimMat = new THREE.LineBasicMaterial({ color: 0xc59b27, linewidth: 2 });
+      const dimMat = new THREE.LineBasicMaterial({ color: 0xb45309, linewidth: 2 });
       const widthLine = new THREE.LineSegments(widthGeo, dimMat);
       floorplan2DGroup.add(widthLine);
 
-      const widthSprite = make2DTextSprite(`WIDTH: ${wFt} FT (${roomWidth.toFixed(2)}m)`, '#0d0f12', '#c59b27', 24);
+      const widthSprite = make2DTextSprite(`WIDTH: ${wFt} FT (${roomWidth.toFixed(2)}m)`, '#0d0f12', '#b45309', 24);
       widthSprite.position.set(0, dimY + 0.02, topDimZ - 0.18);
       floorplan2DGroup.add(widthSprite);
 
@@ -4280,7 +4309,7 @@
       const depthLine = new THREE.LineSegments(depthGeo, dimMat);
       floorplan2DGroup.add(depthLine);
 
-      const depthSprite = make2DTextSprite(`DEPTH: ${dFt} FT (${roomDepth.toFixed(2)}m)`, '#0d0f12', '#c59b27', 24);
+      const depthSprite = make2DTextSprite(`DEPTH: ${dFt} FT (${roomDepth.toFixed(2)}m)`, '#0d0f12', '#b45309', 24);
       depthSprite.position.set(leftDimX - 0.20, dimY + 0.02, 0);
       floorplan2DGroup.add(depthSprite);
 
@@ -4323,7 +4352,7 @@
           new THREE.Vector3(-w / 2, dimY, -dep / 2)
         ];
         const rectGeo = new THREE.BufferGeometry().setFromPoints(rectPts);
-        const rectMat = new THREE.LineBasicMaterial({ color: 0xc59b27, linewidth: 1.5 });
+        const rectMat = new THREE.LineBasicMaterial({ color: 0xb45309, linewidth: 1.5 });
         const rectLine = new THREE.Line(rectGeo, rectMat);
         rectLine.position.set(item.position.x, 0, item.position.z);
         rectLine.rotation.y = rotY;
@@ -4448,7 +4477,10 @@
       items.forEach(p => {
         const card = document.createElement('div');
         card.className = 'group border border-gray-200 rounded-2xl p-4 hover:border-black hover:shadow-xl transition bg-white cursor-pointer transform hover:-translate-y-0.5';
-        card.onclick = () => spawnProductById(p.id, 0, 0, 0);
+        card.onclick = () => {
+          setPlannerConfigurationState('modified');
+          spawnProductById(p.id, 0, 0, 0);
+        };
 
         const iconMap = {
           toilets: 'fa-toilet', vanities: 'fa-sink', faucets: 'fa-faucet',
@@ -4472,7 +4504,7 @@
           </div>
           <div class="mt-3 pt-2.5 border-t border-gray-100 flex justify-between items-center">
             <span class="text-sm font-black text-gray-900">${priceFormatted}</span>
-            <button class="bg-black text-white hover:bg-gray-900 text-xs px-3 py-1.5 rounded-full font-bold shadow-sm flex items-center space-x-1 group-hover:bg-amber-500 group-hover:text-black transition">
+            <button class="bg-black text-white hover:bg-gray-900 text-xs px-3 py-1.5 rounded-full font-bold shadow-sm flex items-center space-x-1 group-hover:bg-amber-600 group-hover:text-white transition">
               <i class="fa-solid fa-plus text-[10px]"></i>
               <span>Add to Room</span>
             </button>
@@ -4492,19 +4524,21 @@
     // ==================== 9. GROQ AI ASSISTANT (TRACK 1 CORE LOGIC) ====================
     // currentSelectedTheme declared at line 1530
     let currentAiRecommendation = null;
+    let isAiEngineReset = false;
 
     function openAiAssistantModal() {
       document.getElementById('modal-ai-assistant').classList.remove('hidden');
-      if (!currentAiRecommendation) {
-        const wFt = parseFloat(document.getElementById('ai-input-width').value) || 10.5;
-        const dFt = parseFloat(document.getElementById('ai-input-depth').value) || 9.2;
-        const slider = document.getElementById('ai-budget-slider');
-        const budgetNum = slider ? parseInt(slider.value) : 350000;
-        const roomW = Math.round(wFt * 0.3048 * 10) / 10;
-        const roomD = Math.round(dFt * 0.3048 * 10) / 10;
-        const initialBundle = optimizeKohlerBundle(roomW, roomD, budgetNum, currentSelectedTheme);
-        currentAiRecommendation = initialBundle;
-        renderAiRecommendationResults(initialBundle);
+      if (isAiEngineReset || !currentAiRecommendation) {
+        // Show empty placeholder state (nothing shown until user enters inputs)
+        const emptyContainer = document.getElementById('ai-empty-container');
+        if (emptyContainer) emptyContainer.classList.remove('hidden');
+        const feasibleContainer = document.getElementById('ai-feasible-container');
+        if (feasibleContainer) feasibleContainer.classList.add('hidden');
+        const impossibleContainer = document.getElementById('ai-impossible-container');
+        if (impossibleContainer) impossibleContainer.classList.add('hidden');
+        const applySection = document.getElementById('ai-apply-section');
+        if (applySection) applySection.classList.add('hidden');
+        return;
       }
     }
     function closeAiAssistantModal() {
@@ -4516,6 +4550,7 @@
       if (typeof applyAestheticTheme === 'function') {
         applyAestheticTheme(theme);
       }
+      isAiEngineReset = false;
       triggerGroqAiRecommendation();
     }
 
@@ -4613,6 +4648,148 @@
       return null;
     }
 
+    function extractThemeFromPrompt(notes) {
+      if (!notes || typeof notes !== 'string') return null;
+      const nLow = notes.toLowerCase();
+      if (nLow.includes('zen') || nLow.includes('japanese') || nLow.includes('spa') || nLow.includes('tranquil') || nLow.includes('teak') || nLow.includes('hinoki')) {
+        return 'Japanese Zen';
+      }
+      if (nLow.includes('classic') || nLow.includes('luxury') || nLow.includes('luxurious') || nLow.includes('marble') || nLow.includes('calacatta') || nLow.includes('palatial') || nLow.includes('gold') || nLow.includes('brass')) {
+        return 'Classic Luxury';
+      }
+      if (nLow.includes('industrial') || nLow.includes('chic') || nLow.includes('urban') || nLow.includes('loft') || nLow.includes('steel') || nLow.includes('crittall')) {
+        return 'Industrial Chic';
+      }
+      if (nLow.includes('waste') || nLow.includes('wastelab') || nLow.includes('eco') || nLow.includes('terrazzo') || nLow.includes('recycled') || nLow.includes('sustainable')) {
+        return 'Kohler WasteLAB Eco-Luxury';
+      }
+      if (nLow.includes('minimalist') || nLow.includes('modern') || nLow.includes('clean line') || nLow.includes('simple') || nLow.includes('scandinavian')) {
+        return 'Minimalist Modern';
+      }
+      return null;
+    }
+
+    function extractInclusionsFromPrompt(notes) {
+      if (!notes || typeof notes !== 'string') return null;
+      const nLow = notes.toLowerCase().trim();
+      if (!nLow) return null;
+
+      const isPowder = nLow.includes('powder room') || nLow.includes('half bath') || nLow.includes('powder');
+      const mentionsToilet = nLow.includes('toilet') || nLow.includes('commode') || nLow.includes('bidet') || nLow.includes('wc') || nLow.includes('veil') || nLow.includes('reach');
+      const mentionsVanity = nLow.includes('vanity') || nLow.includes('sink') || nLow.includes('basin') || nLow.includes('console') || nLow.includes('brazn') || nLow.includes('jacquard') || nLow.includes('tailored');
+      const mentionsShower = nLow.includes('shower') || nLow.includes('wet room') || nLow.includes('wet-room') || nLow.includes('rainhead') || nLow.includes('revel') || nLow.includes('hydrorail');
+      const mentionsMirror = nLow.includes('mirror') || nLow.includes('verdera');
+      const mentionsTub = nLow.includes('tub') || nLow.includes('bathtub') || nLow.includes('soak') || nLow.includes('evok');
+      const noShower = nLow.includes('no shower') || nLow.includes('without shower') || nLow.includes('no-shower') || nLow.includes('remove shower') || nLow.includes('omit shower');
+
+      if (isPowder) {
+        return {
+          toilet: true,
+          vanity: true,
+          mirror: true,
+          shower: (mentionsShower && !noShower && nLow.includes('with shower')) ? true : false,
+          tub: false
+        };
+      }
+
+      if (noShower) {
+        return {
+          toilet: mentionsToilet || true,
+          vanity: mentionsVanity || true,
+          mirror: mentionsMirror || true,
+          shower: false,
+          tub: mentionsTub
+        };
+      }
+
+      // If user specified targeted fixtures without shower (e.g. "toilet, vanity, and mirror")
+      if ((mentionsToilet || mentionsVanity) && !mentionsShower && (nLow.includes('only') || nLow.includes('just') || nLow.includes('toilet and vanity') || nLow.includes('toilet, vanity') || nLow.includes('with toilet') || nLow.includes('vanity, and mirror') || nLow.includes('vanity and mirror'))) {
+        return {
+          toilet: mentionsToilet,
+          vanity: mentionsVanity,
+          mirror: mentionsMirror || true,
+          shower: false,
+          tub: mentionsTub
+        };
+      }
+
+      // Full suite default
+      return {
+        toilet: true,
+        vanity: true,
+        shower: true,
+        mirror: true,
+        tub: mentionsTub
+      };
+    }
+
+    function extractBudgetFromPrompt(notes) {
+      if (!notes || typeof notes !== 'string') return null;
+      const str = notes.toLowerCase();
+
+      // 1. Lakhs (e.g. "under ₹2.5 lakh", "budget 2.5 lakh", "under 2.5L", "within 2 lakh", "under 2.5 lakhs", "upto 3 lac")
+      const lakhMatch = str.match(/(?:under|below|within|budget(?:\s*of|\s*under|\s*around)?|max(?:imum)?|upto|up\s*to|target|cap|less\s*than)?\s*(?:₹|rs\.?|inr)?\s*([0-9]+(?:\.[0-9]+)?)\s*(?:lakhs?|lacs?|lac|l)\b/i);
+      if (lakhMatch && parseFloat(lakhMatch[1]) > 0 && parseFloat(lakhMatch[1]) <= 100) {
+        const val = parseFloat(lakhMatch[1]);
+        const inr = Math.round(val * 100000);
+        return {
+          amountINR: inr,
+          val: val,
+          unit: 'lakh',
+          formatted: `₹${val} Lakh (₹${inr.toLocaleString('en-IN')})`,
+          reason: `Budget capped under ₹${val} Lakh`
+        };
+      }
+
+      // 2. Thousands / K (e.g. "under 250k", "budget 200k", "under ₹250k")
+      const kMatch = str.match(/(?:under|below|within|budget(?:\s*of|\s*under)?|max(?:imum)?|upto|up\s*to)?\s*(?:₹|rs\.?|inr)?\s*([0-9]+(?:\.[0-9]+)?)\s*k\b/i);
+      if (kMatch && parseFloat(kMatch[1]) >= 10) {
+        const val = parseFloat(kMatch[1]);
+        const inr = Math.round(val * 1000);
+        return {
+          amountINR: inr,
+          val: val,
+          unit: 'k',
+          formatted: `₹${inr.toLocaleString('en-IN')}`,
+          reason: `Budget capped under ₹${inr.toLocaleString('en-IN')}`
+        };
+      }
+
+      // 3. Full Rupee amounts (e.g. "under ₹2,50,000", "budget 250000", "within ₹200000")
+      const fullInrMatch = str.match(/(?:under|below|within|budget(?:\s*of|\s*under|\s*target)?|max(?:imum)?|upto|up\s*to|less\s*than)\s*(?:₹|rs\.?|inr)?\s*([0-9]{1,3}(?:,[0-9]{2,3})+|[0-9]{5,8})\b/i);
+      if (fullInrMatch) {
+        const inr = parseInt(fullInrMatch[1].replace(/,/g, ''));
+        if (inr >= 50000 && inr <= 5000000) {
+          return {
+            amountINR: inr,
+            val: inr,
+            unit: 'inr',
+            formatted: `₹${inr.toLocaleString('en-IN')}`,
+            reason: `Budget capped under ₹${inr.toLocaleString('en-IN')}`
+          };
+        }
+      }
+
+      // 4. USD format (e.g. "under $3,000", "budget $2500")
+      const usdMatch = str.match(/(?:under|below|within|budget(?:\s*of)?|max(?:imum)?|upto|up\s*to)?\s*\$\s*([0-9]{1,3}(?:,[0-9]{3})+|[0-9]{3,6})\b/i);
+      if (usdMatch) {
+        const usd = parseInt(usdMatch[1].replace(/,/g, ''));
+        if (usd >= 500) {
+          const inr = Math.round(usd * 75);
+          return {
+            amountINR: inr,
+            amountUSD: usd,
+            val: usd,
+            unit: 'usd',
+            formatted: `$${usd.toLocaleString('en-US')}`,
+            reason: `Budget capped under $${usd.toLocaleString('en-US')}`
+          };
+        }
+      }
+
+      return null;
+    }
+
     function applyAutoRoomDimensions(wFt, dFt, hFt, reason) {
       const wEl = document.getElementById('ai-input-width');
       const dEl = document.getElementById('ai-input-depth');
@@ -4694,11 +4871,15 @@
           btnNatural.className = 'flex-1 py-2 px-2.5 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 text-gray-600 hover:text-black font-extrabold text-xs cursor-pointer';
         }
 
-        // In Predefined Constraints mode, do not display auto room badge
+        // In Predefined Constraints mode, do not display auto room badge or budget badge
         const autoBadge = document.getElementById('ai-auto-room-badge');
         if (autoBadge) autoBadge.classList.add('hidden');
+        const budgetBadge = document.getElementById('ai-auto-budget-badge');
+        if (budgetBadge) budgetBadge.classList.add('hidden');
       }
     }
+
+    let aiCustomNotesDebounceTimer = null;
 
     function updateAiCustomNotesCount() {
       const el = document.getElementById('ai-custom-notes');
@@ -4707,9 +4888,12 @@
         counter.innerText = `${el.value.length} / 500`;
       }
 
-      // ONLY IN CUSTOM AI PROMPT MODE: preview detected room size intent
+      // ONLY IN CUSTOM AI PROMPT MODE: preview detected room size intent, budget intent & sync theme live
       if (currentInputMode === 'natural' && el) {
-        const autoDim = extractRoomDimensionsFromPrompt(el.value);
+        const text = el.value.trim();
+
+        // 1. Room dimensions preview
+        const autoDim = extractRoomDimensionsFromPrompt(text);
         const autoBadge = document.getElementById('ai-auto-room-badge');
         const autoDimText = document.getElementById('ai-auto-room-dimensions');
         const autoReasonText = document.getElementById('ai-auto-room-reason');
@@ -4723,6 +4907,51 @@
           autoBadge.classList.add('hidden');
           lastAutoDetectedDim = null;
         }
+
+        // 1b. Budget intent preview
+        const autoBudget = extractBudgetFromPrompt(text);
+        const budgetBadge = document.getElementById('ai-auto-budget-badge');
+        const budgetAmountText = document.getElementById('ai-auto-budget-amount');
+        const budgetReasonText = document.getElementById('ai-auto-budget-reason');
+        if (autoBudget && budgetBadge && budgetAmountText && budgetReasonText) {
+          budgetAmountText.innerText = autoBudget.formatted;
+          budgetReasonText.innerText = autoBudget.reason;
+          budgetBadge.classList.remove('hidden');
+        } else if (budgetBadge) {
+          budgetBadge.classList.add('hidden');
+        }
+
+        // 2. Synchronize theme detection from custom prompt
+        const detectedTheme = extractThemeFromPrompt(text);
+        if (detectedTheme) {
+          currentSelectedTheme = detectedTheme;
+          const subnavTheme = document.getElementById('subnav-theme-label');
+          if (subnavTheme) subnavTheme.innerText = detectedTheme;
+          document.querySelectorAll('.ai-theme-btn').forEach(btn => {
+            if (btn.dataset.theme === detectedTheme) {
+              btn.classList.add('active', 'border-black', 'bg-gray-50', 'border-2');
+              btn.classList.remove('border-gray-200', 'bg-white');
+            } else {
+              btn.classList.remove('active', 'border-black', 'bg-gray-50', 'border-2');
+              if (btn.dataset.theme === 'Kohler WasteLAB Eco-Luxury') {
+                btn.classList.add('border-emerald-200', 'bg-emerald-50/40');
+              } else {
+                btn.classList.add('border-gray-200', 'bg-white');
+              }
+            }
+          });
+        }
+
+        // 3. Debounced live AI recommendation generation (500ms delay like Predefined Constraints)
+        if (aiCustomNotesDebounceTimer) clearTimeout(aiCustomNotesDebounceTimer);
+        if (text.length >= 8) {
+          aiCustomNotesDebounceTimer = setTimeout(() => {
+            triggerGroqAiRecommendation();
+          }, 500);
+        } else if (text.length === 0) {
+          const understoodContainer = document.getElementById('ai-understood-container');
+          if (understoodContainer) understoodContainer.classList.add('hidden');
+        }
       }
     }
 
@@ -4730,9 +4959,12 @@
       const el = document.getElementById('ai-custom-notes');
       if (el) {
         el.value = '';
+        if (aiCustomNotesDebounceTimer) clearTimeout(aiCustomNotesDebounceTimer);
         updateAiCustomNotesCount();
         const autoBadge = document.getElementById('ai-auto-room-badge');
         if (autoBadge) autoBadge.classList.add('hidden');
+        const budgetBadge = document.getElementById('ai-auto-budget-badge');
+        if (budgetBadge) budgetBadge.classList.add('hidden');
         lastAutoDetectedDim = null;
         const understoodContainer = document.getElementById('ai-understood-container');
         if (understoodContainer) understoodContainer.classList.add('hidden');
@@ -4755,6 +4987,7 @@
       }
       updateAiCustomNotesCount();
       el.focus();
+      triggerGroqAiRecommendation();
     }
 
     function parsePromptPreferences(notes, roomW = 3.2, roomD = 2.8, theme = 'Japanese Zen') {
@@ -4762,12 +4995,16 @@
       const nLow = notes.toLowerCase();
       const tags = [];
 
-      // If in Custom AI Prompt mode, prepend auto-adapted room size tag if detected
+      // If in Custom AI Prompt mode, prepend auto-adapted room size tag & budget tag if detected
       if (currentInputMode === 'natural') {
         const autoDim = extractRoomDimensionsFromPrompt(notes);
         if (autoDim) {
           const sqFt = (autoDim.widthFt * autoDim.depthFt).toFixed(1);
           tags.push(`✓ Room size auto-adapted: ${autoDim.widthFt.toFixed(1)}ft × ${autoDim.depthFt.toFixed(1)}ft (${sqFt} sq ft) — ${autoDim.reason}`);
+        }
+        const autoBudget = extractBudgetFromPrompt(notes);
+        if (autoBudget) {
+          tags.push(`✓ Budget target enforced: ${autoBudget.formatted} — selected budget-compliant suite`);
         }
       }
 
@@ -4838,15 +5075,85 @@
     }
 
     function onPriorityCheckboxChange() {
+      const inclusions = {
+        toilet: document.getElementById('prio-smart-toilet') ? document.getElementById('prio-smart-toilet').checked : false,
+        shower: document.getElementById('prio-thermo-shower') ? document.getElementById('prio-thermo-shower').checked : false,
+        vanity: document.getElementById('prio-dual-vanity') ? document.getElementById('prio-dual-vanity').checked : false,
+        mirror: document.getElementById('prio-smart-mirror') ? document.getElementById('prio-smart-mirror').checked : false
+      };
+      const notes = (document.getElementById('ai-custom-notes') ? document.getElementById('ai-custom-notes').value : '').trim();
+
+      // If user unchecked everything and has no custom prompt, keep in empty state
+      if (!inclusions.toilet && !inclusions.shower && !inclusions.vanity && !inclusions.mirror && !notes) {
+        isAiEngineReset = true;
+        currentAiRecommendation = null;
+        const emptyContainer = document.getElementById('ai-empty-container');
+        if (emptyContainer) emptyContainer.classList.remove('hidden');
+        const feasibleContainer = document.getElementById('ai-feasible-container');
+        if (feasibleContainer) feasibleContainer.classList.add('hidden');
+        const impossibleContainer = document.getElementById('ai-impossible-container');
+        if (impossibleContainer) impossibleContainer.classList.add('hidden');
+        const applySection = document.getElementById('ai-apply-section');
+        if (applySection) applySection.classList.add('hidden');
+        return;
+      }
+
+      isAiEngineReset = false;
       triggerGroqAiRecommendation();
     }
 
     async function triggerGroqAiRecommendation() {
+      const notes = (document.getElementById('ai-custom-notes') ? document.getElementById('ai-custom-notes').value : '').trim();
+      let inclusions = {
+        toilet: document.getElementById('prio-smart-toilet') ? document.getElementById('prio-smart-toilet').checked : false,
+        shower: document.getElementById('prio-thermo-shower') ? document.getElementById('prio-thermo-shower').checked : false,
+        vanity: document.getElementById('prio-dual-vanity') ? document.getElementById('prio-dual-vanity').checked : false,
+        mirror: document.getElementById('prio-smart-mirror') ? document.getElementById('prio-smart-mirror').checked : false
+      };
+
+      // In Custom AI Prompt mode with notes entered, dynamically extract theme & inclusions from prompt
+      let effectiveTheme = currentSelectedTheme;
+      if (currentInputMode === 'natural' && notes) {
+        const themeFromPrompt = extractThemeFromPrompt(notes);
+        if (themeFromPrompt) {
+          effectiveTheme = themeFromPrompt;
+          currentSelectedTheme = themeFromPrompt;
+          const subnavTheme = document.getElementById('subnav-theme-label');
+          if (subnavTheme) subnavTheme.innerText = themeFromPrompt;
+        } else if (!effectiveTheme || effectiveTheme === 'None' || effectiveTheme === 'none') {
+          effectiveTheme = 'Minimalist Modern';
+        }
+
+        const promptInclusions = extractInclusionsFromPrompt(notes);
+        if (promptInclusions) {
+          inclusions = promptInclusions;
+          if (document.getElementById('prio-smart-toilet')) document.getElementById('prio-smart-toilet').checked = !!inclusions.toilet;
+          if (document.getElementById('prio-thermo-shower')) document.getElementById('prio-thermo-shower').checked = !!inclusions.shower;
+          if (document.getElementById('prio-dual-vanity')) document.getElementById('prio-dual-vanity').checked = !!inclusions.vanity;
+          if (document.getElementById('prio-smart-mirror')) document.getElementById('prio-smart-mirror').checked = !!inclusions.mirror;
+        }
+      }
+
+      // Check if user has entered NO inputs at all
+      if (!inclusions.toilet && !inclusions.shower && !inclusions.vanity && !inclusions.mirror && !notes) {
+        renderAiRecommendationResults({
+          feasible: false,
+          empty_selection: true,
+          failed_constraint: 'No Inputs Provided',
+          failure_reason: 'Please select at least one fixture category on the left, or enter your requirements in the Custom AI Prompt tab.',
+          suggestions: [
+            'Check Toilet, Shower, Vanity, or Mirror',
+            'Or switch to Custom AI Prompt and describe your dream bathroom'
+          ]
+        });
+        return;
+      }
+
+      isAiEngineReset = false;
+
       const btn = document.getElementById('btn-generate-ai');
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Analyzing Constraints with Groq AI...</span>';
       btn.disabled = true;
-
-      const notes = (document.getElementById('ai-custom-notes') ? document.getElementById('ai-custom-notes').value : '').trim();
 
       // ONLY IN CUSTOM AI PROMPT MODE: automatically adjust room size based on user prompt
       if (currentInputMode === 'natural' && notes) {
@@ -4856,17 +5163,13 @@
         }
       }
 
-      const wFt = document.getElementById('ai-input-width').value;
-      const dFt = document.getElementById('ai-input-depth').value;
-      const hFt = document.getElementById('ai-input-height').value;
-      const budget = document.getElementById('ai-budget-label').innerText;
+      const wFtRaw = document.getElementById('ai-input-width') ? document.getElementById('ai-input-width').value : '';
+      const dFtRaw = document.getElementById('ai-input-depth') ? document.getElementById('ai-input-depth').value : '';
+      const hFtRaw = document.getElementById('ai-input-height') ? document.getElementById('ai-input-height').value : '';
 
-      const inclusions = {
-        toilet: document.getElementById('prio-smart-toilet') ? document.getElementById('prio-smart-toilet').checked : true,
-        shower: document.getElementById('prio-thermo-shower') ? document.getElementById('prio-thermo-shower').checked : true,
-        vanity: document.getElementById('prio-dual-vanity') ? document.getElementById('prio-dual-vanity').checked : true,
-        mirror: document.getElementById('prio-smart-mirror') ? document.getElementById('prio-smart-mirror').checked : false
-      };
+      const wFt = parseFloat(wFtRaw) || (roomWidth * 3.28084);
+      const dFt = parseFloat(dFtRaw) || (roomDepth * 3.28084);
+      const hFt = parseFloat(hFtRaw) || (roomHeight * 3.28084);
 
       const priorities = [];
       if (inclusions.toilet) priorities.push('Smart Bidet Toilet');
@@ -4875,9 +5178,20 @@
       if (inclusions.mirror) priorities.push('Alexa Voice Mirror');
 
       const slider = document.getElementById('ai-budget-slider');
-      const budgetNum = slider ? parseInt(slider.value) : 350000;
-      const roomW = Math.round(parseFloat(wFt) * 0.3048 * 10) / 10;
-      const roomD = Math.round(parseFloat(dFt) * 0.3048 * 10) / 10;
+      let budgetNum = slider ? parseInt(slider.value) : 350000;
+      let budget = document.getElementById('ai-budget-label').innerText;
+      let promptBudget = null;
+
+      if (currentInputMode === 'natural' && notes) {
+        promptBudget = extractBudgetFromPrompt(notes);
+        if (promptBudget) {
+          budgetNum = promptBudget.amountINR;
+          budget = promptBudget.formatted;
+        }
+      }
+
+      const roomW = Math.round(wFt * 0.3048 * 10) / 10;
+      const roomD = Math.round(dFt * 0.3048 * 10) / 10;
 
       try {
         const response = await fetch('/api/groq/recommend', {
@@ -4889,10 +5203,11 @@
             room_depth_m: roomD,
             budget: budget,
             budget_num: budgetNum,
-            theme: currentSelectedTheme,
+            theme: effectiveTheme,
             priorities: priorities.join(', '),
             inclusions: inclusions,
             customerNotes: notes,
+            prompt_budget: promptBudget,
             input_mode: currentInputMode
           })
         });
@@ -4902,6 +5217,11 @@
           if (currentInputMode === 'natural' && data.auto_adjusted_dimensions) {
             const ad = data.auto_adjusted_dimensions;
             applyAutoRoomDimensions(ad.widthFt, ad.depthFt, ad.heightFt, ad.reason);
+          }
+          if (data.theme) {
+            currentSelectedTheme = data.theme;
+            const subnavTheme = document.getElementById('subnav-theme-label');
+            if (subnavTheme) subnavTheme.innerText = data.theme;
           }
           currentAiRecommendation = data;
           renderAiRecommendationResults(data);
@@ -4916,7 +5236,7 @@
         throw new Error('Server returned non-200');
       } catch (e) {
         console.warn('Backend Groq endpoint not reachable, running client-side optimization engine:', e);
-        const clientBundle = optimizeKohlerBundle(roomW, roomD, budgetNum, currentSelectedTheme, priorities, notes, inclusions);
+        const clientBundle = optimizeKohlerBundle(roomW, roomD, budgetNum, effectiveTheme, priorities, notes, inclusions);
         currentAiRecommendation = clientBundle;
         renderAiRecommendationResults(clientBundle);
         if (clientBundle.feasible) {
@@ -4925,7 +5245,7 @@
           showToast('No feasible configuration found for constraints');
         }
       } finally {
-        btn.innerHTML = '<i class="fa-solid fa-bolt text-amber-400"></i><span>Generate Optimized Kohler Bundle (Groq AI)</span>';
+        btn.innerHTML = '<i class="fa-solid fa-bolt text-amber-500"></i><span>Generate Optimized Kohler Bundle (Groq AI)</span>';
         btn.disabled = false;
       }
     }
@@ -4978,6 +5298,9 @@
         };
       }
 
+      const wantsTub = (inclusions && inclusions.tub) || (notes && (notes.toLowerCase().includes('bathtub') || notes.toLowerCase().includes('tub') || notes.toLowerCase().includes('soak')));
+      const bathtubs = (wantsTub && roomW >= 2.6 && roomD >= 2.4) ? KOHLER_CATALOG.filter(c => c.category === 'bathtubs') : [null];
+
       const toilets = incToilet ? KOHLER_CATALOG.filter(c => c.category === 'toilets') : [null];
       const vanities = incVanity ? KOHLER_CATALOG.filter(c => c.category === 'vanities') : [null];
       const faucets = incVanity ? KOHLER_CATALOG.filter(c => c.category === 'faucets') : [null];
@@ -5018,9 +5341,10 @@
               }
 
               for (let m of mirrors) {
-                const bundleItems = [t, v, f, s, m].filter(Boolean);
-                const totalINR = bundleItems.reduce((acc, item) => acc + item.price_inr, 0);
-                const totalUSD = bundleItems.reduce((acc, item) => acc + item.price_usd, 0);
+                for (let b of bathtubs) {
+                  const bundleItems = [t, v, f, s, m, b].filter(Boolean);
+                  const totalINR = bundleItems.reduce((acc, item) => acc + item.price_inr, 0);
+                  const totalUSD = bundleItems.reduce((acc, item) => acc + item.price_usd, 0);
 
                 if (totalINR < minCostFound) minCostFound = totalINR;
 
@@ -5105,6 +5429,7 @@
           }
         }
       }
+    }
 
       // Handle Impossible Cases
       if (feasibleBundles.length === 0) {
@@ -5168,6 +5493,7 @@
           if (item.category === 'toilets') spatExp = `21"+ front clearance to opposite wall (NKBA standard)`;
           else if (item.category === 'vanities') spatExp = `Preserves 24"+ clearance from door ingress`;
           else if (item.category === 'showers') spatExp = `Provides 24" unobstructed walk-in entry`;
+          else if (item.category === 'bathtubs') spatExp = `67" × 30" freestanding ergonomic soaking tub`;
 
           const budgetPct = Math.round((item.price_inr / candidate.total_price_inr) * 100);
           const isThemeMatch = item.styles && item.styles.includes(targetTheme);
@@ -5303,7 +5629,12 @@
     function renderAiRecommendationResults(data) {
       const feasibleContainer = document.getElementById('ai-feasible-container');
       const impossibleContainer = document.getElementById('ai-impossible-container');
+      const emptyContainer = document.getElementById('ai-empty-container');
+      const applySection = document.getElementById('ai-apply-section');
       const applyBtn = document.getElementById('btn-apply-ai-bundle');
+
+      // Hide empty container as we have recommendation data
+      if (emptyContainer) emptyContainer.classList.add('hidden');
 
       // Check if optimization yielded no feasible configuration or zero fixtures
       if (!data.feasible) {
@@ -5320,6 +5651,7 @@
             suggEl.innerHTML = suggs.map(s => `<li>${s}</li>`).join('');
           }
         }
+        if (applySection) applySection.classList.add('hidden');
         if (applyBtn) {
           applyBtn.disabled = true;
           applyBtn.classList.add('opacity-50', 'cursor-not-allowed');
@@ -5331,6 +5663,7 @@
       // Configuration is feasible: show results container
       if (feasibleContainer) feasibleContainer.classList.remove('hidden');
       if (impossibleContainer) impossibleContainer.classList.add('hidden');
+      if (applySection) applySection.classList.remove('hidden');
       if (applyBtn) {
         applyBtn.disabled = false;
         applyBtn.classList.remove('opacity-50', 'cursor-not-allowed');
@@ -5474,13 +5807,17 @@
       const previewEl = document.getElementById('ai-bundle-total-preview');
       if (previewEl) previewEl.innerText = totalFormatted;
 
+      // Update count badge
+      const countBadge = document.getElementById('ai-bundle-count-badge');
+      if (countBadge) countBadge.innerText = `${(alt.bundle || []).length} items`;
+
       // Render items with the 4 explainable badges
       const container = document.getElementById('ai-bundle-items-container');
       if (container) {
         container.innerHTML = '';
         (alt.bundle || []).forEach(item => {
           const card = document.createElement('div');
-          card.className = 'bg-white p-3 rounded-xl border border-gray-200/80 space-y-2 shadow-xs';
+          card.className = 'bg-white p-4 rounded-2xl border border-gray-200/90 space-y-2.5 shadow-xs hover:border-gray-300 hover:shadow-sm transition';
           const priceFormatted = currentCurrency === 'INR' 
             ? '₹' + (item.price_inr || 25000).toLocaleString('en-IN') 
             : '$' + (item.price_usd || 350).toLocaleString();
@@ -5492,31 +5829,31 @@
           };
 
           card.innerHTML = `
-            <div class="flex justify-between items-start">
-              <div class="flex items-center space-x-2">
-                <span class="text-[9px] font-mono font-bold bg-black text-white px-1.5 py-0.5 rounded">${item.sku_code || 'KOHLER'}</span>
-                <h5 class="font-black text-xs text-gray-900">${item.name}</h5>
+            <div class="flex justify-between items-start gap-2">
+              <div class="flex items-center space-x-2.5 min-w-0">
+                <span class="text-[10px] font-mono font-bold bg-black text-white px-2 py-0.5 rounded-md shrink-0 shadow-2xs">${item.sku_code || 'KOHLER'}</span>
+                <h5 class="font-extrabold text-xs text-gray-900 leading-snug">${item.name}</h5>
               </div>
-              <span class="font-black text-xs text-gray-900">${priceFormatted}</span>
+              <span class="font-black text-xs text-gray-950 font-mono shrink-0 text-right">${priceFormatted}</span>
             </div>
-            <p class="text-[11px] text-gray-600 leading-snug">${item.justification || ''}</p>
+            <p class="text-xs text-gray-600 leading-relaxed font-normal">${item.justification || ''}</p>
             <!-- Explainable AI Checklist Matrix -->
-            <div class="grid grid-cols-2 gap-1.5 pt-1 text-[10px]">
-              <div class="flex items-center space-x-1.5 bg-emerald-50/80 text-emerald-950 p-1.5 rounded-lg border border-emerald-200/60" title="${exp.spatial_fit}">
-                <span class="text-xs shrink-0">📐</span>
-                <span class="truncate font-medium">${exp.spatial_fit}</span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-0.5 text-xs">
+              <div class="flex items-center space-x-2 bg-emerald-50/90 text-emerald-950 px-2.5 py-1.5 rounded-xl border border-emerald-200/70" title="${exp.spatial_fit}">
+                <span class="text-sm shrink-0">📐</span>
+                <span class="font-medium text-[11px] leading-tight">${exp.spatial_fit}</span>
               </div>
-              <div class="flex items-center space-x-1.5 bg-blue-50/80 text-blue-950 p-1.5 rounded-lg border border-blue-200/60" title="${exp.budget_fit}">
-                <span class="text-xs shrink-0">💰</span>
-                <span class="truncate font-medium">${exp.budget_fit}</span>
+              <div class="flex items-center space-x-2 bg-blue-50/90 text-blue-950 px-2.5 py-1.5 rounded-xl border border-blue-200/70" title="${exp.budget_fit}">
+                <span class="text-sm shrink-0">💰</span>
+                <span class="font-medium text-[11px] leading-tight">${exp.budget_fit}</span>
               </div>
-              <div class="flex items-center space-x-1.5 bg-amber-50/80 text-amber-950 p-1.5 rounded-lg border border-amber-200/60" title="${exp.theme_fit}">
-                <span class="text-xs shrink-0">🎨</span>
-                <span class="truncate font-medium">${exp.theme_fit}</span>
+              <div class="flex items-center space-x-2 bg-amber-50/90 text-amber-950 px-2.5 py-1.5 rounded-xl border border-amber-200/70" title="${exp.theme_fit}">
+                <span class="text-sm shrink-0">🎨</span>
+                <span class="font-medium text-[11px] leading-tight">${exp.theme_fit}</span>
               </div>
-              <div class="flex items-center space-x-1.5 bg-purple-50/80 text-purple-950 p-1.5 rounded-lg border border-purple-200/60" title="${exp.plumbing_fit}">
-                <span class="text-xs shrink-0">💧</span>
-                <span class="truncate font-medium">${exp.plumbing_fit}</span>
+              <div class="flex items-center space-x-2 bg-purple-50/90 text-purple-950 px-2.5 py-1.5 rounded-xl border border-purple-200/70" title="${exp.plumbing_fit}">
+                <span class="text-sm shrink-0">💧</span>
+                <span class="font-medium text-[11px] leading-tight">${exp.plumbing_fit}</span>
               </div>
             </div>
           `;
@@ -5557,17 +5894,24 @@
           const byId = KOHLER_CATALOG.find(c => c.id === item.id);
           if (byId) return byId;
         }
-        // 2. SKU / art match
+        // 2. SKU / art match (with price awareness if multiple matches)
         const sku = item.sku_code || item.art;
         if (sku) {
-          const byArt = KOHLER_CATALOG.find(c => c.art === sku || c.art.replace(/-/g, '').toLowerCase() === sku.replace(/-/g, '').toLowerCase());
-          if (byArt) return byArt;
+          const skuNorm = sku.replace(/-/g, '').toLowerCase();
+          const matches = KOHLER_CATALOG.filter(c => c.art === sku || c.art.replace(/-/g, '').toLowerCase() === skuNorm);
+          if (matches.length === 1) return matches[0];
+          if (matches.length > 1) {
+            const priceMatch = matches.find(c => c.price_inr === item.price_inr);
+            if (priceMatch) return priceMatch;
+            return matches[0];
+          }
         }
         // 3. Exact or keyword name match
         if (item.name) {
           const nLow = item.name.toLowerCase();
           const byName = KOHLER_CATALOG.find(c => c.name.toLowerCase() === nLow || nLow.includes(c.name.toLowerCase()));
           if (byName) return byName;
+          if (nLow.includes('parallel')) return KOHLER_CATALOG.find(c => c.id === 'parallel-faucet');
           if (nLow.includes('brazn')) return KOHLER_CATALOG.find(c => c.id === 'brazn-console');
           if (nLow.includes('veil')) return KOHLER_CATALOG.find(c => c.id === 'veil-smart-toilet');
           if (nLow.includes('jacquard')) return KOHLER_CATALOG.find(c => c.id === 'jacquard-vanity');
@@ -5579,6 +5923,9 @@
           if (nLow.includes('purist')) return KOHLER_CATALOG.find(c => c.id === 'purist-faucet');
           if (nLow.includes('artifacts')) return KOHLER_CATALOG.find(c => c.id === 'artifacts-faucet');
           if (nLow.includes('evok')) return KOHLER_CATALOG.find(c => c.id === 'evok-bathtub');
+          if (nLow.includes('verdera') && (nLow.includes('30') || (item.price_inr && item.price_inr <= 28000))) {
+            return KOHLER_CATALOG.find(c => c.id === 'verdera-30-mirror') || KOHLER_CATALOG.find(c => c.id === 'verdera-mirror');
+          }
           if (nLow.includes('verdera')) return KOHLER_CATALOG.find(c => c.id === 'verdera-mirror');
           if (nLow.includes('hydrorail')) return KOHLER_CATALOG.find(c => c.id === 'hydrorail-shower');
           if (nLow.includes('statement')) return KOHLER_CATALOG.find(c => c.id === 'statement-shower');
@@ -5593,79 +5940,105 @@
             return themeMatch || matching[0];
           }
         }
-        return null;
+        return KOHLER_CATALOG[0];
+      }
+
+      // Helper to spawn fixture passing exact AI recommendation IDs, metadata, and prices
+      function spawnAiFixture(entry, x, z, rotY, customOverrides = {}) {
+        if (!entry) return null;
+        const cat = findCatalogFixture(entry);
+        if (!cat) return null;
+        const customData = {
+          id: cat.id,
+          sku_code: entry.sku_code || entry.art || cat.art,
+          art: entry.sku_code || entry.art || cat.art,
+          name: entry.name || cat.name,
+          price_inr: (typeof entry.price_inr === 'number') ? entry.price_inr : cat.price_inr,
+          price_usd: (typeof entry.price_usd === 'number') ? entry.price_usd : cat.price_usd,
+          category: cat.category,
+          fromAiBundle: true,
+          ...customOverrides
+        };
+        return spawnProductById(cat.id, x, z, rotY, customData);
       }
 
       // Identify entries robustly (handling both singular and plural category strings)
       const toiletEntry = rec.find(i => (i.category || '').toLowerCase().includes('toilet'));
       const vanityEntry = rec.find(i => (i.category || '').toLowerCase().includes('vanit') || (i.category || '').toLowerCase().includes('basin'));
+      const faucetEntry = rec.find(i => (i.category || '').toLowerCase().includes('faucet'));
       const mirrorEntry = rec.find(i => (i.category || '').toLowerCase().includes('mirror'));
       const showerEntry = rec.find(i => (i.category || '').toLowerCase().includes('shower'));
       const tubEntry = rec.find(i => (i.category || '').toLowerCase().includes('tub') || (i.category || '').toLowerCase().includes('bath'));
 
       // A. Place Toilet (along back wet-wall, left side) ONLY if in recommended bundle
       if (toiletEntry) {
-        const toiletCat = findCatalogFixture(toiletEntry);
-        if (toiletCat) {
-          const toiletX = Math.max(-roomWidth / 2 + 0.55, Math.min(-0.55, -roomWidth / 3.4));
-          spawnProductById(toiletCat.id, toiletX, -roomDepth / 2 + 0.38, 0);
-        }
+        const toiletX = Math.max(-roomWidth / 2 + 0.55, Math.min(-0.55, -roomWidth / 3.4));
+        spawnAiFixture(toiletEntry, toiletX, -roomDepth / 2 + 0.38, 0);
       }
 
       // B. Place Vanity (along back wet-wall, centered / right-center) ONLY if in recommended bundle
       let vanityX = 0.20;
       if (roomWidth < 2.6) vanityX = 0.08;
+      let vanityCat = null;
       if (vanityEntry) {
-        const vanityCat = findCatalogFixture(vanityEntry);
-        if (vanityCat) {
-          spawnProductById(vanityCat.id, vanityX, -roomDepth / 2 + 0.36, 0);
-        }
+        vanityCat = findCatalogFixture(vanityEntry);
+        spawnAiFixture(vanityEntry, vanityX, -roomDepth / 2 + 0.36, 0);
       }
 
-      // C. Place Mirror (centered directly above vanity) ONLY if in recommended bundle
+      // C. Place Faucet (mounted on vanity deck) ONLY if in recommended bundle
+      if (faucetEntry) {
+        const vanityHeight = (vanityCat && vanityCat.height_m) ? vanityCat.height_m : 0.86;
+        spawnAiFixture(faucetEntry, vanityX, -roomDepth / 2 + 0.26, 0, {
+          elevation: vanityHeight,
+          y: vanityHeight
+        });
+      }
+
+      // D. Place Mirror (centered directly above vanity) ONLY if in recommended bundle
       if (mirrorEntry) {
-        const mirrorCat = findCatalogFixture(mirrorEntry);
-        if (mirrorCat) {
-          spawnProductById(mirrorCat.id, vanityX, -roomDepth / 2 + 0.08, 0);
-        }
+        spawnAiFixture(mirrorEntry, vanityX, -roomDepth / 2 + 0.08, 0);
       }
 
-      // D. Place Shower (wet corner zone) ONLY if in recommended bundle
+      // E. Place Shower (wet corner zone) ONLY if in recommended bundle
       if (showerEntry) {
-        const showerCat = findCatalogFixture(showerEntry);
-        if (showerCat) {
-          const showerX = Math.min(roomWidth / 2 - 0.50, Math.max(0.60, roomWidth / 2 - 0.55));
-          if (roomWidth >= 2.8 && roomDepth >= 2.5) {
-            spawnProductById(showerCat.id, showerX, 0.25, -Math.PI / 2);
-          } else {
-            spawnProductById(showerCat.id, showerX, -roomDepth / 2 + 0.52, 0);
-          }
+        const showerX = Math.min(roomWidth / 2 - 0.50, Math.max(0.60, roomWidth / 2 - 0.55));
+        if (roomWidth >= 2.8 && roomDepth >= 2.5) {
+          spawnAiFixture(showerEntry, showerX, 0.25, -Math.PI / 2);
+        } else {
+          spawnAiFixture(showerEntry, showerX, -roomDepth / 2 + 0.52, 0);
         }
       }
 
-      // E. Place Bathtub (if included in luxury tier and room has enough space)
-      if (tubEntry && roomWidth >= 2.9 && roomDepth >= 2.8) {
-        const tubCat = findCatalogFixture(tubEntry);
-        if (tubCat) {
-          spawnProductById(tubCat.id, -roomWidth / 2 + 0.85, 0.65, Math.PI / 2);
-        }
+      // F. Place Bathtub (if included in bundle and room has enough space)
+      if (tubEntry && roomWidth >= 2.6 && roomDepth >= 2.4) {
+        spawnAiFixture(tubEntry, -roomWidth / 2 + 0.85, 0.65, Math.PI / 2);
       }
 
-      // Safeguard: If somehow nothing was spawned, ensure matching fixtures from bundle are placed
-      if (placedProducts.length === 0 && rec.length > 0) {
-        if (toiletEntry) spawnProductById('veil-smart-toilet', -0.65, -roomDepth / 2 + 0.38, 0);
-        if (vanityEntry) spawnProductById('tailored-dual-vanity', 0.20, -roomDepth / 2 + 0.36, 0);
-        if (mirrorEntry) spawnProductById('verdera-mirror', 0.20, -roomDepth / 2 + 0.08, 0);
-        if (showerEntry) spawnProductById('hydrorail-shower', roomWidth / 2 - 0.50, -roomDepth / 2 + 0.52, 0);
-      }
+      // G. Safeguard: ensure any remaining candidate fixtures in rec are also spawned
+      const handledEntries = new Set([toiletEntry, vanityEntry, faucetEntry, mirrorEntry, showerEntry, tubEntry].filter(Boolean));
+      rec.forEach(extra => {
+        if (!handledEntries.has(extra)) {
+          spawnAiFixture(extra, 0, 0, 0);
+        }
+      });
 
       // Ensure all newly placed fixtures and architecture match the active aesthetic theme
+      const finalTheme = (currentAiRecommendation && currentAiRecommendation.theme && currentAiRecommendation.theme !== 'None' && currentAiRecommendation.theme !== 'none')
+        ? currentAiRecommendation.theme
+        : (currentSelectedTheme !== 'None' ? currentSelectedTheme : 'Minimalist Modern');
+      currentSelectedTheme = finalTheme;
+      const subnavTheme = document.getElementById('subnav-theme-label');
+      if (subnavTheme) subnavTheme.innerText = finalTheme;
+
       if (typeof applyAestheticTheme === 'function') {
-        applyAestheticTheme(currentSelectedTheme);
+        applyAestheticTheme(finalTheme);
       }
       if (typeof updateThemeArchitecturalAccents === 'function') {
-        updateThemeArchitecturalAccents(currentSelectedTheme);
+        updateThemeArchitecturalAccents(finalTheme);
       }
+
+      // Mark planner configuration as active AI bundle suite
+      setPlannerConfigurationState('ai_bundle', currentAiRecommendation.active_tier || 'Signature');
 
       closeAiAssistantModal();
       setViewMode('3d');
@@ -5674,7 +6047,7 @@
       updateWetWallScore();
       buildPlumbingConduits();
       if (currentViewMode === '2d') update2DFloorplanAnnotations();
-      showToast(`✨ Placed ${placedProducts.length} Kohler ${currentAiRecommendation.active_tier || 'Signature'} fixtures matching ${currentSelectedTheme}!`);
+      showToast(`✨ Placed ${placedProducts.length} Kohler ${currentAiRecommendation.active_tier || 'Signature'} fixtures matching ${finalTheme}!`);
     }
 
     // ==================== 10. TOTAL BOM & SHOPPING LIST ====================
@@ -5683,9 +6056,9 @@
       let totalUSD = 0;
 
       placedProducts.forEach(p => {
-        const item = p.userData;
-        totalINR += (item.price_inr || 25000);
-        totalUSD += (item.price_usd || 350);
+        const item = p.userData || {};
+        totalINR += (typeof item.price_inr === 'number' ? item.price_inr : 0);
+        totalUSD += (typeof item.price_usd === 'number' ? item.price_usd : 0);
       });
 
       const displayPrice = currentCurrency === 'INR' ? totalINR : totalUSD;
@@ -5746,25 +6119,20 @@
           const row = document.createElement('div');
           row.className = 'bg-gray-50 border border-gray-200 p-4 rounded-2xl hover:bg-amber-50/20 transition space-y-2.5';
 
-          const unitPriceNum = currentCurrency === 'INR' ? (entry.price_inr || 25000) : (entry.price_usd || 350);
+          const unitPriceNum = currentCurrency === 'INR' ? (typeof entry.price_inr === 'number' ? entry.price_inr : 0) : (typeof entry.price_usd === 'number' ? entry.price_usd : 0);
           const lineTotalNum = unitPriceNum * entry.count;
           const unitPriceStr = currentCurrency === 'INR' ? '₹' + unitPriceNum.toLocaleString('en-IN') : '$' + unitPriceNum.toLocaleString();
           const lineTotalStr = currentCurrency === 'INR' ? '₹' + lineTotalNum.toLocaleString('en-IN') : '$' + lineTotalNum.toLocaleString();
 
           row.innerHTML = `
             <div class="flex justify-between items-start">
-              <div class="flex items-center space-x-3.5">
-                <div class="w-11 h-11 rounded-xl bg-black text-amber-400 flex items-center justify-center font-black text-sm shadow-sm flex-shrink-0">
-                  <i class="fa-solid ${iconMap[entry.category] || 'fa-cube'} text-base"></i>
+              <div>
+                <div class="flex items-center space-x-2">
+                  <span class="text-[10px] font-mono font-bold uppercase text-amber-700 tracking-wider">${entry.series}</span>
+                  <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-black text-[10px]">QTY: ${entry.count}</span>
                 </div>
-                <div>
-                  <div class="flex items-center space-x-2">
-                    <span class="text-[10px] font-mono font-bold uppercase text-amber-700 tracking-wider">${entry.series}</span>
-                    <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-black text-[10px]">QTY: ${entry.count}</span>
-                  </div>
-                  <h4 class="font-extrabold text-sm text-gray-900 leading-snug">${entry.name}</h4>
-                  <div class="text-xs text-gray-500 font-mono mt-0.5">SKU: ${entry.art} | Dim: ${entry.dim}</div>
-                </div>
+                <h4 class="font-extrabold text-sm text-gray-900 leading-snug">${entry.name}</h4>
+                <div class="text-xs text-gray-500 font-mono mt-0.5">SKU: ${entry.art} | Dim: ${entry.dim}</div>
               </div>
               <div class="flex items-center space-x-3">
                 <div class="text-right">
@@ -5789,7 +6157,7 @@
                 <span>Drain: ${entry.drain_type || 'Standard P-Trap'}</span>
               </span>
               <span class="bg-white border border-gray-200 text-gray-700 px-2 py-0.5 rounded-md font-semibold flex items-center space-x-1">
-                <i class="fa-solid fa-bolt text-amber-500 mr-1"></i>
+                <i class="fa-solid fa-bolt text-amber-600 mr-1"></i>
                 <span>Electrical: ${entry.electrical_req || 'None'}</span>
               </span>
               <span class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-2 py-0.5 rounded-md font-bold flex items-center space-x-1">
@@ -5848,7 +6216,7 @@
       }
 
       let totalVal = 0;
-      placedProducts.forEach(p => totalVal += (currentCurrency === 'INR' ? p.userData.price_inr : p.userData.price_usd));
+      placedProducts.forEach(p => totalVal += (currentCurrency === 'INR' ? (typeof p.userData.price_inr === 'number' ? p.userData.price_inr : 0) : (typeof p.userData.price_usd === 'number' ? p.userData.price_usd : 0)));
       document.getElementById('modal-total-price').innerText = formatCurrency(totalVal);
 
       document.getElementById('shopping-list-modal').classList.remove('hidden');
@@ -5860,6 +6228,7 @@
         const item = placedProducts[idx];
         scene.remove(item);
         placedProducts.splice(idx, 1);
+        setPlannerConfigurationState('modified');
         openShoppingList();
         updateTotalBOM();
         evaluateHardConstraints();
@@ -5975,8 +6344,10 @@
 
     // ==================== 11. LOCALSTORAGE, EXPORT & FINISHES ====================
     function savePlanToStorage() {
+      const planNameEl = document.getElementById('plan-name-display');
+      const saveStatusEl = document.getElementById('save-status-label');
       const planData = {
-        name: document.getElementById('plan-name-display').innerText,
+        name: planNameEl ? planNameEl.innerText : 'Kohler Luxury Master Suite',
         code: 'KOHLER-AI-9021',
         dimensions: { width: roomWidth, depth: roomDepth, height: roomHeight },
         products: placedProducts.map(p => ({
@@ -5987,13 +6358,14 @@
         }))
       };
       localStorage.setItem('kohler_ai_plan', JSON.stringify(planData));
-      document.getElementById('save-status-label').innerText = 'Saved just now';
+      if (saveStatusEl) saveStatusEl.innerText = 'Saved just now';
       showToast('Plan KOHLER-AI-9021 saved to browser storage!');
     }
 
     function exportPlanJSON() {
+      const planNameEl = document.getElementById('plan-name-display');
       const planData = {
-        name: document.getElementById('plan-name-display').innerText,
+        name: planNameEl ? planNameEl.innerText : 'Kohler Luxury Master Suite',
         code: 'KOHLER-AI-9021',
         exportedAt: new Date().toISOString(),
         room: { widthM: roomWidth, depthM: roomDepth, heightM: roomHeight, widthFt: (roomWidth * 3.28084).toFixed(1), depthFt: (roomDepth * 3.28084).toFixed(1) },
@@ -6022,12 +6394,43 @@
     }
 
     function promptRenamePlan() {
-      const current = document.getElementById('plan-name-display').innerText;
+      const planNameEl = document.getElementById('plan-name-display');
+      const current = planNameEl ? planNameEl.innerText : 'Kohler Luxury Master Suite';
       const val = prompt('Rename your Kohler bathroom project:', current);
       if (val && val.trim()) {
-        document.getElementById('plan-name-display').innerText = val.trim();
+        if (planNameEl) planNameEl.innerText = val.trim();
         showToast('Project renamed');
       }
+    }
+
+    function toggleImmersiveView(isImmersive) {
+      const header = document.getElementById('main-header');
+      const subnav = document.getElementById('workspace-subnav');
+      const catalog = document.getElementById('catalog-sidebar');
+      const rightTools = document.getElementById('bottom-right-tools');
+      const inspector = document.getElementById('inspector-card');
+
+      if (isImmersive) {
+        if (header) header.classList.add('hidden');
+        if (subnav) subnav.classList.add('hidden');
+        if (catalog) catalog.classList.add('hidden');
+        if (rightTools) rightTools.classList.add('hidden');
+        if (inspector) inspector.classList.add('hidden');
+        if (typeof closeCatalogDrawer === 'function') closeCatalogDrawer();
+        showToast('Clean 3D View: Active');
+      } else {
+        if (header) header.classList.remove('hidden');
+        if (subnav) subnav.classList.remove('hidden');
+        if (catalog) catalog.classList.remove('hidden');
+        if (rightTools) rightTools.classList.remove('hidden');
+        showToast('3D View: Controls Restored');
+      }
+
+      // Smoothly resize 3D viewport canvas to fit viewport
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+        if (typeof onWindowResize === 'function') onWindowResize();
+      }, 50);
     }
 
     function toggleGridVisibility(visible) {
@@ -6038,17 +6441,158 @@
       toggleWetWallInspection(visible);
     }
 
+    function resetThemeToDefault() {
+      currentSelectedTheme = 'None';
+
+      // 1. Clear theme architectural accents (rugs, sconces, plants, slats, etc.)
+      if (themeAccentsGroup) {
+        while (themeAccentsGroup.children.length > 0) {
+          themeAccentsGroup.remove(themeAccentsGroup.children[0]);
+        }
+      }
+
+      // 2. Reset 4 walls to neutral standard off-white ceramic architectural tile
+      const neutralWallTexX = generateWallTileTexture('square', roomWidth, roomHeight);
+      const neutralWallTexZ = generateWallTileTexture('square', roomDepth, roomHeight);
+      [backWallMesh, frontWallMesh].forEach(mesh => {
+        if (mesh && mesh.material) {
+          mesh.material.map = neutralWallTexX;
+          mesh.material.roughness = 0.45;
+          mesh.material.metalness = 0.02;
+          mesh.material.needsUpdate = true;
+        }
+      });
+      [leftWallMesh, rightWallMesh].forEach(mesh => {
+        if (mesh && mesh.material) {
+          mesh.material.map = neutralWallTexZ;
+          mesh.material.roughness = 0.45;
+          mesh.material.metalness = 0.02;
+          mesh.material.needsUpdate = true;
+        }
+      });
+
+      // 3. Reset floor to neutral architectural slate
+      if (floorMesh && floorMesh.material) {
+        const neutralFloorTex = generateFloorTileTexture('slate', roomWidth, roomDepth);
+        floorMesh.material.map = neutralFloorTex;
+        floorMesh.material.roughness = 0.70;
+        floorMesh.material.metalness = 0.02;
+        floorMesh.material.needsUpdate = true;
+      }
+
+      // 4. Reset lighting to clean neutral daylight
+      if (roomAmbLight) {
+        roomAmbLight.color.set(0xfff7ec);
+        roomAmbLight.intensity = 0.38;
+      }
+      if (roomKeySun) {
+        roomKeySun.color.set(0xfff8ee);
+        roomKeySun.intensity = 0.78;
+      }
+      if (roomFillLight) {
+        roomFillLight.color.set(0xdce5ed);
+        roomFillLight.intensity = 0.22;
+      }
+      if (roomBackWallSpot) {
+        roomBackWallSpot.color.set(0xfffaee);
+        roomBackWallSpot.intensity = 1.35;
+      }
+
+      // 5. Reset UI labels and modal theme buttons
+      const subnavTheme = document.getElementById('subnav-theme-label');
+      if (subnavTheme) subnavTheme.innerText = 'None';
+
+      document.querySelectorAll('.ai-theme-btn').forEach(btn => {
+        btn.classList.remove('active', 'border-black', 'bg-gray-50', 'border-2');
+        if (btn.dataset.theme === 'Kohler WasteLAB Eco-Luxury') {
+          btn.classList.add('border-emerald-200', 'bg-emerald-50/40');
+        } else {
+          btn.classList.add('border-gray-200', 'bg-white');
+        }
+      });
+    }
+
     function confirmClearRoom() {
       if (confirm('Clear all placed products and reset Kohler suite?')) {
         placedProducts.forEach(p => scene.remove(p));
         placedProducts.length = 0;
         deselectActiveObject();
+        setPlannerConfigurationState('reset');
         updateTotalBOM();
         updateClearanceVisualizer();
         updateWetWallScore();
         buildPlumbingConduits();
-        showToast('Room cleared');
+        resetThemeToDefault();
+        resetAiEngineAndConstraints();
+        showToast('Room, Theme & AI Engine Cleared');
       }
+    }
+
+    function resetAiEngineAndConstraints() {
+      // 1. Mark AI Engine as reset and clear recommendation cache
+      currentAiRecommendation = null;
+      isAiEngineReset = true;
+
+      // 2. Reset Predefined Constraints
+      const chkToilet = document.getElementById('prio-smart-toilet');
+      if (chkToilet) chkToilet.checked = false;
+      const chkShower = document.getElementById('prio-thermo-shower');
+      if (chkShower) chkShower.checked = false;
+      const chkVanity = document.getElementById('prio-dual-vanity');
+      if (chkVanity) chkVanity.checked = false;
+      const chkMirror = document.getElementById('prio-smart-mirror');
+      if (chkMirror) chkMirror.checked = false;
+
+      // Reset Dimensions inputs in AI modal
+      const aiW = document.getElementById('ai-input-width');
+      if (aiW) { aiW.value = ''; aiW.placeholder = 'e.g. 10.5'; }
+      const aiD = document.getElementById('ai-input-depth');
+      if (aiD) { aiD.value = ''; aiD.placeholder = 'e.g. 9.2'; }
+      const aiH = document.getElementById('ai-input-height');
+      if (aiH) { aiH.value = ''; aiH.placeholder = 'e.g. 8.5'; }
+      const aiArea = document.getElementById('ai-calculated-area');
+      if (aiArea) aiArea.innerText = '—';
+
+      // Reset Theme selection highlight in AI modal
+      document.querySelectorAll('.ai-theme-btn').forEach(btn => {
+        btn.classList.remove('active', 'border-black', 'bg-gray-50', 'border-2');
+        btn.classList.add('border-gray-200', 'bg-white');
+      });
+
+      // 3. Reset Custom AI Prompt (Tab 2)
+      const customNotes = document.getElementById('ai-custom-notes');
+      if (customNotes) customNotes.value = '';
+      const charCount = document.getElementById('ai-custom-char-count');
+      if (charCount) charCount.innerText = '0 / 500';
+
+      const autoRoomBadge = document.getElementById('ai-auto-room-badge');
+      if (autoRoomBadge) autoRoomBadge.classList.add('hidden');
+      lastAutoDetectedDim = null;
+
+      const understoodContainer = document.getElementById('ai-understood-container');
+      if (understoodContainer) understoodContainer.classList.add('hidden');
+      const understoodTagsEl = document.getElementById('ai-understood-tags');
+      if (understoodTagsEl) understoodTagsEl.innerHTML = '';
+
+      // 4. Reset AI Engine Output in Right Column (Show Empty State, Hide All Computed Bundles)
+      const emptyContainer = document.getElementById('ai-empty-container');
+      if (emptyContainer) emptyContainer.classList.remove('hidden');
+
+      const feasibleContainer = document.getElementById('ai-feasible-container');
+      if (feasibleContainer) feasibleContainer.classList.add('hidden');
+
+      const impossibleContainer = document.getElementById('ai-impossible-container');
+      if (impossibleContainer) impossibleContainer.classList.add('hidden');
+
+      const applySection = document.getElementById('ai-apply-section');
+      if (applySection) applySection.classList.add('hidden');
+
+      const bundleItemsContainer = document.getElementById('ai-bundle-items-container');
+      if (bundleItemsContainer) bundleItemsContainer.innerHTML = '';
+
+      // Reset subnav theme label
+      const subnavTheme = document.getElementById('subnav-theme-label');
+      if (subnavTheme) subnavTheme.innerText = 'None';
     }
 
     // Finishes Modal
@@ -6059,9 +6603,12 @@
       document.getElementById('modal-finishes').classList.add('hidden');
     }
     function setWallFinish(type) {
-      const tex = generateWallTileTexture(type, roomWidth, roomHeight);
-      backWallMesh.material.map = tex; backWallMesh.material.needsUpdate = true;
-      leftWallMesh.material.map = tex; leftWallMesh.material.needsUpdate = true;
+      const texX = generateWallTileTexture(type, roomWidth, roomHeight);
+      const texZ = generateWallTileTexture(type, roomDepth, roomHeight);
+      if (backWallMesh && backWallMesh.material) { backWallMesh.material.map = texX; backWallMesh.material.needsUpdate = true; }
+      if (frontWallMesh && frontWallMesh.material) { frontWallMesh.material.map = texX; frontWallMesh.material.needsUpdate = true; }
+      if (leftWallMesh && leftWallMesh.material) { leftWallMesh.material.map = texZ; leftWallMesh.material.needsUpdate = true; }
+      if (rightWallMesh && rightWallMesh.material) { rightWallMesh.material.map = texZ; rightWallMesh.material.needsUpdate = true; }
       closeFinishesModal();
       showToast('Wall surface updated');
     }
@@ -6109,7 +6656,7 @@
       const elSize = document.getElementById('badge-room-size');
       if (elSize) elSize.innerText = `${wFt} ft × ${dFt} ft`;
       const elArea = document.getElementById('badge-room-area');
-      if (elArea) elArea.innerText = `${areaSqFt} sq ft / ${areaSqM} m²`;
+      if (elArea) elArea.innerText = `${areaSqFt} sq ft`;
       const elHeight = document.getElementById('badge-room-height');
       if (elHeight) elHeight.innerText = `${hFt} ft (${roomHeight.toFixed(2)} m)`;
       const elBtn = document.getElementById('btn-size-preview');
@@ -6120,7 +6667,7 @@
       const container = document.getElementById('toast-shelf');
       const toast = document.createElement('div');
       toast.className = 'glass-card px-5 py-2.5 rounded-full shadow-2xl text-xs font-bold text-gray-900 border border-white/80 toast-anim flex items-center space-x-2';
-      toast.innerHTML = `<i class="fa-solid fa-circle-check text-amber-500 text-sm"></i><span>${msg}</span>`;
+      toast.innerHTML = `<i class="fa-solid fa-circle-check text-amber-600 text-sm"></i><span>${msg}</span>`;
       container.appendChild(toast);
       setTimeout(() => toast.remove(), 2600);
     }
@@ -6360,7 +6907,7 @@
       }
       const doorArcGeo = new THREE.BufferGeometry().setFromPoints(doorArcPoints);
       const doorArcMat = new THREE.LineBasicMaterial({
-        color: anyDoorCollision ? 0xef4444 : 0xc59b27,
+        color: anyDoorCollision ? 0xef4444 : 0xb45309,
         linewidth: 2,
         transparent: true,
         opacity: anyDoorCollision ? 0.95 : 0.45
@@ -6396,7 +6943,7 @@
         label.innerText = 'NKBA: 100% Pass';
         icon.className = 'fa-solid fa-circle-check text-emerald-600';
       } else if (status === 'warning') {
-        badge.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-300 flex items-center space-x-1.5 hover:bg-amber-100 transition shadow-xs cursor-pointer';
+        badge.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200/80 flex items-center space-x-1.5 hover:bg-amber-100 transition shadow-xs cursor-pointer';
         label.innerText = `NKBA: ${count} Tight Spacing`;
         icon.className = 'fa-solid fa-triangle-exclamation text-amber-600';
       } else {
@@ -6429,7 +6976,7 @@
         descEl.innerText = 'One or more fixtures have marginal clearances (18"-21"). Usable but tight.';
         iconEl.className = 'fa-solid fa-triangle-exclamation text-2xl text-amber-600';
         bannerEl.className = 'p-4 rounded-2xl border flex items-center space-x-3 bg-amber-50 border-amber-200 text-amber-950';
-        mainIconContainer.className = 'w-9 h-9 rounded-xl bg-amber-500 text-black flex items-center justify-center font-black text-base shadow-sm';
+        mainIconContainer.className = 'w-9 h-9 rounded-xl bg-amber-50 text-amber-700 border border-amber-200/80 flex items-center justify-center font-black text-base shadow-sm';
       } else {
         headingEl.innerText = `${report.invalidCount} Code Violation / Collision Alert`;
         descEl.innerText = 'Fixtures are overlapping or violate minimum NKBA 18" clearance boundaries.';
@@ -7054,7 +7601,7 @@
       const pad = 40;
       ctx.strokeRect(pad, pad, w - pad * 2, h - pad * 2);
 
-      ctx.fillStyle = '#f59e0b';
+      ctx.fillStyle = '#d97706';
       ctx.font = 'bold 11px monospace';
       ctx.fillText(type === 'master' ? '10\'-6" [3.20m]' : '5\'-0" [1.52m]', w / 2 - 35, pad - 12);
       ctx.fillText(type === 'master' ? '9\'-2" [2.80m]' : '7\'-0" [2.13m]', pad - 35, h / 2);
@@ -7198,10 +7745,80 @@
       showToast(`RFQ Transmitted: ${rfqId} dispatched to Kohler Experience Center (${city}) for ${name}!`);
     }
 
+    function updateDynamicWallVisibility() {
+      if (!camera || roomWallDefinitions.length === 0) return;
+
+      if (currentViewMode === '2d') {
+        roomWallDefinitions.forEach(w => {
+          if (w.mesh) w.mesh.visible = true;
+          if (w.caps) w.caps.forEach(c => { if (c) c.visible = true; });
+          if (w.door) w.door.visible = true;
+        });
+        return;
+      }
+
+      // Check if camera is inside room (e.g. walk-in view)
+      const insideX = Math.abs(camera.position.x) < (roomWidth / 2 - 0.05);
+      const insideZ = Math.abs(camera.position.z) < (roomDepth / 2 - 0.05);
+      const isInside = insideX && insideZ;
+
+      if (isInside) {
+        roomWallDefinitions.forEach(w => {
+          if (w.mesh) w.mesh.visible = true;
+          if (w.caps) w.caps.forEach(c => { if (c) c.visible = true; });
+          if (w.door) w.door.visible = true;
+        });
+        placedProducts.forEach(p => {
+          if (p.userData && p.userData.category === 'mirrors') p.visible = true;
+        });
+        return;
+      }
+
+      // Exterior viewing ray from camera to each wall center
+      const camPos = camera.position;
+      const ray = new THREE.Vector3();
+
+      roomWallDefinitions.forEach(w => {
+        ray.subVectors(w.center, camPos).normalize();
+        // Dot product between camera-to-wall ray and wall outward normal:
+        // When dot < -0.05, viewing ray opposes outward normal (camera is outside looking through this wall towards interior)
+        // -> Wall is in front of the interior and obstructs the user's view -> hide it!
+        const dot = ray.dot(w.normal);
+        const shouldHide = (dot < -0.05);
+        const isVisible = !shouldHide;
+
+        if (w.mesh) w.mesh.visible = isVisible;
+        if (w.caps) w.caps.forEach(c => { if (c) c.visible = isVisible; });
+        if (w.door) w.door.visible = isVisible;
+
+        // Synchronize wall-mounted fixtures (mirrors) attached to this wall
+        placedProducts.forEach(p => {
+          if (p.userData && p.userData.category === 'mirrors') {
+            const attachedWall = p.userData.attachedWall || getFixtureAttachedWall(p);
+            if (attachedWall === w.id) {
+              p.visible = isVisible;
+            }
+          }
+        });
+      });
+    }
+
+    function getFixtureAttachedWall(p) {
+      if (!p) return null;
+      if (p.userData && p.userData.attachedWall) return p.userData.attachedWall;
+      const snapDist = 0.25;
+      if (Math.abs(p.position.z - (-roomDepth / 2)) < snapDist) return 'back';
+      if (Math.abs(p.position.z - (roomDepth / 2)) < snapDist) return 'front';
+      if (Math.abs(p.position.x - (-roomWidth / 2)) < snapDist) return 'left';
+      if (Math.abs(p.position.x - (roomWidth / 2)) < snapDist) return 'right';
+      return null;
+    }
+
     // ==================== 19. ANIMATION LOOP ====================
     function animate() {
       requestAnimationFrame(animate);
       if (controls && currentViewMode !== '2d') controls.update();
+      updateDynamicWallVisibility();
       renderer.render(scene, camera);
     }
 
