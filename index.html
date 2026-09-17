@@ -4412,13 +4412,32 @@
       document.getElementById('modal-ai-assistant').classList.add('hidden');
     }
 
+    function setAiNeedsRegeneration(message) {
+      currentAiRecommendation = null;
+      isAiEngineReset = true;
+      const emptyContainer = document.getElementById('ai-empty-container');
+      const feasibleContainer = document.getElementById('ai-feasible-container');
+      const impossibleContainer = document.getElementById('ai-impossible-container');
+      const applySection = document.getElementById('ai-apply-section');
+
+      if (emptyContainer) {
+        emptyContainer.classList.remove('hidden');
+        const desc = emptyContainer.querySelector('p');
+        if (desc && message) {
+          desc.innerHTML = message;
+        }
+      }
+      if (feasibleContainer) feasibleContainer.classList.add('hidden');
+      if (impossibleContainer) impossibleContainer.classList.add('hidden');
+      if (applySection) applySection.classList.add('hidden');
+    }
+
     function selectAiTheme(theme) {
       currentSelectedTheme = theme;
       if (typeof applyAestheticTheme === 'function') {
         applyAestheticTheme(theme);
       }
-      isAiEngineReset = false;
-      triggerGroqAiRecommendation();
+      setAiNeedsRegeneration(`Theme set to <strong>${theme}</strong>. Click <strong>Generate Optimized Kohler Bundle</strong> to synthesize your custom suite.`);
     }
 
     function onAiDimensionInputChange() {
@@ -4434,11 +4453,14 @@
       roomDepth = Math.round(dFt * 0.3048 * 10) / 10;
       roomHeight = Math.round(hFt * 0.3048 * 10) / 10;
       buildRoomArchitecture();
+
+      setAiNeedsRegeneration(`Room dimensions set to <strong>${wFt} × ${dFt} ft</strong>. Click <strong>Generate Optimized Kohler Bundle</strong> to calculate.`);
     }
 
     function updateAiBudgetDisplay(val) {
       const n = parseInt(val);
       document.getElementById('ai-budget-label').innerText = '₹' + n.toLocaleString('en-IN');
+      setAiNeedsRegeneration(`Target budget set to <strong>₹${n.toLocaleString('en-IN')}</strong>. Click <strong>Generate Optimized Kohler Bundle</strong> to calculate.`);
     }
 
     let currentInputMode = 'predefined';
@@ -4809,15 +4831,12 @@
           });
         }
 
-        // 3. Debounced live AI recommendation generation (500ms delay like Predefined Constraints)
         if (aiCustomNotesDebounceTimer) clearTimeout(aiCustomNotesDebounceTimer);
-        if (text.length >= 8) {
-          aiCustomNotesDebounceTimer = setTimeout(() => {
-            triggerGroqAiRecommendation();
-          }, 500);
-        } else if (text.length === 0) {
+        if (text.length === 0) {
           const understoodContainer = document.getElementById('ai-understood-container');
           if (understoodContainer) understoodContainer.classList.add('hidden');
+        } else if (text.length >= 8) {
+          setAiNeedsRegeneration('Custom prompt entered. Click <strong>Generate Optimized Kohler Bundle</strong> to analyze and synthesize your suite.');
         }
       }
     }
@@ -4835,6 +4854,7 @@
         lastAutoDetectedDim = null;
         const understoodContainer = document.getElementById('ai-understood-container');
         if (understoodContainer) understoodContainer.classList.add('hidden');
+        setAiNeedsRegeneration('Prompt cleared. Type your wishlist or select predefined constraints, then click <strong>Generate</strong>.');
         el.focus();
       }
     }
@@ -4854,7 +4874,7 @@
       }
       updateAiCustomNotesCount();
       el.focus();
-      triggerGroqAiRecommendation();
+      setAiNeedsRegeneration(`Inspiration added: "<em>${text}</em>". Click <strong>Generate Optimized Kohler Bundle</strong> to analyze.`);
     }
 
     function parsePromptPreferences(notes, roomW = 3.2, roomD = 2.8, theme = 'Japanese Zen') {
@@ -4965,8 +4985,7 @@
         return;
       }
 
-      isAiEngineReset = false;
-      triggerGroqAiRecommendation();
+      setAiNeedsRegeneration('Fixture inclusions updated. Click <strong>Generate Optimized Kohler Bundle</strong> to synthesize your custom suite.');
     }
 
     async function triggerGroqAiRecommendation() {
