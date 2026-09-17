@@ -1,0 +1,11 @@
+# KOHLER AI Spatial Bathroom Designer & Planner — Python Requirements
+# Track 1: KOHLER-MITWPU AI Research Lab Program
+#
+# The core ai_engine runs out-of-the-box using the Python 3.8+ Standard Library
+# (dataclasses, typing, math, json, re, urllib, http.server, unittest).
+# No external pip dependencies are strictly required to run main.py or tests.
+
+# Optional packages for extended production serving:
+# requests>=2.31.0
+# fastapi>=0.110.0
+# uvicorn>=0.28.0
