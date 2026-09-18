@@ -1,7 +1,7 @@
 # KOHLER AI Bathroom Designer & Planner 
 
 
-### 🏛️ Program & Challenge Overview ###
+### 🏛️ Program & Challenge Overview
 
 This project is submitted as an individual case study solution for the selection process of the **KOHLER-MITWPU AI Research Lab Program**.
 
