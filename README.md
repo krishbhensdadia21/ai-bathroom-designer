@@ -2,7 +2,7 @@
 
 
 ### 🏛️ Program & Challenge Overview
-
+---
 This project is submitted as an individual case study solution for the selection process of the **KOHLER-MITWPU AI Research Lab Program**.
 
 * **Challenge Track**: **Track 1: KOHLER AI Bathroom Designer & Planner**
