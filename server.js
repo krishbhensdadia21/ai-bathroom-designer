@@ -876,7 +876,7 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
       if (cat.includes('mirror')) return incMirror;
       if (cat.includes('bath') || cat.includes('tub')) return incShower || (customerNotes && (customerNotes.toLowerCase().includes('tub') || customerNotes.toLowerCase().includes('bathtub') || customerNotes.toLowerCase().includes('soak')));
       return true;
-    });
+    }).map(it => ({ ...it, sku: it.sku || it.sku_code }));
   }
 
   const activeSignature = filterItems(signatureItems);
