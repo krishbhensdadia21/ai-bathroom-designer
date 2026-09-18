@@ -36,28 +36,33 @@ kohler-ai-bathroom-designer/
 │   ├── studio_specifier_modal.html  # Studio Kohler B2B MEP architectural specifier sheet
 │   ├── clearance_report_modal.html  # Detailed NKBA / ADA building code clearance report
 │   └── about_modal.html          # KOHLER-MITWPU AI Research Lab challenge overview modal
-├── js/                           # Modular Client-Side JavaScript Engine (15 files)
-│   ├── state.js                  # Global application state, currency multipliers, raycaster
-│   ├── materials.js              # Procedural PBR materials & texture canvas generators
-│   ├── catalog.js                # Authentic Kohler product catalog specification database
-│   ├── fixtures.js               # 3D procedural fixture geometry builders (Veil, Reach, Revel, etc.)
-│   ├── theme.js                  # Dynamic theme transformation engine & palette coordinator
-│   ├── room.js                   # 3D architectural envelope builder (walls, floor, door, trim)
-│   ├── interaction.js            # Fixture dragging, 3D selection, deletion, wall-snapping
-│   ├── viewports.js              # 3D Orbit, 2D Floorplan, Walk-In camera perspectives & 2D CAD
-│   ├── ui.js                     # Workflow controller, catalog drawer filters, and toasts
-│   ├── ai_assistant.js           # Groq AI assistant controller, NLP parser, tier switching
-│   ├── optimizer.js              # Client-side multi-objective combinatorial Pareto optimizer
-│   ├── bom.js                    # Multi-currency BOM table, Studio Kohler toggle, RFQ export
-│   ├── storage_export.js         # Room presets, clear room, localStorage, layout export
-│   ├── clearance.js              # NKBA / ADA clearance validation engine & 3D visualizer rings
-│   └── app.js                    # Circadian lighting, wet-wall system, animation loop & bootstrapper
-├── css/                          # Modular Design System & Styles
-│   └── styles.css                # Custom Kohler typography, glassmorphism, animations, scrollbars
+├── public/                       # Static assets & client runtime
+│   ├── css/styles.css            # Custom Kohler typography, glassmorphism, animations, scrollbars
+│   ├── js/                       # Modular Client-Side JavaScript Engine (15 files)
+│   │   ├── state.js              # Global application state, currency multipliers, raycaster
+│   │   ├── materials.js          # Procedural PBR materials & texture canvas generators
+│   │   ├── catalog.js            # Authentic Kohler product catalog specification database
+│   │   ├── fixtures.js           # 3D procedural fixture geometry builders (Veil, Trace, Vive, Brazn, etc.)
+│   │   ├── theme.js              # Dynamic theme transformation engine & palette coordinator
+│   │   ├── room.js               # 3D architectural envelope builder (walls, floor, door, trim)
+│   │   ├── interaction.js        # Fixture dragging, 3D selection, deletion, wall-snapping
+│   │   ├── viewports.js          # 3D Orbit, 2D Floorplan, Walk-In camera perspectives & 2D CAD
+│   │   ├── ui.js                 # Workflow controller, catalog drawer filters, and toasts
+│   │   ├── ai_assistant.js       # Groq AI assistant controller, NLP parser, tier switching
+│   │   ├── optimizer.js          # Client-side multi-objective combinatorial Pareto optimizer
+│   │   ├── bom.js                # Multi-currency BOM table, Studio Kohler toggle, RFQ export
+│   │   ├── storage_export.js     # Room presets, clear room, localStorage, layout export
+│   │   ├── clearance.js          # NKBA / ADA clearance validation engine & 3D visualizer rings
+│   │   └── app.js                # Circadian lighting, wet-wall system, animation loop & bootstrapper
+│   ├── favicon.svg               # Title logo: crisp vector black 'K' favicon
+│   ├── favicon.png               # High-resolution raster black 'K' favicon
+│   ├── favicon.ico               # Legacy browser root favicon
+│   ├── ai-bot-icon.png           # AI Assistant brand icon
+│   ├── logo.png                  # Kohler AI Designer brand logo
+│   └── index.html                # Assembled production SPA
 ├── index_template.html           # Master HTML template with component include directives
-├── build.js                      # Automated component assembler compiling template into index.html
-├── test_modular.js               # Comprehensive 6-point modular architecture verification test
-├── index.html                    # Assembled production SPA (linked to modular js/ & css/)
+├── build.js                      # Automated component assembler compiling template into public/index.html
+├── test_modular.js               # Comprehensive modular architecture & syntax verification test
 ├── server.js                     # Node.js Server (auto-builds components, Groq API, static serving)
 ├── ai_engine/                    # Modular Python AI Spatial Intelligence Engine
 │   ├── __init__.py               # Package entry point & high-level exports
@@ -71,17 +76,12 @@ kohler-ai-bathroom-designer/
 │   └── test_ai_engine.py         # Catalog, NLP, clearance & Pareto mathematical verification
 ├── main.py                       # Python CLI runner & HTTP API microservice
 ├── requirements.txt              # Zero-dependency Python specification (Standard Library only)
-├── public/                       # Static assets for Vercel CDN deployment
-│   ├── ai-bot-icon.png           # AI Assistant brand icon
-│   └── logo.png                  # Kohler AI Designer brand logo
 ├── vercel.json                   # Vercel deployment routing & edge cache headers
 ├── package.json                  # Dependencies, test scripts & build lifecycle
 ├── package-lock.json             # Dependency lockfile
 ├── .env.example                  # Environment variable template for GROQ_API_KEY
 ├── .gitignore                    # Git exclusion rules
-├── README.md                     # Comprehensive case study documentation
-├── ai-bot-icon.png               # Root brand icon
-└── logo.png                      # Root brand logo
+└── README.md                     # Comprehensive case study documentation
 ```
 
 ### 📊 Evaluation Criteria Alignment (100% Total Weightage)
@@ -118,7 +118,8 @@ kohler-ai-bathroom-designer/
 * **Default Clean Architectural Canvas**: Upon initial visit, users start with a clean, empty room (`placedProducts = []`, `Investment: ₹0`, `Theme: None`, `Wet-Wall: N/A`, `NKBA: 100% Pass`), mirroring professional CAD design workflows.
 * **1-Click Reset to Default**: Clicking **`Clear Room`** clears all fixtures and **automatically restores room dimensions to the default 10.5 ft × 9.2 ft (3.2m × 2.8m)**.
 * **Controlled Generation UX**: Selecting themes or typing prompts does not prematurely dump products onto the screen; recommendations appear **only upon clicking `⚡ Generate Optimized Kohler Bundle (Groq AI)`**.
-* **Exact Fixture Matching**: Selecting *Vanity & Basin* adds the complete vanity unit with its integrated countertop basin and taps—preventing duplicate, unselected standalone faucets.
+* **Clean Typographic Branding & Favicon**: Features the authentic **THE BOLD LOOK OF KOHLER** brand lockup in the header and a crisp black 'K' title logo favicon.
+* **Uninterrupted Pricing Readout**: Clean live investment pricing display with zero intrusive customized status boxes during fixture dragging and dropping.
 * **Three Camera Perspectives**:
   * 🧊 **3D Orbit**: Smooth orbit controls, zoom in/out, and view reset.
   * 📐 **2D Floorplan**: Top-down orthographic architectural floorplan with dimensional grid.
@@ -141,21 +142,22 @@ Every product model in the planner corresponds to an authentic, production Kohle
 
 | Category | Kohler Series | SKU | Key Architectural Specs |
 |---|---|---|---|
-| **Smart Toilet** | Veil® One-Piece Intelligent Toilet | `K-5401IN-0` | Touchless dual flush (0.8/1.28 GPF), UV bidet wand, heated seat |
-| **Wall-Hung Toilet** | Reach™ Quiet-Close with In-Wall Tank | `K-77701IN-0` | Concealed in-wall carrier, saves 8–10" floor space |
-| **Classic Toilet** | Memoirs® Stately Comfort Height | `K-3983IN-0` | AquaPiston® 360° canister flush, architectural crown molding |
-| **Dual Vanity** | Tailored® 60" Floating Vanity | `K-99539-LG` | Solid hardwood, Silestone® quartz top, dual undermount sinks |
-| **Single Vanity** | Jacquard® 36" Shaker Vanity | `K-99507IN-0` | Transitional shaker profile, moisture-resistant finish, slow-close drawers |
-| **Zen Console** | Brazn™ Architectural Steel Console | `K-21057-0` | Minimalist Bauhaus black steel frame with ceramic vessel basin |
-| **Shower Enclosure** | Revel® Glass Box with HydroRail-R | `K-706015 / K-76465` | 5/16" CleanCoat® tempered glass box & Katalyst rainhead column |
-| **Multifunction Shower** | Statement® Oval Shower System | `K-26292IN-CP` | Katalyst® air-induction spray (2.2M air bubbles/min) |
-| **Freestanding Bath** | Evok® Freestanding Soaking Tub | `K-1130IN-0` | Seamless high-gloss acrylic, ergonomic lumbar recline, toe-tap drain |
-| **Smart Mirror** | Verdera® Voice Lighted Mirror | `K-99009IN-NA` | 2200K–5000K tunable circadian LED lighting, built-in defogger |
-| **Compact Mirror** | Verdera® 30" Lighted Mirror | `K-99008IN-NA` | Backlit halo LED illumination, copper-free mirror glass |
-| **Deck Faucet** | Purist® Single-Handle Tall Faucet | `K-99856IN-4` | Solid brass construction, ceramic disc valve, 1.2 GPM aerator |
-| **Geometric Faucet** | Parallel® Monoblock Faucet | `K-23484IN-4` | Modern cylindrical form, polished chrome / matte black finish |
-| **Column Faucet** | Artifacts® Column Spout Faucet | `K-10129IN-4` | Vintage Edwardian column silhouette in vibrant brushed brass |
-| **Minimalist Faucet** | Composed® Single-Control Faucet | `K-73159IN-4` | Pure geometric minimalism, laminar water flow |
+| **Smart Toilet** | Veil™ Smart One-piece Toilet | `K-5401IN-0` | Flagship smart toilet with touchless dual flush, heated Quiet-Close seat, LED nightlight |
+| **One-Piece Toilet** | Reach™ One-piece Toilet | `K-3983IN-S-0` | Skirted trapway, Class Five 4.8 LPF canister flush, compact ergonomic profile |
+| **One-Piece Toilet** | Ove™ One-Piece Toilet | `K-17688IN-SM-0` | Sculptural French organic contours, dual flush 3/4.5 LPF, Quiet-Close slim seat |
+| **Integrated Vanity** | Trace™ Integrated Top and Basin | `K-30375IN-0` | 700 mm seamless vitreous china top + basin with wall-hung soft-close cabinet & J-pull |
+| **Integrated Vanity** | Vive™ Integrated Top and Basin | `K-28782IN-0` | 720 mm integrated vanity top with bevelled contours, dual drawers, and brass pull bar |
+| **Vessel Basin** | Brazn™ 58.4 cm Rectangular Vessel Sink | `K-21060IN-0` | Splayed chamfered walls, knife-edge rim, slotted overflow, flush ceramic umbrella drain |
+| **Semi-Recessed Basin** | Forefront™ Square Semi-Recessed Basin | `K-11479IN-VC1-0` | 413 mm square vitreous china basin with cantilevered front overhang on console shelf |
+| **Shower Door** | New Trilogy™ 2000–2161 mm H Pivot Door | `K-704699IN-SHP` | 8 mm ultra-clear tempered glass with SHP high-polish pivot hinges and tubular handle |
+| **Showerhead** | Statement™ Round Multifunction Showerhead | `K-26299IN-CP` | Katalyst® air-induction spray, Cloud spray, Deep Massage streams, MasterClean face |
+| **Freestanding Bath** | Evok 2.0™ 1600 mm Acrylic Bathtub | `K-20935IN-0` | Seamless ergonomic double-ended soaking tub with center toe-tap drain & waste |
+| **Smart Mirror** | Ming™ 80 cm Lighted Mirror | `K-77115IN-NA` | Circular frosted perimeter LED ring, hands-free proximity sensor, defogger pad |
+| **Lighted Mirror** | Reve™ 1000 mm Lighted Mirror | `K-23268IN-NA` | Wide 100 cm rectangular mirror with dual lateral LED task light bars and touch dimmer |
+| **Single Faucet** | Purist™ Single Control Lavatory Faucet | `K-14402IN-4A-CP` | Minimalist tubular spout with straight lever handle in polished chrome, 1.2 GPM |
+| **Pillar Tap** | Parallel™ Pillar Tap | `K-23482IN-4-BV` | Faceted geometric pillar body in Brushed Bronze with quarter-turn ceramic valve |
+| **Widespread Faucet** | Artifacts™ Widespread Sink Faucets | `K-72760T-CP` | Edwardian swan neck spout with dual porcelain-capped cross handles in chrome |
+| **Tall Vessel Faucet** | Composed™ Tall Single-handle Faucet | `K-73159IN-7-CP` | Tower vessel column with side joystick lever and flat horizontal spout, 1.2 GPM |
 
 ### 🛠️ Tech Stack
 
