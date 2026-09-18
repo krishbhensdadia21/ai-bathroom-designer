@@ -645,23 +645,26 @@
           const byName = KOHLER_CATALOG.find(c => c.name.toLowerCase() === nLow || nLow.includes(c.name.toLowerCase()));
           if (byName) return byName;
           if (nLow.includes('parallel')) return KOHLER_CATALOG.find(c => c.id === 'parallel-faucet');
-          if (nLow.includes('brazn')) return KOHLER_CATALOG.find(c => c.id === 'brazn-console');
+          if (nLow.includes('brazn')) return KOHLER_CATALOG.find(c => c.id === 'brazn-vessel-sink') || KOHLER_CATALOG.find(c => c.id === 'brazn-console');
           if (nLow.includes('veil')) return KOHLER_CATALOG.find(c => c.id === 'veil-smart-toilet');
-          if (nLow.includes('jacquard')) return KOHLER_CATALOG.find(c => c.id === 'jacquard-vanity');
-          if (nLow.includes('tailor')) return KOHLER_CATALOG.find(c => c.id === 'tailored-dual-vanity');
-          if (nLow.includes('reach')) return KOHLER_CATALOG.find(c => c.id === 'reach-wall-hung');
-          if (nLow.includes('memoir')) return KOHLER_CATALOG.find(c => c.id === 'memoirs-stately-toilet');
-          if (nLow.includes('leap')) return KOHLER_CATALOG.find(c => c.id === 'leap-smart-toilet');
-          if (nLow.includes('composed')) return KOHLER_CATALOG.find(c => c.id === 'composed-faucet');
+          if (nLow.includes('prologue')) return KOHLER_CATALOG.find(c => c.id === 'prologue-vanity');
+          if (nLow.includes('luxe')) return KOHLER_CATALOG.find(c => c.id === 'luxe-vanity');
+          if (nLow.includes('reach')) return KOHLER_CATALOG.find(c => c.id === 'reach-one-piece-toilet') || KOHLER_CATALOG.find(c => c.id === 'reach-wall-hung');
+          if (nLow.includes('ove')) return KOHLER_CATALOG.find(c => c.id === 'ove-one-piece-toilet');
+          if (nLow.includes('jacquard')) return KOHLER_CATALOG.find(c => c.id === 'prologue-vanity');
+          if (nLow.includes('tailor')) return KOHLER_CATALOG.find(c => c.id === 'luxe-vanity');
+          if (nLow.includes('memoir')) return KOHLER_CATALOG.find(c => c.id === 'ove-one-piece-toilet');
+          if (nLow.includes('leap')) return KOHLER_CATALOG.find(c => c.id === 'reach-one-piece-toilet');
+          if (nLow.includes('composed')) return KOHLER_CATALOG.find(c => c.id === 'composed-tall-faucet') || KOHLER_CATALOG.find(c => c.id === 'composed-faucet');
           if (nLow.includes('purist')) return KOHLER_CATALOG.find(c => c.id === 'purist-faucet');
           if (nLow.includes('artifacts')) return KOHLER_CATALOG.find(c => c.id === 'artifacts-faucet');
           if (nLow.includes('evok')) return KOHLER_CATALOG.find(c => c.id === 'evok-bathtub');
-          if (nLow.includes('verdera') && (nLow.includes('30') || (item.price_inr && item.price_inr <= 28000))) {
-            return KOHLER_CATALOG.find(c => c.id === 'verdera-30-mirror') || KOHLER_CATALOG.find(c => c.id === 'verdera-mirror');
-          }
-          if (nLow.includes('verdera')) return KOHLER_CATALOG.find(c => c.id === 'verdera-mirror');
-          if (nLow.includes('hydrorail')) return KOHLER_CATALOG.find(c => c.id === 'hydrorail-shower');
-          if (nLow.includes('statement')) return KOHLER_CATALOG.find(c => c.id === 'statement-shower');
+          if (nLow.includes('ming')) return KOHLER_CATALOG.find(c => c.id === 'ming-smart-mirror');
+          if (nLow.includes('reve')) return KOHLER_CATALOG.find(c => c.id === 'reve-mirror');
+          if (nLow.includes('verdera')) return KOHLER_CATALOG.find(c => c.id === 'ming-smart-mirror') || KOHLER_CATALOG.find(c => c.id === 'reve-mirror');
+          if (nLow.includes('trilogy')) return KOHLER_CATALOG.find(c => c.id === 'new-trilogy-shower-door');
+          if (nLow.includes('hydrorail')) return KOHLER_CATALOG.find(c => c.id === 'new-trilogy-shower-door');
+          if (nLow.includes('statement')) return KOHLER_CATALOG.find(c => c.id === 'statement-showerhead') || KOHLER_CATALOG.find(c => c.id === 'statement-shower');
         }
         // 4. Safe theme-aware category match (prioritizing currentSelectedTheme)
         if (item.category) {

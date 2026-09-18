@@ -531,7 +531,7 @@ guard_score = float(guard_response.choices[0].message.content.strip())"""
         [
             Paragraph("<b>Budget Focused</b>", body_style),
             Paragraph("<code>[0.15, 0.25, <b>0.35</b>, 0.10, 0.15]</code>", body_style),
-            Paragraph("Essential Value Tier; Reach Wall-Hung carrier toilet; compact vanity.", body_style)
+            Paragraph("Essential Value Tier; Reach One-Piece skirted toilet; compact vanity.", body_style)
         ]
     ]
     weights_table = Table(weights_data, colWidths=[1.6 * inch, 2.7 * inch, 2.7 * inch])
@@ -576,7 +576,7 @@ guard_score = float(guard_response.choices[0].message.content.strip())"""
             Paragraph("<i>'Target budget is below entry threshold required for authentic Kohler vitreous china and solid brass valving.'</i>", body_style),
             Paragraph(
                 "&bull; Increase budget to INR 1,25,000 for Essential Suite<br/>"
-                "&bull; Select Kohler Reach Wall-Hung and Parallel brassware<br/>"
+                "&bull; Select Kohler Reach One-Piece and Parallel brassware<br/>"
                 "&bull; Phased renovation: Install wet-wall fixtures first",
                 body_style
             )

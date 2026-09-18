@@ -1,11 +1,11 @@
-    // ==================== 2. OFFICIAL KOHLER PRODUCT CATALOG ====================
+    // ==================== 2. OFFICIAL KOHLER PRODUCT CATALOG (15 GENUINE PRODUCTS) ====================
     const KOHLER_CATALOG = [
-      // TOILETS & SMART SANITARY
+      // 1. SMART TOILETS
       {
         id: 'veil-smart-toilet',
         series: 'VEIL',
         art: 'K-5401IN-0',
-        name: 'Veil Smart One-Piece Toilet',
+        name: 'Veil™ Smart One-piece Toilet',
         dim: '16x28 in (41x71 cm)',
         desc: 'Sculptural smart one-piece toilet with remote control, heated Quiet-Close seat, and automatic bidet cleansing.',
         price_inr: 85000,
@@ -36,29 +36,31 @@
           power_watts: 45,
           recycled_content_pct: 18,
           epa_watersense: true,
-          annual_water_savings_l: 8840 // (1.6 - 1.28) * 7300 flushes * 3.78541
+          annual_water_savings_l: 8840
         },
         builder: (...args) => buildVeilSmartToilet(...args)
       },
+
+      // 2. TOILETS
       {
-        id: 'leap-smart-toilet',
-        series: 'LEAP',
-        art: 'K-28529IN-0',
-        name: 'Leap Smart Toilet',
-        dim: '16x29 in (41x74 cm)',
-        desc: 'Elongated smart toilet featuring touchless UV sanitization, auto-open lid, and warm air drying.',
-        price_inr: 47000,
-        price_usd: 640,
+        id: 'reach-one-piece-toilet',
+        series: 'REACH',
+        art: 'K-3983IN-S-0',
+        name: 'Reach™ One-piece Round-front Toilet with Skirted Trapway, Dual Flush',
+        dim: '15x27 in (38x68 cm)',
+        desc: 'One-piece round-front toilet with clean skirted trapway, dual flush top actuator, and quiet-close seat.',
+        price_inr: 28000,
+        price_usd: 375,
         category: 'toilets',
         defaultFinish: 'white',
-        width_m: 0.41,
-        depth_m: 0.74,
-        height_m: 0.70,
-        styles: ['minimalist', 'modern'],
+        width_m: 0.38,
+        depth_m: 0.68,
+        height_m: 0.73,
+        styles: ['minimalist', 'modern', 'zen', 'compact', 'wastelab'],
         installation: {
           rough_in_in: 12,
           drain_type: '4-inch floor flange',
-          electrical_req: '120V/15A GFCI outlet',
+          electrical_req: 'None (Mechanical Dual Flush)',
           water_supply: '1/2" cold angle stop',
           min_clearance_front_m: 0.533,
           min_clearance_side_m: 0.381
@@ -69,151 +71,76 @@
           compatible_with: ['faucets', 'vanities', 'mirrors']
         },
         sustainability: {
-          flush_gpf: 1.28,
+          flush_gpf: 1.06, // Dual flush average 2.6/4L
           baseline_flush_gpf: 1.60,
           flow_gpm: 0,
-          power_watts: 40,
-          recycled_content_pct: 12,
+          power_watts: 0,
+          recycled_content_pct: 20,
           epa_watersense: true,
-          annual_water_savings_l: 8840
+          annual_water_savings_l: 14920
         },
-        builder: (...args) => buildLeapSmartToilet(...args)
+        builder: (...args) => buildReachOnePieceToilet(...args)
       },
+
+      // 3. TOILETS
       {
-        id: 'memoirs-stately-toilet',
-        series: 'MEMOIRS',
-        art: 'K-3983IN-0',
-        name: 'Memoirs Stately Toilet',
-        dim: '18x30 in (46x76 cm)',
-        desc: 'Traditional stately one-piece toilet with architectural crown molding details and AquaPiston flush engine.',
-        price_inr: 35000,
-        price_usd: 480,
+        id: 'ove-one-piece-toilet',
+        series: 'OVE',
+        art: 'K-17629T-NS-0',
+        name: 'Ove™ One-piece Round-front Toilet with Skirted Trapway, Dual Flush',
+        dim: '16x28 in (40x70 cm)',
+        desc: 'Sculptural organic egg-shaped one-piece toilet with skirted trapway, dual flush 2.6/4L, and soft-close ergonomic seat.',
+        price_inr: 34000,
+        price_usd: 450,
         category: 'toilets',
         defaultFinish: 'white',
-        width_m: 0.46,
-        depth_m: 0.76,
-        height_m: 0.78,
-        styles: ['classic', 'traditional'],
+        width_m: 0.40,
+        depth_m: 0.70,
+        height_m: 0.74,
+        styles: ['classic', 'modern', 'zen', 'minimalist'],
         installation: {
           rough_in_in: 12,
           drain_type: '4-inch floor flange',
-          electrical_req: 'None (Gravity AquaPiston)',
-          water_supply: '3/8" compression angle stop',
+          electrical_req: 'None',
+          water_supply: '1/2" cold angle stop',
           min_clearance_front_m: 0.533,
           min_clearance_side_m: 0.381
         },
         compatibility: {
           requires_wet_wall: true,
           max_wet_wall_dist_m: 0.85,
-          compatible_with: ['jacquard-vanity', 'artifacts-faucet']
-        },
-        sustainability: {
-          flush_gpf: 1.28,
-          baseline_flush_gpf: 1.60,
-          flow_gpm: 0,
-          power_watts: 0,
-          recycled_content_pct: 10,
-          epa_watersense: true,
-          annual_water_savings_l: 8840
-        },
-        builder: (...args) => buildMemoirsToilet(...args)
-      },
-      {
-        id: 'reach-wall-hung',
-        series: 'REACH',
-        art: 'K-77701IN-0',
-        name: 'Reach Wall-Hung Toilet',
-        dim: '14x21 in (36x53 cm)',
-        desc: 'Space-saving cantilevered toilet with concealed in-wall cistern and dual-flush actuator plate.',
-        price_inr: 24000,
-        price_usd: 320,
-        category: 'toilets',
-        defaultFinish: 'white',
-        width_m: 0.36,
-        depth_m: 0.53,
-        height_m: 0.40,
-        styles: ['minimalist', 'modern', 'zen', 'wastelab'],
-        installation: {
-          rough_in_in: 'Concealed in-wall carrier 4"',
-          drain_type: 'In-wall P-trap 4"',
-          electrical_req: 'None (Mechanical pneumatic actuator)',
-          water_supply: '1/2" supply inside in-wall tank',
-          min_clearance_front_m: 0.533,
-          min_clearance_side_m: 0.381
-        },
-        compatibility: {
-          requires_wet_wall: true,
-          max_wet_wall_dist_m: 0.50, // Must mount directly on wet wall
           compatible_with: ['faucets', 'vanities', 'mirrors']
         },
         sustainability: {
-          flush_gpf: 1.04, // Dual flush average (0.8 / 1.28 GPF)
+          flush_gpf: 1.06,
           baseline_flush_gpf: 1.60,
           flow_gpm: 0,
           power_watts: 0,
-          recycled_content_pct: 20,
+          recycled_content_pct: 16,
           epa_watersense: true,
-          annual_water_savings_l: 15480 // Saves (1.60 - 1.04) * 7300 * 3.78541
+          annual_water_savings_l: 14920
         },
-        builder: (...args) => buildReachToilet(...args)
+        builder: (...args) => buildOveToilet(...args)
       },
 
-      // VANITIES & CONSOLES
+      // 4. VANITIES
       {
-        id: 'tailored-dual-vanity',
-        series: 'TAILORED',
-        art: 'K-99539-LG',
-        name: 'Tailored 60" Dual Vanity',
-        dim: '60x22x34 in (152x56x86 cm)',
-        desc: 'Master double vanity with Silestone quartz countertop, twin Ladena undermount sinks, and slow-close drawers.',
-        price_inr: 145000,
-        price_usd: 1950,
+        id: 'prologue-vanity',
+        series: 'PROLOGUE',
+        art: 'K-30457IN-MWF',
+        name: 'Prologue™ 75 cm Wall-hung Bathroom Vanity Cabinet',
+        dim: '30x19x20 in (75x48x50 cm)',
+        desc: 'Wall-hung floating vanity cabinet with dual soft-close drawers, integrated bevelled J-pulls, and vitreous china basin.',
+        price_inr: 46000,
+        price_usd: 620,
         category: 'vanities',
-        defaultFinish: 'white',
-        width_m: 1.52,
-        depth_m: 0.56,
-        height_m: 0.86,
-        styles: ['minimalist', 'modern'],
+        defaultFinish: 'wood',
+        width_m: 0.75,
+        depth_m: 0.48,
+        height_m: 0.50,
+        styles: ['minimalist', 'modern', 'zen'],
         installation: {
-          rough_in_in: 'Dual 19" AFF wall rough-ins',
-          drain_type: 'Dual 1-1/4" wall P-traps',
-          electrical_req: 'Optional under-cabinet LED circuit',
-          water_supply: 'Dual pairs hot & cold 1/2" angle stops',
-          min_clearance_front_m: 0.533,
-          min_clearance_side_m: 0.100
-        },
-        compatibility: {
-          requires_wet_wall: true,
-          max_wet_wall_dist_m: 0.65,
-          compatible_with: ['purist-faucet', 'composed-faucet', 'verdera-mirror']
-        },
-        sustainability: {
-          flush_gpf: 0,
-          flow_gpm: 0,
-          power_watts: 0,
-          recycled_content_pct: 25, // FSC certified hardwood & recycled quartz
-          epa_watersense: false,
-          annual_water_savings_l: 0
-        },
-        builder: (...args) => buildTailoredVanity(...args)
-      },
-      {
-        id: 'jacquard-vanity',
-        series: 'JACQUARD',
-        art: 'K-99507IN-0',
-        name: 'Jacquard 36" Vanity Cabinet',
-        dim: '36x22x34 in (91x56x86 cm)',
-        desc: 'Traditional solid wood bathroom vanity with classic shaker panels, slow-close drawers, and marble top.',
-        price_inr: 58000,
-        price_usd: 790,
-        category: 'vanities',
-        defaultFinish: 'white',
-        width_m: 0.91,
-        depth_m: 0.56,
-        height_m: 0.86,
-        styles: ['classic', 'traditional'],
-        installation: {
-          rough_in_in: '19" AFF center wall rough-in',
+          rough_in_in: '19" AFF wall rough-in',
           drain_type: '1-1/4" wall P-trap',
           electrical_req: 'None',
           water_supply: '1 pair hot & cold 1/2" angle stops',
@@ -223,33 +150,75 @@
         compatibility: {
           requires_wet_wall: true,
           max_wet_wall_dist_m: 0.65,
-          compatible_with: ['artifacts-faucet', 'memoirs-stately-toilet']
+          compatible_with: ['purist-faucet', 'parallel-faucet', 'composed-tall-faucet', 'reve-mirror', 'ming-smart-mirror']
         },
         sustainability: {
           flush_gpf: 0,
           flow_gpm: 0,
           power_watts: 0,
-          recycled_content_pct: 15,
+          recycled_content_pct: 22,
           epa_watersense: false,
           annual_water_savings_l: 0
         },
-        builder: (...args) => buildJacquardVanity(...args)
+        builder: (...args) => buildPrologueVanity(...args)
       },
+
+      // 5. VANITIES
       {
-        id: 'brazn-console',
+        id: 'luxe-vanity',
+        series: 'LUXE',
+        art: 'K-30460IN-MWF',
+        name: 'Luxe™ 90 cm Wall-hung Bathroom Vanity Cabinet',
+        dim: '36x20x20 in (90x50x50 cm)',
+        desc: 'Luxury 90 cm floating vanity with deep soft-close storage drawers, premium architectural trim, and seamless ceramic basin deck.',
+        price_inr: 68000,
+        price_usd: 910,
+        category: 'vanities',
+        defaultFinish: 'wood',
+        width_m: 0.90,
+        depth_m: 0.50,
+        height_m: 0.50,
+        styles: ['classic', 'modern', 'minimalist', 'luxury'],
+        installation: {
+          rough_in_in: '19" AFF center wall rough-in',
+          drain_type: '1-1/4" wall P-trap',
+          electrical_req: 'Optional 12V under-cabinet LED circuit',
+          water_supply: '1 pair hot & cold 1/2" angle stops',
+          min_clearance_front_m: 0.533,
+          min_clearance_side_m: 0.100
+        },
+        compatibility: {
+          requires_wet_wall: true,
+          max_wet_wall_dist_m: 0.65,
+          compatible_with: ['artifacts-faucet', 'purist-faucet', 'reve-mirror', 'ming-smart-mirror']
+        },
+        sustainability: {
+          flush_gpf: 0,
+          flow_gpm: 0,
+          power_watts: 10,
+          recycled_content_pct: 25,
+          epa_watersense: false,
+          annual_water_savings_l: 0
+        },
+        builder: (...args) => buildLuxeVanity(...args)
+      },
+
+      // 6. BASIN
+      {
+        id: 'brazn-vessel-sink',
         series: 'BRAZN',
-        art: 'K-21057-0',
-        name: 'Brazn Zen Minimalist Console',
-        dim: '32x19x33 in (81x48x84 cm)',
-        desc: 'Japanese Zen-inspired asymmetric matte black console with integrated thin-edge Chalice vessel basin.',
-        price_inr: 72000,
-        price_usd: 980,
+        art: 'K-21060IN-0',
+        name: 'Brazn™ 58.4 cm Rectangular Vessel Bathroom Sink',
+        dim: '23x15x5 in (58.4x36.8x12 cm)',
+        desc: 'Architectural modernist vessel sink in vitreous china with sharp rectangular rim, chamfered edges, and umbrella drain.',
+        price_inr: 32000,
+        price_usd: 430,
         category: 'vanities',
         defaultFinish: 'black',
-        width_m: 0.81,
-        depth_m: 0.48,
-        height_m: 0.84,
-        styles: ['zen', 'minimalist', 'wastelab', 'industrial'],
+        width_m: 0.584,
+        depth_m: 0.368,
+        height_m: 0.84, // Mounted on architectural console shelf
+        styles: ['zen', 'minimalist', 'wastelab', 'industrial', 'modern'],
         installation: {
           rough_in_in: '20" AFF decorative bottle trap',
           drain_type: '1-1/4" exposed matte black bottle trap',
@@ -261,199 +230,41 @@
         compatibility: {
           requires_wet_wall: true,
           max_wet_wall_dist_m: 0.60,
-          compatible_with: ['composed-faucet', 'purist-faucet', 'veil-smart-toilet']
+          compatible_with: ['composed-tall-faucet', 'purist-faucet', 'ming-smart-mirror', 'reve-mirror']
         },
         sustainability: {
           flush_gpf: 0,
           flow_gpm: 0,
           power_watts: 0,
-          recycled_content_pct: 35, // WasteLAB sustainable recycled vitreous china
+          recycled_content_pct: 35,
           epa_watersense: false,
           annual_water_savings_l: 0
         },
-        builder: (...args) => buildBraznConsole(...args)
+        builder: (...args) => buildBraznVesselSink(...args)
       },
 
-      // FAUCETS & BRASSWARE
+      // 7. SHOWER DOOR
       {
-        id: 'purist-faucet',
-        series: 'PURIST',
-        art: 'K-99856IN-4',
-        name: 'Purist Tall Basin Faucet',
-        dim: '6x8x12 in (15x20x30 cm)',
-        desc: 'Architectural cylindrical single-handle faucet in Polished Chrome with Laminar water stream.',
-        price_inr: 19800,
-        price_usd: 270,
-        category: 'faucets',
-        defaultFinish: 'chrome',
-        width_m: 0.15,
-        depth_m: 0.20,
-        height_m: 0.30,
-        styles: ['minimalist', 'modern', 'zen'],
-        installation: {
-          rough_in_in: 'Single-hole 1-3/8" deck mount',
-          drain_type: 'Clicker drain assembly included',
-          electrical_req: 'None',
-          water_supply: '3/8" flexible braided supply hoses',
-          min_clearance_front_m: 0.300,
-          min_clearance_side_m: 0.150
-        },
-        compatibility: {
-          requires_wet_wall: false,
-          max_wet_wall_dist_m: 1.20,
-          compatible_with: ['tailored-dual-vanity', 'brazn-console']
-        },
-        sustainability: {
-          flush_gpf: 0,
-          flow_gpm: 1.20,
-          baseline_flow_gpm: 2.20,
-          power_watts: 0,
-          recycled_content_pct: 40, // Solid lead-free recycled brass
-          epa_watersense: true,
-          annual_water_savings_l: 16580 // (2.2 - 1.2) * 12 min/day * 365 * 3.78541
-        },
-        builder: (...args) => buildPuristFaucet(...args)
-      },
-      {
-        id: 'artifacts-faucet',
-        series: 'ARTIFACTS',
-        art: 'K-10129IN-4',
-        name: 'Artifacts Column Spout Faucet',
-        dim: '9x10x11 in (23x25x28 cm)',
-        desc: 'Classic widespread basin faucet with Edwardian column spout and porcelain cross handles.',
-        price_inr: 32000,
-        price_usd: 430,
-        category: 'faucets',
-        defaultFinish: 'chrome',
-        width_m: 0.23,
-        depth_m: 0.25,
-        height_m: 0.28,
-        styles: ['classic', 'traditional'],
-        installation: {
-          rough_in_in: '8" to 16" widespread 3-hole deck mount',
-          drain_type: 'Pop-up lift rod brass drain',
-          electrical_req: 'None',
-          water_supply: 'Dual 1/2" NPSM supply nuts',
-          min_clearance_front_m: 0.300,
-          min_clearance_side_m: 0.150
-        },
-        compatibility: {
-          requires_wet_wall: false,
-          max_wet_wall_dist_m: 1.20,
-          compatible_with: ['jacquard-vanity']
-        },
-        sustainability: {
-          flush_gpf: 0,
-          flow_gpm: 1.50,
-          baseline_flow_gpm: 2.20,
-          power_watts: 0,
-          recycled_content_pct: 30,
-          epa_watersense: true,
-          annual_water_savings_l: 11600 // (2.2 - 1.5) * 12 min/day * 365 * 3.78541
-        },
-        builder: (...args) => buildArtifactsFaucet(...args)
-      },
-      {
-        id: 'composed-faucet',
-        series: 'COMPOSED',
-        art: 'K-73159IN-4',
-        name: 'Composed Single-Handle Faucet',
-        dim: '6x7x10 in (15x18x25 cm)',
-        desc: 'Minimalist side-control mixer with balanced pure proportions and ceramic disc valving.',
-        price_inr: 14500,
-        price_usd: 195,
-        category: 'faucets',
-        defaultFinish: 'black',
-        width_m: 0.15,
-        depth_m: 0.18,
-        height_m: 0.25,
-        styles: ['minimalist', 'zen', 'modern', 'wastelab', 'industrial'],
-        installation: {
-          rough_in_in: 'Single-hole 1-3/8" deck mount',
-          drain_type: 'Push-button touch drain',
-          electrical_req: 'None',
-          water_supply: 'Flexible braided PEX supplies',
-          min_clearance_front_m: 0.300,
-          min_clearance_side_m: 0.150
-        },
-        compatibility: {
-          requires_wet_wall: false,
-          max_wet_wall_dist_m: 1.20,
-          compatible_with: ['brazn-console', 'tailored-dual-vanity']
-        },
-        sustainability: {
-          flush_gpf: 0,
-          flow_gpm: 1.20,
-          baseline_flow_gpm: 2.20,
-          power_watts: 0,
-          recycled_content_pct: 35,
-          epa_watersense: true,
-          annual_water_savings_l: 16580
-        },
-        builder: (...args) => buildComposedFaucet(...args)
-      },
-      {
-        id: 'parallel-faucet',
-        series: 'PARALLEL',
-        art: 'K-22536IN-4',
-        name: 'Parallel Single-Control Monoblock Faucet',
-        dim: '6x7x8 in (15x18x20 cm)',
-        desc: 'Sleek single-lever brass faucet engineered for high durability and ease of cleaning.',
-        price_inr: 11200,
-        price_usd: 150,
-        category: 'faucets',
-        defaultFinish: 'chrome',
-        width_m: 0.15,
-        depth_m: 0.18,
-        height_m: 0.22,
-        styles: ['minimalist', 'modern', 'zen', 'classic', 'wastelab'],
-        installation: {
-          rough_in_in: 'Single-hole 1-3/8" deck mount',
-          drain_type: 'Clicker drain assembly included',
-          electrical_req: 'None',
-          water_supply: 'Flexible braided supply hoses',
-          min_clearance_front_m: 0.300,
-          min_clearance_side_m: 0.150
-        },
-        compatibility: {
-          requires_wet_wall: false,
-          max_wet_wall_dist_m: 1.20,
-          compatible_with: ['jacquard-vanity', 'brazn-console', 'tailored-dual-vanity']
-        },
-        sustainability: {
-          flush_gpf: 0,
-          flow_gpm: 1.20,
-          baseline_flow_gpm: 2.20,
-          power_watts: 0,
-          recycled_content_pct: 35,
-          epa_watersense: true,
-          annual_water_savings_l: 16580
-        },
-        builder: (...args) => buildPuristFaucet(...args)
-      },
-
-      // THERMOSTATIC SHOWERS
-      {
-        id: 'hydrorail-shower',
-        series: 'REVEL & HYDRORAIL',
-        art: 'K-706015 / K-76465',
-        name: 'Revel Frameless Glass Box Enclosure with HydroRail System',
-        dim: '44x38x84 in (112x96x213 cm)',
-        desc: 'Official Kohler full transparent corner glass enclosure with Revel frameless pivot door, CleanCoat 10mm glass, tubular handle, and HydroRail thermostatic column with Statement 12" rainhead.',
-        price_inr: 118000,
-        price_usd: 1580,
+        id: 'new-trilogy-shower-door',
+        series: 'NEW TRILOGY',
+        art: 'K-704699IN-SHP',
+        name: 'New Trilogy™ 2000–2161 mm H Pivot Shower Door with 8 mm Thick Glass',
+        dim: '40x36x81 in (100x90x205 cm)',
+        desc: 'Architectural 2.05m tall pivot shower door with 8 mm CleanCoat tempered glass, solid brass pivot hinges, and high-polish tubular handle.',
+        price_inr: 82000,
+        price_usd: 1100,
         category: 'showers',
         defaultFinish: 'chrome',
-        width_m: 1.12,
-        depth_m: 0.96,
-        height_m: 2.13,
+        width_m: 1.00,
+        depth_m: 0.90,
+        height_m: 2.05,
         styles: ['minimalist', 'modern', 'classic', 'zen', 'wastelab', 'industrial'],
         installation: {
           rough_in_in: '1/2" NPT hot & cold supply inlets at 36" AFF',
           drain_type: '2-inch high-capacity corner shower drain',
           electrical_req: 'None',
-          water_supply: 'Dual 1/2" copper or PEX lines (45-60 PSI recommended)',
-          min_clearance_front_m: 0.610, // 24" NKBA unobstructed entry
+          water_supply: 'Dual 1/2" copper or PEX lines',
+          min_clearance_front_m: 0.610,
           min_clearance_side_m: 0.200
         },
         compatibility: {
@@ -463,32 +274,34 @@
         },
         sustainability: {
           flush_gpf: 0,
-          flow_gpm: 1.75, // Katalyst air induction eco-luxury stream
+          flow_gpm: 1.75,
           baseline_flow_gpm: 2.50,
           power_watts: 0,
-          recycled_content_pct: 22,
+          recycled_content_pct: 25,
           epa_watersense: true,
-          annual_water_savings_l: 33160 // (2.5 - 1.75) * 32 min/day * 365 * 3.78541
+          annual_water_savings_l: 33160
         },
-        builder: (...args) => buildHydroRailShower(...args)
+        builder: (...args) => buildNewTrilogyShowerDoor(...args)
       },
+
+      // 8. SHOWER
       {
-        id: 'statement-shower',
+        id: 'statement-showerhead',
         series: 'STATEMENT',
-        art: 'K-26292IN-CP',
-        name: 'Statement Multifunction Rainhead',
-        dim: '12x12 in (30x30 cm)',
-        desc: 'Contemporary round rainhead with Katalyst air-induction technology for complete, enveloping coverage.',
+        art: 'K-26290T-2MB',
+        name: 'Statement™ Three-function Showerhead',
+        dim: '10x10 in (25x25 cm)',
+        desc: 'Contemporary multifunction showerhead with Full Coverage, Cloud spray, Deep Massage, and Katalyst air-induction.',
         price_inr: 28500,
         price_usd: 380,
         category: 'showers',
-        defaultFinish: 'chrome',
-        width_m: 0.30,
-        depth_m: 0.30,
-        height_m: 0.15,
-        styles: ['minimalist', 'modern', 'zen'],
+        defaultFinish: 'black',
+        width_m: 0.25,
+        depth_m: 0.35,
+        height_m: 0.25,
+        styles: ['minimalist', 'modern', 'zen', 'industrial'],
         installation: {
-          rough_in_in: '1/2" NPT ceiling or wall arm drop',
+          rough_in_in: '1/2" NPT wall arm connection at 84" AFF',
           drain_type: 'Standard 2-inch floor shower drain',
           electrical_req: 'None',
           water_supply: '1/2" NPT thermostatic supply line',
@@ -496,7 +309,7 @@
           min_clearance_side_m: 0.200
         },
         compatibility: {
-          requires_wet_wall: false,
+          requires_wet_wall: true,
           max_wet_wall_dist_m: 1.50,
           compatible_with: ['faucets', 'toilets']
         },
@@ -509,107 +322,69 @@
           epa_watersense: true,
           annual_water_savings_l: 33160
         },
-        builder: (...args) => buildStatementShower(...args)
+        builder: (...args) => buildStatementShowerhead(...args)
       },
 
-      // BATHTUBS
+      // 9. BATHTUB
       {
         id: 'evok-bathtub',
-        series: 'EVOK',
-        art: 'K-1130IN-0',
-        name: 'Evok Oval Freestanding Bathtub',
-        dim: '67x30x24 in (170x76x61 cm)',
-        desc: 'Seamless acrylic freestanding soaking tub with center toe-tap drain and ergonomic back support.',
-        price_inr: 115000,
-        price_usd: 1550,
+        series: 'EVOK 2.0',
+        art: 'K-25164T-0',
+        name: 'Evok 2.0™ 1.7M Seamless Rectangular Freestanding Bathtub',
+        dim: '67x32x24 in (170x80x60 cm)',
+        desc: 'Seamless rectangular freestanding soaking tub with softened modern corners, double-ended lumbar support, and slotted overflow.',
+        price_inr: 125000,
+        price_usd: 1680,
         category: 'bathtubs',
         defaultFinish: 'white',
         width_m: 1.70,
-        depth_m: 0.76,
-        height_m: 0.61,
+        depth_m: 0.80,
+        height_m: 0.60,
         styles: ['zen', 'modern', 'minimalist', 'classic'],
         installation: {
           rough_in_in: 'Floor rough-in 1-1/2" center drain with P-trap',
           drain_type: '1-1/2" brass slotted overflow toe-tap drain',
           electrical_req: 'None',
           water_supply: 'Freestanding floor-mount bath filler supply lines',
-          min_clearance_front_m: 0.533, // 21" NKBA side access
+          min_clearance_front_m: 0.533,
           min_clearance_side_m: 0.150
         },
         compatibility: {
           requires_wet_wall: false,
           max_wet_wall_dist_m: 2.00,
-          compatible_with: ['purist-faucet', 'artifacts-faucet']
+          compatible_with: ['purist-faucet', 'artifacts-faucet', 'composed-tall-faucet']
         },
         sustainability: {
           flush_gpf: 0,
           flow_gpm: 0,
           power_watts: 0,
-          recycled_content_pct: 15,
+          recycled_content_pct: 18,
           epa_watersense: false,
           annual_water_savings_l: 0
         },
-        builder: (...args) => buildEvokBathtub(...args)
+        builder: (...args) => buildEvok2Bathtub(...args)
       },
 
-      // SMART MIRRORS
+      // 10. SMART MIRROR
       {
-        id: 'verdera-mirror',
-        series: 'VERDERA',
-        art: 'K-99009IN-NA',
-        name: 'Verdera Voice Lighted Smart Mirror',
-        dim: '34x30 in (86x76 cm)',
-        desc: 'Smart LED lighted mirror with built-in Amazon Alexa voice control, optimal daylight CRI 90+, and stereo sound.',
-        price_inr: 38000,
-        price_usd: 520,
+        id: 'ming-smart-mirror',
+        series: 'MING',
+        art: 'K-77115IN-NA',
+        name: 'Ming™ 80 cm Lighted Mirror with Proximity Sensor',
+        dim: '32x32 in (80x80 cm)',
+        desc: 'Circular lighted smart mirror with proximity sensor, perimeter frosted LED halo, circadian light control, and defogger.',
+        price_inr: 42000,
+        price_usd: 560,
         category: 'mirrors',
         defaultFinish: 'chrome',
-        width_m: 0.86,
-        depth_m: 0.10,
-        height_m: 0.76,
-        styles: ['minimalist', 'modern', 'zen', 'classic', 'industrial', 'wastelab'],
+        width_m: 0.80,
+        depth_m: 0.05,
+        height_m: 0.80,
+        styles: ['minimalist', 'modern', 'zen', 'classic', 'wastelab'],
         installation: {
-          rough_in_in: 'Direct 120V hardwired junction box centered behind mirror',
+          rough_in_in: '120V hardwired junction box behind mirror center',
           drain_type: 'None',
-          electrical_req: '120V/60Hz 25W LED + voice module hardwire',
-          water_supply: 'None',
-          min_clearance_front_m: 0.300,
-          min_clearance_side_m: 0.100
-        },
-        compatibility: {
-          requires_wet_wall: true, // Wall mounted above vanity
-          max_wet_wall_dist_m: 0.65,
-          compatible_with: ['tailored-dual-vanity', 'jacquard-vanity', 'brazn-console']
-        },
-        sustainability: {
-          flush_gpf: 0,
-          flow_gpm: 0,
-          power_watts: 25, // High-efficiency CRI 90+ LED illumination
-          recycled_content_pct: 20,
-          epa_watersense: false,
-          annual_water_savings_l: 0
-        },
-        builder: (...args) => buildVerderaMirror(...args)
-      },
-      {
-        id: 'verdera-30-mirror',
-        series: 'VERDERA',
-        art: 'K-99009IN-NA',
-        name: 'Verdera 30" Lighted LED Mirror',
-        dim: '30x30 in (76x76 cm)',
-        desc: 'Perimeter LED strip lighting with high CRI (90+) for accurate natural task lighting.',
-        price_inr: 26000,
-        price_usd: 350,
-        category: 'mirrors',
-        defaultFinish: 'chrome',
-        width_m: 0.76,
-        depth_m: 0.08,
-        height_m: 0.76,
-        styles: ['minimalist', 'modern', 'zen', 'classic', 'industrial', 'wastelab'],
-        installation: {
-          rough_in_in: 'Standard 120V hardwire junction box',
-          drain_type: 'None',
-          electrical_req: '120V hardwire outlet',
+          electrical_req: '120V/60Hz 25W LED + proximity sensor module',
           water_supply: 'None',
           min_clearance_front_m: 0.300,
           min_clearance_side_m: 0.100
@@ -617,17 +392,220 @@
         compatibility: {
           requires_wet_wall: true,
           max_wet_wall_dist_m: 0.65,
-          compatible_with: ['jacquard-vanity', 'brazn-console', 'tailored-dual-vanity']
+          compatible_with: ['prologue-vanity', 'luxe-vanity', 'brazn-vessel-sink']
         },
         sustainability: {
           flush_gpf: 0,
           flow_gpm: 0,
-          power_watts: 20,
+          power_watts: 25,
           recycled_content_pct: 20,
           epa_watersense: false,
           annual_water_savings_l: 0
         },
-        builder: (...args) => buildVerderaMirror(...args)
+        builder: (...args) => buildMingLightedMirror(...args)
+      },
+
+      // 11. MIRROR
+      {
+        id: 'reve-mirror',
+        series: 'REVE',
+        art: 'K-23268IN-NA',
+        name: 'Reve™ 1000 mm Lighted Mirror',
+        dim: '40x30 in (100x75 cm)',
+        desc: 'Wide 100 cm rectangular mirror with dual vertical lateral LED light bars, touch sensor dimmer, 90+ CRI task lighting, and anti-fog pad.',
+        price_inr: 36000,
+        price_usd: 480,
+        category: 'mirrors',
+        defaultFinish: 'chrome',
+        width_m: 1.00,
+        depth_m: 0.05,
+        height_m: 0.75,
+        styles: ['minimalist', 'modern', 'zen', 'classic', 'industrial'],
+        installation: {
+          rough_in_in: 'Standard 120V hardwire junction box',
+          drain_type: 'None',
+          electrical_req: '120V hardwire outlet 22W',
+          water_supply: 'None',
+          min_clearance_front_m: 0.300,
+          min_clearance_side_m: 0.100
+        },
+        compatibility: {
+          requires_wet_wall: true,
+          max_wet_wall_dist_m: 0.65,
+          compatible_with: ['prologue-vanity', 'luxe-vanity', 'brazn-vessel-sink']
+        },
+        sustainability: {
+          flush_gpf: 0,
+          flow_gpm: 0,
+          power_watts: 22,
+          recycled_content_pct: 22,
+          epa_watersense: false,
+          annual_water_savings_l: 0
+        },
+        builder: (...args) => buildReveLightedMirror(...args)
+      },
+
+      // 12. FAUCET
+      {
+        id: 'purist-faucet',
+        series: 'PURIST',
+        art: 'K-14402IN-4A-CP',
+        name: 'Purist™ Single Control Lavatory Faucet',
+        dim: '6x7x8 in (15x18x20 cm)',
+        desc: 'Pure architectural cylindrical single-lever faucet in Polished Chrome with laminar flow and ceramic disc valve.',
+        price_inr: 19800,
+        price_usd: 270,
+        category: 'faucets',
+        defaultFinish: 'chrome',
+        width_m: 0.15,
+        depth_m: 0.18,
+        height_m: 0.20,
+        styles: ['minimalist', 'modern', 'zen'],
+        installation: {
+          rough_in_in: 'Single-hole 1-3/8" deck mount',
+          drain_type: 'Clicker drain assembly included',
+          electrical_req: 'None',
+          water_supply: '3/8" flexible braided supply hoses',
+          min_clearance_front_m: 0.300,
+          min_clearance_side_m: 0.150
+        },
+        compatibility: {
+          requires_wet_wall: false,
+          max_wet_wall_dist_m: 1.20,
+          compatible_with: ['prologue-vanity', 'luxe-vanity']
+        },
+        sustainability: {
+          flush_gpf: 0,
+          flow_gpm: 1.20,
+          baseline_flow_gpm: 2.20,
+          power_watts: 0,
+          recycled_content_pct: 40,
+          epa_watersense: true,
+          annual_water_savings_l: 16580
+        },
+        builder: (...args) => buildPuristSingleControlFaucet(...args)
+      },
+
+      // 13. FAUCET
+      {
+        id: 'parallel-faucet',
+        series: 'PARALLEL',
+        art: 'K-23482IN-4-BV',
+        name: 'Parallel™ Pillar Tap',
+        dim: '5x6x7 in (13x16x18 cm)',
+        desc: 'Faceted geometric pillar tap in Brushed Bronze with precise angular contours and quarter-turn ceramic cartridge.',
+        price_inr: 12500,
+        price_usd: 168,
+        category: 'faucets',
+        defaultFinish: 'bronze',
+        width_m: 0.13,
+        depth_m: 0.16,
+        height_m: 0.18,
+        styles: ['minimalist', 'modern', 'zen', 'classic', 'wastelab'],
+        installation: {
+          rough_in_in: 'Single-hole 1-3/8" deck mount',
+          drain_type: 'Clicker drain assembly included',
+          electrical_req: 'None',
+          water_supply: 'Flexible braided supply hoses',
+          min_clearance_front_m: 0.300,
+          min_clearance_side_m: 0.150
+        },
+        compatibility: {
+          requires_wet_wall: false,
+          max_wet_wall_dist_m: 1.20,
+          compatible_with: ['prologue-vanity', 'luxe-vanity']
+        },
+        sustainability: {
+          flush_gpf: 0,
+          flow_gpm: 1.20,
+          baseline_flow_gpm: 2.20,
+          power_watts: 0,
+          recycled_content_pct: 35,
+          epa_watersense: true,
+          annual_water_savings_l: 16580
+        },
+        builder: (...args) => buildParallelPillarTap(...args)
+      },
+
+      // 14. FAUCET
+      {
+        id: 'artifacts-faucet',
+        series: 'ARTIFACTS',
+        art: 'K-72760T-CP',
+        name: 'Artifacts™ Widespread Bathroom Sink Faucets',
+        dim: '10x9x8 in (25x23x20 cm)',
+        desc: 'Widespread 3-hole bathroom sink faucet with classical Edwardian column spout and authentic dual cross handles.',
+        price_inr: 34000,
+        price_usd: 460,
+        category: 'faucets',
+        defaultFinish: 'chrome',
+        width_m: 0.25,
+        depth_m: 0.23,
+        height_m: 0.20,
+        styles: ['classic', 'traditional', 'luxury'],
+        installation: {
+          rough_in_in: '8" to 16" widespread 3-hole deck mount',
+          drain_type: 'Pop-up lift rod brass drain',
+          electrical_req: 'None',
+          water_supply: 'Dual 1/2" NPSM supply nuts',
+          min_clearance_front_m: 0.300,
+          min_clearance_side_m: 0.150
+        },
+        compatibility: {
+          requires_wet_wall: false,
+          max_wet_wall_dist_m: 1.20,
+          compatible_with: ['luxe-vanity', 'prologue-vanity']
+        },
+        sustainability: {
+          flush_gpf: 0,
+          flow_gpm: 1.50,
+          baseline_flow_gpm: 2.20,
+          power_watts: 0,
+          recycled_content_pct: 30,
+          epa_watersense: true,
+          annual_water_savings_l: 11600
+        },
+        builder: (...args) => buildArtifactsWidespreadFaucet(...args)
+      },
+
+      // 15. FAUCET
+      {
+        id: 'composed-tall-faucet',
+        series: 'COMPOSED',
+        art: 'K-73159IN-7-CP',
+        name: 'Composed™ Tall Single-handle Bathroom Sink Faucet',
+        dim: '6x8x12 in (15x20x31 cm)',
+        desc: 'Tall architectural single-handle faucet designed specifically for vessel basins with side joystick control and sleek flat spout.',
+        price_inr: 22000,
+        price_usd: 295,
+        category: 'faucets',
+        defaultFinish: 'chrome',
+        width_m: 0.15,
+        depth_m: 0.20,
+        height_m: 0.31,
+        styles: ['minimalist', 'zen', 'modern', 'wastelab', 'industrial'],
+        installation: {
+          rough_in_in: 'Single-hole 1-3/8" vessel deck mount',
+          drain_type: 'Push-button touch drain',
+          electrical_req: 'None',
+          water_supply: 'Flexible braided PEX supplies',
+          min_clearance_front_m: 0.300,
+          min_clearance_side_m: 0.150
+        },
+        compatibility: {
+          requires_wet_wall: false,
+          max_wet_wall_dist_m: 1.20,
+          compatible_with: ['brazn-vessel-sink', 'prologue-vanity', 'luxe-vanity']
+        },
+        sustainability: {
+          flush_gpf: 0,
+          flow_gpm: 1.20,
+          baseline_flow_gpm: 2.20,
+          power_watts: 0,
+          recycled_content_pct: 35,
+          epa_watersense: true,
+          annual_water_savings_l: 16580
+        },
+        builder: (...args) => buildComposedTallFaucet(...args)
       }
     ];
-

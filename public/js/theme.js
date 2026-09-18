@@ -14,11 +14,11 @@
         if (role === 'faucet') {
           if (isClassic) child.material = polishedBrassMat;
           else if (isIndustrial || isZen || isMinimalist || isWasteLab) child.material = matteBlackMat;
-        } else if (role === 'showerMetal') {
+        } else if (role === 'showerMetal' || role === 'showerValve' || role === 'showerHead') {
           if (isClassic) child.material = polishedBrassMat;
           else if (isIndustrial || isZen) child.material = matteBlackMat;
           else if (isMinimalist) child.material = chromeMat;
-          else child.material = matteBlackMat;
+          else child.material = chromeMat;
         } else if (role === 'crittallMullions') {
           child.visible = isIndustrial;
         } else if (role === 'vanityCarcass') {

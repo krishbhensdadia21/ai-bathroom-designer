@@ -438,7 +438,7 @@ const server = http.createServer(async (req, res) => {
             relaxation_suggestions: [
               'Expand bathroom footprint to at least 7.5ft × 6.5ft (48+ sq ft) for standard 4-fixture suite',
               'Convert layout to Powder Room (Toilet + Compact Console, removing Shower & Bathtub)',
-              'Utilize ultra-compact wall-hung carrier toilet (Reach K-77701IN) and corner vessel vanity'
+              'Utilize compact skirted toilet (Reach K-3983IN-S-0) and corner vessel vanity'
             ],
             relaxation_actions: {
               expand_room: { width_ft: 8.5, depth_ft: 7.0 },
@@ -544,48 +544,25 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   const isWasteLab = theme.toLowerCase().includes('waste') || theme.toLowerCase().includes('eco');
 
   // ==================== TIER 1: SIGNATURE BALANCED (OPTIMAL MULTI-OBJECTIVE) ====================
-  const toiletName = isClassic ? 'Veil Smart Toilet (Vibrant Brass Actuator)' :
-                     isIndustrial ? 'Veil Smart Toilet (Matte Black Plate)' :
-                     isWasteLab ? 'Veil Smart Toilet (Closed-Loop Eco Dual Flush)' :
-                     'Veil Smart One-Piece Toilet';
+  const toiletName = 'Veil™ Smart One-piece Toilet';
+  const vanityName = (isZen || isIndustrial || isWasteLab) ? 'Brazn™ 58.4 cm Rectangular Vessel Bathroom Sink' :
+                     'Luxe™ 90 cm Wall-hung Bathroom Vanity Cabinet';
+  const vanitySku = (isZen || isIndustrial || isWasteLab) ? 'K-21060IN-0' : 'K-30460IN-MWF';
+  const vanityPriceINR = (isZen || isIndustrial || isWasteLab) ? 32000 : 68000;
+  const vanityPriceUSD = (isZen || isIndustrial || isWasteLab) ? 430 : 910;
 
-  const vanityName = isMinimalist ? 'Tailored 60" Dual Floating Vanity in Scandinavian Oak' :
-                     isClassic ? 'Jacquard 60" Shaker Vanity in Antique Walnut (Calacatta Quartz)' :
-                     isZen ? 'Brazn Zen Teak Floating Console (Chalice Basin)' :
-                     isIndustrial ? 'Brazn Architectural Steel Console (Concrete Trough Basin)' :
-                     isWasteLab ? 'WasteLAB Terrazzo Floating Console (Recycled Aggregate)' :
-                     'Tailored 60" Dual Floating Vanity in Scandinavian Oak';
+  const faucetName = isClassic ? 'Artifacts™ Widespread Bathroom Sink Faucets' :
+                     (isZen || isIndustrial) ? 'Composed™ Tall Single-handle Bathroom Sink Faucet' :
+                     'Purist™ Single Control Lavatory Faucet';
+  const faucetSku = isClassic ? 'K-72760T-CP' : ((isZen || isIndustrial) ? 'K-73159IN-7-CP' : 'K-14402IN-4A-CP');
+  const faucetPriceINR = isClassic ? 34000 : ((isZen || isIndustrial) ? 22000 : 19800);
+  const faucetPriceUSD = isClassic ? 460 : ((isZen || isIndustrial) ? 295 : 270);
 
-  const vanitySku = (isZen || isIndustrial || isWasteLab) ? 'K-21057-0' : (isClassic ? 'K-99507IN-0' : 'K-99539-LG');
-  const vanityPriceINR = (isZen || isIndustrial || isWasteLab) ? 72000 : 145000;
-  const vanityPriceUSD = (isZen || isIndustrial || isWasteLab) ? 980 : 1950;
+  const showerName = 'New Trilogy™ 2000–2161 mm H Pivot Shower Door with 8 mm Thick Glass';
+  const showerSku = 'K-704699IN-SHP';
 
-  const faucetName = isClassic ? 'Artifacts Column Spout Faucet in Vibrant Brushed Brass' :
-                     isMinimalist ? 'Purist Tall Basin Faucet in Matte Black' :
-                     isZen ? 'Composed Minimalist Basin Faucet in Matte Black' :
-                     isIndustrial ? 'Composed Geometric Single-Handle Faucet in Matte Black' :
-                     isWasteLab ? 'Purist Water-Saving Aerated Faucet in Matte Black' :
-                     'Purist Tall Basin Faucet in Matte Black';
-
-  const faucetSku = isClassic ? 'K-10129IN-4' : (isZen || isIndustrial ? 'K-73159IN-4' : 'K-99856IN-4');
-  const faucetPriceINR = isClassic ? 32000 : (isZen || isIndustrial ? 14500 : 19800);
-  const faucetPriceUSD = isClassic ? 430 : (isZen || isIndustrial ? 195 : 270);
-
-  const showerName = isClassic ? 'Revel Glass Box & HydroRail-R in Vibrant Brushed Brass' :
-                     isMinimalist ? 'Revel Frameless Glass Box Enclosure & HydroRail-R in Polished Chrome' :
-                     isZen ? 'Revel Walk-In Wet-Room Glass & HydroRail-R in Matte Black' :
-                     isIndustrial ? 'Revel Crittall Black Grid Glass Box & HydroRail-R in Matte Black' :
-                     isWasteLab ? 'Revel Glass Enclosure with Katalyst Air-Induction Shower Column' :
-                     'Revel Frameless Glass Box Enclosure & HydroRail-R in Polished Chrome';
-
-  const showerSku = isClassic ? 'K-76465IN-CP' : 'K-706015-L';
-
-  const mirrorName = isClassic ? 'Verdera Mirror with Ornate Brass Frame & Dual Glowing Sconces' :
-                     isMinimalist ? 'Verdera Frameless Backlit Halo Smart Mirror' :
-                     isZen ? 'Verdera Natural Hinoki Teak-Framed Smart Mirror' :
-                     isIndustrial ? 'Verdera Industrial Steel Mirror with Suspended Edison Pendants' :
-                     isWasteLab ? 'Verdera Sustainable Recycled Aluminum LED Mirror' :
-                     'Verdera Frameless Backlit Halo Smart Mirror';
+  const mirrorName = 'Ming™ 80 cm Lighted Mirror with Proximity Sensor';
+  const mirrorSku = 'K-77115IN-NA';
 
   const signatureItems = [
     {
@@ -594,15 +571,11 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
       name: toiletName,
       price_inr: 85000,
       price_usd: 1150,
-      justification: isClassic ? 'Intelligent smart toilet with heated seat, bidet cleansing, and rich vibrant brushed brass actuator.' :
-                     isIndustrial ? 'Sculptural monolithic toilet contrasting against raw formwork concrete with matte black actuator.' :
-                     isZen ? 'Organic flowing curves harmonizing with Hinoki wood slats and natural woven mat.' :
-                     isWasteLab ? 'High-efficiency 1.04 GPF dual-flush with electrolyzed bidet sanitization.' :
-                     'Flagship sculptural smart toilet with clean lines, hands-free auto flush, and heated Quiet-Close seat.',
+      justification: 'Flagship sculptural smart toilet with clean lines, hands-free auto flush, heated Quiet-Close seat, and UV bidet cleansing.',
       explainability: {
-        spatial_fit: 'Fits 26.5" envelope with 28" front clearance (Exceeds NKBA 21" min)',
-        budget_fit: 'Balanced 16% of total investment target',
-        theme_fit: `Sculptural profile aligns with ${theme} aesthetic`,
+        spatial_fit: 'Fits 28" envelope with 30" front clearance (Exceeds NKBA 21" min)',
+        budget_fit: 'Balanced 24% of total investment target',
+        theme_fit: `Sculptural organic profile aligns with ${theme} aesthetic`,
         plumbing_fit: '12" standard rough-in aligns directly with 4" PVC soil stack'
       }
     },
@@ -612,16 +585,13 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
       name: vanityName,
       price_inr: vanityPriceINR,
       price_usd: vanityPriceUSD,
-      justification: isClassic ? 'Solid dark walnut Shaker vanity with Calacatta quartz top and brushed brass hardware.' :
-                     isIndustrial ? 'Open architectural steel framework with raw concrete trough basin and slatted lower shelf.' :
-                     isZen ? 'Natural solid Teak floating console topped with organic ceramic Chalice vessel basin.' :
-                     isWasteLab ? 'Closed-loop recycled aggregate terrazzo surface crafted from reclaimed Kohler ceramic shards.' :
-                     'Light Scandinavian Oak floating double vanity with Silestone white quartz top and twin undermount basins.',
+      justification: (isZen || isIndustrial || isWasteLab) ? 'Architectural minimalist vessel sink in vitreous china with sharp rectangular rim and pop-up umbrella drain.' :
+                     'Luxury 90 cm floating vanity with deep soft-close storage drawers, premium architectural trim, and seamless ceramic basin deck.',
       explainability: {
-        spatial_fit: 'Spans focal wall segment with 34" ADA-compliant activity zone',
-        budget_fit: 'Prime focal allocation at 49% of investment',
+        spatial_fit: 'Spans focal wall segment with 34" activity zone',
+        budget_fit: 'Prime focal allocation matching luxury specification',
         theme_fit: `Materials and finish curated specifically for ${theme}`,
-        plumbing_fit: 'Dual 1-1/2" P-traps align directly with primary wet-wall stack'
+        plumbing_fit: 'Standard 1-1/4" wall P-trap aligns with primary wet-wall stack'
       }
     },
     {
@@ -632,7 +602,7 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
       price_usd: faucetPriceUSD,
       justification: 'Solid brass construction with ceramic disc valves and laminar water flow stream.',
       explainability: {
-        spatial_fit: 'Architectural gooseneck centered perfectly over basin',
+        spatial_fit: 'Centered perfectly over basin with ergonomic reach',
         budget_fit: 'Optimal hardware budget allocation',
         theme_fit: `Finish curated to match ${theme} hardware palette`,
         plumbing_fit: 'Standard 3/8" flexible braided stainless supply lines'
@@ -642,34 +612,28 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
       category: 'shower',
       sku_code: showerSku,
       name: showerName,
-      price_inr: 118000,
-      price_usd: 1580,
-      justification: isIndustrial ? 'Crittall-inspired black mullion grid 10mm tempered glass box paired with thermostatic rainhead column.' :
-                     isClassic ? '10mm crystal tempered glass enclosure framed by rich Vibrant Brushed Brass hardware and thermostatic column.' :
-                     isZen ? 'Open walk-in glass wet-room screen paired with matte black thermostatic rainhead column.' :
-                     '10mm CleanCoat® hydrophobic tempered glass box paired with thermostatic rainhead column.',
+      price_inr: 82000,
+      price_usd: 1100,
+      justification: 'Architectural 2.05m tall pivot shower door with 8 mm CleanCoat tempered glass, solid brass pivot hinges, and high-polish tubular handle.',
       explainability: {
-        spatial_fit: '48" × 36" corner footprint with 32" unobstructed entry',
+        spatial_fit: '40" × 36" corner footprint with unobstructed entry',
         budget_fit: 'High-value fixture providing complete wet-room separation',
         theme_fit: `Enclosure aesthetics and glass hardware matched to ${theme}`,
-        plumbing_fit: '2" centered floor drain tied into sub-floor drainage run'
+        plumbing_fit: 'Standard 2" centered floor drain tied into drainage run'
       }
     },
     {
       category: 'mirror',
-      sku_code: 'K-99009IN-NA',
+      sku_code: mirrorSku,
       name: mirrorName,
-      price_inr: 38000,
-      price_usd: 520,
-      justification: isClassic ? 'Brass-framed luxury mirror accompanied by warm glowing wall sconces flanking the vanity.' :
-                     isIndustrial ? 'Matte black steel framed mirror illuminated by suspended industrial cord pendant lights.' :
-                     isZen ? 'Warm Hinoki Teak timber perimeter frame with soft 90+ CRI task lighting.' :
-                     'Frameless perimeter task illumination with built-in Amazon Alexa voice control.',
+      price_inr: 42000,
+      price_usd: 560,
+      justification: 'Circular lighted smart mirror with proximity sensor, perimeter frosted LED halo, circadian light control, and defogger.',
       explainability: {
-        spatial_fit: '34" × 40" portrait orientation centered directly above vanity',
-        budget_fit: 'Smart fixture investment (13% of budget)',
+        spatial_fit: '32" circular geometry centered directly above vanity',
+        budget_fit: 'Smart fixture investment with proximity sensing',
         theme_fit: `Lighting and framing styling engineered for ${theme}`,
-        plumbing_fit: '110-240V junction box rough-in at 68" AFF'
+        plumbing_fit: '120V hardwired junction box rough-in behind mirror'
       }
     }
   ];
@@ -678,109 +642,108 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   if (wantsTub && roomW >= 2.6 && roomD >= 2.4) {
     signatureItems.push({
       category: 'bathtub',
-      sku_code: 'K-1130IN-0',
-      name: 'Evok Oval Freestanding Soaking Bathtub',
-      price_inr: 115000,
-      price_usd: 1550,
-      justification: 'Cast acrylic ergonomic soaking tub with center toe-tap drain and overflow.',
+      sku_code: 'K-25164T-0',
+      name: 'Evok 2.0™ 1.7M Seamless Rectangular Freestanding Bathtub',
+      price_inr: 125000,
+      price_usd: 1680,
+      justification: 'Seamless rectangular freestanding soaking tub with softened modern corners, double-ended lumbar support, and slotted overflow.',
       explainability: {
-        spatial_fit: '66" × 32" freestanding footprint positioned along outer light wall',
+        spatial_fit: '67" × 32" freestanding footprint positioned along outer light wall',
         budget_fit: 'Ultimate spa indulgence fixture',
-        theme_fit: `Clean organic oval geometry complementing ${theme}`,
+        theme_fit: `Clean modern rectangular geometry complementing ${theme}`,
         plumbing_fit: 'Sub-floor center drain trap with floor-mounted tub filler rough-in'
       }
     });
   }
 
   const nLowNotes = (customerNotes || '').toLowerCase();
-  const wantsWalkInShower = nLowNotes.includes('walk-in') || nLowNotes.includes('walk in') || nLowNotes.includes('glass enclosure') || nLowNotes.includes('glass box');
-  // Check if upgrading shower to Revel walk-in glass enclosure (₹1,18,000 instead of ₹28,500) still fits under budgetNum
-  const canFitWalkInInEssential = wantsWalkInShower && (24000 + 58000 + 11200 + 118000 + 26000 <= budgetNum);
+  const wantsWalkInShower = nLowNotes.includes('walk-in') || nLowNotes.includes('walk in') || nLowNotes.includes('glass enclosure') || nLowNotes.includes('glass box') || nLowNotes.includes('pivot');
+  const canFitWalkInInEssential = wantsWalkInShower && (28000 + 46000 + 12500 + 82000 + 36000 <= budgetNum);
 
   const essentialShower = canFitWalkInInEssential ? {
     category: 'shower',
-    sku_code: 'K-706015-L',
-    name: 'Revel Walk-In Wet-Room Glass & HydroRail-R',
-    price_inr: 118000,
-    price_usd: 1580,
-    justification: 'Architectural walk-in tempered glass wet-room screen paired with HydroRail-R column, engineered to honor your walk-in shower request while strictly respecting your budget ceiling.',
+    sku_code: 'K-704699IN-SHP',
+    name: 'New Trilogy™ 2000–2161 mm H Pivot Shower Door with 8 mm Thick Glass',
+    price_inr: 82000,
+    price_usd: 1100,
+    justification: 'Architectural pivot shower door with 8 mm CleanCoat tempered glass and high-polish tubular handle, satisfying your enclosure preference while respecting your budget ceiling.',
     explainability: {
-      spatial_fit: 'Open walk-in entry with zero door swing encroachment',
-      budget_fit: 'Allocates remaining budget ceiling to satisfy walk-in shower preference',
+      spatial_fit: 'Corner pivot entry with zero door swing encroachment',
+      budget_fit: 'Allocates budget ceiling to satisfy glass enclosure preference',
       theme_fit: `Clean minimalist architectural glass paired with ${theme}`,
-      plumbing_fit: 'Direct wet-wall thermostatic connection'
+      plumbing_fit: 'Standard 2" floor drain connection'
     }
   } : {
     category: 'shower',
-    sku_code: 'K-26292IN-CP',
-    name: 'Statement Multifunction Wall-Mount Showerhead',
+    sku_code: 'K-26290T-2MB',
+    name: 'Statement™ Three-function Showerhead',
     price_inr: 28500,
     price_usd: 380,
-    justification: 'Katalyst® air-induction spray delivers full drenching coverage at high efficiency.',
+    justification: 'Contemporary multifunction showerhead with Full Coverage, Cloud spray, Deep Massage, and Katalyst air-induction technology.',
     explainability: {
       spatial_fit: 'Zero floor encroachment; installs on existing shower wall arm',
-      budget_fit: 'Saves ₹89,000 compared to full glass box enclosure',
-      theme_fit: 'Polished chrome finish matches sink hardware',
-      plumbing_fit: 'Standard 1/2" NPT female inlet connects to existing riser'
+      budget_fit: 'Saves ₹53,500 compared to full glass box enclosure',
+      theme_fit: 'Matte Black / Chrome finish matching sink hardware',
+      plumbing_fit: 'Standard 1/2" NPT female inlet connects to shower arm'
     }
   };
 
   const essentialItems = [
     {
       category: 'toilet',
-      sku_code: 'K-77701IN-0',
-      name: 'Reach Wall-Hung Toilet & In-Wall Tank',
-      price_inr: 24000,
-      price_usd: 320,
-      justification: 'Compact wall-hung design with concealed carrier tank saving 8" of floor space.',
+      sku_code: 'K-3983IN-S-0',
+      name: 'Reach™ One-piece Round-front Toilet with Skirted Trapway, Dual Flush',
+      price_inr: 28000,
+      price_usd: 375,
+      justification: 'One-piece round-front toilet with clean skirted trapway, dual flush top actuator, and quiet-close seat.',
       explainability: {
-        spatial_fit: 'Ultra-compact 21" depth expanding front walkway to 34"',
-        budget_fit: 'Economical 14% category allocation',
-        theme_fit: 'Contemporary minimalist floating aesthetic',
-        plumbing_fit: 'In-wall carrier frame mounts directly onto 2x6 wet wall studs'
+        spatial_fit: 'Compact 27" depth expanding front walkway',
+        budget_fit: 'Economical category allocation for genuine Kohler sanitaryware',
+        theme_fit: 'Clean skirted trapway aesthetic',
+        plumbing_fit: 'Standard 12" rough-in to 4" waste flange'
       }
     },
     {
       category: 'vanity',
-      sku_code: 'K-99507IN-0',
-      name: 'Jacquard 36" Vanity with Quartz Top',
-      price_inr: 58000,
-      price_usd: 790,
-      justification: 'Solid hardwood frame with moisture-resistant finish and undermount vitreous china sink.',
+      sku_code: 'K-30457IN-MWF',
+      name: 'Prologue™ 75 cm Wall-hung Bathroom Vanity Cabinet',
+      price_inr: 46000,
+      price_usd: 620,
+      justification: 'Wall-hung floating vanity cabinet with dual soft-close drawers, integrated bevelled J-pulls, and vitreous china basin.',
       explainability: {
-        spatial_fit: 'Compact 36" footprint leaves ample breathing room for side towel warmers',
-        budget_fit: 'Saves 60% over 60" dual vanity to protect overall budget',
-        theme_fit: 'Clean shaker drawer lines matching modern transitional themes',
-        plumbing_fit: 'Pre-cut back panel aligns with standard 18" rough-in heights'
+        spatial_fit: 'Compact 30" (75 cm) footprint provides ample clearance in any bathroom',
+        budget_fit: 'Saves investment capital while delivering full soft-close storage',
+        theme_fit: 'Integrated 45-degree J-pull lines matching modern themes',
+        plumbing_fit: 'Pre-cut back panel aligns with standard 19" rough-in heights'
       }
     },
     {
       category: 'faucet',
-      sku_code: 'K-22536IN-4',
-      name: 'Parallel Single-Control Monoblock Faucet',
-      price_inr: 11200,
-      price_usd: 150,
-      justification: 'Sleek single-lever brass faucet engineered for high durability and ease of cleaning.',
+      sku_code: 'K-23482IN-4-BV',
+      name: 'Parallel™ Pillar Tap',
+      price_inr: 12500,
+      price_usd: 168,
+      justification: 'Faceted geometric pillar tap in Brushed Bronze with precise angular contours and quarter-turn ceramic cartridge.',
       explainability: {
         spatial_fit: 'Single-hole mount maximizes usable countertop area',
-        budget_fit: 'High-value fixture under ₹12,000',
-        theme_fit: 'Geometric flat spout matches modern basin profiles',
+        budget_fit: 'High-value genuine Kohler brassware fixture',
+        theme_fit: 'Geometric faceted spout matches modern basin profiles',
         plumbing_fit: 'Integrated flexible supply hoses for quick installation'
       }
     },
     essentialShower,
     {
       category: 'mirror',
-      sku_code: 'K-99009IN-NA',
-      name: 'Verdera 30" Lighted LED Mirror',
-      price_inr: 26000,
-      price_usd: 350,
-      justification: 'Perimeter LED strip lighting with high CRI (90+) for accurate natural task lighting.',
+      sku_code: 'K-23268IN-NA',
+      name: 'Reve™ 1000 mm Lighted Mirror',
+      price_inr: 36000,
+      price_usd: 480,
+      justification: 'Wide 100 cm rectangular mirror with dual vertical lateral LED light bars, touch sensor dimmer, 90+ CRI task lighting, and anti-fog pad.',
       explainability: {
-        spatial_fit: '30" width matches 36" Jacquard vanity scale proportionally',
-        budget_fit: 'Economical smart mirror upgrade',
-        theme_fit: 'Bevelled frameless glass',
-        plumbing_fit: 'Requires standard 120V hardwire outlet'
+        spatial_fit: '40" width matches 30"-36" vanity scale proportionally',
+        budget_fit: 'Full LED lighted task illumination with defogger',
+        theme_fit: 'Clean lateral task light bars',
+        plumbing_fit: 'Requires standard 120V hardwire junction box'
       }
     }
   ];
@@ -790,12 +753,12 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     {
       category: 'toilet',
       sku_code: 'K-5401IN-0',
-      name: 'Veil Intelligent Smart One-Piece Toilet',
+      name: 'Veil™ Smart One-piece Toilet',
       price_inr: 85000,
       price_usd: 1150,
       justification: 'Flagship smart toilet with integrated bidet, heated seat, hands-free auto flush, and UV wand.',
       explainability: {
-        spatial_fit: 'Ergonomic 26.5" monolithic profile with 30" front clearance zone',
+        spatial_fit: 'Ergonomic 28" monolithic profile with 30" front clearance zone',
         budget_fit: 'Flagship investment anchor for luxury master suites',
         theme_fit: 'Seamless organic form defined by minimalist curves',
         plumbing_fit: 'Dedicated 4" soil flange + 15A GFCI electrical outlet rough-in'
@@ -803,53 +766,53 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     },
     {
       category: 'vanity',
-      sku_code: 'K-99539-LG',
-      name: 'Tailored 60" Floating Master Dual Vanity',
-      price_inr: 145000,
-      price_usd: 1950,
-      justification: 'Dual Ladena undermount sinks, Silestone quartz countertop, and under-vanity ambient LED glow.',
+      sku_code: 'K-30460IN-MWF',
+      name: 'Luxe™ 90 cm Wall-hung Bathroom Vanity Cabinet',
+      price_inr: 68000,
+      price_usd: 910,
+      justification: 'Luxury 90 cm floating vanity with deep soft-close storage drawers, premium architectural trim, and seamless ceramic basin deck.',
       explainability: {
-        spatial_fit: 'Spans full 60" focal wall with dual 30" user grooming stations',
+        spatial_fit: 'Spans 36" focal zone with generous landing wings',
         budget_fit: 'Luxury master centerpiece',
         theme_fit: 'Architectural wall-hung silhouette creating light, airy luxury',
-        plumbing_fit: 'Dual waste drains tied into horizontal wet-wall collector'
+        plumbing_fit: 'Standard wall P-trap tied into horizontal wet-wall collector'
       }
     },
     {
       category: 'faucet',
-      sku_code: 'K-99856IN-4',
-      name: 'Twin Purist Tall Basin Gooseneck Faucets (Pair)',
-      price_inr: 39600,
-      price_usd: 540,
-      justification: 'Matching pair of architectural tall spout faucets with brushed modern finish.',
+      sku_code: 'K-14402IN-4A-CP',
+      name: 'Purist™ Single Control Lavatory Faucet',
+      price_inr: 19800,
+      price_usd: 270,
+      justification: 'Pure architectural cylindrical single-lever faucet in Polished Chrome with laminar flow and ceramic disc valve.',
       explainability: {
-        spatial_fit: 'Tall clearance accommodates deep Ladena undermount vessel bowls',
-        budget_fit: 'Dual specification for master couples bathroom',
-        theme_fit: 'Iconic Kohler Purist minimalist geometry',
-        plumbing_fit: 'Direct connection to hot/cold PEX supply stubs'
+        spatial_fit: 'Cylindrical vertical profile centered over basin',
+        budget_fit: 'Iconic Kohler Purist hardware specification',
+        theme_fit: 'Pure architectural geometry',
+        plumbing_fit: 'Direct connection to hot/cold flexible supplies'
       }
     },
     {
       category: 'bathtub',
-      sku_code: 'K-1130IN-0',
-      name: 'Evok Oval Freestanding Soaking Bathtub',
-      price_inr: 115000,
-      price_usd: 1550,
-      justification: 'Cast acrylic ergonomic soaking tub with center toe-tap drain and overflow.',
+      sku_code: 'K-25164T-0',
+      name: 'Evok 2.0™ 1.7M Seamless Rectangular Freestanding Bathtub',
+      price_inr: 125000,
+      price_usd: 1680,
+      justification: 'Seamless rectangular freestanding soaking tub with softened modern corners, double-ended lumbar support, and slotted overflow.',
       explainability: {
-        spatial_fit: '66" × 32" freestanding footprint positioned along outer light wall',
+        spatial_fit: '67" × 32" freestanding footprint positioned along outer light wall',
         budget_fit: 'Ultimate spa indulgence fixture',
-        theme_fit: 'Clean organic oval geometry complementing Veil toilet',
+        theme_fit: 'Clean organic rectangular geometry complementing Veil toilet',
         plumbing_fit: 'Sub-floor center drain trap with floor-mounted tub filler rough-in'
       }
     },
     {
       category: 'shower',
-      sku_code: 'K-706015-L',
-      name: 'Revel Frameless Pivot Shower Glass Box & HydroRail-R',
-      price_inr: 118000,
-      price_usd: 1580,
-      justification: 'Custom 10mm pivot glass corner box enclosure with Statement 12" rainhead and baton handshower.',
+      sku_code: 'K-704699IN-SHP',
+      name: 'New Trilogy™ 2000–2161 mm H Pivot Shower Door with 8 mm Thick Glass',
+      price_inr: 82000,
+      price_usd: 1100,
+      justification: 'Architectural 2.05m tall pivot shower door with 8 mm CleanCoat tempered glass, solid brass pivot hinges, and high-polish tubular handle.',
       explainability: {
         spatial_fit: 'Corner glass enclosure keeps steam contained while preserving spatial transparency',
         budget_fit: 'Architectural walk-in shower experience',
@@ -859,16 +822,16 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     },
     {
       category: 'mirror',
-      sku_code: 'K-99009IN-NA',
-      name: 'Verdera Voice Lighted Smart Mirror with Alexa',
-      price_inr: 38000,
-      price_usd: 520,
-      justification: 'Full voice integration with Alexa dimming, daylight Kelvin tuning, and built-in speakers.',
+      sku_code: 'K-77115IN-NA',
+      name: 'Ming™ 80 cm Lighted Mirror with Proximity Sensor',
+      price_inr: 42000,
+      price_usd: 560,
+      justification: 'Circular lighted smart mirror with proximity sensor, perimeter frosted LED halo, circadian light control, and defogger.',
       explainability: {
-        spatial_fit: 'Mounted centrally over dual vanity with full facial illumination',
-        budget_fit: 'Integrated smart lighting & audio eliminates separate ceiling speakers',
-        theme_fit: 'Floating frameless mirror with perimeter halo glow',
-        plumbing_fit: 'In-wall concealed 220V power supply'
+        spatial_fit: 'Mounted centrally over vanity with full facial illumination',
+        budget_fit: 'Integrated smart lighting with automatic proximity sensing',
+        theme_fit: 'Floating circular mirror with perimeter halo glow',
+        plumbing_fit: 'Direct 120V junction box rough-in'
       }
     }
   ];
@@ -937,13 +900,13 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     const budgetScore = Math.max(65, Math.min(99, Math.round(100 - Math.abs(1 - budgetRatio) * 35)));
     const themeScore = isZen ? 98 : (isClassic ? 97 : 96);
     const plumbingScore = 96;
-    const ecoScore = items.some(it => it.sku_code === 'K-5401IN-0' || it.sku_code === 'K-77701IN-0') ? 98 : 94;
+    const ecoScore = items.some(it => it.sku_code === 'K-5401IN-0' || it.sku_code === 'K-3983IN-S-0' || it.sku_code === 'K-17629T-NS-0') ? 98 : 94;
     const compositeScore = +(0.25 * spatialScore + 0.20 * budgetScore + 0.20 * themeScore + 0.20 * plumbingScore + 0.15 * ecoScore).toFixed(1);
 
     let annualWaterSavedL = 0;
     items.forEach(it => {
       if (it.category === 'toilet') {
-        const gpf = it.sku_code === 'K-5401IN-0' ? 1.0 : (it.sku_code === 'K-77701IN-0' ? 1.1 : 1.28);
+        const gpf = it.sku_code === 'K-5401IN-0' ? 1.0 : ((it.sku_code === 'K-3983IN-S-0' || it.sku_code === 'K-17629T-NS-0') ? 1.06 : 1.28);
         annualWaterSavedL += Math.round((1.60 - gpf) * 7300 * 3.78541);
       } else if (it.category === 'faucet') {
         annualWaterSavedL += Math.round((2.20 - 1.20) * 12 * 365 * 3.78541);

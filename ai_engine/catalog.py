@@ -1,5 +1,5 @@
 """
-KOHLER Authentic Product Catalog & Specification Database
+KOHLER Authentic Product Catalog & Specification Database (15 Genuine Products)
 Part of the KOHLER AI Bathroom Designer & Planner (Track 1)
 """
 
@@ -48,274 +48,276 @@ class KohlerFixture:
 
 
 KOHLER_CATALOG: List[KohlerFixture] = [
-    # ==================== TOILETS ====================
+    # ==================== 1. SMART TOILETS ====================
     KohlerFixture(
         id='veil-smart-toilet',
         art='K-5401IN-0',
-        name='Veil® One-Piece Intelligent Toilet',
+        name='Veil™ Smart One-piece Toilet',
         category='toilets',
         series='Veil',
-        price_inr=92000,
-        price_usd=1250,
-        width_m=0.43,
-        depth_m=0.67,
-        height_m=0.53,
-        styles=['minimalist', 'minimalist-modern', 'zen', 'japanese-zen', 'luxury'],
-        sustainability=SustainabilitySpec(flush_gpf=1.0, annual_water_savings_l=21900, recycled_content_pct=15),
-        compatibility=PlumbingCompatibility(rough_in_inches=12.0, drain_diameter='3" Waste Line', electrical_req='220V/15A GFI'),
-        description='Touchless dual flush (0.8/1.28 GPF), UV bidet wand, integrated heated seat and LED nightlight.'
+        price_inr=85000,
+        price_usd=1150,
+        width_m=0.41,
+        depth_m=0.71,
+        height_m=0.72,
+        styles=['minimalist', 'minimalist-modern', 'zen', 'japanese-zen', 'luxury', 'modern'],
+        sustainability=SustainabilitySpec(flush_gpf=1.0, annual_water_savings_l=21900, recycled_content_pct=18),
+        compatibility=PlumbingCompatibility(rough_in_inches=12.0, drain_diameter='4" Floor Flange', electrical_req='120V/15A GFCI'),
+        description='Sculptural smart one-piece toilet with remote control, heated Quiet-Close seat, and automatic bidet cleansing.'
     ),
+
+    # ==================== 2. TOILETS ====================
     KohlerFixture(
-        id='reach-wall-hung',
-        art='K-77701IN-0',
-        name='Reach™ Quiet-Close with In-Wall Carrier',
+        id='reach-one-piece-toilet',
+        art='K-3983IN-S-0',
+        name='Reach™ One-piece Round-front Toilet with Skirted Trapway, Dual Flush',
         category='toilets',
         series='Reach',
-        price_inr=32000,
-        price_usd=430,
-        width_m=0.36,
-        depth_m=0.54,
-        height_m=0.40,
-        styles=['minimalist', 'minimalist-modern', 'industrial', 'industrial-chic', 'compact'],
-        sustainability=SustainabilitySpec(flush_gpf=1.1, annual_water_savings_l=18500, recycled_content_pct=20),
-        compatibility=PlumbingCompatibility(rough_in_inches=12.0, drain_diameter='3" Waste Line'),
-        description='Concealed in-wall carrier saves 8–10" of floor space, glazed trapway.'
-    ),
-    KohlerFixture(
-        id='memoirs-stately-toilet',
-        art='K-3983IN-0',
-        name='Memoirs® Stately Comfort Height Toilet',
-        category='toilets',
-        series='Memoirs',
-        price_inr=42000,
-        price_usd=560,
-        width_m=0.48,
-        depth_m=0.72,
-        height_m=0.79,
-        styles=['classic', 'classic-luxury', 'traditional', 'heritage'],
-        sustainability=SustainabilitySpec(flush_gpf=1.28, annual_water_savings_l=16200, recycled_content_pct=10),
-        compatibility=PlumbingCompatibility(rough_in_inches=12.0, drain_diameter='3" Waste Line'),
-        description='AquaPiston® 360° canister flush, architectural crown molding profile.'
-    ),
-    KohlerFixture(
-        id='leap-smart-toilet',
-        art='K-76625IN-0',
-        name='Leap™ Modern Skirted One-Piece Toilet',
-        category='toilets',
-        series='Leap',
-        price_inr=24500,
-        price_usd=330,
-        width_m=0.40,
-        depth_m=0.69,
-        height_m=0.72,
-        styles=['minimalist', 'minimalist-modern', 'modern'],
-        sustainability=SustainabilitySpec(flush_gpf=1.2, annual_water_savings_l=17500, recycled_content_pct=12),
-        compatibility=PlumbingCompatibility(rough_in_inches=12.0, drain_diameter='3" Waste Line'),
-        description='Seamless skirted trapway design with siphon jet high-efficiency flush.'
+        price_inr=28000,
+        price_usd=375,
+        width_m=0.38,
+        depth_m=0.68,
+        height_m=0.73,
+        styles=['minimalist', 'minimalist-modern', 'modern', 'compact', 'zen'],
+        sustainability=SustainabilitySpec(flush_gpf=1.06, annual_water_savings_l=14920, recycled_content_pct=20),
+        compatibility=PlumbingCompatibility(rough_in_inches=12.0, drain_diameter='4" Floor Flange'),
+        description='One-piece round-front toilet with clean skirted trapway, dual flush top actuator, and quiet-close seat.'
     ),
 
-    # ==================== VANITIES ====================
+    # ==================== 3. TOILETS ====================
     KohlerFixture(
-        id='tailored-dual-vanity',
-        art='K-99539-LG',
-        name='Tailored® 60" Floating Vanity with Sinks',
-        category='vanities',
-        series='Tailored',
-        price_inr=145000,
-        price_usd=1950,
-        width_m=1.52,
-        depth_m=0.55,
-        height_m=0.86,
-        styles=['minimalist', 'minimalist-modern', 'luxury', 'modern'],
-        sustainability=SustainabilitySpec(recycled_content_pct=30),
-        compatibility=PlumbingCompatibility(drain_diameter='Twin 1-1/2" P-Trap'),
-        description='Solid hardwood oak carcass, Silestone® quartz countertop with dual undermount ceramic basins.'
+        id='ove-one-piece-toilet',
+        art='K-17629T-NS-0',
+        name='Ove™ One-piece Round-front Toilet with Skirted Trapway, Dual Flush',
+        category='toilets',
+        series='Ove',
+        price_inr=34000,
+        price_usd=450,
+        width_m=0.40,
+        depth_m=0.70,
+        height_m=0.74,
+        styles=['classic', 'classic-luxury', 'modern', 'zen'],
+        sustainability=SustainabilitySpec(flush_gpf=1.06, annual_water_savings_l=14920, recycled_content_pct=16),
+        compatibility=PlumbingCompatibility(rough_in_inches=12.0, drain_diameter='4" Floor Flange'),
+        description='Sculptural organic egg-shaped one-piece toilet with skirted trapway, dual flush 2.6/4L, and soft-close ergonomic seat.'
     ),
+
+    # ==================== 4. VANITIES ====================
     KohlerFixture(
-        id='jacquard-vanity',
-        art='K-99507IN-0',
-        name='Jacquard® 36" Transitional Shaker Vanity',
+        id='prologue-vanity',
+        art='K-30457IN-MWF',
+        name='Prologue™ 75 cm Wall-hung Bathroom Vanity Cabinet',
         category='vanities',
-        series='Jacquard',
-        price_inr=58000,
-        price_usd=780,
-        width_m=0.94,
-        depth_m=0.54,
-        height_m=0.86,
-        styles=['classic', 'classic-luxury', 'transitional'],
+        series='Prologue',
+        price_inr=46000,
+        price_usd=620,
+        width_m=0.75,
+        depth_m=0.48,
+        height_m=0.50,
+        styles=['minimalist', 'minimalist-modern', 'zen', 'compact'],
+        sustainability=SustainabilitySpec(recycled_content_pct=22),
+        compatibility=PlumbingCompatibility(drain_diameter='1-1/4" Wall P-Trap'),
+        description='Wall-hung floating vanity cabinet with dual soft-close drawers, integrated bevelled J-pulls, and vitreous china basin.'
+    ),
+
+    # ==================== 5. VANITIES ====================
+    KohlerFixture(
+        id='luxe-vanity',
+        art='K-30460IN-MWF',
+        name='Luxe™ 90 cm Wall-hung Bathroom Vanity Cabinet',
+        category='vanities',
+        series='Luxe',
+        price_inr=68000,
+        price_usd=910,
+        width_m=0.90,
+        depth_m=0.50,
+        height_m=0.50,
+        styles=['classic', 'classic-luxury', 'modern', 'luxury'],
         sustainability=SustainabilitySpec(recycled_content_pct=25),
-        compatibility=PlumbingCompatibility(drain_diameter='1-1/2" P-Trap'),
-        description='Transitional shaker profile, moisture-resistant finish with ceramic undermount basin and slow-close drawers.'
+        compatibility=PlumbingCompatibility(drain_diameter='1-1/4" Wall P-Trap', electrical_req='Optional 12V LED'),
+        description='Luxury 90 cm floating vanity with deep soft-close storage drawers, premium architectural trim, and seamless ceramic basin deck.'
     ),
+
+    # ==================== 6. BASIN ====================
     KohlerFixture(
-        id='brazn-console',
-        art='K-21057-0',
-        name='Brazn™ Minimalist Architectural Steel Console',
+        id='brazn-vessel-sink',
+        art='K-21060IN-0',
+        name='Brazn™ 58.4 cm Rectangular Vessel Bathroom Sink',
         category='vanities',
         series='Brazn',
-        price_inr=72000,
-        price_usd=980,
-        width_m=0.86,
-        depth_m=0.50,
-        height_m=0.86,
-        styles=['zen', 'japanese-zen', 'industrial', 'industrial-chic'],
-        sustainability=SustainabilitySpec(recycled_content_pct=40),
-        compatibility=PlumbingCompatibility(drain_diameter='1-1/2" Exposed P-Trap'),
-        description='Bauhaus-inspired architectural steel frame, teak slatted lower shelf, and cylindrical ceramic vessel basin.'
+        price_inr=32000,
+        price_usd=430,
+        width_m=0.584,
+        depth_m=0.368,
+        height_m=0.84,
+        styles=['zen', 'japanese-zen', 'industrial', 'industrial-chic', 'minimalist'],
+        sustainability=SustainabilitySpec(recycled_content_pct=35),
+        compatibility=PlumbingCompatibility(drain_diameter='1-1/4" Exposed Bottle Trap'),
+        description='Architectural modernist vessel sink in vitreous china with sharp rectangular rim, chamfered edges, and umbrella drain.'
     ),
 
-    # ==================== SHOWERS ====================
+    # ==================== 7. SHOWER DOOR ====================
     KohlerFixture(
-        id='hydrorail-shower',
-        art='K-76465IN-CP',
-        name='Revel® Glass Box with HydroRail-R Column',
+        id='new-trilogy-shower-door',
+        art='K-704699IN-SHP',
+        name='New Trilogy™ 2000–2161 mm H Pivot Shower Door with 8 mm Thick Glass',
         category='showers',
-        series='HydroRail',
-        price_inr=54000,
-        price_usd=720,
-        width_m=1.12,
-        depth_m=0.96,
-        height_m=2.10,
-        styles=['minimalist', 'minimalist-modern', 'classic', 'classic-luxury', 'zen', 'japanese-zen'],
-        sustainability=SustainabilitySpec(flow_rate_gpm=1.75, annual_water_savings_l=26500),
-        compatibility=PlumbingCompatibility(water_pressure_min_psi=45, supply_line='1/2" Copper/CPVC', drain_diameter='2" Shower Drain'),
-        description='5/16" CleanCoat® tempered glass box, HydroRail-R arch column, 10" Katalyst rainhead and handshower.',
-        clearance_front_m=0.610  # NKBA 24" entry minimum
-    ),
-    KohlerFixture(
-        id='statement-shower',
-        art='K-26292IN-CP',
-        name='Statement® Oval Rainhead & Handshower System',
-        category='showers',
-        series='Statement',
-        price_inr=48000,
-        price_usd=640,
-        width_m=0.90,
+        series='New Trilogy',
+        price_inr=82000,
+        price_usd=1100,
+        width_m=1.00,
         depth_m=0.90,
-        height_m=2.10,
-        styles=['industrial', 'industrial-chic', 'minimalist', 'minimalist-modern'],
-        sustainability=SustainabilitySpec(flow_rate_gpm=2.0, annual_water_savings_l=19800),
-        compatibility=PlumbingCompatibility(water_pressure_min_psi=45, supply_line='1/2" NPT', drain_diameter='2" Shower Drain'),
-        description='Katalyst® air-induction spray infusing 2.2M air bubbles per minute, thermostatic valve trim.',
+        height_m=2.05,
+        styles=['minimalist', 'minimalist-modern', 'classic', 'classic-luxury', 'zen', 'industrial'],
+        sustainability=SustainabilitySpec(flow_rate_gpm=1.75, annual_water_savings_l=33160),
+        compatibility=PlumbingCompatibility(water_pressure_min_psi=45, supply_line='1/2" Copper/PEX', drain_diameter='2" Shower Drain'),
+        description='Architectural 2.05m tall pivot shower door with 8 mm CleanCoat tempered glass, solid brass pivot hinges, and high-polish tubular handle.',
         clearance_front_m=0.610
     ),
 
-    # ==================== BATHTUBS ====================
+    # ==================== 8. SHOWER ====================
+    KohlerFixture(
+        id='statement-showerhead',
+        art='K-26290T-2MB',
+        name='Statement™ Three-function Showerhead',
+        category='showers',
+        series='Statement',
+        price_inr=28500,
+        price_usd=380,
+        width_m=0.25,
+        depth_m=0.35,
+        height_m=0.25,
+        styles=['industrial', 'industrial-chic', 'minimalist', 'minimalist-modern', 'zen'],
+        sustainability=SustainabilitySpec(flow_rate_gpm=1.75, annual_water_savings_l=33160),
+        compatibility=PlumbingCompatibility(water_pressure_min_psi=45, supply_line='1/2" NPT', drain_diameter='2" Shower Drain'),
+        description='Contemporary multifunction showerhead with Full Coverage, Cloud spray, Deep Massage, and Katalyst air-induction.',
+        clearance_front_m=0.610
+    ),
+
+    # ==================== 9. BATHTUB ====================
     KohlerFixture(
         id='evok-bathtub',
-        art='K-1130IN-0',
-        name='Evok® 66" Freestanding Ergonomic Soaking Tub',
+        art='K-25164T-0',
+        name='Evok 2.0™ 1.7M Seamless Rectangular Freestanding Bathtub',
         category='bathtubs',
-        series='Evok',
-        price_inr=115000,
-        price_usd=1550,
-        width_m=1.68,
-        depth_m=0.82,
+        series='Evok 2.0',
+        price_inr=125000,
+        price_usd=1680,
+        width_m=1.70,
+        depth_m=0.80,
         height_m=0.60,
-        styles=['zen', 'japanese-zen', 'luxury', 'classic-luxury'],
+        styles=['zen', 'japanese-zen', 'luxury', 'classic-luxury', 'modern', 'minimalist'],
         sustainability=SustainabilitySpec(annual_water_savings_l=0),
-        compatibility=PlumbingCompatibility(drain_diameter='1-1/2" Center Toe-Tap Drain'),
-        description='Seamless high-gloss acrylic casting, sloped lumbar support recline, slotted overflow.'
+        compatibility=PlumbingCompatibility(requires_wet_wall=False, drain_diameter='1-1/2" Slotted Overflow Drain'),
+        description='Seamless rectangular freestanding soaking tub with softened modern corners, double-ended lumbar support, and slotted overflow.'
     ),
 
-    # ==================== MIRRORS ====================
+    # ==================== 10. SMART MIRROR ====================
     KohlerFixture(
-        id='verdera-mirror',
-        art='K-99009IN-NA',
-        name='Verdera® Voice Lighted Halo Smart Mirror',
+        id='ming-smart-mirror',
+        art='K-77115IN-NA',
+        name='Ming™ 80 cm Lighted Mirror with Proximity Sensor',
         category='mirrors',
-        series='Verdera',
-        price_inr=38000,
-        price_usd=510,
-        width_m=1.02,
-        depth_m=0.08,
-        height_m=0.82,
-        styles=['minimalist', 'minimalist-modern', 'classic', 'classic-luxury', 'zen', 'japanese-zen'],
-        sustainability=SustainabilitySpec(),
-        compatibility=PlumbingCompatibility(requires_wet_wall=False, electrical_req='220V In-Wall Box'),
-        description='2200K–5000K tunable circadian LED halo lighting, built-in defogger heating pad.'
-    ),
-    KohlerFixture(
-        id='verdera-30-mirror',
-        art='K-99008IN-NA',
-        name='Verdera® 30" Compact Lighted LED Mirror',
-        category='mirrors',
-        series='Verdera',
-        price_inr=26000,
-        price_usd=350,
-        width_m=0.76,
-        depth_m=0.06,
-        height_m=0.76,
-        styles=['industrial', 'industrial-chic', 'compact', 'minimalist'],
-        sustainability=SustainabilitySpec(),
-        compatibility=PlumbingCompatibility(requires_wet_wall=False, electrical_req='220V In-Wall Box'),
-        description='Frameless perimeter backlit LED mirror with copper-free glass.'
+        series='Ming',
+        price_inr=42000,
+        price_usd=560,
+        width_m=0.80,
+        depth_m=0.05,
+        height_m=0.80,
+        styles=['minimalist', 'minimalist-modern', 'zen', 'japanese-zen', 'modern'],
+        sustainability=SustainabilitySpec(recycled_content_pct=20),
+        compatibility=PlumbingCompatibility(requires_wet_wall=False, electrical_req='120V In-Wall Hardwire'),
+        description='Circular lighted smart mirror with proximity sensor, perimeter frosted LED halo, circadian light control, and defogger.'
     ),
 
-    # ==================== FAUCETS ====================
+    # ==================== 11. MIRROR ====================
+    KohlerFixture(
+        id='reve-mirror',
+        art='K-23268IN-NA',
+        name='Reve™ 1000 mm Lighted Mirror',
+        category='mirrors',
+        series='Reve',
+        price_inr=36000,
+        price_usd=480,
+        width_m=1.00,
+        depth_m=0.05,
+        height_m=0.75,
+        styles=['classic', 'classic-luxury', 'modern', 'industrial', 'minimalist'],
+        sustainability=SustainabilitySpec(recycled_content_pct=22),
+        compatibility=PlumbingCompatibility(requires_wet_wall=False, electrical_req='120V In-Wall Hardwire'),
+        description='Wide 100 cm rectangular mirror with dual vertical lateral LED light bars, touch sensor dimmer, 90+ CRI task lighting, and anti-fog pad.'
+    ),
+
+    # ==================== 12. FAUCET ====================
     KohlerFixture(
         id='purist-faucet',
-        art='K-99856IN-4',
-        name='Purist® Tall Basin Monoblock Faucet',
+        art='K-14402IN-4A-CP',
+        name='Purist™ Single Control Lavatory Faucet',
         category='faucets',
         series='Purist',
         price_inr=19800,
         price_usd=270,
-        width_m=0.18,
-        depth_m=0.20,
-        height_m=0.32,
-        styles=['minimalist', 'minimalist-modern'],
-        sustainability=SustainabilitySpec(flow_rate_gpm=1.2, annual_water_savings_l=5200),
+        width_m=0.15,
+        depth_m=0.18,
+        height_m=0.20,
+        styles=['minimalist', 'minimalist-modern', 'modern', 'zen'],
+        sustainability=SustainabilitySpec(flow_rate_gpm=1.2, annual_water_savings_l=16580),
         compatibility=PlumbingCompatibility(requires_wet_wall=False, supply_line='3/8" Flexible Braided'),
-        description='Solid brass construction, ceramic disc valving, 1.2 GPM laminar stream aerator.'
+        description='Pure architectural cylindrical single-lever faucet in Polished Chrome with laminar flow and ceramic disc valve.'
     ),
+
+    # ==================== 13. FAUCET ====================
     KohlerFixture(
         id='parallel-faucet',
-        art='K-23484IN-4',
-        name='Parallel® Cylindrical Basin Faucet',
+        art='K-23482IN-4-BV',
+        name='Parallel™ Pillar Tap',
         category='faucets',
         series='Parallel',
-        price_inr=11200,
-        price_usd=150,
-        width_m=0.16,
-        depth_m=0.18,
-        height_m=0.26,
-        styles=['minimalist', 'minimalist-modern', 'modern'],
-        sustainability=SustainabilitySpec(flow_rate_gpm=1.2, annual_water_savings_l=5200),
+        price_inr=12500,
+        price_usd=168,
+        width_m=0.13,
+        depth_m=0.16,
+        height_m=0.18,
+        styles=['minimalist', 'minimalist-modern', 'modern', 'classic'],
+        sustainability=SustainabilitySpec(flow_rate_gpm=1.2, annual_water_savings_l=16580),
         compatibility=PlumbingCompatibility(requires_wet_wall=False, supply_line='3/8" Flexible Braided'),
-        description='Crisp cylindrical styling, corrosion-resistant Kohler finish.'
+        description='Faceted geometric pillar tap in Brushed Bronze with precise angular contours and quarter-turn ceramic cartridge.'
     ),
+
+    # ==================== 14. FAUCET ====================
     KohlerFixture(
         id='artifacts-faucet',
-        art='K-10129IN-4',
-        name='Artifacts® Column Spout Basin Faucet',
+        art='K-72760T-CP',
+        name='Artifacts™ Widespread Bathroom Sink Faucets',
         category='faucets',
         series='Artifacts',
-        price_inr=32000,
-        price_usd=430,
-        width_m=0.20,
-        depth_m=0.22,
-        height_m=0.34,
-        styles=['classic', 'classic-luxury'],
-        sustainability=SustainabilitySpec(flow_rate_gpm=1.2, annual_water_savings_l=5200),
+        price_inr=34000,
+        price_usd=460,
+        width_m=0.25,
+        depth_m=0.23,
+        height_m=0.20,
+        styles=['classic', 'classic-luxury', 'luxury', 'traditional'],
+        sustainability=SustainabilitySpec(flow_rate_gpm=1.5, annual_water_savings_l=11600),
         compatibility=PlumbingCompatibility(requires_wet_wall=False, supply_line='3/8" Flexible Braided'),
-        description='Vintage Edwardian column spout profile in vibrant brushed brass.'
+        description='Widespread 3-hole bathroom sink faucet with classical Edwardian column spout and authentic dual cross handles.'
     ),
+
+    # ==================== 15. FAUCET ====================
     KohlerFixture(
-        id='composed-faucet',
-        art='K-73159IN-4',
-        name='Composed® Geometric Single-Handle Faucet',
+        id='composed-tall-faucet',
+        art='K-73159IN-7-CP',
+        name='Composed™ Tall Single-handle Bathroom Sink Faucet',
         category='faucets',
         series='Composed',
-        price_inr=14500,
-        price_usd=195,
-        width_m=0.16,
-        depth_m=0.19,
-        height_m=0.28,
-        styles=['zen', 'japanese-zen', 'industrial', 'industrial-chic'],
-        sustainability=SustainabilitySpec(flow_rate_gpm=1.2, annual_water_savings_l=5200),
+        price_inr=22000,
+        price_usd=295,
+        width_m=0.15,
+        depth_m=0.20,
+        height_m=0.31,
+        styles=['zen', 'japanese-zen', 'industrial', 'industrial-chic', 'minimalist'],
+        sustainability=SustainabilitySpec(flow_rate_gpm=1.2, annual_water_savings_l=16580),
         compatibility=PlumbingCompatibility(requires_wet_wall=False, supply_line='3/8" Flexible Braided'),
-        description='Timeless geometric proportions with side-joystick control.'
+        description='Tall architectural single-handle faucet designed specifically for vessel basins with side joystick control and sleek flat spout.'
     )
 ]
 
