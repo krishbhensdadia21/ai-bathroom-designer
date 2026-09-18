@@ -168,9 +168,9 @@ Every product model in the planner corresponds to an authentic, production Kohle
 * **AI Model Engine**: Groq Cloud API (`llama-3.3-70b-versatile`)
 * **Security & Prompt Safety**: Meta Llama Prompt Guard 22M (`meta-llama/llama-prompt-guard-2-22m`)
 * **Testing & Quality Assurance**: Python `unittest` suite (9 test cases, 100% pass rate in <5ms)
-* **Deployment**: Vercel (`vercel.json` + `/public` CDN) & GitHub Pages compatible
-
+##
 ### 💻 Local Quickstart
+##
 
 ### Prerequisites
 * **Node.js** (v18 or higher installed)
@@ -200,6 +200,7 @@ node server.js
 
 ### 4. Open in Browser
 Navigate to **`http://localhost:3000`** in any web browser.
-
+##
 ### 📄 License & Attribution
+##
 This project is open-source under the **MIT License**. Genuine Kohler product models, names, and design trademarks are property of **Kohler Co.** Submitted for the **KOHLER-MITWPU AI Research Lab Program**.
