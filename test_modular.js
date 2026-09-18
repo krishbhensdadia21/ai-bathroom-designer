@@ -102,10 +102,22 @@ const mockGlobal = {
     Vector2: function() {},
     Vector3: function() { return { set: function() {}, clone: function() { return this; }, subVectors: function() { return this; }, normalize: function() { return this; }, dot: function() { return 1; } }; },
     Group: function() { return { add: function(c) { this.children.push(c); }, remove: function() {}, position: { set: function() {} }, rotation: { set: function() {}, y: 0 }, scale: { set: function() {} }, children: [] }; },
-    Mesh: function() { return { position: { set: function() {} }, rotation: { set: function() {}, y: 0 }, castShadow: false, receiveShadow: false, add: function() {}, children: [] }; },
+    Mesh: function() { return { position: { set: function() {} }, rotation: { set: function() {}, y: 0 }, scale: { set: function() {} }, castShadow: false, receiveShadow: false, add: function() {}, children: [] }; },
     CylinderGeometry: function() {},
     BoxGeometry: function() {},
     PlaneGeometry: function() {},
+    BufferGeometry: function() {
+      return {
+        setAttribute: function() { return this; },
+        setIndex: function() { return this; },
+        computeVertexNormals: function() {},
+        computeBoundingBox: function() {},
+        toNonIndexed: function() { return this; },
+        boundingBox: { min: { x: -0.292, y: 0, z: -0.184 }, max: { x: 0.292, y: 0.125, z: 0.184 } }
+      };
+    },
+    Float32BufferAttribute: function(arr, itemSize) { return { array: arr, itemSize: itemSize, count: (arr ? arr.length / itemSize : 0) }; },
+    Uint16BufferAttribute: function(arr, itemSize) { return { array: arr, itemSize: itemSize, count: (arr ? arr.length / itemSize : 0) }; },
     MeshBasicMaterial: function() {},
     MeshStandardMaterial: function() { return { clone: function() { return this; } }; },
     MeshPhysicalMaterial: function() { return { clone: function() { return this; } }; },

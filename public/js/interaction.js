@@ -14,15 +14,17 @@
           isModified: false
         };
         if (badge) {
+          badge.className = 'hidden';
           badge.classList.add('hidden');
           badge.innerHTML = '';
         }
       } else if (type === 'modified') {
         currentPlannerConfigState.isModified = true;
         if (badge) {
-          badge.className = 'text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200/90 shadow-2xs flex items-center space-x-1';
-          badge.innerHTML = `<i class="fa-solid fa-pen-ruler text-[8px] text-amber-600"></i><span>Customized</span>`;
-          badge.classList.remove('hidden');
+          // Customized box completely removed per user request
+          badge.className = 'hidden';
+          badge.classList.add('hidden');
+          badge.innerHTML = '';
         }
       } else if (type === 'reset') {
         currentPlannerConfigState = {
@@ -31,7 +33,9 @@
           isModified: false
         };
         if (badge) {
+          badge.className = 'hidden';
           badge.classList.add('hidden');
+          badge.innerHTML = '';
         }
       }
     }

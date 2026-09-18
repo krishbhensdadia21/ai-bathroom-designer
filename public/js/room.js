@@ -43,10 +43,10 @@
     }
 
     function setupRoomLighting() {
-      roomAmbLight = new THREE.AmbientLight(0xfff7ec, 0.38);
+      roomAmbLight = new THREE.AmbientLight(0xfff7ec, 0.50);
       scene.add(roomAmbLight);
 
-      roomKeySun = new THREE.DirectionalLight(0xfff8ee, 0.78);
+      roomKeySun = new THREE.DirectionalLight(0xfff8ee, 0.75);
       roomKeySun.position.set(3.0, 5.0, 3.4);
       roomKeySun.castShadow = true;
       roomKeySun.shadow.mapSize.width = 2048; roomKeySun.shadow.mapSize.height = 2048;
@@ -56,16 +56,12 @@
       roomKeySun.shadow.bias = -0.00008;
       scene.add(roomKeySun);
 
-      roomFillLight = new THREE.DirectionalLight(0xdce5ed, 0.22);
+      roomFillLight = new THREE.DirectionalLight(0xdce5ed, 0.30);
       roomFillLight.position.set(-3.0, 3.0, 1.8);
       scene.add(roomFillLight);
 
-      // Back wall ceiling spotlight
-      roomBackWallSpot = new THREE.SpotLight(0xfffaee, 1.35, 6.5, 0.60, 0.85, 1.1);
-      roomBackWallSpot.position.set(0.4, 2.55, -0.3);
-      roomBackWallSpot.target.position.set(0.4, 1.1, -roomDepth / 2);
-      scene.add(roomBackWallSpot);
-      scene.add(roomBackWallSpot.target);
+      // Back wall spotlight removed per user request for smooth, realistic studio wall illumination
+      roomBackWallSpot = null;
 
       if (!themeAccentsGroup) {
         themeAccentsGroup = new THREE.Group();

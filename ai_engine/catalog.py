@@ -102,40 +102,40 @@ KOHLER_CATALOG: List[KohlerFixture] = [
         description='Sculptural organic egg-shaped one-piece toilet with skirted trapway, dual flush 2.6/4L, and soft-close ergonomic seat.'
     ),
 
-    # ==================== 4. VANITIES ====================
+    # ==================== 4. VANITY + BASIN ====================
     KohlerFixture(
-        id='prologue-vanity',
-        art='K-30457IN-MWF',
-        name='Prologue™ 75 cm Wall-hung Bathroom Vanity Cabinet',
+        id='trace-integrated-vanity',
+        art='K-30375IN-0',
+        name='Trace™ Integrated Top and Basin',
         category='vanities',
-        series='Prologue',
-        price_inr=46000,
-        price_usd=620,
-        width_m=0.75,
+        series='Trace',
+        price_inr=42000,
+        price_usd=560,
+        width_m=0.70,
         depth_m=0.48,
         height_m=0.50,
         styles=['minimalist', 'minimalist-modern', 'zen', 'compact'],
         sustainability=SustainabilitySpec(recycled_content_pct=22),
         compatibility=PlumbingCompatibility(drain_diameter='1-1/4" Wall P-Trap'),
-        description='Wall-hung floating vanity cabinet with dual soft-close drawers, integrated bevelled J-pulls, and vitreous china basin.'
+        description='700 mm integrated vanity top + basin in lustrous vitreous china with seamless sculpted bowl and wall-hung soft-close cabinet.'
     ),
 
-    # ==================== 5. VANITIES ====================
+    # ==================== 5. VANITY + BASIN ====================
     KohlerFixture(
-        id='luxe-vanity',
-        art='K-30460IN-MWF',
-        name='Luxe™ 90 cm Wall-hung Bathroom Vanity Cabinet',
+        id='vive-integrated-vanity',
+        art='K-28782IN-0',
+        name='Vive™ Integrated Top and Basin',
         category='vanities',
-        series='Luxe',
-        price_inr=68000,
-        price_usd=910,
-        width_m=0.90,
-        depth_m=0.50,
+        series='Vive',
+        price_inr=48000,
+        price_usd=640,
+        width_m=0.72,
+        depth_m=0.49,
         height_m=0.50,
         styles=['classic', 'classic-luxury', 'modern', 'luxury'],
         sustainability=SustainabilitySpec(recycled_content_pct=25),
         compatibility=PlumbingCompatibility(drain_diameter='1-1/4" Wall P-Trap', electrical_req='Optional 12V LED'),
-        description='Luxury 90 cm floating vanity with deep soft-close storage drawers, premium architectural trim, and seamless ceramic basin deck.'
+        description='720 mm integrated vanity top + basin with fluid bevelled contours, vitreous china washbasin, and architectural floating storage.'
     ),
 
     # ==================== 6. BASIN ====================
@@ -154,6 +154,24 @@ KOHLER_CATALOG: List[KohlerFixture] = [
         sustainability=SustainabilitySpec(recycled_content_pct=35),
         compatibility=PlumbingCompatibility(drain_diameter='1-1/4" Exposed Bottle Trap'),
         description='Architectural modernist vessel sink in vitreous china with sharp rectangular rim, chamfered edges, and umbrella drain.'
+    ),
+
+    # ==================== 7. BASIN ====================
+    KohlerFixture(
+        id='forefront-semi-recessed-basin',
+        art='K-11479IN-VC1-0',
+        name='Forefront™ Square Semi-Recessed Basin',
+        category='vanities',
+        series='Forefront',
+        price_inr=18500,
+        price_usd=245,
+        width_m=0.413,
+        depth_m=0.413,
+        height_m=0.84,
+        styles=['minimalist', 'minimalist-modern', 'zen', 'classic', 'compact'],
+        sustainability=SustainabilitySpec(recycled_content_pct=20),
+        compatibility=PlumbingCompatibility(drain_diameter='1-1/4" Decorative Bottle Trap'),
+        description='Separate semi-recessed basin in vitreous china with sleek vertical rim, rear faucet deck, and cantilevered counter mounting.'
     ),
 
     # ==================== 7. SHOWER DOOR ====================

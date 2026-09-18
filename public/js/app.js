@@ -251,8 +251,8 @@
       if (mode === 'day') {
         scene.background = new THREE.Color(0xe6e1da);
         if (roomAmbLight) {
-          roomAmbLight.color.set(0xfff7ec);
-          roomAmbLight.intensity = 0.42;
+          roomAmbLight.color.set(kelvinColor);
+          roomAmbLight.intensity = 0.50;
         }
         if (roomKeySun) {
           roomKeySun.color.set(kelvinColor);
@@ -260,10 +260,7 @@
           roomKeySun.position.set(3.0, 5.0, 3.4);
         }
         if (roomFillLight) {
-          roomFillLight.intensity = 0.25;
-        }
-        if (roomBackWallSpot) {
-          roomBackWallSpot.intensity = 1.35;
+          roomFillLight.intensity = 0.30;
         }
         setFixtureNightEmissives(false);
         showToast('Ambiance: Daylight Showroom (5000K)');
@@ -271,38 +268,30 @@
         scene.background = new THREE.Color(0x3a3028);
         if (roomAmbLight) {
           roomAmbLight.color.set(0xff9944);
-          roomAmbLight.intensity = 0.28;
+          roomAmbLight.intensity = 0.38;
         }
         if (roomKeySun) {
           roomKeySun.color.set(0xff8833);
-          roomKeySun.intensity = 0.55;
+          roomKeySun.intensity = 0.60;
           roomKeySun.position.set(4.5, 2.2, 4.0);
         }
         if (roomFillLight) {
-          roomFillLight.intensity = 0.15;
-        }
-        if (roomBackWallSpot) {
-          roomBackWallSpot.intensity = 1.8;
-          roomBackWallSpot.color.set(0xffcc88);
+          roomFillLight.intensity = 0.22;
         }
         setFixtureNightEmissives(true, 1.2);
         showToast('Ambiance: Sunset Dusk (2700K Warm)');
       } else if (mode === 'night') {
         scene.background = new THREE.Color(0x0a0d14);
         if (roomAmbLight) {
-          roomAmbLight.color.set(0x1e293b);
-          roomAmbLight.intensity = 0.14;
+          roomAmbLight.color.set(0x223048);
+          roomAmbLight.intensity = 0.24;
         }
         if (roomKeySun) {
           roomKeySun.color.set(0x38bdf8);
-          roomKeySun.intensity = 0.18;
+          roomKeySun.intensity = 0.20;
         }
         if (roomFillLight) {
-          roomFillLight.intensity = 0.08;
-        }
-        if (roomBackWallSpot) {
-          roomBackWallSpot.intensity = 2.4;
-          roomBackWallSpot.color.set(0xffe4b5);
+          roomFillLight.intensity = 0.12;
         }
         setFixtureNightEmissives(true, 3.0);
         showToast('Ambiance: Night Mode (Smart Mirror & Under-Vanity Glow)');
@@ -324,9 +313,6 @@
       const col = getKelvinColor(k);
       if (roomKeySun && currentLightingMode !== 'night') {
         roomKeySun.color.set(col);
-      }
-      if (roomBackWallSpot) {
-        roomBackWallSpot.color.set(col);
       }
       showToast(`Color Temperature: ${k}K`);
     }

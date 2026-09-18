@@ -164,179 +164,407 @@
       return g;
     }
 
-    // 4. KOHLER Prologue™ 75 cm Wall-hung Bathroom Vanity Cabinet (K-30457IN-MWF)
-    function buildPrologueVanity(finish = 'wood') {
+    // 4. KOHLER Trace™ Integrated Top and Basin (K-30375IN-0) - 700 mm integrated vanity top + basin
+    function buildTraceIntegratedVanity(finish = 'wood') {
       const g = new THREE.Group();
       const finishMat = (finish === 'white') ? whiteLaminateMat : scandinavianOakMat;
 
-      // Wall-hung floating cabinet body (cantilevered 75 cm W x 48 cm D x 48 cm H)
-      const cabinet = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.48, 0.48), finishMat);
-      cabinet.position.set(0, 0.24, 0);
+      // 700 mm (0.70m W x 0.48m D x 0.46m H) wall-hung floating cabinet body
+      const cabinet = new THREE.Mesh(new THREE.BoxGeometry(0.70, 0.46, 0.46), finishMat);
+      cabinet.position.set(0, 0.23, 0);
       cabinet.castShadow = true;
       cabinet.userData.role = 'vanity';
       g.add(cabinet);
 
-      // Two horizontal soft-close drawers with 45-degree J-pull channel
-      const drawerUpper = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.21, 0.02), finishMat);
-      drawerUpper.position.set(0, 0.35, 0.245);
-      drawerUpper.userData.role = 'vanity';
-      g.add(drawerUpper);
+      // Deep pull-out storage drawer with Trace minimalist recessed J-pull channel
+      const drawerFront = new THREE.Mesh(new THREE.BoxGeometry(0.69, 0.42, 0.02), finishMat);
+      drawerFront.position.set(0, 0.22, 0.235);
+      drawerFront.userData.role = 'vanity';
+      g.add(drawerFront);
 
-      const drawerLower = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.21, 0.02), finishMat);
-      drawerLower.position.set(0, 0.12, 0.245);
-      drawerLower.userData.role = 'vanity';
-      g.add(drawerLower);
+      const jPullChannel = new THREE.Mesh(new THREE.BoxGeometry(0.69, 0.016, 0.02), matteBlackMat);
+      jPullChannel.position.set(0, 0.435, 0.23);
+      g.add(jPullChannel);
 
-      // Subtle recessed shadow line handle channel
-      const handleChannel = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.018, 0.02), matteBlackMat);
-      handleChannel.position.set(0, 0.235, 0.24);
-      g.add(handleChannel);
-
-      // Integrated white vitreous china countertop washbasin (0.754m x 0.484m)
-      const basinTop = new THREE.Mesh(new THREE.BoxGeometry(0.754, 0.04, 0.484), porcelainMat);
-      basinTop.position.set(0, 0.49, 0);
+      // 700 mm seamless integrated vitreous china vanity top with built-in sculpted basin bowl
+      const basinTop = new THREE.Mesh(new THREE.BoxGeometry(0.704, 0.042, 0.484), porcelainMat);
+      basinTop.position.set(0, 0.48, 0.01);
       basinTop.castShadow = true;
       basinTop.userData.role = 'sink';
       g.add(basinTop);
 
-      // Recessed inner washing basin
-      const innerBasin = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.14, 0.32), porcelainMat);
-      innerBasin.position.set(0, 0.42, 0.02);
+      // Seamless sculpted inner washing bowl with gentle radiused contours (0.46m x 0.30m x 0.13m)
+      const innerBasin = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.13, 0.30), porcelainMat);
+      innerBasin.position.set(0, 0.415, 0.02);
       innerBasin.userData.role = 'sink';
       g.add(innerBasin);
 
-      // Chrome umbrella clicker drain
+      // Chrome umbrella clicker pop-up drain
       const drain = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.032, 0.005, 20), chromeMat);
       drain.position.set(0, 0.352, 0.02);
       g.add(drain);
 
-      // Rear single-hole faucet deck ring
+      // Single-hole faucet mounting deck collar at rear
       const faucetDeck = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.005, 20), chromeMat);
-      faucetDeck.position.set(0, 0.512, -0.14);
+      faucetDeck.position.set(0, 0.505, -0.14);
       g.add(faucetDeck);
 
-      // Wall-mount rear shadow gap bracket
-      const mountBracket = new THREE.Mesh(new THREE.BoxGeometry(0.70, 0.40, 0.02), industrialSteelMat);
-      mountBracket.position.set(0, 0.24, -0.24);
+      // Rear wall mounting suspension bracket
+      const mountBracket = new THREE.Mesh(new THREE.BoxGeometry(0.66, 0.38, 0.02), industrialSteelMat);
+      mountBracket.position.set(0, 0.23, -0.23);
       g.add(mountBracket);
 
       return g;
     }
 
-    // 5. KOHLER Luxe™ 90 cm Wall-hung Bathroom Vanity Cabinet (K-30460IN-MWF)
-    function buildLuxeVanity(finish = 'wood') {
+    // 5. KOHLER Vive™ Integrated Top and Basin (K-28782IN-0) - 720 mm integrated vanity top + basin
+    function buildViveIntegratedVanity(finish = 'wood') {
       const g = new THREE.Group();
       const finishMat = (finish === 'white') ? whiteLaminateMat : darkMahoganyMat;
 
-      // Wide luxury 90 cm floating cabinet body (0.90m W x 0.50m D x 0.48m H)
-      const cabinet = new THREE.Mesh(new THREE.BoxGeometry(0.90, 0.48, 0.50), finishMat);
-      cabinet.position.set(0, 0.24, 0);
+      // 720 mm (0.72m W x 0.49m D x 0.48m H) contemporary wall-hung vanity cabinet with Vive fluid bevelled profile
+      const cabinet = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.46, 0.47), finishMat);
+      cabinet.position.set(0, 0.23, 0);
       cabinet.castShadow = true;
       cabinet.userData.role = 'vanity';
       g.add(cabinet);
 
-      // Architectural brushed brass accent border trim
-      const trimTop = new THREE.Mesh(new THREE.BoxGeometry(0.904, 0.012, 0.015), brushedBrassMat);
-      trimTop.position.set(0, 0.475, 0.252);
-      trimTop.userData.role = 'vanity';
-      g.add(trimTop);
+      // Architectural bevelled trim and dual-drawer front panels
+      const drawerUpper = new THREE.Mesh(new THREE.BoxGeometry(0.708, 0.20, 0.02), finishMat);
+      drawerUpper.position.set(0, 0.33, 0.24);
+      drawerUpper.userData.role = 'vanity';
+      g.add(drawerUpper);
 
-      // Deep wide storage drawer panel
-      const drawerFront = new THREE.Mesh(new THREE.BoxGeometry(0.88, 0.44, 0.02), finishMat);
-      drawerFront.position.set(0, 0.23, 0.252);
-      drawerFront.userData.role = 'vanity';
-      g.add(drawerFront);
+      const drawerLower = new THREE.Mesh(new THREE.BoxGeometry(0.708, 0.20, 0.02), finishMat);
+      drawerLower.position.set(0, 0.11, 0.24);
+      drawerLower.userData.role = 'vanity';
+      g.add(drawerLower);
 
-      // Slim horizontal brass architectural drawer pull
-      const pullBar = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.015, 0.018), brushedBrassMat);
-      pullBar.position.set(0, 0.38, 0.265);
+      // Refined slim horizontal architectural pull bar
+      const pullBar = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.014, 0.016), brushedBrassMat);
+      pullBar.position.set(0, 0.33, 0.255);
       pullBar.userData.role = 'vanity';
       g.add(pullBar);
 
-      // Seamless luxury countertop with wide landing areas on left and right
-      const counterTop = new THREE.Mesh(new THREE.BoxGeometry(0.906, 0.045, 0.506), calacattaMarbleMat);
-      counterTop.position.set(0, 0.49, 0);
-      counterTop.castShadow = true;
-      counterTop.userData.role = 'sink';
-      g.add(counterTop);
+      // 720 mm seamless integrated vitreous china vanity top with Vive bevelled perimeter edge
+      const basinTop = new THREE.Mesh(new THREE.BoxGeometry(0.724, 0.045, 0.494), porcelainMat);
+      basinTop.position.set(0, 0.482, 0.01);
+      basinTop.castShadow = true;
+      basinTop.userData.role = 'sink';
+      g.add(basinTop);
 
-      // Deep centered rectangular wash basin
-      const innerBasin = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.15, 0.33), porcelainMat);
-      innerBasin.position.set(0, 0.41, 0.02);
+      // Fluid contour sculpted washbasin bowl (0.48m x 0.31m x 0.14m)
+      const innerBasin = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.14, 0.31), porcelainMat);
+      innerBasin.position.set(0, 0.412, 0.02);
       innerBasin.userData.role = 'sink';
       g.add(innerBasin);
 
-      // Pop-up umbrella drain
-      const drain = new THREE.Mesh(new THREE.CylinderGeometry(0.034, 0.034, 0.006, 24), brushedBrassMat);
-      drain.position.set(0, 0.34, 0.02);
+      // Center pop-up umbrella drain
+      const drain = new THREE.Mesh(new THREE.CylinderGeometry(0.033, 0.033, 0.006, 20), brushedBrassMat);
+      drain.position.set(0, 0.344, 0.02);
       g.add(drain);
 
-      // Ambient downward under-vanity LED light strip casting warm architectural glow
+      // Rear single-hole faucet deck ring
+      const faucetDeck = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.005, 20), brushedBrassMat);
+      faucetDeck.position.set(0, 0.508, -0.14);
+      g.add(faucetDeck);
+
+      // Ambient downward under-vanity LED architectural light strip
       const underGlow = new THREE.Mesh(
-        new THREE.BoxGeometry(0.80, 0.012, 0.012),
+        new THREE.BoxGeometry(0.66, 0.01, 0.01),
         new THREE.MeshBasicMaterial({ color: 0xfef08a })
       );
-      underGlow.position.set(0, 0.01, 0.10);
+      underGlow.position.set(0, 0.01, 0.08);
       g.add(underGlow);
 
-      const downLight = new THREE.PointLight(0xfef08a, 0.55, 1.2);
-      downLight.position.set(0, 0.03, 0.10);
+      const downLight = new THREE.PointLight(0xfef08a, 0.45, 1.1);
+      downLight.position.set(0, 0.03, 0.08);
       g.add(downLight);
 
       return g;
     }
 
+    // Helper: Construct authentic Kohler Brazn™ chamfered splayed vessel sink geometry
+    function createBraznVesselGeometry() {
+      if (typeof THREE.BufferGeometry !== 'function') {
+        return new THREE.BoxGeometry(0.584, 0.125, 0.368);
+      }
+
+      const geom = new THREE.BufferGeometry();
+
+      // Authentic Kohler Brazn K-21060IN-0 Dimensions (meters)
+      const topW = 0.584, topD = 0.368, H = 0.125;
+      const botW = 0.518, botD = 0.306;
+      const rimT = 0.010; // 10mm ultra-thin knife-edge rim
+      const inTopW = topW - rimT * 2, inTopD = topD - rimT * 2;
+      const floorW = 0.436, floorD = 0.218, floorY = 0.018;
+
+      // Corner chamfer bevels (45-degree facets)
+      const topC = 0.030, botC = 0.024;
+      const inTopC = 0.024, floorC = 0.020;
+
+      function get8Points(w, d, c, y) {
+        const hw = w / 2, hd = d / 2;
+        return [
+          [-hw + c, y, -hd],     // 0: rear-left
+          [hw - c, y, -hd],      // 1: rear-right
+          [hw, y, -hd + c],      // 2: right-rear
+          [hw, y, hd - c],       // 3: right-front
+          [hw - c, y, hd],       // 4: front-right
+          [-hw + c, y, hd],      // 5: front-left
+          [-hw, y, hd - c],      // 6: left-front
+          [-hw, y, -hd + c]      // 7: left-rear
+        ];
+      }
+
+      // 4 concentric 8-vertex loops
+      const outerBot = get8Points(botW, botD, botC, 0);          // Loop 0: 0..7
+      const outerTop = get8Points(topW, topD, topC, H);          // Loop 1: 8..15
+      const innerTop = get8Points(inTopW, inTopD, inTopC, H);    // Loop 2: 16..23
+      const innerFloor = get8Points(floorW, floorD, floorC, floorY); // Loop 3: 24..31
+      const floorCenter = [0, floorY - 0.003, 0.010];             // Vertex 32
+      const botCenter = [0, 0, 0];                               // Vertex 33
+
+      const positions = [];
+      const indices = [];
+
+      [...outerBot, ...outerTop, ...innerTop, ...innerFloor, floorCenter, botCenter].forEach(p => {
+        positions.push(...p);
+      });
+
+      function bridgeLoops(startA, startB, flip = false) {
+        for (let i = 0; i < 8; i++) {
+          const next = (i + 1) % 8;
+          const a1 = startA + i, a2 = startA + next;
+          const b1 = startB + i, b2 = startB + next;
+          if (!flip) {
+            indices.push(a1, b1, a2);
+            indices.push(a2, b1, b2);
+          } else {
+            indices.push(a1, a2, b1);
+            indices.push(a2, b2, b1);
+          }
+        }
+      }
+
+      // 1. Splayed outer walls (Loop 0 -> Loop 1)
+      bridgeLoops(0, 8, false);
+
+      // 2. Ultra-thin knife-edge rim top face (Loop 1 -> Loop 2)
+      bridgeLoops(8, 16, false);
+
+      // 3. Sloped inner basin cavity walls (Loop 2 -> Loop 3)
+      bridgeLoops(16, 24, true);
+
+      // 4. Sloping inner floor fan to center drain vertex 32
+      for (let i = 0; i < 8; i++) {
+        const next = (i + 1) % 8;
+        indices.push(24 + i, 32, 24 + next);
+      }
+
+      // 5. Flat bottom base fan to center vertex 33
+      for (let i = 0; i < 8; i++) {
+        const next = (i + 1) % 8;
+        indices.push(i, (i + 1) % 8, 33);
+      }
+
+      geom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      geom.setIndex(indices);
+
+      if (typeof geom.toNonIndexed === 'function') {
+        const nonIndexed = geom.toNonIndexed();
+        nonIndexed.computeVertexNormals();
+        return nonIndexed;
+      }
+
+      geom.computeVertexNormals();
+      return geom;
+    }
+
     // 6. KOHLER Brazn™ 58.4 cm Rectangular Vessel Bathroom Sink (K-21060IN-0)
-    function buildBraznVesselSink(finish = 'black') {
+    // Matches authentic product photo: pristine white vitreous china, splayed chamfered walls, slotted overflow, and flush ceramic umbrella drain
+    function buildBraznVesselSink(finish = 'white') {
       const g = new THREE.Group();
-      const basinMat = (finish === 'white') ? porcelainMat : matteBlackMat;
+      const basinMat = (finish === 'black') ? matteBlackMat : porcelainMat;
+      const counterMat = (finish === 'wood') ? teakMat : whiteQuartzMat;
 
-      // Architectural floating console shelf (0.82m W x 0.46m D)
-      const shelf = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.06, 0.46), teakMat);
-      shelf.position.set(0, 0.72, 0);
-      shelf.castShadow = true;
-      shelf.userData.role = 'vanity';
-      g.add(shelf);
+      // 1. Architectural floating console countertop (0.76m W x 0.44m D x 0.042m H)
+      const counterSlab = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.042, 0.44), counterMat);
+      counterSlab.position.set(0, 0.72, 0);
+      counterSlab.castShadow = true;
+      counterSlab.receiveShadow = true;
+      counterSlab.userData.role = 'vanityCounter';
+      g.add(counterSlab);
 
-      // Front horizontal towel rail bar
-      const towelRail = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, 0.74, 16), matteBlackMat);
+      // Front horizontal minimalist chrome towel rail bar under countertop
+      const towelRail = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.009, 0.68, 16), chromeMat);
       towelRail.rotation.z = Math.PI / 2;
-      towelRail.position.set(0, 0.66, 0.23);
-      towelRail.userData.role = 'vanity';
+      towelRail.position.set(0, 0.665, 0.215);
+      towelRail.userData.role = 'vanityHardware';
       g.add(towelRail);
 
-      // Exposed decorative bottle trap underneath
-      const bottleTrap = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.024, 0.28, 16), matteBlackMat);
-      bottleTrap.position.set(0, 0.54, 0.02);
-      g.add(bottleTrap);
+      // Left & Right towel rail mounting standoff posts
+      for (let rx of [-0.33, 0.33]) {
+        const standoff = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.045, 16), chromeMat);
+        standoff.rotation.x = Math.PI / 2;
+        standoff.position.set(rx, 0.665, 0.19);
+        standoff.userData.role = 'vanityHardware';
+        g.add(standoff);
+      }
 
-      const wallWastePipe = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.24, 16), matteBlackMat);
+      // Exposed European chrome designer bottle trap (P-trap)
+      const trapVertical = new THREE.Mesh(new THREE.CylinderGeometry(0.020, 0.020, 0.18, 20), chromeMat);
+      trapVertical.position.set(0, 0.61, 0.025);
+      trapVertical.userData.role = 'vanityHardware';
+      g.add(trapVertical);
+
+      const trapBody = new THREE.Mesh(new THREE.CylinderGeometry(0.030, 0.030, 0.075, 20), chromeMat);
+      trapBody.position.set(0, 0.50, 0.025);
+      trapBody.userData.role = 'vanityHardware';
+      g.add(trapBody);
+
+      const trapCap = new THREE.Mesh(new THREE.CylinderGeometry(0.031, 0.031, 0.012, 20), chromeMat);
+      trapCap.position.set(0, 0.458, 0.025);
+      trapCap.userData.role = 'vanityHardware';
+      g.add(trapCap);
+
+      const wallWastePipe = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.22, 16), chromeMat);
       wallWastePipe.rotation.x = Math.PI / 2;
-      wallWastePipe.position.set(0, 0.48, -0.10);
+      wallWastePipe.position.set(0, 0.51, -0.08);
+      wallWastePipe.userData.role = 'vanityHardware';
       g.add(wallWastePipe);
 
-      // Authentic Brazn 58.4 cm Rectangular Vessel Sink (58.4 cm x 36.8 cm x 11.5 cm)
-      const vesselBody = new THREE.Mesh(new THREE.BoxGeometry(0.584, 0.115, 0.368), basinMat);
-      vesselBody.position.set(0, 0.81, 0.02);
-      vesselBody.castShadow = true;
-      vesselBody.userData.role = 'sink';
-      g.add(vesselBody);
+      // Rear wall suspension brackets
+      for (let bx of [-0.28, 0.28]) {
+        const bracket = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.12, 0.24), industrialSteelMat);
+        bracket.position.set(bx, 0.64, -0.09);
+        g.add(bracket);
+      }
 
-      // Thin chamfered inner basin cavity (only 12mm thin rim walls)
-      const innerCavity = new THREE.Mesh(new THREE.BoxGeometry(0.558, 0.105, 0.342), basinMat);
-      innerCavity.position.set(0, 0.82, 0.02);
-      innerCavity.userData.role = 'sink';
-      g.add(innerCavity);
+      // 2. Authentic Brazn 58.4 cm Chamfered Vessel Sink (sits on counter at y = 0.741m)
+      const basinGeom = createBraznVesselGeometry();
+      const basinMesh = new THREE.Mesh(basinGeom, basinMat);
+      basinMesh.position.set(0, 0.741, 0.015);
+      basinMesh.castShadow = true;
+      basinMesh.receiveShadow = true;
+      basinMesh.userData.role = 'basin';
+      g.add(basinMesh);
 
-      // Center clicker umbrella pop-up drain
-      const drain = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.006, 24), matteBlackMat);
-      drain.position.set(0, 0.768, 0.02);
-      g.add(drain);
+      // 3. Rear Horizontal Slotted Overflow Opening (characteristic of Kohler Brazn)
+      // Slanted slightly to match the 31-degree draft angle of the rear inner basin wall
+      const wallSlopeAngle = Math.atan2(0.065, 0.107);
+      const overflowSlot = new THREE.Mesh(
+        new THREE.BoxGeometry(0.046, 0.007, 0.008),
+        new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.9, metalness: 0.1 })
+      );
+      overflowSlot.rotation.x = -wallSlopeAngle;
+      overflowSlot.position.set(0, 0.741 + 0.100, 0.015 - 0.158);
+      overflowSlot.userData.role = 'sink';
+      g.add(overflowSlot);
+
+      // Subtle chrome interior overflow grill accent
+      const overflowGrill = new THREE.Mesh(new THREE.BoxGeometry(0.040, 0.002, 0.004), chromeMat);
+      overflowGrill.rotation.x = -wallSlopeAngle;
+      overflowGrill.position.set(0, 0.741 + 0.100, 0.015 - 0.156);
+      g.add(overflowGrill);
+
+      // 4. Center Flush Circular Ceramic Umbrella Pop-up Drain Cover (matching white vitreous china)
+      // Dark recessed perimeter shadow ring
+      const drainWell = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.043, 0.043, 0.004, 32),
+        new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.8 })
+      );
+      drainWell.position.set(0, 0.741 + 0.021, 0.015 + 0.010);
+      g.add(drainWell);
+
+      // Matching white ceramic umbrella disc cover (exact match to photo!)
+      const ceramicUmbrellaDrain = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.038, 0.038, 0.005, 32),
+        basinMat
+      );
+      ceramicUmbrellaDrain.position.set(0, 0.741 + 0.024, 0.015 + 0.010);
+      ceramicUmbrellaDrain.castShadow = true;
+      ceramicUmbrellaDrain.userData.role = 'sink';
+      g.add(ceramicUmbrellaDrain);
+
+      // Subtle crown curve on ceramic drain cap
+      const drainCrown = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.034, 0.038, 0.0025, 32),
+        basinMat
+      );
+      drainCrown.position.set(0, 0.741 + 0.027, 0.015 + 0.010);
+      drainCrown.userData.role = 'sink';
+      g.add(drainCrown);
+
+      // 5. Discreet "KOHLER" brand lettering mark on rear rim
+      const brandMark = new THREE.Mesh(
+        new THREE.BoxGeometry(0.026, 0.0006, 0.003),
+        new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.3, metalness: 0.8 })
+      );
+      brandMark.position.set(0, 0.741 + 0.1254, 0.015 - 0.178);
+      g.add(brandMark);
 
       return g;
     }
 
-    // 7. KOHLER New Trilogy™ 2000–2161 mm H Pivot Shower Door with 8 mm Thick Glass (K-704699IN-SHP)
+    // 7. KOHLER Forefront™ Square Semi-Recessed Basin (K-11479IN-VC1-0) - Separate semi-recessed basin
+    function buildForefrontSemiRecessedBasin(finish = 'white') {
+      const g = new THREE.Group();
+      const basinMat = (finish === 'black') ? matteBlackMat : porcelainMat;
+      const counterMat = (finish === 'wood') ? darkMahoganyMat : scandinavianOakMat;
+
+      // Floating vanity console shelf (0.70m W x 0.36m D x 0.06m H) - narrower depth creates the authentic semi-recessed overhang
+      const consoleShelf = new THREE.Mesh(new THREE.BoxGeometry(0.70, 0.06, 0.36), counterMat);
+      consoleShelf.position.set(0, 0.72, 0);
+      consoleShelf.castShadow = true;
+      consoleShelf.userData.role = 'vanity';
+      g.add(consoleShelf);
+
+      // Front horizontal matte black towel rail bar mounted under shelf
+      const towelRail = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.009, 0.64, 16), matteBlackMat);
+      towelRail.rotation.z = Math.PI / 2;
+      towelRail.position.set(0, 0.66, 0.18);
+      towelRail.userData.role = 'vanity';
+      g.add(towelRail);
+
+      // Exposed decorative bottle trap and waste pipe underneath
+      const bottleTrap = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.024, 0.26, 16), chromeMat);
+      bottleTrap.position.set(0, 0.55, 0.05);
+      g.add(bottleTrap);
+
+      const wallWastePipe = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.22, 16), chromeMat);
+      wallWastePipe.rotation.x = Math.PI / 2;
+      wallWastePipe.position.set(0, 0.50, -0.06);
+      g.add(wallWastePipe);
+
+      // Forefront 413 mm x 413 mm Square Basin outer body (0.413m W x 0.145m H x 0.413m D)
+      // Positioned at z = 0.05 so the front portion projects forward past the console shelf front edge (z = 0.18)
+      const basinBody = new THREE.Mesh(new THREE.BoxGeometry(0.413, 0.145, 0.413), basinMat);
+      basinBody.position.set(0, 0.79, 0.05);
+      basinBody.castShadow = true;
+      basinBody.userData.role = 'sink';
+      g.add(basinBody);
+
+      // Sleek inner basin bowl cavity (0.375m x 0.13m x 0.28m) with smooth slope
+      const innerCavity = new THREE.Mesh(new THREE.BoxGeometry(0.375, 0.13, 0.28), basinMat);
+      innerCavity.position.set(0, 0.80, 0.08);
+      innerCavity.userData.role = 'sink';
+      g.add(innerCavity);
+
+      // Center umbrella pop-up clicker drain
+      const drain = new THREE.Mesh(new THREE.CylinderGeometry(0.034, 0.034, 0.005, 20), chromeMat);
+      drain.position.set(0, 0.738, 0.08);
+      g.add(drain);
+
+      // Rear single-hole faucet deck on basin with chrome collar
+      const faucetDeck = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.005, 20), chromeMat);
+      faucetDeck.position.set(0, 0.865, -0.10);
+      g.add(faucetDeck);
+
+      return g;
+    }
+
+    // 8. KOHLER New Trilogy™ 2000–2161 mm H Pivot Shower Door with 8 mm Thick Glass (K-704699IN-SHP)
     function buildNewTrilogyShowerDoor() {
       const g = new THREE.Group();
 
@@ -825,8 +1053,11 @@
     const buildReachToilet = buildReachOnePieceToilet;
     const buildLeapSmartToilet = buildReachOnePieceToilet;
     const buildMemoirsToilet = buildOveToilet;
-    const buildTailoredVanity = buildLuxeVanity;
-    const buildJacquardVanity = buildPrologueVanity;
+    const buildTailoredVanity = buildViveIntegratedVanity;
+    const buildJacquardVanity = buildTraceIntegratedVanity;
+    const buildPrologueVanity = buildTraceIntegratedVanity;
+    const buildLuxeVanity = buildViveIntegratedVanity;
+    const buildForefrontBasin = buildForefrontSemiRecessedBasin;
     const buildBraznConsole = buildBraznVesselSink;
     const buildHydroRailShower = buildNewTrilogyShowerDoor;
     const buildStatementShower = buildStatementShowerhead;

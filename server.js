@@ -546,10 +546,10 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   // ==================== TIER 1: SIGNATURE BALANCED (OPTIMAL MULTI-OBJECTIVE) ====================
   const toiletName = 'Veil™ Smart One-piece Toilet';
   const vanityName = (isZen || isIndustrial || isWasteLab) ? 'Brazn™ 58.4 cm Rectangular Vessel Bathroom Sink' :
-                     'Luxe™ 90 cm Wall-hung Bathroom Vanity Cabinet';
-  const vanitySku = (isZen || isIndustrial || isWasteLab) ? 'K-21060IN-0' : 'K-30460IN-MWF';
-  const vanityPriceINR = (isZen || isIndustrial || isWasteLab) ? 32000 : 68000;
-  const vanityPriceUSD = (isZen || isIndustrial || isWasteLab) ? 430 : 910;
+                     'Vive™ Integrated Top and Basin';
+  const vanitySku = (isZen || isIndustrial || isWasteLab) ? 'K-21060IN-0' : 'K-28782IN-0';
+  const vanityPriceINR = (isZen || isIndustrial || isWasteLab) ? 32000 : 48000;
+  const vanityPriceUSD = (isZen || isIndustrial || isWasteLab) ? 430 : 640;
 
   const faucetName = isClassic ? 'Artifacts™ Widespread Bathroom Sink Faucets' :
                      (isZen || isIndustrial) ? 'Composed™ Tall Single-handle Bathroom Sink Faucet' :
@@ -705,15 +705,15 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     },
     {
       category: 'vanity',
-      sku_code: 'K-30457IN-MWF',
-      name: 'Prologue™ 75 cm Wall-hung Bathroom Vanity Cabinet',
-      price_inr: 46000,
-      price_usd: 620,
-      justification: 'Wall-hung floating vanity cabinet with dual soft-close drawers, integrated bevelled J-pulls, and vitreous china basin.',
+      sku_code: 'K-30375IN-0',
+      name: 'Trace™ Integrated Top and Basin',
+      price_inr: 42000,
+      price_usd: 560,
+      justification: '700 mm integrated vanity top + basin in lustrous vitreous china with seamless sculpted bowl and wall-hung soft-close cabinet.',
       explainability: {
-        spatial_fit: 'Compact 30" (75 cm) footprint provides ample clearance in any bathroom',
-        budget_fit: 'Saves investment capital while delivering full soft-close storage',
-        theme_fit: 'Integrated 45-degree J-pull lines matching modern themes',
+        spatial_fit: 'Compact 700 mm (28") footprint provides ample clearance in any bathroom',
+        budget_fit: 'High value integrated top and basin saves installation and separate countertop costs',
+        theme_fit: 'Seamless vitreous china basin lines matching modern themes',
         plumbing_fit: 'Pre-cut back panel aligns with standard 19" rough-in heights'
       }
     },
@@ -766,14 +766,14 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     },
     {
       category: 'vanity',
-      sku_code: 'K-30460IN-MWF',
-      name: 'Luxe™ 90 cm Wall-hung Bathroom Vanity Cabinet',
-      price_inr: 68000,
-      price_usd: 910,
-      justification: 'Luxury 90 cm floating vanity with deep soft-close storage drawers, premium architectural trim, and seamless ceramic basin deck.',
+      sku_code: 'K-28782IN-0',
+      name: 'Vive™ Integrated Top and Basin',
+      price_inr: 48000,
+      price_usd: 640,
+      justification: '720 mm integrated vanity top + basin with fluid bevelled contours, vitreous china washbasin, and architectural floating storage.',
       explainability: {
-        spatial_fit: 'Spans 36" focal zone with generous landing wings',
-        budget_fit: 'Luxury master centerpiece',
+        spatial_fit: 'Spans 720 mm focal zone with fluid bevelled contours',
+        budget_fit: 'Luxury integrated top and basin centerpiece',
         theme_fit: 'Architectural wall-hung silhouette creating light, airy luxury',
         plumbing_fit: 'Standard wall P-trap tied into horizontal wet-wall collector'
       }

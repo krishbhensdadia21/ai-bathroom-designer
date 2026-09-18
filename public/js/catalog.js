@@ -123,22 +123,22 @@
         builder: (...args) => buildOveToilet(...args)
       },
 
-      // 4. VANITIES
+      // 4. VANITY + BASIN: Trace™ Integrated Top and Basin
       {
-        id: 'prologue-vanity',
-        series: 'PROLOGUE',
-        art: 'K-30457IN-MWF',
-        name: 'Prologue™ 75 cm Wall-hung Bathroom Vanity Cabinet',
-        dim: '30x19x20 in (75x48x50 cm)',
-        desc: 'Wall-hung floating vanity cabinet with dual soft-close drawers, integrated bevelled J-pulls, and vitreous china basin.',
-        price_inr: 46000,
-        price_usd: 620,
+        id: 'trace-integrated-vanity',
+        series: 'TRACE',
+        art: 'K-30375IN-0',
+        name: 'Trace™ Integrated Top and Basin',
+        dim: '28x19 in (70x48 cm)',
+        desc: '700 mm integrated vanity top + basin in lustrous vitreous china with seamless sculpted bowl and wall-hung soft-close cabinet.',
+        price_inr: 42000,
+        price_usd: 560,
         category: 'vanities',
         defaultFinish: 'wood',
-        width_m: 0.75,
+        width_m: 0.70,
         depth_m: 0.48,
         height_m: 0.50,
-        styles: ['minimalist', 'modern', 'zen'],
+        styles: ['minimalist', 'modern', 'zen', 'compact'],
         installation: {
           rough_in_in: '19" AFF wall rough-in',
           drain_type: '1-1/4" wall P-trap',
@@ -160,23 +160,23 @@
           epa_watersense: false,
           annual_water_savings_l: 0
         },
-        builder: (...args) => buildPrologueVanity(...args)
+        builder: (...args) => buildTraceIntegratedVanity(...args)
       },
 
-      // 5. VANITIES
+      // 5. VANITY + BASIN: Vive™ Integrated Top and Basin
       {
-        id: 'luxe-vanity',
-        series: 'LUXE',
-        art: 'K-30460IN-MWF',
-        name: 'Luxe™ 90 cm Wall-hung Bathroom Vanity Cabinet',
-        dim: '36x20x20 in (90x50x50 cm)',
-        desc: 'Luxury 90 cm floating vanity with deep soft-close storage drawers, premium architectural trim, and seamless ceramic basin deck.',
-        price_inr: 68000,
-        price_usd: 910,
+        id: 'vive-integrated-vanity',
+        series: 'VIVE',
+        art: 'K-28782IN-0',
+        name: 'Vive™ Integrated Top and Basin',
+        dim: '29x20 in (72x49 cm)',
+        desc: '720 mm integrated vanity top + basin with fluid bevelled contours, vitreous china washbasin, and architectural floating storage.',
+        price_inr: 48000,
+        price_usd: 640,
         category: 'vanities',
         defaultFinish: 'wood',
-        width_m: 0.90,
-        depth_m: 0.50,
+        width_m: 0.72,
+        depth_m: 0.49,
         height_m: 0.50,
         styles: ['classic', 'modern', 'minimalist', 'luxury'],
         installation: {
@@ -200,28 +200,28 @@
           epa_watersense: false,
           annual_water_savings_l: 0
         },
-        builder: (...args) => buildLuxeVanity(...args)
+        builder: (...args) => buildViveIntegratedVanity(...args)
       },
 
-      // 6. BASIN
+      // 6. BASIN: Brazn™ 58.4 cm Rectangular Vessel Bathroom Sink
       {
         id: 'brazn-vessel-sink',
         series: 'BRAZN',
         art: 'K-21060IN-0',
         name: 'Brazn™ 58.4 cm Rectangular Vessel Bathroom Sink',
-        dim: '23x15x5 in (58.4x36.8x12 cm)',
-        desc: 'Architectural modernist vessel sink in vitreous china with sharp rectangular rim, chamfered edges, and umbrella drain.',
+        dim: '23x15x5 in (58.4x36.8x12.5 cm)',
+        desc: 'Separate vessel basin in pristine white vitreous china with splayed chamfered outer walls, ultra-thin knife-edge rim, rear slotted overflow, and flush ceramic umbrella drain.',
         price_inr: 32000,
         price_usd: 430,
         category: 'vanities',
-        defaultFinish: 'black',
+        defaultFinish: 'white',
         width_m: 0.584,
         depth_m: 0.368,
-        height_m: 0.84, // Mounted on architectural console shelf
-        styles: ['zen', 'minimalist', 'wastelab', 'industrial', 'modern'],
+        height_m: 0.865, // Mounted on architectural console countertop at 86.5 cm AFF
+        styles: ['minimalist', 'modern', 'zen', 'luxury', 'industrial'],
         installation: {
-          rough_in_in: '20" AFF decorative bottle trap',
-          drain_type: '1-1/4" exposed matte black bottle trap',
+          rough_in_in: '20" AFF decorative European bottle trap',
+          drain_type: '1-1/4" polished chrome European bottle trap',
           electrical_req: 'None',
           water_supply: '1 pair hot & cold 1/2" stops',
           min_clearance_front_m: 0.533,
@@ -230,7 +230,7 @@
         compatibility: {
           requires_wet_wall: true,
           max_wet_wall_dist_m: 0.60,
-          compatible_with: ['composed-tall-faucet', 'purist-faucet', 'ming-smart-mirror', 'reve-mirror']
+          compatible_with: ['composed-tall-faucet', 'purist-faucet', 'parallel-faucet', 'ming-smart-mirror', 'reve-mirror']
         },
         sustainability: {
           flush_gpf: 0,
@@ -241,6 +241,46 @@
           annual_water_savings_l: 0
         },
         builder: (...args) => buildBraznVesselSink(...args)
+      },
+
+      // 7. BASIN: Forefront™ Square Semi-Recessed Basin
+      {
+        id: 'forefront-semi-recessed-basin',
+        series: 'FOREFRONT',
+        art: 'K-11479IN-VC1-0',
+        name: 'Forefront™ Square Semi-Recessed Basin',
+        dim: '16x16x6 in (41.3x41.3x14.5 cm)',
+        desc: 'Separate semi-recessed basin in vitreous china with sleek vertical rim, rear faucet deck, and cantilevered counter mounting.',
+        price_inr: 18500,
+        price_usd: 245,
+        category: 'vanities',
+        defaultFinish: 'white',
+        width_m: 0.413,
+        depth_m: 0.413,
+        height_m: 0.84,
+        styles: ['minimalist', 'modern', 'zen', 'classic', 'compact'],
+        installation: {
+          rough_in_in: '20" AFF bottle trap',
+          drain_type: '1-1/4" decorative bottle trap',
+          electrical_req: 'None',
+          water_supply: '1 pair hot & cold 1/2" stops',
+          min_clearance_front_m: 0.533,
+          min_clearance_side_m: 0.100
+        },
+        compatibility: {
+          requires_wet_wall: true,
+          max_wet_wall_dist_m: 0.60,
+          compatible_with: ['purist-faucet', 'parallel-faucet', 'composed-tall-faucet', 'reve-mirror', 'ming-smart-mirror']
+        },
+        sustainability: {
+          flush_gpf: 0,
+          flow_gpm: 0,
+          power_watts: 0,
+          recycled_content_pct: 20,
+          epa_watersense: false,
+          annual_water_savings_l: 0
+        },
+        builder: (...args) => buildForefrontSemiRecessedBasin(...args)
       },
 
       // 7. SHOWER DOOR
@@ -392,7 +432,7 @@
         compatibility: {
           requires_wet_wall: true,
           max_wet_wall_dist_m: 0.65,
-          compatible_with: ['prologue-vanity', 'luxe-vanity', 'brazn-vessel-sink']
+          compatible_with: ['trace-integrated-vanity', 'vive-integrated-vanity', 'brazn-vessel-sink', 'forefront-semi-recessed-basin', 'prologue-vanity', 'luxe-vanity']
         },
         sustainability: {
           flush_gpf: 0,
@@ -432,7 +472,7 @@
         compatibility: {
           requires_wet_wall: true,
           max_wet_wall_dist_m: 0.65,
-          compatible_with: ['prologue-vanity', 'luxe-vanity', 'brazn-vessel-sink']
+          compatible_with: ['trace-integrated-vanity', 'vive-integrated-vanity', 'brazn-vessel-sink', 'forefront-semi-recessed-basin', 'prologue-vanity', 'luxe-vanity']
         },
         sustainability: {
           flush_gpf: 0,
@@ -472,7 +512,7 @@
         compatibility: {
           requires_wet_wall: false,
           max_wet_wall_dist_m: 1.20,
-          compatible_with: ['prologue-vanity', 'luxe-vanity']
+          compatible_with: ['trace-integrated-vanity', 'vive-integrated-vanity', 'forefront-semi-recessed-basin', 'prologue-vanity', 'luxe-vanity']
         },
         sustainability: {
           flush_gpf: 0,
@@ -513,7 +553,7 @@
         compatibility: {
           requires_wet_wall: false,
           max_wet_wall_dist_m: 1.20,
-          compatible_with: ['prologue-vanity', 'luxe-vanity']
+          compatible_with: ['trace-integrated-vanity', 'vive-integrated-vanity', 'forefront-semi-recessed-basin', 'prologue-vanity', 'luxe-vanity']
         },
         sustainability: {
           flush_gpf: 0,
@@ -554,7 +594,7 @@
         compatibility: {
           requires_wet_wall: false,
           max_wet_wall_dist_m: 1.20,
-          compatible_with: ['luxe-vanity', 'prologue-vanity']
+          compatible_with: ['vive-integrated-vanity', 'trace-integrated-vanity', 'forefront-semi-recessed-basin', 'luxe-vanity', 'prologue-vanity']
         },
         sustainability: {
           flush_gpf: 0,
@@ -595,7 +635,7 @@
         compatibility: {
           requires_wet_wall: false,
           max_wet_wall_dist_m: 1.20,
-          compatible_with: ['brazn-vessel-sink', 'prologue-vanity', 'luxe-vanity']
+          compatible_with: ['brazn-vessel-sink', 'forefront-semi-recessed-basin', 'trace-integrated-vanity', 'vive-integrated-vanity', 'prologue-vanity', 'luxe-vanity']
         },
         sustainability: {
           flush_gpf: 0,

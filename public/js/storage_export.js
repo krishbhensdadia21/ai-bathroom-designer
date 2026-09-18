@@ -147,11 +147,7 @@
       }
       if (roomFillLight) {
         roomFillLight.color.set(0xdce5ed);
-        roomFillLight.intensity = 0.22;
-      }
-      if (roomBackWallSpot) {
-        roomBackWallSpot.color.set(0xfffaee);
-        roomBackWallSpot.intensity = 1.35;
+        roomFillLight.intensity = 0.30;
       }
 
       // 5. Reset UI labels and modal theme buttons
