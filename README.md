@@ -8,8 +8,9 @@ This project is submitted as an individual case study solution for the selection
 * **Challenge Track**: **Track 1: KOHLER AI Bathroom Designer & Planner**
 * **Core Objective**: Build an interactive AI design assistant that takes a customer's constraints (dimensions, budget limits, aesthetic themes, and device catalog specifications) and automates personalized product bundle recommendations.
 * **Expected Outcome**: An intelligent recommendation engine that outputs optimized product combinations (smart toilets, vanities, thermostatic showers, mirrors, bathtubs) fitting exact physical space and budget parameters, accompanied by an interactive 3D WebGL representation
-
+##
 ### 📑 Official Deliverables & Submission Assets
+##
 
 | Deliverable | Description | File / Access Link |
 |---|---|---|
@@ -17,9 +18,9 @@ This project is submitted as an individual case study solution for the selection
 | **2. Prompts & Workflows PDF** | Comprehensive 6-page publication-quality technical report detailing all AI prompts, system instructions, Llama Guard rules, NLP parsers, and multi-objective workflows | 📄 **[KOHLER_AI_Prompts_System_Instructions_Workflows.pdf](./KOHLER_AI_Prompts_System_Instructions_Workflows.pdf)** |
 | **3. Video Walkthrough** | Demonstration of the 3D space planner and generative AI recommendation engine | 🎥 **[Video Walkthrough Documentation](#-video-walkthrough)** |
 | **4. Presentation Deck** | Structured presentation deck on system approach, architecture, innovation, and business impact | 📊 **[Presentation Deck Summary](#-presentation-deck)** |
-
+##
 ### 📁 Repository Structure
-
+##
 ```text
 kohler-ai-bathroom-designer/
 ├── KOHLER_AI_Prompts_System_Instructions_Workflows.pdf  # Deliverable 2: Complete Prompts & Workflows Report
@@ -83,9 +84,9 @@ kohler-ai-bathroom-designer/
 ├── .gitignore                    # Git exclusion rules
 └── README.md                     # Comprehensive case study documentation
 ```
-
+##
 ### 📊 Evaluation Criteria Alignment (100% Total Weightage)
-
+##
 | Evaluation Criteria | Weight | Implementation in this Solution |
 |---|:---:|---|
 | **Approach & Innovation** | **45%** | Dual-mode AI (Predefined & Natural-Language), NLP dimension & budget extraction, Meta Llama Prompt Guard 22M, multi-objective Pareto-scoring engine, and Explainable AI (XAI) transparent cards. |
@@ -93,9 +94,9 @@ kohler-ai-bathroom-designer/
 | **User Experience & Feasibility** | **20%** | Clean default empty room on load, 1-click Clear Room with automated dimension reset, manual generate trigger, unified quote BOM with multi-currency (INR, USD, CAD), and Studio Kohler specifier data sheet. |
 | **Business & Sustainability Impact** | **10%** | Alignment with Kohler's water conservation initiatives (WaterSense annual savings, carbon offset tracking) and MEP plumbing wet-wall alignment optimization reducing labor costs. |
 
-
+##
 ### 🚀 Architectural Breakdown & Key Innovations
-
+##
 ### 1. Approach & Innovation (45% Weight)
 * **Dual-Pathway AI Architecture**:
   * **Tab 1: Predefined Constraints**: Interactive dimension inputs (Width, Depth, Ceiling Height with live area calculation), budget slider (₹1.0L to ₹12.0L+), 4 curated themes, and 4 priority checkboxes (*Toilet*, *Shower*, *Vanity*, *Mirror*).
@@ -106,14 +107,14 @@ kohler-ai-bathroom-designer/
   Scores candidate configurations across physical and economic dimensions:
   $$\text{Composite Fitness} = 0.25 \cdot \text{SpatialFit} + 0.20 \cdot \text{BudgetFit} + 0.20 \cdot \text{ThemeFit} + 0.15 \cdot \text{Functionality} + 0.10 \cdot \text{Sustainability} + 0.10 \cdot \text{WetWallFit}$$
 * **Explainable AI (XAI)**: Every recommended fixture displays transparent decision cards detailing **Spatial Fit** (clearance vs. NKBA minimum), **Budget Efficiency** (percentage allocation), **Theme Synergy**, and **Plumbing Rough-In**.
-
+##
 ### 2. Technical Execution (25% Weight)
 * **High-Performance 3D WebGL Engine (Three.js r128)**: Complete client-side rendering pipeline featuring procedural PBR textures, soft directional shadows, and responsive canvas resizing.
 * **Dynamic Architectural Rebuilding**: Changing room width, depth, or ceiling height dynamically triggers `buildRoomArchitecture()`, reconstructing wall meshes, baseboards, floor tiles, and door geometry in real time.
 * **Interactive Fixture Manipulation**: Drag fixtures along wall planes, rotate 90°, duplicate, or delete with instant bounding-box collision detection.
 * **Single Source of Truth (Zero Pricing Discrepancy)**: The AI candidate bundle total and the 3D planner's live Investment counter strictly reference the same underlying catalog data (`customData`), guaranteeing $0 discrepancy.
 * **Resilient Multi-Platform Hosting**: Configured for instant deployment on **Vercel** (`vercel.json` + `/public`), **GitHub Pages**, or a local **Node.js** HTTP server (`server.js`) with fail-safe offline fallbacks.
-
+##
 ### 3. User Experience & Feasibility (20% Weight)
 * **Default Clean Architectural Canvas**: Upon initial visit, users start with a clean, empty room (`placedProducts = []`, `Investment: ₹0`, `Theme: None`, `Wet-Wall: N/A`, `NKBA: 100% Pass`), mirroring professional CAD design workflows.
 * **1-Click Reset to Default**: Clicking **`Clear Room`** clears all fixtures and **automatically restores room dimensions to the default 10.5 ft × 9.2 ft (3.2m × 2.8m)**.
@@ -130,14 +131,14 @@ kohler-ai-bathroom-designer/
   * Bill of Materials table with SKU part numbers, quantities, and individual prices.
   * **Studio KOHLER Specifier Data Sheet**: Professional B2B architectural tables detailing rough-in dimensions (12" toilet rough-in, 1-1/4" P-trap, 1/2" NPT valves), conduit requirements, and certifications.
 * **In-App Studio Specifier Modal**: Dedicated modal accessible from the top header summarizing challenge guidelines, criteria, and engineering specifications.
-
+##
 ### 4. Business & Sustainability Impact (10% Weight)
 * **Kohler Environmental Stewardship**: Integrated calculations based on Kohler WaterSense® and Katalyst® air-induction technologies (2.2M air bubbles/minute), displaying annual water savings in liters and equivalent carbon offset (kg CO₂e).
 * **Plumbing Wet-Wall (MEP) Optimization**: Evaluates fixture alignment along the primary wet-wall stack, calculating a live alignment score (up to 94%) and projecting reduced plumbing labor and material costs.
 * **Direct Commercial Feasibility**: Enables Kohler showrooms and B2B trade partners to accelerate customer consultation cycles from days to minutes.
-
+##
 ### 🛁 Authentic Kohler Catalog Specifications
-
+##
 Every product model in the planner corresponds to an authentic, production Kohler catalog item:
 
 | Category | Kohler Series | SKU | Key Architectural Specs |
@@ -158,9 +159,9 @@ Every product model in the planner corresponds to an authentic, production Kohle
 | **Pillar Tap** | Parallel™ Pillar Tap | `K-23482IN-4-BV` | Faceted geometric pillar body in Brushed Bronze with quarter-turn ceramic valve |
 | **Widespread Faucet** | Artifacts™ Widespread Sink Faucets | `K-72760T-CP` | Edwardian swan neck spout with dual porcelain-capped cross handles in chrome |
 | **Tall Vessel Faucet** | Composed™ Tall Single-handle Faucet | `K-73159IN-7-CP` | Tower vessel column with side joystick lever and flat horizontal spout, 1.2 GPM |
-
+##
 ### 🛠️ Tech Stack
-
+##
 * **Frontend**: HTML5, Vanilla JavaScript (ES6+), CSS3, Tailwind CSS, Three.js (r128), FontAwesome 6 Pro
 * **Node.js Web Server**: Node.js HTTP Server (`server.js`) with Groq Llama 3.3 proxy & Prompt Guard
 * **Python AI Spatial Engine**: Python 3.8+ modular microservice & standalone CLI (`ai_engine/`, `main.py`)
