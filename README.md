@@ -85,6 +85,37 @@ kohler-ai-bathroom-designer/
 └── README.md                     # Comprehensive case study documentation
 ```
 ##
+### 🔄 Basic Workflow
+##
+
+The end-to-end design lifecycle operates across 5 intuitive stages:
+
+1. **Define Spatial Boundaries**:
+   * Set room dimensions (Width, Depth, Ceiling Height) in metric or imperial units, or start with the default clean CAD room (10.5 ft × 9.2 ft / 3.2m × 2.8m).
+   * Real-time parametric rebuilding automatically updates floor area, perimeter walls, baseboards, and entrance door.
+
+2. **Specify AI Design Constraints**:
+   * **Predefined Constraints Mode**: Adjust the budget slider (₹1.0L to ₹12.0L+), select a design theme (*Modern Minimalist*, *Classic Elegance*, *Architectural Zen*, *Luxury Spa*), and pick desired fixture priorities (*Toilet*, *Shower*, *Vanity*, *Mirror*).
+   * **Natural-Language Prompt Mode**: Enter a freeform text or voice wishlist (e.g., *"Design a 12x9 ft luxury master bathroom with freestanding tub and black finishes under 6 lakhs"*).
+   * Real-time NLP extracts dimensional and budget limits, validated against Meta Llama Prompt Guard 22M.
+
+3. **Generate & Optimize Bundle (Groq AI & Pareto Engine)**:
+   * Click **`⚡ Generate Optimized Kohler Bundle (Groq AI)`** to trigger spatial reasoning.
+   * Multi-objective combinatorial Pareto optimizer ranks authentic Kohler fixtures by spatial clearance, budget allocation, theme synergy, and MEP wet-wall alignment.
+   * Transparent Explainable AI (XAI) decision cards show exact fit metrics and rationale for each recommended product.
+
+4. **Interactive 3D WebGL Space Planning**:
+   * Fixtures are rendered with authentic geometric contours and procedural PBR materials.
+   * Switch between **3D Orbit**, **2D Orthographic CAD Floorplan**, and **First-Person Walk-In** perspectives.
+   * Drag, snap to walls, rotate 90°, or add/delete items directly from the categorized Kohler catalog dock.
+   * Real-time NKBA / ADA clearance indicators and live MEP wet-wall alignment score update instantly without intrusive banners.
+   * Customize ambiance with Circadian lighting (Day 5000K, Dusk 2700K, Night) and surface finishes (Calacatta, Marquina, Slate, Carrara, Teak).
+
+5. **Consolidated Quote, BOM & Specification Export**:
+   * Open the unified Bill of Materials (BOM) with real-time multi-currency pricing (**INR ₹**, **USD $**, **CAD $**).
+   * Inspect the **Studio KOHLER Specifier Data Sheet** for MEP plumbing rough-in dimensions, supply lines, and electrical conduit specs.
+   * Export the layout summary or request dealer RFQs for nearest Kohler Experience Centers.
+##
 ### 📊 Evaluation Criteria Alignment (100% Total Weightage)
 ##
 | Evaluation Criteria | Weight | Implementation in this Solution |
