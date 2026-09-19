@@ -62,26 +62,15 @@
         let warningThresholdM = 0.457; // 18" warning limit
         let standardName = cat === 'showers' ? 'NKBA 24" Unobstructed Entry' : 'NKBA 21" Front Clearance';
 
-        // Effective rotated bounding box
-        const cosR = Math.abs(Math.cos(rotY));
-        const sinR = Math.abs(Math.sin(rotY));
-        const effW = fw * cosR + fd * sinR;
-        const effD = fw * sinR + fd * cosR;
+        // ================= UNIVERSAL COMPUTATIONAL GEOMETRY (AABB) =================
+        // Dynamically compute exact world-space bounding box directly from the 3D meshes
+        const realBox = new THREE.Box3().setFromObject(p);
+        const fixMinX = realBox.min.x;
+        const fixMaxX = realBox.max.x;
+        const fixMinZ = realBox.min.z;
+        const fixMaxZ = realBox.max.z;
 
-        // For toilets, the tank rear is at -0.15m from origin, bowl extends forward
-        let rearD = effD / 2;
-        let frontD = effD / 2;
-        if (cat === 'toilets' && Math.abs(rotY) < 0.1) {
-          rearD = 0.15;
-          frontD = fd - 0.15;
-        }
-
-        const fixMinX = pos.x - effW / 2;
-        const fixMaxX = pos.x + effW / 2;
-        const fixMinZ = pos.z - rearD;
-        const fixMaxZ = pos.z + frontD;
-
-        // 1. Boundary Overflow Check (Product dimensions vs room dimensions)
+        // 1. Universal Boundary Overflow Check (Any fixture geometry vs room wall planes)
         const isOutOfBounds = (
           fixMinX < -halfRoomW - 0.03 ||
           fixMaxX > halfRoomW + 0.03 ||
@@ -89,6 +78,7 @@
           fixMaxZ > halfRoomD + 0.03
         );
 
+        // 2. Door Collision Check (Inward 90° door swing arc collision against true 3D extents)
         const closestX = Math.max(fixMinX, Math.min(doorHingeX, fixMaxX));
         const closestZ = Math.max(fixMinZ, Math.min(doorHingeZ, fixMaxZ));
         const distToHinge = Math.hypot(closestX - doorHingeX, closestZ - doorHingeZ);
@@ -126,27 +116,23 @@
           }
         }
 
-        // 4. Inter-Fixture Collision Check (physical bounding box overlap)
+        // 4. Universal Inter-Fixture Collision Check (physical bounding box overlap)
         let hasFixtureCollision = false;
         let collidedWith = '';
         floorFixtures.forEach((other, oIdx) => {
           if (idx === oIdx) return;
-          const od = other.userData || {};
-          const ofw = od.width_m || 0.45;
-          const ofd = od.depth_m || 0.65;
-          const oCos = Math.abs(Math.cos(other.rotation.y));
-          const oSin = Math.abs(Math.sin(other.rotation.y));
-          const oEffW = ofw * oCos + ofd * oSin;
-          const oEffD = ofw * oSin + ofd * oCos;
+          // Exclude hosted accessories (e.g. deck faucet hosted on vanity)
+          const oCat = (other.userData && other.userData.category) || '';
+          if ((cat === 'vanities' && oCat === 'faucets') || (cat === 'faucets' && oCat === 'vanities')) return;
 
-          const dx = Math.abs(pos.x - other.position.x);
-          const dz = Math.abs(pos.z - other.position.z);
-          const overlapX = (effW / 2 + oEffW / 2) - dx;
-          const overlapZ = (effD / 2 + oEffD / 2) - dz;
-
-          if (overlapX > 0.04 && overlapZ > 0.04) {
+          const otherBox = new THREE.Box3().setFromObject(other);
+          // Check overlap with 3cm tolerance
+          if (realBox.min.x < otherBox.max.x - 0.03 &&
+              realBox.max.x > otherBox.min.x + 0.03 &&
+              realBox.min.z < otherBox.max.z - 0.03 &&
+              realBox.max.z > otherBox.min.z + 0.03) {
             hasFixtureCollision = true;
-            collidedWith = od.name || 'Another Fixture';
+            collidedWith = (other.userData && other.userData.name) || 'Another Fixture';
           }
         });
 
