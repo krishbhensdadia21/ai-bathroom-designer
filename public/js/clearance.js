@@ -90,12 +90,30 @@
         // 3. Plumbing Compatibility Check (Wet-wall alignment & max distance from soil stack)
         let isPlumbingViolation = false;
         let plumbingMessage = '';
-        if (d.compatibility && d.compatibility.requires_wet_wall) {
+        if (cat === 'toilets') {
+          const distFromRearWall = pos.z - (-halfRoomD);
+          const maxAllowed = (d.compatibility && d.compatibility.max_wet_wall_dist_m) || 0.85;
+          if (distFromRearWall > maxAllowed + 0.08) {
+            isPlumbingViolation = true;
+            plumbingMessage = `Plumbing Conflict: Distance (${distFromRearWall.toFixed(2)}m) from rear wet-wall soil stack exceeds ${maxAllowed}m code limit`;
+          }
+        } else if (cat === 'showers') {
+          const distFromRear = pos.z - (-halfRoomD);
+          const distFromRight = Math.abs(pos.x - halfRoomW);
+          const distFromLeft = Math.abs(pos.x - (-halfRoomW));
+          const distToNearestWall = Math.min(distFromRear, distFromRight, distFromLeft);
+          const maxAllowed = (d.compatibility && d.compatibility.max_wet_wall_dist_m) || 1.5;
+          // Shower is compliant if within rear wet-wall zone or mounted along a side partition wall (within 0.85m)
+          if (distToNearestWall > 0.85 && distFromRear > maxAllowed + 0.08) {
+            isPlumbingViolation = true;
+            plumbingMessage = `Plumbing Conflict: Shower must be within ${maxAllowed}m of wet-wall or mounted along partition wall`;
+          }
+        } else if (d.compatibility && d.compatibility.requires_wet_wall) {
           const distFromRearWall = pos.z - (-halfRoomD);
           const maxAllowed = d.compatibility.max_wet_wall_dist_m || 0.85;
           if (distFromRearWall > maxAllowed + 0.08) {
             isPlumbingViolation = true;
-            plumbingMessage = `Plumbing Conflict: Distance (${distFromRearWall.toFixed(2)}m) from rear wet-wall soil stack exceeds ${maxAllowed}m code limit`;
+            plumbingMessage = `Plumbing Conflict: Distance (${distFromRearWall.toFixed(2)}m) from wet-wall plumbing exceeds ${maxAllowed}m code limit`;
           }
         }
 

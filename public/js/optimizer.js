@@ -740,12 +740,9 @@
 
       // E. Place Shower (wet corner zone) ONLY if in recommended bundle
       if (showerEntry) {
-        const showerX = Math.min(roomWidth / 2 - 0.50, Math.max(0.60, roomWidth / 2 - 0.55));
-        if (roomWidth >= 2.8 && roomDepth >= 2.5) {
-          spawnAiFixture(showerEntry, showerX, 0.25, -Math.PI / 2);
-        } else {
-          spawnAiFixture(showerEntry, showerX, -roomDepth / 2 + 0.52, 0);
-        }
+        const showerX = Math.min(roomWidth / 2 - 0.45, Math.max(0.60, roomWidth / 2 - 0.50));
+        const showerZ = Math.max(-roomDepth / 2 + 0.65, -roomDepth / 2 + 0.55);
+        spawnAiFixture(showerEntry, showerX, showerZ, -Math.PI / 2);
       }
 
       // F. Place Bathtub (if included in bundle and room has enough space)
