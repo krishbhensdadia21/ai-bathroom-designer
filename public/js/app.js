@@ -357,9 +357,9 @@
         roomDepth = 2.13; // 7.0 ft
         roomHeight = 2.60;
         buildRoomArchitecture();
-        spawnProductById('veil-smart-toilet', -0.32, -roomDepth / 2 + 0.38, 0);
-        spawnProductById('brazn-console', 0.32, -roomDepth / 2 + 0.34, 0);
-        spawnProductById('verdera-mirror', 0.32, -roomDepth / 2 + 0.08, 0);
+        spawnProductById('veil-smart-toilet', -0.32, -roomDepth / 2 + 0.165, 0);
+        spawnProductById('brazn-vessel-sink', 0.32, -roomDepth / 2 + 0.245, 0);
+        spawnProductById('ming-lighted-mirror', 0.32, -roomDepth / 2 + 0.055, 0);
         applyAestheticTheme('Minimalist Modern');
         showToast('Loaded: Powder Room Preset (5.0 × 7.0 ft)');
       } else if (presetKey === 'family') {
@@ -367,10 +367,10 @@
         roomDepth = 2.44; // 8.0 ft
         roomHeight = 2.60;
         buildRoomArchitecture();
-        spawnProductById('veil-smart-toilet', -0.65, -roomDepth / 2 + 0.38, 0);
-        spawnProductById('tailored-dual-vanity', 0.20, -roomDepth / 2 + 0.36, 0);
-        spawnProductById('verdera-mirror', 0.20, -roomDepth / 2 + 0.08, 0);
-        spawnProductById('hydrorail-shower', roomWidth / 2 - 0.50, -roomDepth / 2 + 0.52, 0);
+        spawnProductById('veil-smart-toilet', -0.65, -roomDepth / 2 + 0.165, 0);
+        spawnProductById('vive-integrated-vanity', 0.15, -roomDepth / 2 + 0.245, 0);
+        spawnProductById('ming-lighted-mirror', 0.15, -roomDepth / 2 + 0.055, 0);
+        spawnProductById('new-trilogy-pivot-door', roomWidth / 2 - 0.55, -roomDepth / 2 + 0.55, 0);
         applyAestheticTheme('Minimalist Modern');
         showToast('Loaded: Family Bathroom Preset (8.0 × 8.0 ft)');
       } else if (presetKey === 'master') {
@@ -378,12 +378,12 @@
         roomDepth = 3.65; // 12.0 ft
         roomHeight = 2.74;
         buildRoomArchitecture();
-        spawnProductById('veil-smart-toilet', -0.95, -roomDepth / 2 + 0.38, 0);
-        spawnProductById('tailored-dual-vanity', 0.35, -roomDepth / 2 + 0.36, 0);
-        spawnProductById('verdera-mirror', 0.35, -roomDepth / 2 + 0.08, 0);
-        spawnProductById('revel-glass-box', 1.05, -roomDepth / 2 + 0.60, 0);
-        spawnProductById('hydrorail-shower', 1.05, -roomDepth / 2 + 0.60, 0);
-        spawnProductById('evok-freestanding-tub', -0.75, 0.75, Math.PI / 2);
+        spawnProductById('veil-smart-toilet', -0.95, -roomDepth / 2 + 0.165, 0);
+        spawnProductById('vive-integrated-vanity', 0.15, -roomDepth / 2 + 0.245, 0);
+        spawnProductById('reve-lighted-mirror', 0.15, -roomDepth / 2 + 0.055, 0);
+        spawnProductById('new-trilogy-pivot-door', roomWidth / 2 - 0.55, -roomDepth / 2 + 0.55, 0);
+        spawnProductById('statement-round-showerhead', roomWidth / 2 - 0.55, -roomDepth / 2 + 0.02, 0);
+        spawnProductById('evok-2-bathtub', roomWidth / 2 - 0.50, 0.75, -Math.PI / 2);
         applyAestheticTheme('Classic Luxury');
         showToast('Loaded: Luxury Master Spa Suite (10.5 × 12.0 ft)');
       } else if (presetKey === 'zen') {
@@ -391,11 +391,11 @@
         roomDepth = 3.05; // 10.0 ft
         roomHeight = 2.60;
         buildRoomArchitecture();
-        spawnProductById('veil-smart-toilet', -0.72, -roomDepth / 2 + 0.38, 0);
-        spawnProductById('brazn-console', 0.25, -roomDepth / 2 + 0.34, 0);
-        spawnProductById('verdera-mirror', 0.25, -roomDepth / 2 + 0.08, 0);
-        spawnProductById('evok-freestanding-tub', 0.65, 0.45, 0);
-        spawnProductById('hydrorail-shower', 0.65, -roomDepth / 2 + 0.52, 0);
+        spawnProductById('veil-smart-toilet', -0.72, -roomDepth / 2 + 0.165, 0);
+        spawnProductById('trace-integrated-vanity', 0.15, -roomDepth / 2 + 0.245, 0);
+        spawnProductById('ming-lighted-mirror', 0.15, -roomDepth / 2 + 0.055, 0);
+        spawnProductById('statement-round-showerhead', roomWidth / 2 - 0.55, -roomDepth / 2 + 0.02, 0);
+        spawnProductById('evok-2-bathtub', roomWidth / 2 - 0.50, 0.75, -Math.PI / 2);
         applyAestheticTheme('Japanese Zen');
         showToast('Loaded: Japanese Zen Wet-Room (9.0 × 10.0 ft)');
       }

@@ -203,6 +203,7 @@ function extractInclusionsFromPrompt(notes) {
   const mentionsMirror = nLow.includes('mirror') || nLow.includes('verdera');
   const mentionsTub = nLow.includes('tub') || nLow.includes('bathtub') || nLow.includes('soak') || nLow.includes('evok');
   const noShower = nLow.includes('no shower') || nLow.includes('without shower') || nLow.includes('no-shower') || nLow.includes('remove shower') || nLow.includes('omit shower');
+  const noTub = nLow.includes('no tub') || nLow.includes('without tub') || nLow.includes('no-tub') || nLow.includes('no bathtub') || nLow.includes('without bathtub') || nLow.includes('remove tub') || nLow.includes('omit tub');
 
   if (isPowder) {
     return {
@@ -220,7 +221,7 @@ function extractInclusionsFromPrompt(notes) {
       vanity: mentionsVanity || true,
       mirror: mentionsMirror || true,
       shower: false,
-      tub: mentionsTub
+      tub: mentionsTub && !noTub
     };
   }
 
@@ -231,7 +232,18 @@ function extractInclusionsFromPrompt(notes) {
       vanity: mentionsVanity,
       mirror: mentionsMirror || true,
       shower: false,
-      tub: mentionsTub
+      tub: mentionsTub && !noTub
+    };
+  }
+
+  // If user specified targeted fixtures with shower but without tub (e.g. "toilet, vanity, and shower")
+  if (mentionsShower && !mentionsTub && (nLow.includes('only') || nLow.includes('just') || nLow.includes('toilet, vanity and shower') || nLow.includes('toilet, vanity, and shower') || nLow.includes('vanity and shower') || nLow.includes('toilet and shower'))) {
+    return {
+      toilet: true,
+      vanity: true,
+      mirror: true,
+      shower: true,
+      tub: false
     };
   }
 
@@ -239,9 +251,9 @@ function extractInclusionsFromPrompt(notes) {
   return {
     toilet: true,
     vanity: true,
-    shower: true,
+    shower: !noShower,
     mirror: true,
-    tub: mentionsTub
+    tub: (!noTub && (mentionsTub || (nLow.includes('spa') || nLow.includes('master') || nLow.includes('luxury') || nLow.includes('zen'))))
   };
 }
 
@@ -566,8 +578,10 @@ function formatCatalogFixture(fixture, category, customJustification = null, cus
   if (!fixture) return null;
   const isSmart = fixture.name && (fixture.name.includes('Smart') || fixture.name.includes('Lighted'));
   return {
+    id: fixture.id,
     category: category || fixture.category,
     sku_code: fixture.art,
+    art: fixture.art,
     name: fixture.name,
     price_inr: fixture.price_inr,
     price_usd: fixture.price_usd,
@@ -602,47 +616,71 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   const isWasteLab = theme.toLowerCase().includes('waste') || theme.toLowerCase().includes('eco');
 
   const nLow = (customerNotes || '').toLowerCase();
+  const isPowder = nLow.includes('powder room') || nLow.includes('half bath') || nLow.includes('powder');
 
-  // Detect explicit prompt keyword pins
-  const wantsTub = nLow.includes('bathtub') || nLow.includes('tub') || nLow.includes('soak') || (inclusions && inclusions.tub);
-  const wantsWhirlpool = nLow.includes('whirlpool') || nLow.includes('jacuzzi') || nLow.includes('hydrotherapy');
+  // Strict inclusion flags
+  const incToilet = (inclusions && inclusions.toilet !== undefined) ? !!inclusions.toilet : true;
+  const incVanity = (inclusions && inclusions.vanity !== undefined) ? !!inclusions.vanity : true;
+  const incFaucet = incVanity;
+  const incShower = (inclusions && inclusions.shower !== undefined) ? !!inclusions.shower : !isPowder;
+  const incMirror = (inclusions && inclusions.mirror !== undefined) ? !!inclusions.mirror : true;
+
   const isSpaciousMaster = (roomW >= 2.6 && roomD >= 2.4 && budgetNum >= 420000);
+  const wantsTub = (inclusions && inclusions.tub !== undefined)
+    ? !!inclusions.tub
+    : (!isPowder && !nLow.includes('no tub') && !nLow.includes('without tub') && (nLow.includes('bathtub') || nLow.includes('tub') || nLow.includes('soak') || (isSpaciousMaster && (isZen || isClassic || nLow.includes('spa') || nLow.includes('master')))));
+
+  const wantsWhirlpool = nLow.includes('whirlpool') || nLow.includes('jacuzzi') || nLow.includes('hydrotherapy');
 
   // 1. Resolve Pinned or Best-Fit Toilets
-  let toiletLux = findCatalogItem(nLow.includes('innate') ? 'innate' : (nLow.includes('veil') ? 'veil' : (nLow.includes('reach') ? 'reach' : (nLow.includes('ove') ? 'ove' : 'innate'))), 'toilets', 'veil-smart-toilet');
-  if (nLow.includes('veil') || !toiletLux) toiletLux = findCatalogItem('veil', 'toilets', 'veil-smart-toilet');
-  const toiletSig = findCatalogItem(nLow.includes('reach') ? 'reach' : (nLow.includes('ove') ? 'ove' : 'veil'), 'toilets', 'veil-smart-toilet');
-  const toiletEss = findCatalogItem('reach', 'toilets', 'reach-one-piece-toilet');
+  let toiletLux = null, toiletSig = null, toiletEss = null;
+  if (incToilet) {
+    toiletLux = findCatalogItem(nLow.includes('innate') ? 'innate' : (nLow.includes('veil') ? 'veil' : (nLow.includes('reach') ? 'reach' : (nLow.includes('ove') ? 'ove' : (nLow.includes('vive') ? 'vive' : 'innate')))), 'toilets', 'veil-smart-toilet');
+    if (nLow.includes('veil') || !toiletLux) toiletLux = findCatalogItem('veil', 'toilets', 'veil-smart-toilet');
+    toiletSig = findCatalogItem(nLow.includes('reach') ? 'reach' : (nLow.includes('ove') ? 'ove' : (nLow.includes('vive') ? 'vive' : 'veil')), 'toilets', 'veil-smart-toilet');
+    toiletEss = findCatalogItem(nLow.includes('ove') ? 'ove' : 'reach', 'toilets', 'reach-one-piece-toilet');
+  }
 
   // 2. Resolve Pinned or Best-Fit Vanities & Basins
-  let vanityLux = findCatalogItem(nLow.includes('vive') ? 'vive' : (nLow.includes('trace') ? 'trace' : (nLow.includes('brazn') ? 'brazn' : (nLow.includes('forefront') ? 'forefront' : (nLow.includes('pedestal') ? 'pedestal' : 'vive')))), 'vanities', 'vive-integrated-vanity');
-  const vanitySig = findCatalogItem(nLow.includes('trace') ? 'trace' : (nLow.includes('brazn') ? 'brazn' : 'vive'), 'vanities', 'vive-integrated-vanity');
-  const vanityEss = findCatalogItem('trace', 'vanities', 'trace-integrated-vanity');
+  let vanityLux = null, vanitySig = null, vanityEss = null;
+  if (incVanity) {
+    vanityLux = findCatalogItem(nLow.includes('brazn') ? 'brazn' : (nLow.includes('vessel') ? 'brazn' : (nLow.includes('forefront') ? 'forefront' : (nLow.includes('vive') ? 'vive' : (nLow.includes('trace') ? 'trace' : 'vive')))), 'vanities', 'vive-integrated-vanity');
+    vanitySig = findCatalogItem(nLow.includes('trace') ? 'trace' : (nLow.includes('brazn') ? 'brazn' : (nLow.includes('forefront') ? 'forefront' : 'vive')), 'vanities', 'vive-integrated-vanity');
+    vanityEss = findCatalogItem('trace', 'vanities', 'trace-integrated-vanity');
+  }
 
   // 3. Resolve Pinned or Best-Fit Bathtubs
-  let tubLux = null;
-  let tubSig = null;
-  if (wantsTub || isSpaciousMaster) {
+  let tubLux = null, tubSig = null;
+  if (wantsTub && roomW >= 2.6 && roomD >= 2.4) {
     tubLux = findCatalogItem((wantsWhirlpool || (!nLow.includes('evok') && budgetNum >= 550000)) ? 'whirlpool' : 'evok', 'bathtubs', 'evok-2-bathtub');
     tubSig = findCatalogItem('evok', 'bathtubs', 'evok-2-bathtub');
   }
 
   // 4. Resolve Showers
-  const showerDoorLux = findCatalogItem(nLow.includes('singulier') ? 'singulier' : (nLow.includes('elate') ? 'elate' : (nLow.includes('contra') ? 'contra' : 'new-trilogy')), 'showers', 'new-trilogy-pivot-door');
-  const showerHeadLux = findCatalogItem('statement', 'showers', 'statement-round-showerhead');
-  const showerSig = findCatalogItem('new-trilogy', 'showers', 'new-trilogy-pivot-door');
-  const showerHeadSig = findCatalogItem('statement', 'showers', 'statement-round-showerhead');
-  const showerEss = findCatalogItem('statement', 'showers', 'statement-round-showerhead');
+  let showerDoorLux = null, showerHeadLux = null, showerSig = null, showerHeadSig = null, showerEss = null;
+  if (incShower) {
+    showerDoorLux = findCatalogItem(nLow.includes('singulier') ? 'singulier' : (nLow.includes('elate') ? 'elate' : (nLow.includes('contra') ? 'contra' : 'new-trilogy')), 'showers', 'new-trilogy-pivot-door');
+    showerHeadLux = findCatalogItem('statement', 'showers', 'statement-round-showerhead');
+    showerSig = findCatalogItem(nLow.includes('elate') ? 'elate' : 'new-trilogy', 'showers', 'new-trilogy-pivot-door');
+    showerHeadSig = findCatalogItem('statement', 'showers', 'statement-round-showerhead');
+    showerEss = findCatalogItem('statement', 'showers', 'statement-round-showerhead');
+  }
 
   // 5. Resolve Faucets
-  const faucetLux = findCatalogItem(nLow.includes('artifacts') ? 'artifacts' : (nLow.includes('composed') ? 'composed-2-handle' : (nLow.includes('purist') ? 'purist' : (isClassic ? 'artifacts' : 'composed-2-handle'))), 'faucets', 'composed-tall-faucet');
-  const faucetSig = findCatalogItem(nLow.includes('artifacts') ? 'artifacts' : (isZen || isIndustrial ? 'composed' : 'purist'), 'faucets', 'purist-single-control-faucet');
-  const faucetEss = findCatalogItem('parallel', 'faucets', 'parallel-pillar-tap');
+  let faucetLux = null, faucetSig = null, faucetEss = null;
+  if (incFaucet) {
+    faucetLux = findCatalogItem(nLow.includes('artifacts') ? 'artifacts' : (nLow.includes('composed') ? 'composed-tall-faucet' : (nLow.includes('purist') ? 'purist' : (isClassic ? 'artifacts' : 'composed-tall-faucet'))), 'faucets', 'composed-tall-faucet');
+    faucetSig = findCatalogItem(nLow.includes('artifacts') ? 'artifacts' : (isZen || isIndustrial ? 'composed' : 'purist'), 'faucets', 'purist-single-control-faucet');
+    faucetEss = findCatalogItem(nLow.includes('aleo') ? 'aleo' : 'parallel', 'faucets', 'parallel-pillar-tap');
+  }
 
   // 6. Resolve Mirrors
-  const mirrorLux = findCatalogItem(nLow.includes('reve') ? 'reve' : (nLow.includes('embark') ? 'embark' : (nLow.includes('ming') ? 'ming' : 'reve')), 'mirrors', 'reve-lighted-mirror');
-  const mirrorSig = findCatalogItem(nLow.includes('reve') ? 'reve' : 'ming', 'mirrors', 'ming-lighted-mirror');
-  const mirrorEss = findCatalogItem('archer', 'mirrors', 'archer-rcher-51-78-7-cm-irrored-abine-k3073inn');
+  let mirrorLux = null, mirrorSig = null, mirrorEss = null;
+  if (incMirror) {
+    mirrorLux = findCatalogItem(nLow.includes('reve') ? 'reve' : (nLow.includes('embark') ? 'embark' : (nLow.includes('ming') ? 'ming' : 'reve')), 'mirrors', 'reve-lighted-mirror');
+    mirrorSig = findCatalogItem(nLow.includes('reve') ? 'reve' : 'ming', 'mirrors', 'ming-lighted-mirror');
+    mirrorEss = findCatalogItem('archer', 'mirrors', 'archer-rcher-51-78-7-cm-irrored-abine-k3073inn');
+  }
 
   // ==================== COMPOSE TIER 3: MASTERPIECE LUXURY (90% - 96% BUDGET) ====================
   const luxuryItems = [
@@ -657,7 +695,7 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   }
 
   // Include walk-in glass shower enclosure in luxury suites with space
-  if (isSpaciousMaster || !tubLux || nLow.includes('shower') || nLow.includes('enclosure')) {
+  if (showerDoorLux) {
     luxuryItems.push(formatCatalogFixture(showerDoorLux, 'shower', 'Architectural pivot shower door with 8 mm CleanCoat tempered glass and solid brass hardware.'));
     luxuryItems.push(formatCatalogFixture(showerHeadLux, 'shower', 'Multifunction rainhead shower system with Full Coverage and Cloud spray indulgence.'));
   }
@@ -666,8 +704,10 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   let luxSubtotal = luxuryItems.reduce((s, i) => s + i.price_inr, 0);
   if (budgetNum >= 450000 && budgetNum - luxSubtotal >= 60000) {
     luxuryItems.push({
+      id: 'dtv-mode-digital-interface',
       category: 'accessories',
       sku_code: 'K-99693IN-NA',
+      art: 'K-99693IN-NA',
       name: 'Kohler DTV Mode™ Digital Thermostatic Shower & Bath Interface',
       price_inr: 48000,
       price_usd: 640,
@@ -675,8 +715,10 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
       explainability: { spatial_fit: 'Wall recessed', budget_fit: 'Digital luxury upgrade', theme_fit: 'Minimalist glass interface', plumbing_fit: '1/2" thermostatic cartridge' }
     });
     luxuryItems.push({
+      id: 'statement-towel-warmer',
       category: 'accessories',
       sku_code: 'K-27292IN-BV',
+      art: 'K-27292IN-BV',
       name: 'Statement™ Luxury Heated Towel Warmer & Robe Hooks',
       price_inr: 45000,
       price_usd: 600,
@@ -696,7 +738,7 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   if (tubSig) {
     signatureItems.push(formatCatalogFixture(tubSig, 'bathtub', 'Seamless rectangular freestanding soaking tub with softened corners and double-ended lumbar support.'));
   }
-  if (isSpaciousMaster || !tubSig || nLow.includes('shower') || nLow.includes('enclosure')) {
+  if (showerSig) {
     signatureItems.push(formatCatalogFixture(showerSig, 'shower', 'Architectural pivot shower door with 8 mm CleanCoat tempered glass and high-polish tubular handle.'));
     signatureItems.push(formatCatalogFixture(showerHeadSig, 'shower', 'Three-function showerhead with Full Coverage and Katalyst air-induction technology.'));
   }
@@ -704,8 +746,10 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   let sigSubtotal = signatureItems.reduce((s, i) => s + i.price_inr, 0);
   if (budgetNum >= 450000 && budgetNum - sigSubtotal >= 40000) {
     signatureItems.push({
+      id: 'purist-towel-bar-suite',
       category: 'accessories',
       sku_code: 'K-72567IN-BV',
+      art: 'K-72567IN-BV',
       name: 'Kohler Purist™ Architectural Brass Towel Bar & Paper Holder Suite',
       price_inr: 38000,
       price_usd: 510,
@@ -713,8 +757,10 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
       explainability: { spatial_fit: 'Wall mounted', budget_fit: 'Accessory collection', theme_fit: 'Harmonious hardware finish', plumbing_fit: 'Surface anchors' }
     });
     signatureItems.push({
+      id: 'pop-up-umbrella-drain',
       category: 'accessories',
       sku_code: 'K-7124IN-CP',
+      art: 'K-7124IN-CP',
       name: 'Kohler Luxury Pop-up Umbrella Drain & Brass P-Trap Assembly',
       price_inr: 18000,
       price_usd: 240,

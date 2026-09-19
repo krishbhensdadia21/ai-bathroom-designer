@@ -607,10 +607,11 @@
       placedProducts.length = 0;
       deselectActiveObject();
 
-      // 3. Update room dimensions from inputs
-      const wFt = parseFloat(document.getElementById('ai-input-width').value) || 10.5;
-      const dFt = parseFloat(document.getElementById('ai-input-depth').value) || 9.2;
-      const hFt = parseFloat(document.getElementById('ai-input-height').value) || 8.5;
+      // 3. Update room dimensions from recommendation or inputs
+      const dimRec = currentAiRecommendation.auto_adjusted_dimensions || currentAiRecommendation.room_dimensions;
+      const wFt = (dimRec && (dimRec.widthFt || dimRec.width_ft)) || parseFloat(document.getElementById('ai-input-width').value) || 10.5;
+      const dFt = (dimRec && (dimRec.depthFt || dimRec.depth_ft)) || parseFloat(document.getElementById('ai-input-depth').value) || 9.2;
+      const hFt = (dimRec && (dimRec.heightFt || dimRec.height_ft)) || parseFloat(document.getElementById('ai-input-height').value) || 8.5;
       roomWidth = Math.round(wFt * 0.3048 * 10) / 10;
       roomDepth = Math.round(dFt * 0.3048 * 10) / 10;
       roomHeight = Math.round(hFt * 0.3048 * 10) / 10;
@@ -642,32 +643,40 @@
         // 3. Exact or keyword name match
         if (item.name) {
           const nLow = item.name.toLowerCase();
-          const byName = KOHLER_CATALOG.find(c => c.name.toLowerCase() === nLow || nLow.includes(c.name.toLowerCase()));
+          const byName = KOHLER_CATALOG.find(c => c.name.toLowerCase() === nLow || nLow.includes(c.name.toLowerCase()) || c.name.toLowerCase().includes(nLow));
           if (byName) return byName;
-          if (nLow.includes('parallel')) return KOHLER_CATALOG.find(c => c.id === 'parallel-faucet');
-          if (nLow.includes('brazn')) return KOHLER_CATALOG.find(c => c.id === 'brazn-vessel-sink') || KOHLER_CATALOG.find(c => c.id === 'brazn-console');
-          if (nLow.includes('forefront')) return KOHLER_CATALOG.find(c => c.id === 'forefront-semi-recessed-basin');
+          if (nLow.includes('parallel')) return KOHLER_CATALOG.find(c => c.id === 'parallel-pillar-tap');
+          if (nLow.includes('purist')) return KOHLER_CATALOG.find(c => c.id === 'purist-single-control-faucet');
+          if (nLow.includes('artifacts')) return KOHLER_CATALOG.find(c => c.id === 'artifacts-widespread-faucet');
+          if (nLow.includes('composed')) return KOHLER_CATALOG.find(c => c.id.includes('composed'));
+          if (nLow.includes('aleo')) return KOHLER_CATALOG.find(c => c.id.includes('leo-'));
+          if (nLow.includes('hone')) return KOHLER_CATALOG.find(c => c.id.includes('one-'));
+          if (nLow.includes('brazn')) return KOHLER_CATALOG.find(c => c.id === 'brazn-vessel-sink');
+          if (nLow.includes('forefront')) return KOHLER_CATALOG.find(c => c.id.includes('forefront'));
+          if (nLow.includes('foreward')) return KOHLER_CATALOG.find(c => c.id.includes('oreward'));
           if (nLow.includes('trace')) return KOHLER_CATALOG.find(c => c.id === 'trace-integrated-vanity');
+          if (nLow.includes('vive') && (item.category || '').includes('toilet')) return KOHLER_CATALOG.find(c => c.id.includes('ive-ne-piece'));
           if (nLow.includes('vive')) return KOHLER_CATALOG.find(c => c.id === 'vive-integrated-vanity');
-          if (nLow.includes('veil')) return KOHLER_CATALOG.find(c => c.id === 'veil-smart-toilet');
-          if (nLow.includes('prologue')) return KOHLER_CATALOG.find(c => c.id === 'trace-integrated-vanity');
-          if (nLow.includes('luxe')) return KOHLER_CATALOG.find(c => c.id === 'vive-integrated-vanity');
-          if (nLow.includes('reach')) return KOHLER_CATALOG.find(c => c.id === 'reach-one-piece-toilet') || KOHLER_CATALOG.find(c => c.id === 'reach-wall-hung');
+          if (nLow.includes('veil') && (item.category || '').includes('toilet')) return KOHLER_CATALOG.find(c => c.id === 'veil-smart-toilet');
+          if (nLow.includes('veil')) return KOHLER_CATALOG.find(c => c.id.includes('eil-'));
+          if (nLow.includes('innate')) return KOHLER_CATALOG.find(c => c.id.includes('nnate-'));
+          if (nLow.includes('reach')) return KOHLER_CATALOG.find(c => c.id === 'reach-one-piece-toilet');
+          if (nLow.includes('ove') && (item.category || '').includes('tub')) return KOHLER_CATALOG.find(c => c.id === 've-ve-170-75-cm-rop-in-hirlpool-ath-k1709ink');
           if (nLow.includes('ove')) return KOHLER_CATALOG.find(c => c.id === 'ove-one-piece-toilet');
-          if (nLow.includes('jacquard')) return KOHLER_CATALOG.find(c => c.id === 'trace-integrated-vanity');
-          if (nLow.includes('tailor')) return KOHLER_CATALOG.find(c => c.id === 'vive-integrated-vanity');
-          if (nLow.includes('memoir')) return KOHLER_CATALOG.find(c => c.id === 'ove-one-piece-toilet');
-          if (nLow.includes('leap')) return KOHLER_CATALOG.find(c => c.id === 'reach-one-piece-toilet');
-          if (nLow.includes('composed')) return KOHLER_CATALOG.find(c => c.id === 'composed-tall-faucet') || KOHLER_CATALOG.find(c => c.id === 'composed-faucet');
-          if (nLow.includes('purist')) return KOHLER_CATALOG.find(c => c.id === 'purist-faucet');
-          if (nLow.includes('artifacts')) return KOHLER_CATALOG.find(c => c.id === 'artifacts-faucet');
-          if (nLow.includes('evok')) return KOHLER_CATALOG.find(c => c.id === 'evok-bathtub');
-          if (nLow.includes('ming')) return KOHLER_CATALOG.find(c => c.id === 'ming-smart-mirror');
-          if (nLow.includes('reve')) return KOHLER_CATALOG.find(c => c.id === 'reve-mirror');
-          if (nLow.includes('verdera')) return KOHLER_CATALOG.find(c => c.id === 'ming-smart-mirror') || KOHLER_CATALOG.find(c => c.id === 'reve-mirror');
-          if (nLow.includes('trilogy')) return KOHLER_CATALOG.find(c => c.id === 'new-trilogy-shower-door');
-          if (nLow.includes('hydrorail')) return KOHLER_CATALOG.find(c => c.id === 'new-trilogy-shower-door');
-          if (nLow.includes('statement')) return KOHLER_CATALOG.find(c => c.id === 'statement-showerhead') || KOHLER_CATALOG.find(c => c.id === 'statement-shower');
+          if (nLow.includes('evok')) return KOHLER_CATALOG.find(c => c.id === 'evok-2-bathtub');
+          if (nLow.includes('whirlpool')) return KOHLER_CATALOG.find(c => c.id === 've-ve-170-75-cm-rop-in-hirlpool-ath-k1709ink');
+          if (nLow.includes('ming')) return KOHLER_CATALOG.find(c => c.id === 'ming-lighted-mirror');
+          if (nLow.includes('reve')) return KOHLER_CATALOG.find(c => c.id === 'reve-lighted-mirror');
+          if (nLow.includes('archer')) return KOHLER_CATALOG.find(c => c.id.includes('rcher'));
+          if (nLow.includes('embark')) return KOHLER_CATALOG.find(c => c.id.includes('mbark'));
+          if (nLow.includes('modernlife')) return KOHLER_CATALOG.find(c => c.id.includes('odern-ife'));
+          if (nLow.includes('essential')) return KOHLER_CATALOG.find(c => c.id.includes('ssential'));
+          if (nLow.includes('trilogy')) return KOHLER_CATALOG.find(c => c.id === 'new-trilogy-pivot-door');
+          if (nLow.includes('elate')) return KOHLER_CATALOG.find(c => c.id.includes('late-'));
+          if (nLow.includes('contra')) return KOHLER_CATALOG.find(c => c.id.includes('ontra-'));
+          if (nLow.includes('singulier')) return KOHLER_CATALOG.find(c => c.id.includes('ingulier-'));
+          if (nLow.includes('levity')) return KOHLER_CATALOG.find(c => c.id.includes('evity-'));
+          if (nLow.includes('statement')) return KOHLER_CATALOG.find(c => c.id === 'statement-round-showerhead');
         }
         // 4. Safe theme-aware category match (prioritizing currentSelectedTheme)
         if (item.category) {
@@ -724,7 +733,7 @@
       const toiletFlushZ = backWallZ + 0.165; // Back of tank sits flush against back wall tile
       const vanityFlushZ = backWallZ + 0.245; // Back of vanity counter sits flush against back wall tile
       const mirrorFlushZ = backWallZ + 0.055; // 5.5cm offset clears 5cm wood slat feature wall cleanly
-      const faucetFlushZ = vanityFlushZ - 0.10; // Faucet mounts precisely into rear hole of vanity basin
+      const faucetFlushZ = vanityFlushZ - 0.14; // Faucet mounts precisely into rear hole of vanity basin deck
 
       // 2. Calculate Uncongested, Balanced X Coordinates
       // Place shower in the back-right corner flush against right wall & back wall
@@ -766,10 +775,10 @@
       // C. Place Faucet (mounted on vanity deck)
       let spawnedFaucet = null;
       if (faucetEntry) {
-        const vanityHeight = (vanityCat && vanityCat.height_m) ? vanityCat.height_m : 0.86;
+        const faucetElevation = 0.508; // Sits flush on top of vanity deck collar
         spawnedFaucet = spawnAiFixture(faucetEntry, vanityX, faucetFlushZ, 0, {
-          elevation: vanityHeight,
-          y: vanityHeight
+          elevation: faucetElevation,
+          y: faucetElevation
         });
       }
 

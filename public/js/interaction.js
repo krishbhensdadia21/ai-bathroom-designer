@@ -263,6 +263,11 @@
         targetPos.x = Math.max(-roomWidth / 2 + margin, Math.min(roomWidth / 2 - margin, targetPos.x));
         targetPos.z = Math.max(-roomDepth / 2 + margin, Math.min(roomDepth / 2 - margin, targetPos.z));
 
+        // Wall-mounted mirrors strictly stay flush to the back wall at 5.5cm offset
+        if (isMirrorObj) {
+          targetPos.z = -roomDepth / 2 + 0.055;
+        }
+
         const prevX = activeSelectedObject.position.x;
         const prevZ = activeSelectedObject.position.z;
         const dx = targetPos.x - prevX;
