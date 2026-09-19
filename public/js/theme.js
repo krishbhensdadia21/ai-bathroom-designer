@@ -160,9 +160,30 @@
         mat.receiveShadow = true;
         themeAccentsGroup.add(mat);
 
-        // Potted Japanese Bamboo plant in ceramic vase in right corner
+        // Potted Japanese Bamboo plant in ceramic vase (dynamic collision-free corner selection)
         const plantG = new THREE.Group();
-        plantG.position.set(roomWidth / 2 - 0.38, 0, -roomDepth / 2 + 0.45);
+        const candidateSpots = [
+          { x: roomWidth / 2 - 0.38, z: -roomDepth / 2 + 0.45 }, // default: back right
+          { x: roomWidth / 2 - 0.38, z: roomDepth / 2 - 0.55 },  // front right
+          { x: -roomWidth / 2 + 0.38, z: roomDepth / 2 - 0.55 }, // front left
+          { x: vanityX + 0.70, z: -roomDepth / 2 + 0.45 }         // alongside vanity
+        ];
+
+        let chosenSpot = candidateSpots[0];
+        // If candidate spot collides with any placed fixture (e.g. shower enclosure), pick next open spot
+        for (const spot of candidateSpots) {
+          const isColliding = (placedProducts || []).some(p => {
+            const w = (p.userData && p.userData.width_m) || 0.8;
+            const d = (p.userData && p.userData.depth_m) || 0.8;
+            const threshold = Math.max(w, d) / 2 + 0.30;
+            return Math.hypot(p.position.x - spot.x, p.position.z - spot.z) < threshold;
+          });
+          if (!isColliding) {
+            chosenSpot = spot;
+            break;
+          }
+        }
+        plantG.position.set(chosenSpot.x, 0, chosenSpot.z);
         const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.12, 0.42, 24), new THREE.MeshStandardMaterial({ color: 0x22252a, roughness: 0.85 }));
         pot.position.y = 0.21;
         pot.castShadow = true;
