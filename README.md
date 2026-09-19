@@ -15,14 +15,24 @@ This project is submitted as an individual case study solution for the selection
 | Deliverable | Description | File / Access Link |
 |---|---|---|
 | **1. Working Model** | Live interactive 3D WebGL space planner & AI assistant deployed to production | 🔗 **[Live Vercel Application](https://kohler-ai-bathroom-designer.vercel.app/)** |
-| **2. Prompts & Workflows** | Complete documentation of AI prompts, system instructions, Llama Guard rules, and multi-objective workflows | 📖 **[System Architecture & Prompts](#-ai-prompts-system-instructions--workflows)** |
-| **3. Video Walkthrough** | Demonstration of the 3D space planner and generative AI recommendation engine | 🎥 **[Video Walkthrough Documentation](#-video-walkthrough)** |
-| **4. Presentation Deck** | Structured presentation deck on system approach, architecture, innovation, and business impact | 📊 **[Presentation Deck Summary](#-presentation-deck)** |
+| **2. Prompts & Workflows** | Complete documentation of AI prompts, system instructions, Llama Guard rules, and multi-objective workflows | 📖 **[System Architecture & Prompts](assets/Prompts%20Documentation/KOHLER_AI_Prompts_System_Instructions_Workflows.pdf)** |
+| **3. Video Walkthrough** | Demonstration of the 3D space planner and generative AI recommendation engine | 🎥 **[Video Walkthrough Documentation](https://drive.google.com/file/d/1JLduiibQigBj4lLsjb8qXYPyGb0GnuWj/view?usp=sharing)** |
+| **4. Presentation Deck** | Structured presentation deck on system approach, architecture, innovation, and business impact | 📊 **[Presentation Deck Summary](assets/Presentation%20Deck/KOHLER_AI_Bathroom_Designer.pptx)** |
 ##
 ### 📁 Repository Structure
 ##
 ```text
 kohler-ai-bathroom-designer/
+├── assets/                       # Official Submission Deliverables & Media
+│   ├── Prompts Documentation/    # Comprehensive AI system prompts & Pareto workflows PDF
+│   │   ├── KOHLER_AI_Prompts_System_Instructions_Workflows.pdf
+│   │   └── README.md
+│   ├── Video Demonstration/      # Direct walkthrough video link & demonstration summary
+│   │   ├── VIDEO_LINK.txt        # Direct Google Drive video URL
+│   │   └── README.md
+│   └── Presentation Deck/        # Pitch & architecture presentation deck (PPTX)
+│       ├── KOHLER_AI_Bathroom_Designer.pptx
+│       └── README.md
 ├── components/                   # Modular HTML Component Partials (12 files)
 │   ├── header.html               # Platform header, logo, currency selector, and investment counter
 │   ├── workspace_nav.html        # Viewport switcher (3D/2D/Walk-in), clear room, dimensions, finishes
