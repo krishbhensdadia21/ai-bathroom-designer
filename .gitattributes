@@ -1,0 +1,8 @@
+# Binary file declarations to prevent CRLF corruption
+*.pdf binary
+*.pptx binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.webp binary
