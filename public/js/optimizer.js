@@ -679,7 +679,7 @@
             return themeMatch || matching[0];
           }
         }
-        return KOHLER_CATALOG[0];
+        return null; // Return null if not a physical 3D catalog fixture (never spawn a random toilet!)
       }
 
       // Helper to spawn fixture passing exact AI recommendation IDs, metadata, and prices
@@ -706,8 +706,16 @@
       const vanityEntry = rec.find(i => (i.category || '').toLowerCase().includes('vanit') || (i.category || '').toLowerCase().includes('basin'));
       const faucetEntry = rec.find(i => (i.category || '').toLowerCase().includes('faucet'));
       const mirrorEntry = rec.find(i => (i.category || '').toLowerCase().includes('mirror'));
-      const showerEntry = rec.find(i => (i.category || '').toLowerCase().includes('shower'));
       const tubEntry = rec.find(i => (i.category || '').toLowerCase().includes('tub') || (i.category || '').toLowerCase().includes('bath'));
+
+      // Differentiate Shower Door Enclosure vs Showerhead/Column
+      const showerDoorEntry = rec.find(i => (i.category || '').toLowerCase().includes('shower') &&
+        (i.name.toLowerCase().includes('door') || i.name.toLowerCase().includes('pivot') || i.name.toLowerCase().includes('sliding') || i.name.toLowerCase().includes('enclosure')));
+      const showerHeadEntry = rec.find(i => (i.category || '').toLowerCase().includes('shower') &&
+        (i.name.toLowerCase().includes('head') || i.name.toLowerCase().includes('column') || i.name.toLowerCase().includes('mult') || i.name.toLowerCase().includes('statement')) &&
+        i !== showerDoorEntry);
+      const genericShowerEntry = (!showerDoorEntry && !showerHeadEntry) ? rec.find(i => (i.category || '').toLowerCase().includes('shower')) : null;
+      const hasShower = !!(showerDoorEntry || showerHeadEntry || genericShowerEntry);
 
       // ================= ARCHITECTURAL FLUSH & BALANCED SPATIAL ZONING =================
       const backWallZ = -roomDepth / 2;
@@ -715,47 +723,39 @@
       // 1. Calculate Flush Z Coordinates (Zero floating gaps behind fixtures)
       const toiletFlushZ = backWallZ + 0.165; // Back of tank sits flush against back wall tile
       const vanityFlushZ = backWallZ + 0.245; // Back of vanity counter sits flush against back wall tile
-      const mirrorFlushZ = backWallZ + 0.035; // Mirror sits flush to back wall
+      const mirrorFlushZ = backWallZ + 0.055; // 5.5cm offset clears 5cm wood slat feature wall cleanly
       const faucetFlushZ = vanityFlushZ - 0.10; // Faucet mounts precisely into rear hole of vanity basin
 
       // 2. Calculate Uncongested, Balanced X Coordinates
       // Place shower in the back-right corner flush against right wall & back wall
-      let showerX = 0;
-      let showerZ = 0;
-      if (showerEntry) {
-        showerX = roomWidth / 2 - 0.48; // Right edge flush to right wall
-        showerZ = backWallZ + 0.48;     // Back edge flush to back wall
-      }
+      const showerX = roomWidth / 2 - 0.55;
+      const showerZ = backWallZ + 0.55;
 
       // Place toilet in the back-left zone (respecting NKBA 15" centerline from left wall)
-      let toiletX = 0;
-      if (toiletEntry) {
-        toiletX = -roomWidth / 2 + 0.48;
-      }
+      const toiletX = -roomWidth / 2 + 0.48;
 
       // Dynamically calculate Vanity X to sit in the exact spacious midpoint between Toilet and Shower!
       let vanityX = 0;
-      if (toiletEntry && showerEntry) {
-        // Equal, generous breathing room on both sides of the vanity (no congestion!)
-        const toiletRightBoundary = toiletX + 0.22;
-        const showerLeftBoundary = showerX - 0.48;
+      if (toiletEntry && hasShower) {
+        const toiletRightBoundary = toiletX + 0.25;
+        const showerLeftBoundary = showerX - 0.55;
         vanityX = (toiletRightBoundary + showerLeftBoundary) / 2;
-      } else if (showerEntry && !toiletEntry) {
-        vanityX = (-roomWidth / 2 + (showerX - 0.48)) / 2;
-      } else if (toiletEntry && !showerEntry) {
-        vanityX = ((toiletX + 0.22) + (roomWidth / 2)) / 2;
+      } else if (hasShower && !toiletEntry) {
+        vanityX = (-roomWidth / 2 + (showerX - 0.55)) / 2;
+      } else if (toiletEntry && !hasShower) {
+        vanityX = ((toiletX + 0.25) + (roomWidth / 2)) / 2;
       } else {
         vanityX = 0.0;
       }
       // Safety clamp so vanity never clips walls
       vanityX = Math.max(-roomWidth / 2 + 0.55, Math.min(roomWidth / 2 - 0.55, vanityX));
 
-      // A. Place Toilet (along back wet-wall, left side) ONLY if in recommended bundle
+      // A. Place Toilet (along back wet-wall, left side)
       if (toiletEntry) {
         spawnAiFixture(toiletEntry, toiletX, toiletFlushZ, 0);
       }
 
-      // B. Place Vanity (along back wet-wall, perfectly centered in open space) ONLY if in recommended bundle
+      // B. Place Vanity (along back wet-wall, perfectly centered in open space)
       let vanityCat = null;
       let spawnedVanity = null;
       if (vanityEntry) {
@@ -763,7 +763,7 @@
         spawnedVanity = spawnAiFixture(vanityEntry, vanityX, vanityFlushZ, 0);
       }
 
-      // C. Place Faucet (mounted on vanity deck) ONLY if in recommended bundle
+      // C. Place Faucet (mounted on vanity deck)
       let spawnedFaucet = null;
       if (faucetEntry) {
         const vanityHeight = (vanityCat && vanityCat.height_m) ? vanityCat.height_m : 0.86;
@@ -773,38 +773,46 @@
         });
       }
 
-      // D. Place Mirror (centered directly above vanity) ONLY if in recommended bundle
+      // D. Place Mirror (centered directly above vanity flush against wall/wood slats)
       let spawnedMirror = null;
       if (mirrorEntry) {
         spawnedMirror = spawnAiFixture(mirrorEntry, vanityX, mirrorFlushZ, 0);
       }
 
-      // Link vanity, faucet, and mirror together so moving vanity moves all 3
+      // Link vanity, faucet, and mirror together
       if (spawnedVanity) {
         if (spawnedFaucet) spawnedVanity.userData.attachedFaucet = spawnedFaucet;
         if (spawnedMirror) spawnedVanity.userData.attachedMirror = spawnedMirror;
       }
 
-      // E. Place Shower (wet corner zone) ONLY if in recommended bundle
-      if (showerEntry) {
-        spawnAiFixture(showerEntry, showerX, showerZ, 0);
+      // E. Place Shower (wet corner zone)
+      if (showerDoorEntry) {
+        spawnAiFixture(showerDoorEntry, showerX, showerZ, 0);
+      }
+      if (showerHeadEntry) {
+        // Mount showerhead INSIDE the shower zone on the back wall (never in the mirror!)
+        spawnAiFixture(showerHeadEntry, showerX, backWallZ + 0.02, 0);
+      } else if (genericShowerEntry) {
+        spawnAiFixture(genericShowerEntry, showerX, showerZ, 0);
       }
 
-      // F. Place Bathtub (if included in bundle and room has enough space)
+      // F. Place Bathtub (Dedicated tub zone on the RIGHT side, 100% away from the entry door on the left wall!)
       if (tubEntry && roomWidth >= 2.6 && roomDepth >= 2.4) {
-        // Place freestanding tub along left-front wall with filler against left wall
-        const tubX = -roomWidth / 2 + 0.45;
-        const tubZ = Math.min(roomDepth / 2 - 0.80, 0.65);
-        spawnAiFixture(tubEntry, tubX, tubZ, -Math.PI / 2);
+        if (hasShower) {
+          // If shower occupies back-right corner, place tub along right wall in the front spa zone
+          const tubX = roomWidth / 2 - 0.50;
+          const tubZ = Math.min(roomDepth / 2 - 0.70, 0.75);
+          spawnAiFixture(tubEntry, tubX, tubZ, -Math.PI / 2);
+        } else {
+          // If no shower, tub sits along back-right wall
+          const tubX = roomWidth / 2 - 0.55;
+          const tubZ = backWallZ + 0.65;
+          spawnAiFixture(tubEntry, tubX, tubZ, Math.PI);
+        }
       }
 
-      // G. Safeguard: ensure any remaining candidate fixtures in rec are also spawned
-      const handledEntries = new Set([toiletEntry, vanityEntry, faucetEntry, mirrorEntry, showerEntry, tubEntry].filter(Boolean));
-      rec.forEach(extra => {
-        if (!handledEntries.has(extra)) {
-          spawnAiFixture(extra, 0, 0, 0);
-        }
-      });
+      // G. Architectural Safeguard: No random floor dumping at (0,0,0)!
+      // All genuine fixtures have been mapped to their dedicated real-life architectural zones.
 
       // Ensure all newly placed fixtures and architecture match the active aesthetic theme
       const finalTheme = (currentAiRecommendation && currentAiRecommendation.theme && currentAiRecommendation.theme !== 'None' && currentAiRecommendation.theme !== 'none')

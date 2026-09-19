@@ -229,7 +229,7 @@
 
             // Exact architectural offsets to eliminate floating wall gaps
             let offset = depth / 2 + 0.015;
-            if (cat === 'mirrors') offset = 0.035;
+            if (cat === 'mirrors') offset = 0.055; // 5.5cm clears 5cm wood slat feature wall cleanly
             else if (cat === 'toilets') offset = 0.165;
             else if (cat === 'vanities') offset = 0.245;
             else if (cat === 'showers') offset = Math.min(width, depth) / 2 + 0.02;
@@ -275,11 +275,14 @@
         if (activeSelectedObject.userData && activeSelectedObject.userData.category === 'vanities') {
           placedProducts.forEach(p => {
             if (p !== activeSelectedObject && p.userData) {
-              const isChild = (p.userData.category === 'faucets' || p.userData.category === 'mirrors') &&
-                              Math.hypot(p.position.x - prevX, p.position.z - prevZ) < 0.60;
-              if (isChild) {
+              const distToVanity = Math.hypot(p.position.x - prevX, p.position.z - prevZ);
+              if (p.userData.category === 'faucets' && distToVanity < 0.60) {
+                // Faucet is mounted on vanity deck: follows vanity in both X and Z
                 p.position.x += dx;
                 p.position.z += dz;
+              } else if (p.userData.category === 'mirrors' && Math.abs(p.position.x - prevX) < 0.50) {
+                // Wall mirror: tracks vanity laterally along wall (X), NEVER pulls into room or wall (Z)!
+                p.position.x += dx;
               }
             }
           });
