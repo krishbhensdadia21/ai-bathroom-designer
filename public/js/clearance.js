@@ -115,17 +115,25 @@
           }
         }
 
-        // 4. Universal Inter-Fixture Collision Check (physical bounding box overlap)
+        // 4. Universal Inter-Fixture Collision Check (physical 3D bounding box overlap)
         let hasFixtureCollision = false;
         let collidedWith = '';
         floorFixtures.forEach((other, oIdx) => {
           if (idx === oIdx) return;
-          // Exclude hosted accessories (e.g. deck faucet hosted on vanity)
           const oCat = (other.userData && other.userData.category) || '';
+
+          // Exclude hosted accessories and vertical non-interfering fixtures
           if ((cat === 'vanities' && oCat === 'faucets') || (cat === 'faucets' && oCat === 'vanities')) return;
+          if ((cat === 'bathtubs' || cat === 'showers') && (oCat === 'faucets' || oCat === 'accessories')) return;
+          if (cat === 'showers' && oCat === 'showers' && (other.position.y > 0.8 || pos.y > 0.8)) return; // showerhead inside shower
 
           const otherBox = new THREE.Box3().setFromObject(other);
-          // Check overlap with 3cm tolerance
+
+          // Check true 3D bounding box overlap including vertical height Y
+          const yOverlap = (realBox.min.y < otherBox.max.y - 0.04 && realBox.max.y > otherBox.min.y + 0.04);
+          if (!yOverlap) return; // Completely different height tiers (e.g. wall control above tub)
+
+          // Check horizontal floor overlap with 3cm tolerance
           if (realBox.min.x < otherBox.max.x - 0.03 &&
               realBox.max.x > otherBox.min.x + 0.03 &&
               realBox.min.z < otherBox.max.z - 0.03 &&
@@ -136,7 +144,26 @@
         });
 
         // 5. Universal Vector-Based Forward Clearance Check (Accurate in any rotation 0°, 90°, 180°, 270°)
-        const forwardDir = new THREE.Vector3(0, 0, 1).applyAxisAngle(new THREE.Vector3(0, 1, 0), rotY);
+        let effectiveForwardDir = new THREE.Vector3(0, 0, 1).applyAxisAngle(new THREE.Vector3(0, 1, 0), rotY);
+        let effectiveRotY = rotY;
+
+        // Double-ended freestanding bathtubs can be entered from either long side.
+        // If the primary direction faces into a wall (<0.5m), check step-in access from the open room side!
+        if (cat === 'bathtubs') {
+          let testFacingWallDist = 999;
+          const testFrontPos = new THREE.Vector3().copy(pos).add(effectiveForwardDir.clone().multiplyScalar(fd / 2));
+          if (effectiveForwardDir.x > 0.001) testFacingWallDist = Math.min(testFacingWallDist, (halfRoomW - testFrontPos.x) / effectiveForwardDir.x);
+          else if (effectiveForwardDir.x < -0.001) testFacingWallDist = Math.min(testFacingWallDist, (-halfRoomW - testFrontPos.x) / effectiveForwardDir.x);
+          if (effectiveForwardDir.z > 0.001) testFacingWallDist = Math.min(testFacingWallDist, (halfRoomD - testFrontPos.z) / effectiveForwardDir.z);
+          else if (effectiveForwardDir.z < -0.001) testFacingWallDist = Math.min(testFacingWallDist, (-halfRoomD - testFrontPos.z) / effectiveForwardDir.z);
+
+          if (testFacingWallDist < minFrontClearanceM) {
+            effectiveForwardDir.negate();
+            effectiveRotY = (effectiveRotY + Math.PI) % (Math.PI * 2);
+          }
+        }
+
+        const forwardDir = effectiveForwardDir;
         const forwardVector = forwardDir.clone().multiplyScalar(fd / 2 + minFrontClearanceM / 2);
         const clearanceCenter = new THREE.Vector3().copy(pos).add(forwardVector);
         const frontEdgePos = new THREE.Vector3().copy(pos).add(forwardDir.clone().multiplyScalar(fd / 2));
@@ -155,6 +182,8 @@
           if (idx === oIdx) return;
           const oCat = (other.userData && other.userData.category) || '';
           if ((cat === 'vanities' && oCat === 'faucets') || (cat === 'faucets' && oCat === 'vanities')) return;
+          if ((cat === 'bathtubs' || cat === 'showers') && (oCat === 'faucets' || oCat === 'accessories')) return;
+          if (cat === 'showers' && oCat === 'showers' && (other.position.y > 0.8 || pos.y > 0.8)) return;
           const otherBox = new THREE.Box3().setFromObject(other);
           const hit = clearanceRay.intersectBox(otherBox, new THREE.Vector3());
           if (hit) {
@@ -242,7 +271,7 @@
         });
         const planeMesh = new THREE.Mesh(planeGeo, planeMat);
         planeMesh.rotation.x = -Math.PI / 2;
-        planeMesh.rotation.z = rotY;
+        planeMesh.rotation.z = effectiveRotY;
         planeMesh.position.set(clearanceCenter.x, 0.009, clearanceCenter.z);
         clearanceGroup.add(planeMesh);
 

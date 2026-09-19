@@ -55,7 +55,7 @@ requiredIds.forEach(id => {
 
 console.log('\n--- 5. VERIFYING SCRIPT TAGS IN INDEX.HTML ---');
 jsFiles.forEach(f => {
-  if (html.includes(`src="js/${f}"`) || html.includes(`src='js/${f}'`)) {
+  if (html.includes(`src="js/${f}"`) || html.includes(`src='js/${f}'`) || html.includes(`src="js/${f}?`) || html.includes(`src='js/${f}?`)) {
     console.log(`  [✓] Linked: js/${f}`);
   } else {
     console.error(`  [✗] NOT LINKED: js/${f}`);
