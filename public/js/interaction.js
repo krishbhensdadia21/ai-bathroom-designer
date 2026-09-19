@@ -222,25 +222,34 @@
           const minDist = Math.min(distBack, distFront, distLeft, distRight);
 
           if (minDist < snapThreshold) {
-            const isMirror = activeSelectedObject.userData && activeSelectedObject.userData.category === 'mirrors';
+            const cat = (activeSelectedObject.userData && activeSelectedObject.userData.category) || '';
             const depth = (activeSelectedObject.userData && activeSelectedObject.userData.depth_m) || 0.6;
-            const offset = isMirror ? 0.05 : Math.max(0.25, depth / 2 + 0.04);
+            const width = (activeSelectedObject.userData && activeSelectedObject.userData.width_m) || 0.8;
+            const isTub = (cat === 'bathtubs');
+
+            // Exact architectural offsets to eliminate floating wall gaps
+            let offset = depth / 2 + 0.015;
+            if (cat === 'mirrors') offset = 0.035;
+            else if (cat === 'toilets') offset = 0.165;
+            else if (cat === 'vanities') offset = 0.245;
+            else if (cat === 'showers') offset = Math.min(width, depth) / 2 + 0.02;
+            else if (cat === 'bathtubs') offset = 0.42;
 
             if (minDist === distBack) {
               targetPos.z = backWallZ + offset;
-              activeSelectedObject.rotation.y = 0;
+              activeSelectedObject.rotation.y = isTub ? Math.PI : 0;
               activeSelectedObject.userData.attachedWall = 'back';
             } else if (minDist === distLeft) {
               targetPos.x = leftWallX + offset;
-              activeSelectedObject.rotation.y = Math.PI / 2;
+              activeSelectedObject.rotation.y = isTub ? -Math.PI / 2 : Math.PI / 2;
               activeSelectedObject.userData.attachedWall = 'left';
             } else if (minDist === distRight) {
               targetPos.x = rightWallX - offset;
-              activeSelectedObject.rotation.y = -Math.PI / 2;
+              activeSelectedObject.rotation.y = isTub ? Math.PI / 2 : -Math.PI / 2;
               activeSelectedObject.userData.attachedWall = 'right';
             } else if (minDist === distFront) {
               targetPos.z = frontWallZ - offset;
-              activeSelectedObject.rotation.y = Math.PI;
+              activeSelectedObject.rotation.y = isTub ? 0 : Math.PI;
               activeSelectedObject.userData.attachedWall = 'front';
             }
           } else {
@@ -254,8 +263,27 @@
         targetPos.x = Math.max(-roomWidth / 2 + margin, Math.min(roomWidth / 2 - margin, targetPos.x));
         targetPos.z = Math.max(-roomDepth / 2 + margin, Math.min(roomDepth / 2 - margin, targetPos.z));
 
+        const prevX = activeSelectedObject.position.x;
+        const prevZ = activeSelectedObject.position.z;
+        const dx = targetPos.x - prevX;
+        const dz = targetPos.z - prevZ;
+
         activeSelectedObject.position.x = targetPos.x;
         activeSelectedObject.position.z = targetPos.z;
+
+        // Synchronously move hosted faucet and mirror when vanity is dragged
+        if (activeSelectedObject.userData && activeSelectedObject.userData.category === 'vanities') {
+          placedProducts.forEach(p => {
+            if (p !== activeSelectedObject && p.userData) {
+              const isChild = (p.userData.category === 'faucets' || p.userData.category === 'mirrors') &&
+                              Math.hypot(p.position.x - prevX, p.position.z - prevZ) < 0.60;
+              if (isChild) {
+                p.position.x += dx;
+                p.position.z += dz;
+              }
+            }
+          });
+        }
 
         const helper = scene.getObjectByName('selection-helper');
         if (helper) helper.update();
