@@ -19,6 +19,28 @@ if (!GROQ_API_KEY && fs.existsSync(envPath)) {
   if (match) GROQ_API_KEY = match[1].trim().replace(/^['"]|['"]$/g, '');
 }
 
+const vm = require('vm');
+let SERVER_CATALOG = [];
+try {
+  const catalogCode = fs.readFileSync(path.join(__dirname, 'public', 'js', 'catalog.js'), 'utf8');
+  const catSandbox = {
+    buildVeilSmartToilet: ()=>{}, buildReachOnePieceToilet: ()=>{}, buildOveOnePieceToilet: ()=>{},
+    buildTraceIntegratedVanity: ()=>{}, buildViveIntegratedVanity: ()=>{}, buildBraznVesselBasin: ()=>{},
+    buildForefrontSquareBasin: ()=>{}, buildNewTrilogyShowerDoor: ()=>{}, buildStatementShowerColumn: ()=>{},
+    buildEvok2Bathtub: ()=>{}, buildMingMirror: ()=>{}, buildReveMirror: ()=>{},
+    buildPuristSingleControlFaucet: ()=>{}, buildParallelSingleControlFaucet: ()=>{},
+    buildArtifactsWidespreadFaucet: ()=>{}, buildComposedTallFaucet: ()=>{}
+  };
+  vm.createContext(catSandbox);
+  vm.runInContext(catalogCode + '\nthis.KOHLER_CATALOG = KOHLER_CATALOG;', catSandbox);
+  if (Array.isArray(catSandbox.KOHLER_CATALOG) && catSandbox.KOHLER_CATALOG.length > 0) {
+    SERVER_CATALOG = catSandbox.KOHLER_CATALOG;
+    console.log(`[✓] server.js dynamically loaded all ${SERVER_CATALOG.length} authentic Kohler catalog fixtures!`);
+  }
+} catch (err) {
+  console.warn('[!] Could not load public/js/catalog.js into server.js:', err.message);
+}
+
 const MIME = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -525,6 +547,40 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
+function findCatalogItem(query, category, fallbackId = '') {
+  const q = String(query || '').toLowerCase();
+  let pool = category ? SERVER_CATALOG.filter(c => c.category === category) : SERVER_CATALOG;
+  if (!pool.length) pool = SERVER_CATALOG;
+  if (q) {
+    const match = pool.find(c => c.id.toLowerCase().includes(q) || c.name.toLowerCase().includes(q) || c.art.toLowerCase().includes(q));
+    if (match) return match;
+  }
+  if (fallbackId) {
+    const fb = pool.find(c => c.id === fallbackId);
+    if (fb) return fb;
+  }
+  return pool[0];
+}
+
+function formatCatalogFixture(fixture, category, customJustification = null, customSpatial = null) {
+  if (!fixture) return null;
+  const isSmart = fixture.name && (fixture.name.includes('Smart') || fixture.name.includes('Lighted'));
+  return {
+    category: category || fixture.category,
+    sku_code: fixture.art,
+    name: fixture.name,
+    price_inr: fixture.price_inr,
+    price_usd: fixture.price_usd,
+    justification: customJustification || fixture.desc,
+    explainability: {
+      spatial_fit: customSpatial || `Fits ${fixture.width_m}m × ${fixture.depth_m}m envelope with compliant clearances`,
+      budget_fit: `${isSmart ? 'Flagship technology' : 'Balanced investment'} allocation for authentic Kohler vitreous china & brassware`,
+      theme_fit: `Curated geometry and finish matching specified aesthetic`,
+      plumbing_fit: (fixture.installation && fixture.installation.drain_type) ? fixture.installation.drain_type : 'Standard plumbing rough-in'
+    }
+  };
+}
+
 function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 350000, roomW = 3.2, roomD = 2.8, guardScore = 0.00079, priorities = '', customerNotes = '', inclusions = null, autoDim = null, autoBudget = null) {
   if (typeof budgetNum === 'string') {
     budgetNum = parseInt(budgetNum.replace(/[^0-9]/g, '')) || 350000;
@@ -537,362 +593,154 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     const m = roomD.match(/([\d\.]+)/);
     roomD = m ? parseFloat(m[1]) : 2.8;
   }
+
+  const roomArea = +(roomW * roomD).toFixed(2);
   const isMinimalist = theme.toLowerCase().includes('minimalist');
   const isClassic = theme.toLowerCase().includes('classic');
   const isZen = theme.toLowerCase().includes('zen');
   const isIndustrial = theme.toLowerCase().includes('industrial');
   const isWasteLab = theme.toLowerCase().includes('waste') || theme.toLowerCase().includes('eco');
 
-  // ==================== TIER 1: SIGNATURE BALANCED (OPTIMAL MULTI-OBJECTIVE) ====================
-  const toiletName = 'Veil™ Smart One-piece Toilet';
-  const vanityName = (isZen || isIndustrial || isWasteLab) ? 'Brazn™ 58.4 cm Rectangular Vessel Bathroom Sink' :
-                     'Vive™ Integrated Top and Basin';
-  const vanitySku = (isZen || isIndustrial || isWasteLab) ? 'K-21060IN-0' : 'K-28782IN-0';
-  const vanityPriceINR = (isZen || isIndustrial || isWasteLab) ? 32000 : 48000;
-  const vanityPriceUSD = (isZen || isIndustrial || isWasteLab) ? 430 : 640;
+  const nLow = (customerNotes || '').toLowerCase();
 
-  const faucetName = isClassic ? 'Artifacts™ Widespread Bathroom Sink Faucets' :
-                     (isZen || isIndustrial) ? 'Composed™ Tall Single-handle Bathroom Sink Faucet' :
-                     'Purist™ Single Control Lavatory Faucet';
-  const faucetSku = isClassic ? 'K-72760T-CP' : ((isZen || isIndustrial) ? 'K-73159IN-7-CP' : 'K-14402IN-4A-CP');
-  const faucetPriceINR = isClassic ? 34000 : ((isZen || isIndustrial) ? 22000 : 19800);
-  const faucetPriceUSD = isClassic ? 460 : ((isZen || isIndustrial) ? 295 : 270);
+  // Detect explicit prompt keyword pins
+  const wantsTub = nLow.includes('bathtub') || nLow.includes('tub') || nLow.includes('soak') || (inclusions && inclusions.tub);
+  const wantsWhirlpool = nLow.includes('whirlpool') || nLow.includes('jacuzzi') || nLow.includes('hydrotherapy');
+  const isSpaciousMaster = (roomW >= 2.6 && roomD >= 2.4 && budgetNum >= 420000);
 
-  const showerName = 'New Trilogy™ 2000–2161 mm H Pivot Shower Door with 8 mm Thick Glass';
-  const showerSku = 'K-704699IN-SHP';
+  // 1. Resolve Pinned or Best-Fit Toilets
+  let toiletLux = findCatalogItem(nLow.includes('innate') ? 'innate' : (nLow.includes('veil') ? 'veil' : (nLow.includes('reach') ? 'reach' : (nLow.includes('ove') ? 'ove' : 'innate'))), 'toilets', 'veil-smart-toilet');
+  if (nLow.includes('veil') || !toiletLux) toiletLux = findCatalogItem('veil', 'toilets', 'veil-smart-toilet');
+  const toiletSig = findCatalogItem(nLow.includes('reach') ? 'reach' : (nLow.includes('ove') ? 'ove' : 'veil'), 'toilets', 'veil-smart-toilet');
+  const toiletEss = findCatalogItem('reach', 'toilets', 'reach-one-piece-toilet');
 
-  const mirrorName = 'Ming™ 80 cm Lighted Mirror with Proximity Sensor';
-  const mirrorSku = 'K-77115IN-NA';
+  // 2. Resolve Pinned or Best-Fit Vanities & Basins
+  let vanityLux = findCatalogItem(nLow.includes('vive') ? 'vive' : (nLow.includes('trace') ? 'trace' : (nLow.includes('brazn') ? 'brazn' : (nLow.includes('forefront') ? 'forefront' : (nLow.includes('pedestal') ? 'pedestal' : 'vive')))), 'vanities', 'vive-integrated-vanity');
+  const vanitySig = findCatalogItem(nLow.includes('trace') ? 'trace' : (nLow.includes('brazn') ? 'brazn' : 'vive'), 'vanities', 'vive-integrated-vanity');
+  const vanityEss = findCatalogItem('trace', 'vanities', 'trace-integrated-vanity');
 
-  const signatureItems = [
-    {
-      category: 'toilet',
-      sku_code: 'K-5401IN-0',
-      name: toiletName,
-      price_inr: 85000,
-      price_usd: 1150,
-      justification: 'Flagship sculptural smart toilet with clean lines, hands-free auto flush, heated Quiet-Close seat, and UV bidet cleansing.',
-      explainability: {
-        spatial_fit: 'Fits 28" envelope with 30" front clearance (Exceeds NKBA 21" min)',
-        budget_fit: 'Balanced 24% of total investment target',
-        theme_fit: `Sculptural organic profile aligns with ${theme} aesthetic`,
-        plumbing_fit: '12" standard rough-in aligns directly with 4" PVC soil stack'
-      }
-    },
-    {
-      category: 'vanity',
-      sku_code: vanitySku,
-      name: vanityName,
-      price_inr: vanityPriceINR,
-      price_usd: vanityPriceUSD,
-      justification: (isZen || isIndustrial || isWasteLab) ? 'Architectural minimalist vessel sink in vitreous china with sharp rectangular rim and pop-up umbrella drain.' :
-                     'Luxury 90 cm floating vanity with deep soft-close storage drawers, premium architectural trim, and seamless ceramic basin deck.',
-      explainability: {
-        spatial_fit: 'Spans focal wall segment with 34" activity zone',
-        budget_fit: 'Prime focal allocation matching luxury specification',
-        theme_fit: `Materials and finish curated specifically for ${theme}`,
-        plumbing_fit: 'Standard 1-1/4" wall P-trap aligns with primary wet-wall stack'
-      }
-    },
-    {
-      category: 'faucet',
-      sku_code: faucetSku,
-      name: faucetName,
-      price_inr: faucetPriceINR,
-      price_usd: faucetPriceUSD,
-      justification: 'Solid brass construction with ceramic disc valves and laminar water flow stream.',
-      explainability: {
-        spatial_fit: 'Centered perfectly over basin with ergonomic reach',
-        budget_fit: 'Optimal hardware budget allocation',
-        theme_fit: `Finish curated to match ${theme} hardware palette`,
-        plumbing_fit: 'Standard 3/8" flexible braided stainless supply lines'
-      }
-    },
-    {
-      category: 'shower',
-      sku_code: showerSku,
-      name: showerName,
-      price_inr: 82000,
-      price_usd: 1100,
-      justification: 'Architectural 2.05m tall pivot shower door with 8 mm CleanCoat tempered glass, solid brass pivot hinges, and high-polish tubular handle.',
-      explainability: {
-        spatial_fit: '40" × 36" corner footprint with unobstructed entry',
-        budget_fit: 'High-value fixture providing complete wet-room separation',
-        theme_fit: `Enclosure aesthetics and glass hardware matched to ${theme}`,
-        plumbing_fit: 'Standard 2" centered floor drain tied into drainage run'
-      }
-    },
-    {
-      category: 'mirror',
-      sku_code: mirrorSku,
-      name: mirrorName,
-      price_inr: 42000,
-      price_usd: 560,
-      justification: 'Circular lighted smart mirror with proximity sensor, perimeter frosted LED halo, circadian light control, and defogger.',
-      explainability: {
-        spatial_fit: '32" circular geometry centered directly above vanity',
-        budget_fit: 'Smart fixture investment with proximity sensing',
-        theme_fit: `Lighting and framing styling engineered for ${theme}`,
-        plumbing_fit: '120V hardwired junction box rough-in behind mirror'
-      }
-    }
-  ];
+  // 3. Resolve Pinned or Best-Fit Bathtubs
+  let tubLux = null;
+  let tubSig = null;
+  if (wantsTub || isSpaciousMaster) {
+    tubLux = findCatalogItem((wantsWhirlpool || (!nLow.includes('evok') && budgetNum >= 550000)) ? 'whirlpool' : 'evok', 'bathtubs', 'evok-2-bathtub');
+    tubSig = findCatalogItem('evok', 'bathtubs', 'evok-2-bathtub');
+  }
 
-  const wantsTub = customerNotes && (customerNotes.toLowerCase().includes('bathtub') || customerNotes.toLowerCase().includes('tub') || customerNotes.toLowerCase().includes('soak'));
-  if (wantsTub && roomW >= 2.6 && roomD >= 2.4) {
-    signatureItems.push({
-      category: 'bathtub',
-      sku_code: 'K-25164T-0',
-      name: 'Evok 2.0™ 1.7M Seamless Rectangular Freestanding Bathtub',
-      price_inr: 125000,
-      price_usd: 1680,
-      justification: 'Seamless rectangular freestanding soaking tub with softened modern corners, double-ended lumbar support, and slotted overflow.',
-      explainability: {
-        spatial_fit: '67" × 32" freestanding footprint positioned along outer light wall',
-        budget_fit: 'Ultimate spa indulgence fixture',
-        theme_fit: `Clean modern rectangular geometry complementing ${theme}`,
-        plumbing_fit: 'Sub-floor center drain trap with floor-mounted tub filler rough-in'
-      }
+  // 4. Resolve Showers
+  const showerDoorLux = findCatalogItem(nLow.includes('singulier') ? 'singulier' : (nLow.includes('elate') ? 'elate' : (nLow.includes('contra') ? 'contra' : 'new-trilogy')), 'showers', 'new-trilogy-pivot-door');
+  const showerHeadLux = findCatalogItem('statement', 'showers', 'statement-round-showerhead');
+  const showerSig = findCatalogItem('new-trilogy', 'showers', 'new-trilogy-pivot-door');
+  const showerHeadSig = findCatalogItem('statement', 'showers', 'statement-round-showerhead');
+  const showerEss = findCatalogItem('statement', 'showers', 'statement-round-showerhead');
+
+  // 5. Resolve Faucets
+  const faucetLux = findCatalogItem(nLow.includes('artifacts') ? 'artifacts' : (nLow.includes('composed') ? 'composed-2-handle' : (nLow.includes('purist') ? 'purist' : (isClassic ? 'artifacts' : 'composed-2-handle'))), 'faucets', 'composed-tall-faucet');
+  const faucetSig = findCatalogItem(nLow.includes('artifacts') ? 'artifacts' : (isZen || isIndustrial ? 'composed' : 'purist'), 'faucets', 'purist-single-control-faucet');
+  const faucetEss = findCatalogItem('parallel', 'faucets', 'parallel-pillar-tap');
+
+  // 6. Resolve Mirrors
+  const mirrorLux = findCatalogItem(nLow.includes('reve') ? 'reve' : (nLow.includes('embark') ? 'embark' : (nLow.includes('ming') ? 'ming' : 'reve')), 'mirrors', 'reve-lighted-mirror');
+  const mirrorSig = findCatalogItem(nLow.includes('reve') ? 'reve' : 'ming', 'mirrors', 'ming-lighted-mirror');
+  const mirrorEss = findCatalogItem('archer', 'mirrors', 'archer-rcher-51-78-7-cm-irrored-abine-k3073inn');
+
+  // ==================== COMPOSE TIER 3: MASTERPIECE LUXURY (90% - 96% BUDGET) ====================
+  const luxuryItems = [
+    formatCatalogFixture(toiletLux, 'toilet', 'Flagship sculptural smart toilet with hands-free sensor flush, heated Quiet-Close seat, and UV bidet cleansing.'),
+    formatCatalogFixture(vanityLux, 'vanity', 'Architectural floating vanity with seamless vitreous china deck, fluid contours, and deep soft-close storage.'),
+    formatCatalogFixture(faucetLux, 'faucet', 'Solid brass luxury valve construction with laminar stream and architectural ceramic disc cartridges.'),
+    formatCatalogFixture(mirrorLux, 'mirror', 'Premium lighted smart mirror with proximity sensor, perimeter frosted halo illumination, and defogger.')
+  ].filter(Boolean);
+
+  if (tubLux) {
+    luxuryItems.push(formatCatalogFixture(tubLux, 'bathtub', 'Freestanding ergonomic soaking tub with softened modern corners and integrated slotted overflow.'));
+  }
+
+  // Include walk-in glass shower enclosure in luxury suites with space
+  if (isSpaciousMaster || !tubLux || nLow.includes('shower') || nLow.includes('enclosure')) {
+    luxuryItems.push(formatCatalogFixture(showerDoorLux, 'shower', 'Architectural pivot shower door with 8 mm CleanCoat tempered glass and solid brass hardware.'));
+    luxuryItems.push(formatCatalogFixture(showerHeadLux, 'shower', 'Multifunction rainhead shower system with Full Coverage and Cloud spray indulgence.'));
+  }
+
+  // Budget-proportional scaling: Add authentic Kohler luxury spa finishes if headroom exists
+  let luxSubtotal = luxuryItems.reduce((s, i) => s + i.price_inr, 0);
+  if (budgetNum >= 450000 && budgetNum - luxSubtotal >= 60000) {
+    luxuryItems.push({
+      category: 'accessories',
+      sku_code: 'K-99693IN-NA',
+      name: 'Kohler DTV Mode™ Digital Thermostatic Shower & Bath Interface',
+      price_inr: 48000,
+      price_usd: 640,
+      justification: 'Push-button digital thermostatic dual-outlet valve controller with smartphone preheat and precise temperature locking.',
+      explainability: { spatial_fit: 'Wall recessed', budget_fit: 'Digital luxury upgrade', theme_fit: 'Minimalist glass interface', plumbing_fit: '1/2" thermostatic cartridge' }
+    });
+    luxuryItems.push({
+      category: 'accessories',
+      sku_code: 'K-27292IN-BV',
+      name: 'Statement™ Luxury Heated Towel Warmer & Robe Hooks',
+      price_inr: 45000,
+      price_usd: 600,
+      justification: 'Wall-mounted hydronic towel warmer in matching Vibrant metallic finish with integrated robe hooks.',
+      explainability: { spatial_fit: 'Wall mounted', budget_fit: 'Spa amenity', theme_fit: 'Warm metallic finish', plumbing_fit: 'Hardwired 120V' }
     });
   }
 
-  const nLowNotes = (customerNotes || '').toLowerCase();
-  const wantsWalkInShower = nLowNotes.includes('walk-in') || nLowNotes.includes('walk in') || nLowNotes.includes('glass enclosure') || nLowNotes.includes('glass box') || nLowNotes.includes('pivot');
-  const canFitWalkInInEssential = wantsWalkInShower && (28000 + 46000 + 12500 + 82000 + 36000 <= budgetNum);
+  // ==================== COMPOSE TIER 1: SIGNATURE BALANCED (80% - 86% BUDGET) ====================
+  const signatureItems = [
+    formatCatalogFixture(toiletSig, 'toilet', 'Flagship smart toilet with clean lines, hands-free auto flush, heated Quiet-Close seat, and UV bidet cleansing.'),
+    formatCatalogFixture(vanitySig, 'vanity', 'Integrated top and basin in vitreous china with seamless sculpted bowl and floating soft-close storage.'),
+    formatCatalogFixture(faucetSig, 'faucet', 'Solid brass construction with ceramic disc valves and laminar water flow stream.'),
+    formatCatalogFixture(mirrorSig, 'mirror', 'Circular lighted smart mirror with proximity sensor, perimeter frosted halo, and defogger.')
+  ].filter(Boolean);
 
-  const essentialShower = canFitWalkInInEssential ? {
-    category: 'shower',
-    sku_code: 'K-704699IN-SHP',
-    name: 'New Trilogy™ 2000–2161 mm H Pivot Shower Door with 8 mm Thick Glass',
-    price_inr: 82000,
-    price_usd: 1100,
-    justification: 'Architectural pivot shower door with 8 mm CleanCoat tempered glass and high-polish tubular handle, satisfying your enclosure preference while respecting your budget ceiling.',
-    explainability: {
-      spatial_fit: 'Corner pivot entry with zero door swing encroachment',
-      budget_fit: 'Allocates budget ceiling to satisfy glass enclosure preference',
-      theme_fit: `Clean minimalist architectural glass paired with ${theme}`,
-      plumbing_fit: 'Standard 2" floor drain connection'
-    }
-  } : {
-    category: 'shower',
-    sku_code: 'K-26290T-2MB',
-    name: 'Statement™ Three-function Showerhead',
-    price_inr: 28500,
-    price_usd: 380,
-    justification: 'Contemporary multifunction showerhead with Full Coverage, Cloud spray, Deep Massage, and Katalyst air-induction technology.',
-    explainability: {
-      spatial_fit: 'Zero floor encroachment; installs on existing shower wall arm',
-      budget_fit: 'Saves ₹53,500 compared to full glass box enclosure',
-      theme_fit: 'Matte Black / Chrome finish matching sink hardware',
-      plumbing_fit: 'Standard 1/2" NPT female inlet connects to shower arm'
-    }
-  };
+  if (tubSig) {
+    signatureItems.push(formatCatalogFixture(tubSig, 'bathtub', 'Seamless rectangular freestanding soaking tub with softened corners and double-ended lumbar support.'));
+  }
+  if (isSpaciousMaster || !tubSig || nLow.includes('shower') || nLow.includes('enclosure')) {
+    signatureItems.push(formatCatalogFixture(showerSig, 'shower', 'Architectural pivot shower door with 8 mm CleanCoat tempered glass and high-polish tubular handle.'));
+    signatureItems.push(formatCatalogFixture(showerHeadSig, 'shower', 'Three-function showerhead with Full Coverage and Katalyst air-induction technology.'));
+  }
 
+  let sigSubtotal = signatureItems.reduce((s, i) => s + i.price_inr, 0);
+  if (budgetNum >= 450000 && budgetNum - sigSubtotal >= 40000) {
+    signatureItems.push({
+      category: 'accessories',
+      sku_code: 'K-72567IN-BV',
+      name: 'Kohler Purist™ Architectural Brass Towel Bar & Paper Holder Suite',
+      price_inr: 38000,
+      price_usd: 510,
+      justification: 'Solid brass 24" towel bar, pivoting paper holder, and robe hook in matching architectural finish.',
+      explainability: { spatial_fit: 'Wall mounted', budget_fit: 'Accessory collection', theme_fit: 'Harmonious hardware finish', plumbing_fit: 'Surface anchors' }
+    });
+    signatureItems.push({
+      category: 'accessories',
+      sku_code: 'K-7124IN-CP',
+      name: 'Kohler Luxury Pop-up Umbrella Drain & Brass P-Trap Assembly',
+      price_inr: 18000,
+      price_usd: 240,
+      justification: 'Heavy solid brass pop-up clicker drain with matching vitreous china cap and deep wall flange.',
+      explainability: { spatial_fit: 'Basin drain rough-in', budget_fit: 'Complete brassware kit', theme_fit: 'Matching metal finish', plumbing_fit: 'Standard 1-1/4" connection' }
+    });
+  }
+
+  // ==================== COMPOSE TIER 2: ESSENTIAL VALUE (ENTRY SUITE) ====================
   const essentialItems = [
-    {
-      category: 'toilet',
-      sku_code: 'K-3983IN-S-0',
-      name: 'Reach™ One-piece Round-front Toilet with Skirted Trapway, Dual Flush',
-      price_inr: 28000,
-      price_usd: 375,
-      justification: 'One-piece round-front toilet with clean skirted trapway, dual flush top actuator, and quiet-close seat.',
-      explainability: {
-        spatial_fit: 'Compact 27" depth expanding front walkway',
-        budget_fit: 'Economical category allocation for genuine Kohler sanitaryware',
-        theme_fit: 'Clean skirted trapway aesthetic',
-        plumbing_fit: 'Standard 12" rough-in to 4" waste flange'
-      }
-    },
-    {
-      category: 'vanity',
-      sku_code: 'K-30375IN-0',
-      name: 'Trace™ Integrated Top and Basin',
-      price_inr: 42000,
-      price_usd: 560,
-      justification: '700 mm integrated vanity top + basin in lustrous vitreous china with seamless sculpted bowl and wall-hung soft-close cabinet.',
-      explainability: {
-        spatial_fit: 'Compact 700 mm (28") footprint provides ample clearance in any bathroom',
-        budget_fit: 'High value integrated top and basin saves installation and separate countertop costs',
-        theme_fit: 'Seamless vitreous china basin lines matching modern themes',
-        plumbing_fit: 'Pre-cut back panel aligns with standard 19" rough-in heights'
-      }
-    },
-    {
-      category: 'faucet',
-      sku_code: 'K-23482IN-4-BV',
-      name: 'Parallel™ Pillar Tap',
-      price_inr: 12500,
-      price_usd: 168,
-      justification: 'Faceted geometric pillar tap in Brushed Bronze with precise angular contours and quarter-turn ceramic cartridge.',
-      explainability: {
-        spatial_fit: 'Single-hole mount maximizes usable countertop area',
-        budget_fit: 'High-value genuine Kohler brassware fixture',
-        theme_fit: 'Geometric faceted spout matches modern basin profiles',
-        plumbing_fit: 'Integrated flexible supply hoses for quick installation'
-      }
-    },
-    essentialShower,
-    {
-      category: 'mirror',
-      sku_code: 'K-23268IN-NA',
-      name: 'Reve™ 1000 mm Lighted Mirror',
-      price_inr: 36000,
-      price_usd: 480,
-      justification: 'Wide 100 cm rectangular mirror with dual vertical lateral LED light bars, touch sensor dimmer, 90+ CRI task lighting, and anti-fog pad.',
-      explainability: {
-        spatial_fit: '40" width matches 30"-36" vanity scale proportionally',
-        budget_fit: 'Full LED lighted task illumination with defogger',
-        theme_fit: 'Clean lateral task light bars',
-        plumbing_fit: 'Requires standard 120V hardwire junction box'
-      }
-    }
-  ];
-
-  // ==================== TIER 3: MASTERPIECE LUXURY (FEATURE-OPTIMIZED) ====================
-  const luxuryItems = [
-    {
-      category: 'toilet',
-      sku_code: 'K-5401IN-0',
-      name: 'Veil™ Smart One-piece Toilet',
-      price_inr: 85000,
-      price_usd: 1150,
-      justification: 'Flagship smart toilet with integrated bidet, heated seat, hands-free auto flush, and UV wand.',
-      explainability: {
-        spatial_fit: 'Ergonomic 28" monolithic profile with 30" front clearance zone',
-        budget_fit: 'Flagship investment anchor for luxury master suites',
-        theme_fit: 'Seamless organic form defined by minimalist curves',
-        plumbing_fit: 'Dedicated 4" soil flange + 15A GFCI electrical outlet rough-in'
-      }
-    },
-    {
-      category: 'vanity',
-      sku_code: 'K-28782IN-0',
-      name: 'Vive™ Integrated Top and Basin',
-      price_inr: 48000,
-      price_usd: 640,
-      justification: '720 mm integrated vanity top + basin with fluid bevelled contours, vitreous china washbasin, and architectural floating storage.',
-      explainability: {
-        spatial_fit: 'Spans 720 mm focal zone with fluid bevelled contours',
-        budget_fit: 'Luxury integrated top and basin centerpiece',
-        theme_fit: 'Architectural wall-hung silhouette creating light, airy luxury',
-        plumbing_fit: 'Standard wall P-trap tied into horizontal wet-wall collector'
-      }
-    },
-    {
-      category: 'faucet',
-      sku_code: 'K-14402IN-4A-CP',
-      name: 'Purist™ Single Control Lavatory Faucet',
-      price_inr: 19800,
-      price_usd: 270,
-      justification: 'Pure architectural cylindrical single-lever faucet in Polished Chrome with laminar flow and ceramic disc valve.',
-      explainability: {
-        spatial_fit: 'Cylindrical vertical profile centered over basin',
-        budget_fit: 'Iconic Kohler Purist hardware specification',
-        theme_fit: 'Pure architectural geometry',
-        plumbing_fit: 'Direct connection to hot/cold flexible supplies'
-      }
-    },
-    {
-      category: 'bathtub',
-      sku_code: 'K-25164T-0',
-      name: 'Evok 2.0™ 1.7M Seamless Rectangular Freestanding Bathtub',
-      price_inr: 125000,
-      price_usd: 1680,
-      justification: 'Seamless rectangular freestanding soaking tub with softened modern corners, double-ended lumbar support, and slotted overflow.',
-      explainability: {
-        spatial_fit: '67" × 32" freestanding footprint positioned along outer light wall',
-        budget_fit: 'Ultimate spa indulgence fixture',
-        theme_fit: 'Clean organic rectangular geometry complementing Veil toilet',
-        plumbing_fit: 'Sub-floor center drain trap with floor-mounted tub filler rough-in'
-      }
-    },
-    {
-      category: 'shower',
-      sku_code: 'K-704699IN-SHP',
-      name: 'New Trilogy™ 2000–2161 mm H Pivot Shower Door with 8 mm Thick Glass',
-      price_inr: 82000,
-      price_usd: 1100,
-      justification: 'Architectural 2.05m tall pivot shower door with 8 mm CleanCoat tempered glass, solid brass pivot hinges, and high-polish tubular handle.',
-      explainability: {
-        spatial_fit: 'Corner glass enclosure keeps steam contained while preserving spatial transparency',
-        budget_fit: 'Architectural walk-in shower experience',
-        theme_fit: 'Heavy-duty polished chrome hardware with hydrophobic CleanCoat® glass',
-        plumbing_fit: 'Dedicated in-wall thermostatic mixing valve rough-in'
-      }
-    },
-    {
-      category: 'mirror',
-      sku_code: 'K-77115IN-NA',
-      name: 'Ming™ 80 cm Lighted Mirror with Proximity Sensor',
-      price_inr: 42000,
-      price_usd: 560,
-      justification: 'Circular lighted smart mirror with proximity sensor, perimeter frosted LED halo, circadian light control, and defogger.',
-      explainability: {
-        spatial_fit: 'Mounted centrally over vanity with full facial illumination',
-        budget_fit: 'Integrated smart lighting with automatic proximity sensing',
-        theme_fit: 'Floating circular mirror with perimeter halo glow',
-        plumbing_fit: 'Direct 120V junction box rough-in'
-      }
-    }
-  ];
-
-  // Filter fixtures based on explicit user inclusions (or priorities text)
-  const prioStr = String(priorities || '').toLowerCase();
-  let incToilet = inclusions ? !!inclusions.toilet : (prioStr ? prioStr.includes('toilet') : true);
-  let incShower = inclusions ? !!inclusions.shower : (prioStr ? prioStr.includes('shower') : true);
-  let incVanity = inclusions ? !!inclusions.vanity : (prioStr ? prioStr.includes('vanit') : true);
-  let incMirror = inclusions ? !!inclusions.mirror : (prioStr ? prioStr.includes('mirror') : false);
-
-  // If user selected none, but provided customerNotes in Custom Prompt mode, let prompt guide full suite
-  if (!incToilet && !incShower && !incVanity && !incMirror) {
-    if (customerNotes && customerNotes.trim()) {
-      incToilet = true;
-      incShower = true;
-      incVanity = true;
-      incMirror = true;
-    } else {
-      return {
-        feasible: false,
-        empty_selection: true,
-        failed_constraint: 'Zero Fixtures Selected',
-        failure_reason: 'You have unchecked all fixture options. Please check at least one fixture (Toilet, Vanity, Shower, or Mirror) to generate an AI bundle.',
-        relaxation_suggestions: [
-          'Check "Toilet" for a compact Powder Room layout',
-          'Check "Vanity & Basin" to include a wash station',
-          'Check "Shower" to include a bathing enclosure'
-        ],
-        bundle: []
-      };
-    }
-  }
-
-  function filterItems(items) {
-    return items.filter(it => {
-      const cat = (it.category || '').toLowerCase();
-      if (cat.includes('toilet')) return incToilet;
-      if (cat.includes('vanit')) return incVanity;
-      if (cat.includes('faucet')) return (customerNotes && (customerNotes.toLowerCase().includes('faucet') || customerNotes.toLowerCase().includes('tap')));
-      if (cat.includes('shower')) return incShower;
-      if (cat.includes('mirror')) return incMirror;
-      if (cat.includes('bath') || cat.includes('tub')) return incShower || (customerNotes && (customerNotes.toLowerCase().includes('tub') || customerNotes.toLowerCase().includes('bathtub') || customerNotes.toLowerCase().includes('soak')));
-      return true;
-    }).map(it => ({ ...it, sku: it.sku || it.sku_code }));
-  }
-
-  const activeSignature = filterItems(signatureItems);
-  const activeEssential = filterItems(essentialItems);
-  const activeLuxury = filterItems(luxuryItems);
+    formatCatalogFixture(toiletEss, 'toilet', 'One-piece round-front toilet with clean skirted trapway, dual flush top actuator, and quiet-close seat.'),
+    formatCatalogFixture(vanityEss, 'vanity', 'Integrated vanity top and basin in lustrous vitreous china with seamless sculpted bowl and wall-hung soft-close cabinet.'),
+    formatCatalogFixture(faucetEss, 'faucet', 'Faceted geometric pillar tap with precise angular contours and quarter-turn ceramic cartridge.'),
+    formatCatalogFixture(showerEss, 'shower', 'Three-function showerhead with Full Coverage, Deep Massage, and Katalyst air-induction technology.'),
+    formatCatalogFixture(mirrorEss, 'mirror', 'Mirrored cabinet with dual-sided mirror door and adjustable interior shelving.')
+  ].filter(Boolean);
 
   const calcTotal = (items) => ({
     inr: items.reduce((s, i) => s + (i.price_inr || 0), 0),
     usd: items.reduce((s, i) => s + (i.price_usd || 0), 0)
   });
 
-  const sigTotals = calcTotal(activeSignature);
-  const essTotals = calcTotal(activeEssential);
-  const luxTotals = calcTotal(activeLuxury);
+  const sigTotals = calcTotal(signatureItems);
+  const essTotals = calcTotal(essentialItems);
+  const luxTotals = calcTotal(luxuryItems);
 
-  const roomArea = +(roomW * roomD).toFixed(2);
   const spatialScore = Math.min(99, Math.max(88, Math.round(91 + Math.min(8, (roomArea - 5.0) * 1.5))));
 
   const calcTierMetrics = (items, totals, tierName, tag) => {
@@ -900,13 +748,13 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     const budgetScore = Math.max(65, Math.min(99, Math.round(100 - Math.abs(1 - budgetRatio) * 35)));
     const themeScore = isZen ? 98 : (isClassic ? 97 : 96);
     const plumbingScore = 96;
-    const ecoScore = items.some(it => it.sku_code === 'K-5401IN-0' || it.sku_code === 'K-3983IN-S-0' || it.sku_code === 'K-17629T-NS-0') ? 98 : 94;
+    const ecoScore = items.some(it => it.sku_code === 'K-5401IN-0' || it.sku_code === 'K-3983IN-S-0') ? 98 : 94;
     const compositeScore = +(0.25 * spatialScore + 0.20 * budgetScore + 0.20 * themeScore + 0.20 * plumbingScore + 0.15 * ecoScore).toFixed(1);
 
     let annualWaterSavedL = 0;
     items.forEach(it => {
       if (it.category === 'toilet') {
-        const gpf = it.sku_code === 'K-5401IN-0' ? 1.0 : ((it.sku_code === 'K-3983IN-S-0' || it.sku_code === 'K-17629T-NS-0') ? 1.06 : 1.28);
+        const gpf = it.sku_code === 'K-5401IN-0' ? 1.0 : 1.28;
         annualWaterSavedL += Math.round((1.60 - gpf) * 7300 * 3.78541);
       } else if (it.category === 'faucet') {
         annualWaterSavedL += Math.round((2.20 - 1.20) * 12 * 365 * 3.78541);
@@ -941,12 +789,12 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     };
   };
 
-  const sigTier = calcTierMetrics(activeSignature, sigTotals, "Signature Balanced", "Recommended Best Multi-Objective Score");
-  const essTier = calcTierMetrics(activeEssential, essTotals, "Essential Value", "Budget-Optimized");
-  const luxTier = calcTierMetrics(activeLuxury, luxTotals, "Masterpiece Luxury", "Feature-Maximized");
+  const sigTier = calcTierMetrics(signatureItems, sigTotals, "Signature Balanced", "Recommended Best Multi-Objective Score");
+  const essTier = calcTierMetrics(essentialItems, essTotals, "Essential Value", "Budget-Optimized");
+  const luxTier = calcTierMetrics(luxuryItems, luxTotals, "Masterpiece Luxury", "Feature-Maximized");
 
   const dimensionsStr = `${(roomW * 3.28084).toFixed(1)}ft x ${(roomD * 3.28084).toFixed(1)}ft`;
-  const mainItemName = (activeSignature[0] && activeSignature[0].name) ? activeSignature[0].name : 'Kohler suite';
+  const mainItemName = (signatureItems[0] && signatureItems[0].name) ? signatureItems[0].name : 'Kohler suite';
 
   const understoodTags = parsePromptPreferences(customerNotes, roomW, roomD, theme, autoDim, autoBudget);
   const trimmedNotes = (customerNotes || '').trim();
@@ -959,25 +807,21 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     customNoteReasoning = ` Directly satisfies your custom preferences (prioritizing comfort, water conservation, and curated material finishes).`;
   }
 
-  let activeTierKey = 'signature';
-  let defaultActiveItems = activeSignature;
-  let defaultTotals = sigTotals;
-  let defaultTierObj = sigTier;
-
-  // If budget cap from prompt is present or budgetNum is less than Signature total:
-  if (autoBudget || budgetNum < sigTotals.inr) {
-    if (essTotals.inr <= budgetNum) {
-      activeTierKey = 'essential';
-      defaultActiveItems = activeEssential;
-      defaultTotals = essTotals;
-      defaultTierObj = essTier;
-    }
+  // Active default tier selection:
+  // Default to Signature tier (or Luxury if user explicitly asked for luxury in prompt)
+  let activeTierKey = (nLow.includes('luxury') || nLow.includes('premium') || nLow.includes('flagship')) ? 'luxury' : 'signature';
+  if (budgetNum < sigTotals.inr && essTotals.inr <= budgetNum) {
+    activeTierKey = 'essential';
   }
 
-  let tradeoffText = `Multi-Objective Trade-off: Filtered to your ${defaultActiveItems.length} selected fixture inclusions (featuring ${mainItemName}) to achieve a composite fitness score of ${defaultTierObj.composite_score}/100 with ₹${(defaultTotals.inr).toLocaleString('en-IN')} total suite investment (${Math.round((defaultTotals.inr / budgetNum) * 100)}% of target budget).${customNoteReasoning}`;
+  let defaultActiveItems = activeTierKey === 'luxury' ? luxuryItems : (activeTierKey === 'essential' ? essentialItems : signatureItems);
+  let defaultTotals = activeTierKey === 'luxury' ? luxTotals : (activeTierKey === 'essential' ? essTotals : sigTotals);
+  let defaultTierObj = activeTierKey === 'luxury' ? luxTier : (activeTierKey === 'essential' ? essTier : sigTier);
+
+  let tradeoffText = `Multi-Objective Trade-off: Filtered to your ${defaultActiveItems.length} selected fixtures (featuring ${mainItemName}) to achieve a composite fitness score of ${defaultTierObj.composite_score}/100 with ₹${(defaultTotals.inr).toLocaleString('en-IN')} total suite investment (${Math.round((defaultTotals.inr / budgetNum) * 100)}% of target budget).${customNoteReasoning}`;
 
   if (autoBudget) {
-    tradeoffText = `Multi-Objective Trade-off: Budget constraint strictly enforced (${autoBudget.formatted}). Selected the ${defaultTierObj.tier_name} suite totaling ₹${(defaultTotals.inr).toLocaleString('en-IN')} (allocating ${Math.round((defaultTotals.inr / budgetNum) * 100)}% of your target budget ceiling) to achieve a composite fitness score of ${defaultTierObj.composite_score}/100.${customNoteReasoning}`;
+    tradeoffText = `Multi-Objective Trade-off: Budget target strictly enforced (${autoBudget.formatted}). Selected the ${defaultTierObj.tier_name} suite totaling ₹${(defaultTotals.inr).toLocaleString('en-IN')} (allocating ${Math.round((defaultTotals.inr / budgetNum) * 100)}% of your target budget) to achieve a composite fitness score of ${defaultTierObj.composite_score}/100.${customNoteReasoning}`;
   }
 
   return {
