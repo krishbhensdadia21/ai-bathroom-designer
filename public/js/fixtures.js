@@ -1049,9 +1049,454 @@
       return g;
     }
 
-    // ==================== BACKWARD-COMPATIBILITY ALIASES ====================
+    
+    // ==================== EXPANDED PROCEDURAL BUILDERS (PRODUCTS 17 - 60) ====================
+
+    // 17. Leap™ Smart Toilet (K-28529IN-0)
+    function buildLeapSmartToilet() {
+      const g = new THREE.Group();
+      const bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.15, 0.42, 32), porcelainMat);
+      bowl.position.set(0, 0.21, 0.18);
+      bowl.scale.set(0.95, 1.0, 1.30);
+      bowl.castShadow = true;
+      g.add(bowl);
+
+      const seat = new THREE.Mesh(new THREE.CylinderGeometry(0.195, 0.195, 0.025, 32), porcelainMat);
+      seat.position.set(0, 0.43, 0.18);
+      seat.scale.set(0.95, 1.0, 1.30);
+      g.add(seat);
+
+      const consoleRear = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.19, 0.18), porcelainMat);
+      consoleRear.position.set(0, 0.35, -0.06);
+      g.add(consoleRear);
+
+      const nightlight = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.015, 0.015), new THREE.MeshBasicMaterial({ color: 0x38bdf8 }));
+      nightlight.position.set(0, 0.04, 0.32);
+      g.add(nightlight);
+
+      const remote = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.13, 0.012), chromeMat);
+      remote.position.set(0.36, 0.85, -0.01);
+      g.add(remote);
+      return g;
+    }
+
+    // 18. Innate™ Elongated Smart Toilet (K-29777IN-0)
+    function buildInnateSmartToilet() {
+      const g = new THREE.Group();
+      const bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.20, 0.16, 0.44, 36), porcelainMat);
+      bowl.position.set(0, 0.22, 0.22);
+      bowl.scale.set(0.90, 1.0, 1.48);
+      bowl.castShadow = true;
+      g.add(bowl);
+
+      const seat = new THREE.Mesh(new THREE.CylinderGeometry(0.205, 0.205, 0.025, 36), porcelainMat);
+      seat.position.set(0, 0.445, 0.22);
+      seat.scale.set(0.90, 1.0, 1.48);
+      g.add(seat);
+
+      const trimRing = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.005, 8, 32), chromeMat);
+      trimRing.rotation.x = Math.PI / 2;
+      trimRing.position.set(0, 0.435, 0.22);
+      trimRing.scale.set(0.90, 1.48, 1.0);
+      g.add(trimRing);
+
+      const consoleRear = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.22, 0.18), porcelainMat);
+      consoleRear.position.set(0, 0.35, -0.06);
+      g.add(consoleRear);
+
+      const remote = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.15, 0.012), chromeMat);
+      remote.position.set(0.38, 0.88, -0.01);
+      g.add(remote);
+      return g;
+    }
+
+    // 19 & 20. KOHLER VIVE® One-piece Toilet (K-33123IN-0 & K-33124IN-S-0)
+    function buildViveRoundToilet() {
+      const g = new THREE.Group();
+      const bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.185, 0.14, 0.42, 32), porcelainMat);
+      bowl.position.set(0, 0.21, 0.18);
+      bowl.scale.set(0.96, 1.0, 1.34);
+      bowl.castShadow = true;
+      g.add(bowl);
+
+      const skirt = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.34, 0.48), porcelainMat);
+      skirt.position.set(0, 0.17, 0.08);
+      g.add(skirt);
+
+      const tank = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.34, 0.18), porcelainMat);
+      tank.position.set(0, 0.56, -0.08);
+      tank.castShadow = true;
+      g.add(tank);
+
+      const dualBtn = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.024, 0.008, 16), chromeMat);
+      dualBtn.position.set(0, 0.734, -0.08);
+      g.add(dualBtn);
+
+      const seat = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.19, 0.024, 32), porcelainMat);
+      seat.position.set(0, 0.43, 0.18);
+      seat.scale.set(0.96, 1.0, 1.34);
+      g.add(seat);
+      return g;
+    }
+
+    // 21. Veil™ 16" Round Vessel Sink (K-20703-0)
+    function buildVeilRoundVesselSink(finish = 'white') {
+      const g = new THREE.Group();
+      const mat = (finish === 'black') ? matteBlackMat : porcelainMat;
+      const basin = new THREE.Mesh(new THREE.CylinderGeometry(0.20, 0.15, 0.13, 32, 1, true), mat);
+      basin.position.set(0, 0.065, 0);
+      basin.castShadow = true;
+      g.add(basin);
+
+      const bottom = new THREE.Mesh(new THREE.CircleGeometry(0.15, 32), mat);
+      bottom.rotation.x = -Math.PI / 2;
+      bottom.position.set(0, 0.002, 0);
+      g.add(bottom);
+
+      const drain = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.032, 0.008, 24), chromeMat);
+      drain.position.set(0, 0.006, 0);
+      g.add(drain);
+      return g;
+    }
+
+    // 22, 24, 27. Veil™ Oval Vessel Sinks (K-20705-0, K-20704-0, K-77171IN-0)
+    function buildVeilOvalVesselSink(finish = 'white', widthScale = 1.0) {
+      const g = new THREE.Group();
+      const mat = (finish === 'black') ? matteBlackMat : porcelainMat;
+      const basin = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.16, 0.14, 36, 1, true), mat);
+      basin.position.set(0, 0.07, 0);
+      basin.scale.set(1.35 * widthScale, 1.0, 0.95);
+      basin.castShadow = true;
+      g.add(basin);
+
+      const bottom = new THREE.Mesh(new THREE.CircleGeometry(0.16, 32), mat);
+      bottom.rotation.x = -Math.PI / 2;
+      bottom.scale.set(1.35 * widthScale, 0.95, 1.0);
+      bottom.position.set(0, 0.003, 0);
+      g.add(bottom);
+
+      const drain = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.032, 0.008, 24), chromeMat);
+      drain.position.set(0, 0.007, 0);
+      g.add(drain);
+      return g;
+    }
+
+    // 23. Veil™ Pedestal Basin (K-20702-0)
+    function buildVeilPedestalSink(finish = 'white') {
+      const g = new THREE.Group();
+      const mat = (finish === 'black') ? matteBlackMat : porcelainMat;
+      const pedestal = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.16, 0.72, 32), mat);
+      pedestal.position.set(0, 0.36, 0.08);
+      pedestal.castShadow = true;
+      g.add(pedestal);
+
+      const basin = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.15, 0.16, 36), mat);
+      basin.position.set(0, 0.78, 0.08);
+      basin.scale.set(0.96, 1.0, 1.15);
+      basin.castShadow = true;
+      g.add(basin);
+
+      const drain = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.032, 0.008, 24), chromeMat);
+      drain.position.set(0, 0.78, 0.08);
+      g.add(drain);
+      return g;
+    }
+
+    // 25. Ladena™ Semi-Recessed Basin (K-72907K-1-0)
+    function buildLadenaSemiRecessedSink(finish = 'white') {
+      const g = new THREE.Group();
+      const mat = (finish === 'black') ? matteBlackMat : porcelainMat;
+      const rim = new THREE.Mesh(new THREE.BoxGeometry(0.53, 0.04, 0.46), mat);
+      rim.position.set(0, 0.02, 0.05);
+      rim.castShadow = true;
+      g.add(rim);
+
+      const bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.15, 0.16, 28), mat);
+      bowl.position.set(0, -0.06, 0.05);
+      bowl.scale.set(1.15, 1.0, 0.90);
+      g.add(bowl);
+
+      const drain = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.006, 20), chromeMat);
+      drain.position.set(0, -0.13, 0.05);
+      g.add(drain);
+      return g;
+    }
+
+    // 28, 29, 34. Composed™ Wall-mount Faucets (K-73061T, K-73061IN, K-73067T)
+    function buildComposedWallMountFaucet(finish = 'chrome') {
+      const g = new THREE.Group();
+      const mat = (finish === 'gold') ? brushedBrassMat : (finish === 'black' ? matteBlackMat : chromeMat);
+      const plate = new THREE.Mesh(new THREE.BoxGeometry(0.23, 0.08, 0.015), mat);
+      plate.position.set(0, 0.04, 0);
+      plate.userData.role = 'faucet';
+      g.add(plate);
+
+      const spout = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.19, 16), mat);
+      spout.rotation.x = Math.PI / 2;
+      spout.position.set(0, 0.04, 0.095);
+      spout.userData.role = 'faucet';
+      g.add(spout);
+
+      const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.045, 16), mat);
+      handle.position.set(0.08, 0.04, 0.03);
+      handle.userData.role = 'faucet';
+      g.add(handle);
+      return g;
+    }
+
+    // 30, 31, 32, 33. Composed™ Single-handle Faucets (Deck Mount)
+    function buildComposedSingleFaucet(finish = 'chrome') {
+      const g = new THREE.Group();
+      const mat = (finish === 'gold') ? brushedBrassMat : (finish === 'black' ? matteBlackMat : chromeMat);
+      const base = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.01, 20), mat);
+      base.position.set(0, 0.005, 0);
+      base.userData.role = 'faucet';
+      g.add(base);
+
+      const tower = new THREE.Mesh(new THREE.BoxGeometry(0.038, 0.19, 0.038), mat);
+      tower.position.set(0, 0.10, 0);
+      tower.userData.role = 'faucet';
+      g.add(tower);
+
+      const spout = new THREE.Mesh(new THREE.BoxGeometry(0.032, 0.016, 0.14), mat);
+      spout.position.set(0, 0.18, 0.06);
+      spout.userData.role = 'faucet';
+      g.add(spout);
+
+      const lever = new THREE.Mesh(new THREE.BoxGeometry(0.024, 0.008, 0.075), mat);
+      lever.position.set(0, 0.20, -0.01);
+      lever.userData.role = 'faucet';
+      g.add(lever);
+      return g;
+    }
+
+    // 36, 37. Aleo™ Single-handle & Tall Faucets
+    function buildAleoFaucet(finish = 'gold') {
+      const g = new THREE.Group();
+      const mat = (finish === 'chrome') ? chromeMat : brushedBrassMat;
+      const column = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.026, 0.20, 20), mat);
+      column.position.set(0, 0.10, 0);
+      column.userData.role = 'faucet';
+      g.add(column);
+
+      const spout = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.12, 16), mat);
+      spout.rotation.x = Math.PI / 3;
+      spout.position.set(0, 0.17, 0.06);
+      spout.userData.role = 'faucet';
+      g.add(spout);
+
+      const lever = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.008, 0.07), mat);
+      lever.position.set(0, 0.205, -0.01);
+      lever.userData.role = 'faucet';
+      g.add(lever);
+      return g;
+    }
+
+    // 38. Hone™ Single Control Lav Faucet (K-22534IN-4-CP)
+    function buildHoneFaucet(finish = 'chrome') {
+      const g = new THREE.Group();
+      const mat = chromeMat;
+      const column = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.024, 0.16, 20), mat);
+      column.position.set(0, 0.08, 0);
+      column.userData.role = 'faucet';
+      g.add(column);
+
+      const spout = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.12, 16), mat);
+      spout.rotation.x = Math.PI / 2.8;
+      spout.position.set(0, 0.14, 0.05);
+      spout.userData.role = 'faucet';
+      g.add(spout);
+
+      const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.06, 16), mat);
+      handle.position.set(0, 0.17, -0.01);
+      handle.userData.role = 'faucet';
+      g.add(handle);
+      return g;
+    }
+
+    // 39. ModernLife Edge™ Tall Single-handle Faucet (K-25758IN-4ND-CP)
+    function buildModernLifeEdgeFaucet(finish = 'chrome') {
+      const g = new THREE.Group();
+      const mat = chromeMat;
+      const tower = new THREE.Mesh(new THREE.BoxGeometry(0.028, 0.29, 0.028), mat);
+      tower.position.set(0, 0.145, 0);
+      tower.userData.role = 'faucet';
+      g.add(tower);
+
+      const flatSpout = new THREE.Mesh(new THREE.BoxGeometry(0.026, 0.012, 0.16), mat);
+      flatSpout.position.set(0, 0.28, 0.075);
+      flatSpout.userData.role = 'faucet';
+      g.add(flatSpout);
+
+      const pinLever = new THREE.Mesh(new THREE.CylinderGeometry(0.005, 0.005, 0.05, 12), mat);
+      pinLever.position.set(0, 0.30, 0);
+      pinLever.userData.role = 'faucet';
+      g.add(pinLever);
+      return g;
+    }
+
+    // 40. Complementary™ Wall-mount Faucet Valve (K-5679IN-CP)
+    function buildWallMountValve(finish = 'chrome') {
+      const g = new THREE.Group();
+      const plate = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 0.012, 24), chromeMat);
+      plate.rotation.x = Math.PI / 2;
+      plate.position.set(0, 0.075, 0);
+      plate.userData.role = 'faucet';
+      g.add(plate);
+
+      const lever = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.07, 0.035), chromeMat);
+      lever.position.set(0, 0.075, 0.025);
+      lever.userData.role = 'faucet';
+      g.add(lever);
+      return g;
+    }
+
+    // 41, 44, 46, 47, 48. Sliding Shower Doors (Elate, Contra, New Levity)
+    function buildSlidingShowerDoor(finish = 'chrome') {
+      const g = new THREE.Group();
+      const mat = (finish === 'black') ? matteBlackMat : chromeMat;
+      const topRail = new THREE.Mesh(new THREE.BoxGeometry(1.20, 0.05, 0.04), mat);
+      topRail.position.set(0, 1.98, 0);
+      g.add(topRail);
+
+      const glass1 = new THREE.Mesh(new THREE.BoxGeometry(0.62, 1.94, 0.01), glassMat);
+      glass1.position.set(-0.29, 0.98, -0.015);
+      g.add(glass1);
+
+      const glass2 = new THREE.Mesh(new THREE.BoxGeometry(0.62, 1.94, 0.01), glassMat);
+      glass2.position.set(0.29, 0.98, 0.015);
+      g.add(glass2);
+
+      const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.40, 16), mat);
+      handle.position.set(0.10, 1.0, 0.035);
+      g.add(handle);
+      return g;
+    }
+
+    // 42, 43, 45, 49. Pivot Shower Doors (New Trilogy, Singulier)
+    function buildPivotShowerDoor(finish = 'chrome') {
+      const g = new THREE.Group();
+      const mat = (finish === 'black') ? matteBlackMat : chromeMat;
+      const frame = new THREE.Mesh(new THREE.BoxGeometry(0.92, 2.05, 0.04), mat);
+      frame.position.set(0, 1.025, 0);
+      g.add(frame);
+
+      const glass = new THREE.Mesh(new THREE.BoxGeometry(0.84, 1.96, 0.01), glassMat);
+      glass.position.set(0, 1.025, 0);
+      g.add(glass);
+
+      const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.35, 16), mat);
+      handle.position.set(0.35, 1.0, 0.03);
+      g.add(handle);
+      return g;
+    }
+
+    // 50 & 59. Archer™ & Embark™ Mirrored Cabinets
+    function buildMirroredCabinet() {
+      const g = new THREE.Group();
+      const body = new THREE.Mesh(new THREE.BoxGeometry(0.51, 0.79, 0.13), chromeMat);
+      body.position.set(0, 0.395, -0.065);
+      body.castShadow = true;
+      g.add(body);
+
+      const mirror = new THREE.Mesh(new THREE.BoxGeometry(0.50, 0.78, 0.01), mirrorMat);
+      mirror.position.set(0, 0.395, 0.005);
+      g.add(mirror);
+      return g;
+    }
+
+    // 51, 52, 53. Forefront™ & Foreward™ Wall-hung Vanity Cabinets
+    function buildWallHungVanityCabinet(finish = 'wood') {
+      const g = new THREE.Group();
+      const vanityMat = (finish === 'white') ? whiteLaminateMat : oakMat;
+      const box = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.52, 0.46), vanityMat);
+      box.position.set(0, 0.58, 0);
+      box.castShadow = true;
+      g.add(box);
+
+      const top = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.03, 0.47), porcelainMat);
+      top.position.set(0, 0.855, 0);
+      g.add(top);
+
+      const seam = new THREE.Mesh(new THREE.BoxGeometry(0.78, 0.006, 0.01), matteBlackMat);
+      seam.position.set(0, 0.58, 0.232);
+      g.add(seam);
+      return g;
+    }
+
+    // 54, 57. Capsule Lighted & Framed Mirrors (ModernLife, Essential)
+    function buildCapsuleLightedMirror() {
+      const g = new THREE.Group();
+      const mirror = new THREE.Mesh(new THREE.BoxGeometry(0.50, 1.00, 0.03), mirrorMat);
+      mirror.position.set(0, 0.50, 0);
+      g.add(mirror);
+
+      const glow = new THREE.Mesh(new THREE.BoxGeometry(0.52, 1.02, 0.01), new THREE.MeshBasicMaterial({ color: 0xfff4e6 }));
+      glow.position.set(0, 0.50, -0.01);
+      g.add(glow);
+      return g;
+    }
+
+    // 55, 56. Forefront™ Lite Lighted Mirrors (72cm, 90cm)
+    function buildForefrontLiteMirror() {
+      const g = new THREE.Group();
+      const mirror = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.65, 0.03), mirrorMat);
+      mirror.position.set(0, 0.325, 0);
+      g.add(mirror);
+
+      const halo = new THREE.Mesh(new THREE.BoxGeometry(0.83, 0.68, 0.01), new THREE.MeshBasicMaterial({ color: 0xfafafa }));
+      halo.position.set(0, 0.325, -0.01);
+      g.add(halo);
+      return g;
+    }
+
+    // 58. Essential Arched Framed Mirror (K-30637IN-BLL)
+    function buildArchedFramedMirror() {
+      const g = new THREE.Group();
+      const frame = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.92, 0.03), matteBlackMat);
+      frame.position.set(0, 0.46, 0);
+      g.add(frame);
+
+      const mirror = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.88, 0.01), mirrorMat);
+      mirror.position.set(0, 0.46, 0.015);
+      g.add(mirror);
+      return g;
+    }
+
+    // 60. Ove™ 170 × 75 cm Drop-in Whirlpool Bath (K-1709IN-K-0)
+    function buildOveWhirlpoolBath() {
+      const g = new THREE.Group();
+      const shell = new THREE.Mesh(new THREE.BoxGeometry(1.70, 0.58, 0.75), porcelainMat);
+      shell.position.set(0, 0.29, 0);
+      shell.castShadow = true;
+      g.add(shell);
+
+      const interior = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.28, 0.50, 24), porcelainMat);
+      interior.scale.set(2.2, 1.0, 0.95);
+      interior.position.set(0, 0.30, 0);
+      g.add(interior);
+
+      const drain = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.01, 16), chromeMat);
+      drain.position.set(0, 0.06, 0);
+      g.add(drain);
+
+      // 6 Chrome Whirlpool Jets
+      for (let i = -1; i <= 1; i++) {
+        const jetL = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.015, 12), chromeMat);
+        jetL.rotation.z = Math.PI / 2;
+        jetL.position.set(-0.70 + i * 0.45, 0.28, 0.34);
+        g.add(jetL);
+
+        const jetR = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.015, 12), chromeMat);
+        jetR.rotation.z = Math.PI / 2;
+        jetR.position.set(-0.70 + i * 0.45, 0.28, -0.34);
+        g.add(jetR);
+      }
+      return g;
+    }
+
+// ==================== BACKWARD-COMPATIBILITY ALIASES ====================
     const buildReachToilet = buildReachOnePieceToilet;
-    const buildLeapSmartToilet = buildReachOnePieceToilet;
     const buildMemoirsToilet = buildOveToilet;
     const buildTailoredVanity = buildViveIntegratedVanity;
     const buildJacquardVanity = buildTraceIntegratedVanity;

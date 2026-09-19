@@ -188,28 +188,72 @@ Rather than forcing a single rigid layout, the multi-objective Pareto solver syn
 * **Plumbing Wet-Wall (MEP) Optimization**: Evaluates fixture alignment along the primary wet-wall stack, calculating a live alignment score (up to 94%) and projecting reduced plumbing labor and material costs.
 * **Direct Commercial Feasibility**: Enables Kohler showrooms and B2B trade partners to accelerate customer consultation cycles from days to minutes.
 ##
-### 🛁 Authentic Kohler Catalog Specifications
+### 🛁 Authentic Kohler Catalog Specifications (60 Genuine Products)
 ##
-Every product model in the planner corresponds to an authentic, production Kohler catalog item:
+Every product model in the planner corresponds to an authentic, production Kohler catalog item across 6 showroom categories:
 
-| Category | Kohler Series | SKU | Key Architectural Specs |
-|---|---|---|---|
-| **Smart Toilet** | Veil™ Smart One-piece Toilet | `K-5401IN-0` | Flagship smart toilet with touchless dual flush, heated Quiet-Close seat, LED nightlight |
-| **One-Piece Toilet** | Reach™ One-piece Toilet | `K-3983IN-S-0` | Skirted trapway, Class Five 4.8 LPF canister flush, compact ergonomic profile |
-| **One-Piece Toilet** | Ove™ One-Piece Toilet | `K-17688IN-SM-0` | Sculptural French organic contours, dual flush 3/4.5 LPF, Quiet-Close slim seat |
-| **Integrated Vanity** | Trace™ Integrated Top and Basin | `K-30375IN-0` | 700 mm seamless vitreous china top + basin with wall-hung soft-close cabinet & J-pull |
-| **Integrated Vanity** | Vive™ Integrated Top and Basin | `K-28782IN-0` | 720 mm integrated vanity top with bevelled contours, dual drawers, and brass pull bar |
-| **Vessel Basin** | Brazn™ 58.4 cm Rectangular Vessel Sink | `K-21060IN-0` | Splayed chamfered walls, knife-edge rim, slotted overflow, flush ceramic umbrella drain |
-| **Semi-Recessed Basin** | Forefront™ Square Semi-Recessed Basin | `K-11479IN-VC1-0` | 413 mm square vitreous china basin with cantilevered front overhang on console shelf |
-| **Shower Door** | New Trilogy™ 2000–2161 mm H Pivot Door | `K-704699IN-SHP` | 8 mm ultra-clear tempered glass with SHP high-polish pivot hinges and tubular handle |
-| **Showerhead** | Statement™ Round Multifunction Showerhead | `K-26299IN-CP` | Katalyst® air-induction spray, Cloud spray, Deep Massage streams, MasterClean face |
-| **Freestanding Bath** | Evok 2.0™ 1600 mm Acrylic Bathtub | `K-20935IN-0` | Seamless ergonomic double-ended soaking tub with center toe-tap drain & waste |
-| **Smart Mirror** | Ming™ 80 cm Lighted Mirror | `K-77115IN-NA` | Circular frosted perimeter LED ring, hands-free proximity sensor, defogger pad |
-| **Lighted Mirror** | Reve™ 1000 mm Lighted Mirror | `K-23268IN-NA` | Wide 100 cm rectangular mirror with dual lateral LED task light bars and touch dimmer |
-| **Single Faucet** | Purist™ Single Control Lavatory Faucet | `K-14402IN-4A-CP` | Minimalist tubular spout with straight lever handle in polished chrome, 1.2 GPM |
-| **Pillar Tap** | Parallel™ Pillar Tap | `K-23482IN-4-BV` | Faceted geometric pillar body in Brushed Bronze with quarter-turn ceramic valve |
-| **Widespread Faucet** | Artifacts™ Widespread Sink Faucets | `K-72760T-CP` | Edwardian swan neck spout with dual porcelain-capped cross handles in chrome |
-| **Tall Vessel Faucet** | Composed™ Tall Single-handle Faucet | `K-73159IN-7-CP` | Tower vessel column with side joystick lever and flat horizontal spout, 1.2 GPM |
+| # | Category | Product | SKU | Architectural & Design Specifications |
+|:---:|---|---|---|---|
+| **1** | Smart Toilet | Veil™ Smart One-piece Toilet | `K-5401IN-0` | Sculptural smart one-piece toilet with remote control, heated seat, and automatic bidet cleansing. |
+| **2** | One-Piece Toilet | Reach™ One-piece Toilet | `K-3983IN-S-0` | One-piece round-front toilet with clean skirted trapway, dual flush top actuator, and quiet-close seat. |
+| **3** | One-Piece Toilet | Ove™ One-Piece Toilet | `K-17688IN-SM-0` | Compact elongated one-piece toilet with Class Five flushing technology and skirted bowl. |
+| **4** | Integrated Vanity | Trace™ Integrated Top and Basin | `K-30375IN-0` | 700 mm integrated vitreous china vanity top and basin with moisture-resistant vanity cabinet. |
+| **5** | Integrated Vanity | Vive™ Integrated Top and Basin | `K-28782IN-0` | 720 mm contemporary integrated vanity top with seamless washbasin and soft-close storage drawer. |
+| **6** | Vessel Basin | Brazn™ 58.4 cm Rectangular Vessel Sink | `K-21060IN-0` | Modernist architectural rectangular vessel sink inspired by Bauhaus geometry with razor-thin edges. |
+| **7** | Semi-Recessed Basin | Forefront™ Square Semi-Recessed Basin | `K-11479IN-VC1-0` | Clean geometric semi-recessed basin projecting past the counter edge for effortless ergonomic wash reach. |
+| **8** | Shower Door | New Trilogy™ 2000–2161 mm H Pivot Door | `K-704699IN-SHP` | Architectural 2.05m tall pivot shower door with 8 mm CleanCoat tempered glass and solid brass pivot hinges. |
+| **9** | Showerhead | Statement™ Round Multifunction Showerhead | `K-26299IN-CP` | Statement round multifunction showerhead delivering Full Coverage with Katalyst air-induction technology. |
+| **10** | Freestanding Bath | Evok 2.0™ 1600 mm Acrylic Bathtub | `K-20935IN-0` | Seamless rectangular freestanding acrylic bathtub with ergonomic lumbar backrest and center toe-tap drain. |
+| **11** | Smart Mirror | Ming™ 80 cm Lighted Mirror | `K-77115IN-NA` | 80 cm circular lighted smart mirror with proximity sensor, perimeter frosted LED halo, and defogger. |
+| **12** | Lighted Mirror | Reve™ 1000 mm Lighted Mirror | `K-23268IN-NA` | 1000 mm rectangular luxury lighted mirror with integrated LED lighting border and touch dimmer control. |
+| **13** | Single Faucet | Purist™ Single Control Lavatory Faucet | `K-14402IN-4A-CP` | Iconic architectural single-lever lavatory faucet with straight ergonomic spout and ceramic disc cartridge. |
+| **14** | Pillar Tap | Parallel™ Pillar Tap | `K-23482IN-4-BV` | Precision-machined pillar tap with distinctive flat spout and knurled quarter-turn handle in Vibrant Brushed Bronze. |
+| **15** | Widespread Faucet | Artifacts™ Widespread Sink Faucets | `K-72760T-CP` | Edwardian swan neck spout with dual porcelain-capped cross handles in polished chrome. |
+| **16** | Tall Vessel Faucet | Composed™ Tall Single-handle Faucet | `K-73159IN-7-CP` | Tower vessel column with side joystick lever and flat horizontal spout, 1.2 GPM WaterSense. |
+| **17** | Smart Toilet | Leap™ One-piece Round-front Smart Toilet | `K-28529IN-0` | Intelligent one-piece compact round-front smart toilet with personalized bidet wand, warm-air dryer, and wireless remote. |
+| **18** | Smart Toilet | Innate™ One-piece Elongated Smart Toilet | `K-29777IN-0` | Architectural elongated smart toilet featuring dual-flush power, stainless steel cleansing wand, and ambient LED bowl nightlight. |
+| **19** | One-Piece Toilet | KOHLER VIVE® One-piece Round-front Toilet | `K-33123IN-0` | Modern round-front one-piece toilet with smooth contoured bowl and high-efficiency 3.8/4.8L dual flush. |
+| **20** | One-Piece Toilet | KOHLER VIVE® One-piece Round-front Toilet | `K-33124IN-S-0` | One-piece round-front toilet with skirted trapway design for effortless wiping and quiet-close slim seat. |
+| **21** | Vessel Basin | Veil™ 16" Round Vessel Bathroom Sink | `K-20703-0` | Sensuous 16-inch circular vessel sink with flowing Supramic ceramic curves and ultra-thin 4mm rim profile. |
+| **22** | Vessel Basin | Veil™ 38-1/2" Oval Vessel Bathroom Sink | `K-20705-0` | Extra-wide 38.5-inch organic oval statement vessel sink creating a striking luxury centerpiece in master suites. |
+| **23** | Pedestal Basin | Veil™ 12-1/4" Pedestal Bathroom Sink | `K-20702-0` | Sculptural monolithic pedestal sink tapering organically from floor to basin with concealed floor waste coupling. |
+| **24** | Vessel Basin | Veil™ 21" Oval Vessel Bathroom Sink | `K-20704-0` | 21-inch balanced oval vessel bathroom sink with flowing organic contours and stain-resistant glaze. |
+| **25** | Semi-Recessed Basin | Ladena™ Semi-Recessed Bathroom Sink | `K-72907K-1-0` | Gracefully contoured rectangular semi-recessed sink with deep basin geometry and overflow channel. |
+| **26** | Semi-Recessed Basin | Forefront™ Semi-Recessed Bathroom Sink | `K-98930X-1-0` | Architectural semi-recessed basin featuring crisp parallel lines, wide rear deck for faucet, and rounded basin interior. |
+| **27** | Vessel Basin | Veil™ 59.9 cm Oval Vessel Bathroom Sink | `K-77171IN-0` | 60 cm asymmetric organic vessel sink crafted in high-performance Supramic material with concealed overflow. |
+| **28** | Wall-Mount Faucet | Composed™ Wall-mount Lavatory Faucet | `K-73061T-7-BV` | Wall-mount single-control lavatory faucet with 200 mm reach spout in Vibrant Brushed Bronze. |
+| **29** | Wall-Mount Faucet | Composed™ Wall-mount Bathroom Sink Faucet | `K-73061IN-4ND-CP` | Clean geometric wall-mounted faucet in Polished Chrome with minimal wall plate and aerated laminar stream. |
+| **30** | Single Faucet | Composed™ Single-handle Bathroom Sink Faucet | `K-73050T-B7-BL` | Matte Black single-handle deck-mount faucet with pure geometric proportions and top lever control. |
+| **31** | Single Faucet | Composed™ Single-handle Faucet with Joystick Handle | `K-73158T-4-RGD` | Rose Gold luxury single-control faucet featuring a precision side-joystick actuator for feather-touch regulation. |
+| **32** | Single Faucet | Composed™ Single-handle Faucet | `K-73050-7-2MB` | Vibrant Brushed Moderne Brass single-control lavatory faucet with solid brass body and ceramic disc valve. |
+| **33** | Single Faucet | Composed™ Single-handle Faucet, 4.5 LPM | `K-73050T-7GCH-TT` | Titanium finish ultra-efficient 4.5 LPM water-saving single-handle faucet engineered for LEED-certified green suites. |
+| **34** | Wall-Mount Faucet | Composed™ 2-handle Wall-mounted Lavatory Faucet | `K-73067T-9ACH-BV` | Dual-handle three-hole wall-mount lavatory faucet with independent hot and cold cross valves in Brushed Bronze. |
+| **35** | Tall Faucet | Composed™ Tall Single-handle Faucet | `K-73159T-B7-AF` | Vibrant French Gold tall tower faucet designed to provide generous clearance above elevated vessel basins. |
+| **36** | Single Faucet | Aleo™ Single-handle Bathroom Sink Faucet | `K-72275IN-4ND-RGD` | Rose Gold sleek single-handle faucet with forward-angled spout and integrated coin-slot aerator. |
+| **37** | Tall Faucet | Aleo™ Tall Single-handle Bathroom Sink Faucet | `K-72298IN-4ND-RGD` | Extended tower vessel faucet in Rose Gold with sculpted ergonomic handle and smooth water delivery. |
+| **38** | Single Faucet | Hone™ Single Control Lav Faucet with Drain | `K-22534IN-4-CP` | Polished Chrome cylindrical single-control faucet with pop-up clicker drain and durable brass waterway. |
+| **39** | Tall Faucet | ModernLife Edge™ Tall Single-handle Faucet | `K-25758IN-4ND-CP` | Ultra-slim architectural tall vessel faucet with razor-thin lever and crisp planar surfaces. |
+| **40** | Wall-Mount Faucet Valve | Complementary™ Single-handle Wall-mount Faucet Valve | `K-5679IN-CP` | Solid brass concealed wall-mount rough-in valve with polished chrome decorative faceplate. |
+| **41** | Shower Door | Elate™ 200 cm H Sliding Shower Door | `K-39061IN-SHP` | 120 cm wide 2-meter tall sliding glass shower door with oversized top rollers and Bright Polished Silver header. |
+| **42** | Shower Door | New Trilogy™ 206.1 cm H Pivot Shower Door | `K-704796IN-2BL` | Matte Black framed pivot shower door standing 2.06m tall with heavy-duty 8mm tempered glass. |
+| **43** | Shower Door | New Trilogy™ 2000 mm H Pivot Shower Door | `K-704702IN-SHP` | High-gloss silver pivot shower door with continuous magnetic catch and outward-opening clearance. |
+| **44** | Shower Door | Contra™ 200 cm H Sliding Shower Door | `K-705116IN-SHP` | Frameless sliding shower enclosure with exposed stainless steel dual roller wheels and soft-cushion stops. |
+| **45** | Shower Door | New Trilogy™ 200–216.1 cm H Pivot Shower Door | `K-704699IN-SHP` | 100 cm wide adjustable pivot shower door with full-length clear water seals and ergonomic towel bar handle. |
+| **46** | Shower Door | Elate™ 200 cm H Sliding Shower Door | `K-39060IN-SHP` | 105 cm compact sliding shower door with smooth bypass action and low threshold for easy walk-in entry. |
+| **47** | Shower Door | Contra™ 200–210 cm H Sliding Shower Door | `K-705115IN-SHP` | Adjustable height 200-210cm sliding shower door with CleanCoat hydrophobic surface protection. |
+| **48** | Shower Door | New Levity™ 200 cm H Sliding Shower Door | `K-709076IN-CP` | Dual-sliding bypass glass shower door system with cushioned center guide and minimalist top track. |
+| **49** | Shower Door | Singulier™ 200–212.1 cm H Pivot Shower Door | `K-708066IN-CP` | French architectural pivot shower door with integrated rise-and-fall hinge mechanism preventing seal drag. |
+| **50** | Mirrored Cabinet | Archer™ 51 × 78.7 cm Mirrored Cabinet | `K-3073IN-NA` | 51x79 cm reversible mirrored cabinet with beveled glass door, 3 adjustable glass shelves, and rust-free aluminum body. |
+| **51** | Vanity Cabinet | Forefront™ 90 cm Wall-hung Vanity Cabinet | `K-31601IN-E64` | 90 cm wall-hung floating vanity cabinet in Nordic Oak finish with full-extension soft-close dual drawers. |
+| **52** | Vanity Cabinet | Foreward™ 75 cm Wall-hung Vanity Cabinet | `K-28741IN-RWP` | 75 cm contemporary timber wall-hung vanity with integrated finger-pull drawer fronts and plumbing cutout. |
+| **53** | Vanity Cabinet | Forefront™ 60 cm Wall-hung Vanity Cabinet | `K-31602IN-E64` | 60 cm compact powder room floating vanity cabinet with deep bottom storage and moisture-resistant lacquer. |
+| **54** | Lighted Mirror | ModernLife™ 51 × 101.8 cm Capsule Lighted Mirror | `K-37876IN-NA` | 51x102 cm pill-capsule vertical lighted mirror with diffuse perimeter glow, touch sensor, and anti-fog heating pad. |
+| **55** | Lighted Mirror | Forefront™ Lite 72 × 65 cm Lighted Mirror | `K-29155IN-NA` | 72x65 cm rectangular backlit LED mirror providing uniform indirect task lighting for grooming. |
+| **56** | Lighted Mirror | Forefront™ Lite 90 × 65 cm Lighted Mirror | `K-29156IN-NA` | 90x65 cm wide lighted mirror ideal for double vanities with 3000K/4000K dual-color circadian toggle. |
+| **57** | Framed Mirror | Essential 60 × 120 cm Capsule Framed Mirror | `K-38367IN-BLL` | 60x120 cm elongated capsule mirror enclosed in a clean Matte Black anodized aluminum metal rim. |
+| **58** | Framed Mirror | Essential 61.6 × 92.1 cm Arched Framed Mirror | `K-30637IN-BLL` | 62x92 cm classic Roman arch framed mirror with slender black profile and distortion-free copper-free backing. |
+| **59** | Mirrored Cabinet | Embark™ Premium XL Arched Mirrored Cabinet | `K-56151IN-NA` | Architectural arched mirrored medicine cabinet featuring internal LED lighting, magnetic organizer bar, and double-sided mirror door. |
+| **60** | Drop-in Bath | Ove™ 170 × 75 cm Drop-in Whirlpool Bath | `K-1709IN-K-0` | 170 cm drop-in hydrotherapy whirlpool bathtub with 6 adjustable hydromassage body jets and quiet-flow pump. |
 ##
 ### 🛠️ Tech Stack
 ##
