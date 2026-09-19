@@ -55,6 +55,17 @@
       });
     }
 
+    // Generic Spatial Collision Detector: checks if a coordinate is occupied by any placed fixture
+    function isSpatialZoneOccupied(x, z, safetyRadius = 0.45) {
+      if (!placedProducts || !placedProducts.length) return false;
+      return placedProducts.some(p => {
+        const pw = (p.userData && p.userData.width_m) || 0.80;
+        const pd = (p.userData && p.userData.depth_m) || 0.80;
+        const threshold = Math.max(pw, pd) / 2 + safetyRadius;
+        return Math.hypot(p.position.x - x, p.position.z - z) < threshold;
+      });
+    }
+
     function updateThemeArchitecturalAccents(themeName = currentSelectedTheme) {
       if (!themeAccentsGroup) return;
       while (themeAccentsGroup.children.length > 0) {
@@ -113,9 +124,14 @@
           themeAccentsGroup.add(sconceG);
         }
 
-        // Brass towel ring on right wall
+        // Brass towel ring on side wall (generic collision-aware)
         const ringG = new THREE.Group();
-        ringG.position.set(roomWidth / 2 - 0.03, 1.45, -roomDepth / 2 + 0.85);
+        let ringX = roomWidth / 2 - 0.03;
+        let ringZ = -roomDepth / 2 + 0.85;
+        if (isSpatialZoneOccupied(ringX, ringZ, 0.45)) {
+          ringX = -roomWidth / 2 + 0.03;
+        }
+        ringG.position.set(ringX, 1.45, ringZ);
         const ringBase = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.02, 20), polishedBrassMat);
         ringBase.rotation.z = Math.PI / 2;
         ringG.add(ringBase);
@@ -170,15 +186,8 @@
         ];
 
         let chosenSpot = candidateSpots[0];
-        // If candidate spot collides with any placed fixture (e.g. shower enclosure), pick next open spot
         for (const spot of candidateSpots) {
-          const isColliding = (placedProducts || []).some(p => {
-            const w = (p.userData && p.userData.width_m) || 0.8;
-            const d = (p.userData && p.userData.depth_m) || 0.8;
-            const threshold = Math.max(w, d) / 2 + 0.30;
-            return Math.hypot(p.position.x - spot.x, p.position.z - spot.z) < threshold;
-          });
-          if (!isColliding) {
+          if (!isSpatialZoneOccupied(spot.x, spot.z, 0.30)) {
             chosenSpot = spot;
             break;
           }
@@ -255,9 +264,14 @@
           themeAccentsGroup.add(pendantG);
         }
 
-        // Industrial matte black towel bar on right wall
+        // Industrial matte black towel bar on wall (generic collision-aware)
         const barG = new THREE.Group();
-        barG.position.set(roomWidth / 2 - 0.025, 1.20, -roomDepth / 2 + 0.85);
+        let barX = roomWidth / 2 - 0.025;
+        let barZ = -roomDepth / 2 + 0.85;
+        if (isSpatialZoneOccupied(barX, barZ, 0.45)) {
+          barX = -roomWidth / 2 + 0.025;
+        }
+        barG.position.set(barX, 1.20, barZ);
         const barRail = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.02, 0.55), industrialSteelMat);
         barG.add(barRail);
         const barPost1 = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.02, 0.02), industrialSteelMat);
