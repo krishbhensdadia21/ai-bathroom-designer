@@ -717,34 +717,48 @@
     function buildEvok2Bathtub() {
       const g = new THREE.Group();
 
-      // Contemporary seamless rectangular outer shell (1.70m L x 0.80m W x 0.60m H)
+      // Contemporary seamless rectangular outer shell (1.70m L x 0.80m W x 0.58m H)
       const outerTub = new THREE.Mesh(new THREE.BoxGeometry(1.70, 0.58, 0.80), porcelainMat);
       outerTub.position.set(0, 0.29, 0);
       outerTub.castShadow = true;
       outerTub.userData.role = 'bathtub';
       g.add(outerTub);
 
-      // Deep double-ended inner bathing well
-      const innerWell = new THREE.Mesh(new THREE.BoxGeometry(1.54, 0.48, 0.64), porcelainMat);
-      innerWell.position.set(0, 0.35, 0);
+      // Deep double-ended inner bathing well (stays strictly below rim)
+      const innerWell = new THREE.Mesh(new THREE.BoxGeometry(1.54, 0.44, 0.64), porcelainMat);
+      innerWell.position.set(0, 0.32, 0);
       innerWell.userData.role = 'bathtub';
       g.add(innerWell);
 
-      // Left sloped lumbar backrest
-      const leftSlope = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.46, 0.62), porcelainMat);
-      leftSlope.rotation.z = Math.PI / 6;
-      leftSlope.position.set(-0.62, 0.38, 0);
+      // Ergonomic sloped lumbar backrests (smooth interior transitions strictly below rim y=0.58m)
+      const leftSlope = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.34, 0.60), porcelainMat);
+      leftSlope.rotation.z = Math.PI / 7;
+      leftSlope.position.set(-0.62, 0.33, 0);
+      leftSlope.userData.role = 'bathtub';
       g.add(leftSlope);
 
-      // Right sloped lumbar backrest
-      const rightSlope = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.46, 0.62), porcelainMat);
-      rightSlope.rotation.z = -Math.PI / 6;
-      rightSlope.position.set(0.62, 0.38, 0);
+      const rightSlope = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.34, 0.60), porcelainMat);
+      rightSlope.rotation.z = -Math.PI / 7;
+      rightSlope.position.set(0.62, 0.33, 0);
+      rightSlope.userData.role = 'bathtub';
       g.add(rightSlope);
 
+      // Realistic tranquil spa water surface plane (inside well at y=0.42m)
+      const waterMat = new THREE.MeshStandardMaterial({
+        color: 0x67e8f9,
+        transparent: true,
+        opacity: 0.45,
+        roughness: 0.08,
+        metalness: 0.1
+      });
+      const waterPlane = new THREE.Mesh(new THREE.PlaneGeometry(1.48, 0.60), waterMat);
+      waterPlane.rotation.x = -Math.PI / 2;
+      waterPlane.position.set(0, 0.42, 0);
+      g.add(waterPlane);
+
       // Integrated chrome linear slotted overflow
-      const overflow = new THREE.Mesh(new THREE.BoxGeometry(0.10, 0.015, 0.006), chromeMat);
-      overflow.position.set(0, 0.49, -0.315);
+      const overflow = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.018, 0.008), chromeMat);
+      overflow.position.set(0, 0.48, -0.315);
       overflow.userData.role = 'faucet';
       g.add(overflow);
 
@@ -753,17 +767,24 @@
       drain.position.set(0, 0.12, 0);
       g.add(drain);
 
-      // Freestanding floor-mounted bath filler
+      // Freestanding floor-mounted bath filler (Positioned on the WALL side z = -0.44m)
+      // Leaving the front step-in corridor (z > 0) 100% unobstructed!
       const fillerPipe = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.88, 20), chromeMat);
-      fillerPipe.position.set(0, 0.44, 0.48);
+      fillerPipe.position.set(0, 0.44, -0.44);
       fillerPipe.userData.role = 'faucet';
       g.add(fillerPipe);
 
-      const fillerSpout = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.22, 16), chromeMat);
+      // Arched gooseneck spout arching forward from the wall into the tub
+      const fillerSpout = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.24, 16), chromeMat);
       fillerSpout.rotation.x = Math.PI / 2;
-      fillerSpout.position.set(0, 0.86, 0.37);
+      fillerSpout.position.set(0, 0.86, -0.32);
       fillerSpout.userData.role = 'faucet';
       g.add(fillerSpout);
+
+      // Mixer lever handle on filler
+      const fillerHandle = new THREE.Mesh(new THREE.BoxGeometry(0.018, 0.08, 0.018), chromeMat);
+      fillerHandle.position.set(0.04, 0.82, -0.44);
+      g.add(fillerHandle);
 
       return g;
     }

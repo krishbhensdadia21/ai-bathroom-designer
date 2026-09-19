@@ -86,33 +86,32 @@
         const isDoorCollision = inDoorSweepQuadrant && (distToHinge < doorRadius);
         if (isDoorCollision) anyDoorCollision = true;
 
-        // 3. Plumbing Compatibility Check (Wet-wall alignment & max distance from soil stack)
+        // 3. Plumbing Compatibility Check (Multi-wall wet-wall alignment & max distance from soil stack)
         let isPlumbingViolation = false;
         let plumbingMessage = '';
+        const distFromRear = pos.z - (-halfRoomD);
+        const distFromLeft = pos.x - (-halfRoomW);
+        const distFromRight = halfRoomW - pos.x;
+        const distToNearestWetWall = Math.min(distFromRear, distFromLeft, distFromRight);
+
         if (cat === 'toilets') {
-          const distFromRearWall = pos.z - (-halfRoomD);
           const maxAllowed = (d.compatibility && d.compatibility.max_wet_wall_dist_m) || 0.85;
-          if (distFromRearWall > maxAllowed + 0.08) {
+          if (distToNearestWetWall > maxAllowed + 0.08) {
             isPlumbingViolation = true;
-            plumbingMessage = `Plumbing Conflict: Distance (${distFromRearWall.toFixed(2)}m) from rear wet-wall soil stack exceeds ${maxAllowed}m code limit`;
+            plumbingMessage = `Plumbing Conflict: Distance (${distToNearestWetWall.toFixed(2)}m) from nearest plumbing wall exceeds ${maxAllowed}m code limit`;
           }
         } else if (cat === 'showers') {
-          const distFromRear = pos.z - (-halfRoomD);
-          const distFromRight = Math.abs(pos.x - halfRoomW);
-          const distFromLeft = Math.abs(pos.x - (-halfRoomW));
-          const distToNearestWall = Math.min(distFromRear, distFromRight, distFromLeft);
           const maxAllowed = (d.compatibility && d.compatibility.max_wet_wall_dist_m) || 1.5;
           // Shower is compliant if within rear wet-wall zone or mounted along a side partition wall (within 0.85m)
-          if (distToNearestWall > 0.85 && distFromRear > maxAllowed + 0.08) {
+          if (distToNearestWetWall > 0.85 && distFromRear > maxAllowed + 0.08) {
             isPlumbingViolation = true;
             plumbingMessage = `Plumbing Conflict: Shower must be within ${maxAllowed}m of wet-wall or mounted along partition wall`;
           }
         } else if (d.compatibility && d.compatibility.requires_wet_wall) {
-          const distFromRearWall = pos.z - (-halfRoomD);
           const maxAllowed = d.compatibility.max_wet_wall_dist_m || 0.85;
-          if (distFromRearWall > maxAllowed + 0.08) {
+          if (distToNearestWetWall > maxAllowed + 0.08) {
             isPlumbingViolation = true;
-            plumbingMessage = `Plumbing Conflict: Distance (${distFromRearWall.toFixed(2)}m) from wet-wall plumbing exceeds ${maxAllowed}m code limit`;
+            plumbingMessage = `Plumbing Conflict: Distance (${distToNearestWetWall.toFixed(2)}m) from wet-wall plumbing exceeds ${maxAllowed}m code limit`;
           }
         }
 
@@ -136,18 +135,47 @@
           }
         });
 
-        // 5. Forward Clearance Check
-        const forwardVector = new THREE.Vector3(0, 0, fd / 2 + minFrontClearanceM / 2).applyAxisAngle(new THREE.Vector3(0, 1, 0), rotY);
+        // 5. Universal Vector-Based Forward Clearance Check (Accurate in any rotation 0°, 90°, 180°, 270°)
+        const forwardDir = new THREE.Vector3(0, 0, 1).applyAxisAngle(new THREE.Vector3(0, 1, 0), rotY);
+        const forwardVector = forwardDir.clone().multiplyScalar(fd / 2 + minFrontClearanceM / 2);
         const clearanceCenter = new THREE.Vector3().copy(pos).add(forwardVector);
-        const frontEdgePos = new THREE.Vector3().copy(pos).add(new THREE.Vector3(0, 0, fd / 2).applyAxisAngle(new THREE.Vector3(0, 1, 0), rotY));
-        const distToFrontWall = halfRoomD - frontEdgePos.z;
-        const observedFrontM = Math.max(0.15, distToFrontWall);
+        const frontEdgePos = new THREE.Vector3().copy(pos).add(forwardDir.clone().multiplyScalar(fd / 2));
 
-        // 6. Side Clearance Check (NKBA 15" from centerline)
-        const distToLeftWall = pos.x - (-halfRoomW);
-        const distToRightWall = halfRoomW - pos.x;
+        // Compute ray distance to facing wall
+        let distToFacingWall = 999;
+        if (forwardDir.x > 0.001) distToFacingWall = Math.min(distToFacingWall, (halfRoomW - frontEdgePos.x) / forwardDir.x);
+        else if (forwardDir.x < -0.001) distToFacingWall = Math.min(distToFacingWall, (-halfRoomW - frontEdgePos.x) / forwardDir.x);
+        if (forwardDir.z > 0.001) distToFacingWall = Math.min(distToFacingWall, (halfRoomD - frontEdgePos.z) / forwardDir.z);
+        else if (forwardDir.z < -0.001) distToFacingWall = Math.min(distToFacingWall, (-halfRoomD - frontEdgePos.z) / forwardDir.z);
+
+        // Check if any other physical fixture directly blocks this forward clearance ray
+        let distToNearestObstacle = distToFacingWall;
+        const clearanceRay = new THREE.Ray(frontEdgePos, forwardDir.clone().normalize());
+        floorFixtures.forEach((other, oIdx) => {
+          if (idx === oIdx) return;
+          const oCat = (other.userData && other.userData.category) || '';
+          if ((cat === 'vanities' && oCat === 'faucets') || (cat === 'faucets' && oCat === 'vanities')) return;
+          const otherBox = new THREE.Box3().setFromObject(other);
+          const hit = clearanceRay.intersectBox(otherBox, new THREE.Vector3());
+          if (hit) {
+            const d = frontEdgePos.distanceTo(hit);
+            if (d > 0.02 && d < distToNearestObstacle) {
+              distToNearestObstacle = d;
+            }
+          }
+        });
+        const observedFrontM = Math.max(0.15, distToNearestObstacle);
+
+        // 6. Rotation-Aware Side Clearance Check (NKBA 15" from centerline)
+        let distToSide1 = distFromLeft;
+        let distToSide2 = distFromRight;
+        if (Math.abs(Math.abs(rotY) - Math.PI / 2) < 0.35) {
+          // Fixture faces laterally along X axis: side clearances are along Z axis
+          distToSide1 = pos.z - (-halfRoomD);
+          distToSide2 = halfRoomD - pos.z;
+        }
         const sideClearanceMin = (d.installation && d.installation.min_clearance_side_m) ? d.installation.min_clearance_side_m : 0.381;
-        const hasTightSide = (cat === 'toilets') && (Math.min(distToLeftWall, distToRightWall) < sideClearanceMin - 0.02);
+        const hasTightSide = (cat === 'toilets') && (Math.min(distToSide1, distToSide2) < sideClearanceMin - 0.02);
 
         let fixtureStatus = 'valid';
         let statusReason = `Compliant: ${(observedFrontM * 39.3701).toFixed(1)}" clearance meets NKBA code`;
@@ -184,7 +212,7 @@
           warningCount++;
         } else if (hasTightSide) {
           fixtureStatus = 'warning';
-          statusReason = `Warning: Side clearance (${(Math.min(distToLeftWall, distToRightWall) * 39.3701).toFixed(1)}") < 15" from centerline`;
+          statusReason = `Warning: Side clearance (${(Math.min(distToSide1, distToSide2) * 39.3701).toFixed(1)}") < 15" from centerline`;
           hasWarning = true;
           warningCount++;
         }

@@ -93,6 +93,13 @@
                   continue;
                 }
 
+                // Wet-wall physical collision avoidance:
+                // Toilet + Vanity + Shower together on a back wall must fit comfortably
+                if (t && v && s && (t.width_m + v.width_m + s.width_m + 0.45 > roomW)) {
+                  spatialViolations++;
+                  continue;
+                }
+
                 // --- Real Multi-Objective Mathematical Scoring ---
                 // 1. Spatial Fit Score (0-100)
                 const footprintArea = (t ? t.width_m * t.depth_m : 0) + (v ? v.width_m * v.depth_m : 0) + (s ? s.width_m * s.depth_m : 0);
@@ -726,66 +733,102 @@
       const genericShowerEntry = (!showerDoorEntry && !showerHeadEntry) ? rec.find(i => (i.category || '').toLowerCase().includes('shower')) : null;
       const hasShower = !!(showerDoorEntry || showerHeadEntry || genericShowerEntry);
 
-      // ================= ARCHITECTURAL FLUSH & BALANCED SPATIAL ZONING =================
+      // ================= ARCHITECTURAL 4-ZONE SPATIAL PLACEMENT =================
       const backWallZ = -roomDepth / 2;
+      const frontWallZ = roomDepth / 2;
+      const leftWallX = -roomWidth / 2;
+      const rightWallX = roomWidth / 2;
 
-      // 1. Calculate Flush Z Coordinates (Zero floating gaps behind fixtures)
+      // Identify dimensions of chosen fixtures
+      const toiletCat = toiletEntry ? findCatalogFixture(toiletEntry) : null;
+      const toiletW = (toiletCat && toiletCat.width_m) || 0.41;
+      const toiletD = (toiletCat && toiletCat.depth_m) || 0.71;
+
+      const vanityCat = vanityEntry ? findCatalogFixture(vanityEntry) : null;
+      const vanityW = (vanityCat && vanityCat.width_m) || 1.15;
+      const vanityD = (vanityCat && vanityCat.depth_m) || 0.56;
+
+      const showerCat = showerDoorEntry ? findCatalogFixture(showerDoorEntry) : null;
+      const showerW = (showerCat && showerCat.width_m) || 1.12;
+      const showerD = (showerCat && showerCat.depth_m) || 0.96;
+
+      const tubCat = tubEntry ? findCatalogFixture(tubEntry) : null;
+      const tubW = (tubCat && tubCat.width_m) || 1.70; // length
+      const tubD = (tubCat && tubCat.depth_m) || 0.80; // width
+
+      // 1. Zone 3: Walk-in Shower Enclosure (Wet Corner Zone)
+      // Placed in Back-Right corner flush against back & right walls
+      const showerX = rightWallX - showerW / 2;
+      const showerZ = backWallZ + showerD / 2;
+
+      // 2. Zone 1: Toilet / Commode Zone
+      // Placed along back-left wall respecting NKBA 15" (0.38m) centerline minimum from left wall
+      const toiletX = leftWallX + Math.max(0.45, toiletW / 2 + 0.18);
       const toiletFlushZ = backWallZ + 0.165; // Back of tank sits flush against back wall tile
-      const vanityFlushZ = backWallZ + 0.245; // Back of vanity counter sits flush against back wall tile
-      const mirrorFlushZ = backWallZ + 0.055; // 5.5cm offset clears 5cm wood slat feature wall cleanly
-      const faucetFlushZ = vanityFlushZ - 0.14; // Faucet mounts precisely into rear hole of vanity basin deck
 
-      // 2. Calculate Uncongested, Balanced X Coordinates
-      // Place shower in the back-right corner flush against right wall & back wall
-      const showerX = roomWidth / 2 - 0.55;
-      const showerZ = backWallZ + 0.55;
+      // 3. Zone 2: Vanity & Grooming Zone
+      // Calculate remaining back wall space between toilet and shower
+      const toiletRightEdge = toiletX + toiletW / 2 + 0.10;
+      const showerLeftEdge = hasShower ? (showerX - showerW / 2 - 0.10) : (rightWallX - 0.20);
+      const availableBackWallSpace = showerLeftEdge - toiletRightEdge;
 
-      // Place toilet in the back-left zone (respecting NKBA 15" centerline from left wall)
-      const toiletX = -roomWidth / 2 + 0.48;
-
-      // Dynamically calculate Vanity X to sit in the exact spacious midpoint between Toilet and Shower!
       let vanityX = 0;
-      if (toiletEntry && hasShower) {
-        const toiletRightBoundary = toiletX + 0.25;
-        const showerLeftBoundary = showerX - 0.55;
-        vanityX = (toiletRightBoundary + showerLeftBoundary) / 2;
-      } else if (hasShower && !toiletEntry) {
-        vanityX = (-roomWidth / 2 + (showerX - 0.55)) / 2;
-      } else if (toiletEntry && !hasShower) {
-        vanityX = ((toiletX + 0.25) + (roomWidth / 2)) / 2;
-      } else {
-        vanityX = 0.0;
-      }
-      // Safety clamp so vanity never clips walls
-      vanityX = Math.max(-roomWidth / 2 + 0.55, Math.min(roomWidth / 2 - 0.55, vanityX));
+      let vanityZ = backWallZ + vanityD / 2;
+      let vanityRotY = 0;
+      let mirrorX = 0;
+      let mirrorZ = backWallZ + 0.055;
+      let mirrorRotY = 0;
+      let faucetX = 0;
+      let faucetZ = vanityZ - 0.14;
+      let faucetElevation = 0.508;
 
-      // A. Place Toilet (along back wet-wall, left side)
+      if (vanityW <= availableBackWallSpace) {
+        // Fits comfortably on the back wall between toilet and shower
+        vanityX = (toiletRightEdge + showerLeftEdge) / 2;
+        vanityZ = backWallZ + vanityD / 2;
+        vanityRotY = 0;
+        mirrorX = vanityX;
+        mirrorZ = backWallZ + 0.055;
+        mirrorRotY = 0;
+        faucetX = vanityX;
+        faucetZ = vanityZ - 0.14;
+      } else {
+        // Lateral 4-Zone Master Placement: Position vanity along Left Wall
+        // This gives wide vanities (e.g. 60" dual vanity) unlimited space without crowding!
+        vanityX = leftWallX + vanityD / 2;
+        vanityZ = Math.min(-0.25, backWallZ + vanityW / 2 + 0.35);
+        vanityRotY = Math.PI / 2;
+        mirrorX = leftWallX + 0.055;
+        mirrorZ = vanityZ;
+        mirrorRotY = Math.PI / 2;
+        faucetX = vanityX + 0.14;
+        faucetZ = vanityZ;
+      }
+
+      // Spawn Toilet
       if (toiletEntry) {
         spawnAiFixture(toiletEntry, toiletX, toiletFlushZ, 0);
       }
 
-      // B. Place Vanity (along back wet-wall, perfectly centered in open space)
-      let vanityCat = null;
+      // Spawn Vanity
       let spawnedVanity = null;
       if (vanityEntry) {
-        vanityCat = findCatalogFixture(vanityEntry);
-        spawnedVanity = spawnAiFixture(vanityEntry, vanityX, vanityFlushZ, 0);
+        spawnedVanity = spawnAiFixture(vanityEntry, vanityX, vanityZ, vanityRotY);
       }
 
-      // C. Place Faucet (mounted on vanity deck)
+      // Spawn Faucet
       let spawnedFaucet = null;
       if (faucetEntry) {
-        const faucetElevation = 0.508; // Sits flush on top of vanity deck collar
-        spawnedFaucet = spawnAiFixture(faucetEntry, vanityX, faucetFlushZ, 0, {
+        spawnedFaucet = spawnAiFixture(faucetEntry, faucetX, faucetZ, vanityRotY, {
           elevation: faucetElevation,
           y: faucetElevation
         });
       }
 
-      // D. Place Mirror (centered directly above vanity flush against wall/wood slats)
+      // Spawn Mirror
       let spawnedMirror = null;
       if (mirrorEntry) {
-        spawnedMirror = spawnAiFixture(mirrorEntry, vanityX, mirrorFlushZ, 0);
+        spawnedMirror = spawnAiFixture(mirrorEntry, mirrorX, mirrorZ, mirrorRotY);
       }
 
       // Link vanity, faucet, and mirror together
@@ -794,33 +837,34 @@
         if (spawnedMirror) spawnedVanity.userData.attachedMirror = spawnedMirror;
       }
 
-      // E. Place Shower (wet corner zone)
+      // Spawn Shower
       if (showerDoorEntry) {
         spawnAiFixture(showerDoorEntry, showerX, showerZ, 0);
       }
       if (showerHeadEntry) {
-        // Mount showerhead INSIDE the shower zone on the back wall (never in the mirror!)
+        // Mount showerhead INSIDE the shower zone on the back wall
         spawnAiFixture(showerHeadEntry, showerX, backWallZ + 0.02, 0);
       } else if (genericShowerEntry) {
         spawnAiFixture(genericShowerEntry, showerX, showerZ, 0);
       }
 
-      // F. Place Bathtub (Dedicated tub zone on the RIGHT side, 100% away from the entry door on the left wall!)
-      if (tubEntry && roomWidth >= 2.6 && roomDepth >= 2.4) {
+      // 4. Zone 4: Freestanding Bathtub & Spa Zone (Dedicated along Right Wall)
+      if (tubEntry && roomWidth >= 2.5 && roomDepth >= 2.3) {
+        // Oriented along the right wall with rotY = -Math.PI / 2 (filler on wall side, step-in into room)
+        const tubX = rightWallX - tubD / 2 - 0.05;
+        let tubZ = 0.45;
         if (hasShower) {
-          // If shower occupies back-right corner, place tub along right wall in the front spa zone
-          const tubX = roomWidth / 2 - 0.50;
-          const tubZ = Math.min(roomDepth / 2 - 0.70, 0.75);
-          spawnAiFixture(tubEntry, tubX, tubZ, -Math.PI / 2);
-        } else {
-          // If no shower, tub sits along back-right wall
-          const tubX = roomWidth / 2 - 0.55;
-          const tubZ = backWallZ + 0.65;
-          spawnAiFixture(tubEntry, tubX, tubZ, Math.PI);
+          // Position tub along right wall in front of the shower, leaving comfortable walking gap
+          tubZ = Math.max(showerZ + showerD / 2 + tubW / 2 + 0.18, frontWallZ - tubW / 2 - 0.18);
+          // Safety clamp within room boundaries
+          if (tubZ + tubW / 2 > frontWallZ - 0.05) {
+            tubZ = frontWallZ - tubW / 2 - 0.06;
+          }
         }
+        spawnAiFixture(tubEntry, tubX, tubZ, -Math.PI / 2);
       }
 
-      // G. Architectural Safeguard: No random floor dumping at (0,0,0)!
+      // Architectural Safeguard: No random floor dumping at (0,0,0)!
       // All genuine fixtures have been mapped to their dedicated real-life architectural zones.
 
       // Ensure all newly placed fixtures and architecture match the active aesthetic theme

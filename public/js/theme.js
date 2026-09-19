@@ -144,37 +144,71 @@
         themeAccentsGroup.add(ringG);
 
       } else if (isZen) {
-        // Vertical Hinoki / Teak wood slatted feature wall along back wall behind/around vanity
+        // Vertical Hinoki / Teak wood slatted feature wall behind/around vanity
         const slatW = 0.038, slatD = 0.024, slatH = roomHeight;
         const panelWidth = 1.80;
         const numSlats = Math.floor(panelWidth / 0.07);
         const slatsG = new THREE.Group();
-        // Thin dark shadow backing panel mounted flush to front of back wall (wall front is -roomDepth/2 + 0.04)
-        const backPanel = new THREE.Mesh(
-          new THREE.BoxGeometry(panelWidth + 0.1, slatH - 0.02, 0.012),
-          new THREE.MeshStandardMaterial({ color: 0x2b1e15, roughness: 0.9 })
-        );
-        backPanel.position.set(vanityX, slatH / 2, -roomDepth / 2 + 0.046);
-        slatsG.add(backPanel);
 
-        for (let i = 0; i < numSlats; i++) {
-          const sx = vanityX - panelWidth / 2 + 0.04 + i * 0.07;
-          const slat = new THREE.Mesh(new THREE.BoxGeometry(slatW, slatH - 0.04, slatD), teakMat);
-          slat.position.set(sx, slatH / 2, -roomDepth / 2 + 0.064);
-          slat.castShadow = true;
-          slat.receiveShadow = true;
-          slatsG.add(slat);
+        const vanityRot = vanityObj ? (vanityObj.rotation.y || 0) : 0;
+        const isVanityOnSide = Math.abs(Math.abs(vanityRot) - Math.PI / 2) < 0.35;
+
+        if (isVanityOnSide) {
+          // Attached to Left Wall behind vanity
+          const backPanel = new THREE.Mesh(
+            new THREE.BoxGeometry(0.012, slatH - 0.02, panelWidth + 0.1),
+            new THREE.MeshStandardMaterial({ color: 0x2b1e15, roughness: 0.9 })
+          );
+          backPanel.position.set(-roomWidth / 2 + 0.046, slatH / 2, vanityZ);
+          slatsG.add(backPanel);
+
+          for (let i = 0; i < numSlats; i++) {
+            const sz = vanityZ - panelWidth / 2 + 0.04 + i * 0.07;
+            const slat = new THREE.Mesh(new THREE.BoxGeometry(slatD, slatH - 0.04, slatW), teakMat);
+            slat.position.set(-roomWidth / 2 + 0.064, slatH / 2, sz);
+            slat.castShadow = true;
+            slat.receiveShadow = true;
+            slatsG.add(slat);
+          }
+          themeAccentsGroup.add(slatsG);
+
+          // Natural woven tatami / jute runner mat in front of console
+          const matGeo = new THREE.PlaneGeometry(1.40, 0.65);
+          const matMat = new THREE.MeshStandardMaterial({ color: 0xc4a47c, roughness: 0.95 });
+          const mat = new THREE.Mesh(matGeo, matMat);
+          mat.rotation.x = -Math.PI / 2;
+          mat.rotation.z = Math.PI / 2;
+          mat.position.set(-roomWidth / 2 + 0.92, 0.0022, vanityZ);
+          mat.receiveShadow = true;
+          themeAccentsGroup.add(mat);
+        } else {
+          // Attached to Back Wall behind vanity
+          const backPanel = new THREE.Mesh(
+            new THREE.BoxGeometry(panelWidth + 0.1, slatH - 0.02, 0.012),
+            new THREE.MeshStandardMaterial({ color: 0x2b1e15, roughness: 0.9 })
+          );
+          backPanel.position.set(vanityX, slatH / 2, -roomDepth / 2 + 0.046);
+          slatsG.add(backPanel);
+
+          for (let i = 0; i < numSlats; i++) {
+            const sx = vanityX - panelWidth / 2 + 0.04 + i * 0.07;
+            const slat = new THREE.Mesh(new THREE.BoxGeometry(slatW, slatH - 0.04, slatD), teakMat);
+            slat.position.set(sx, slatH / 2, -roomDepth / 2 + 0.064);
+            slat.castShadow = true;
+            slat.receiveShadow = true;
+            slatsG.add(slat);
+          }
+          themeAccentsGroup.add(slatsG);
+
+          // Natural woven tatami / jute runner mat in front of console
+          const matGeo = new THREE.PlaneGeometry(1.40, 0.65);
+          const matMat = new THREE.MeshStandardMaterial({ color: 0xc4a47c, roughness: 0.95 });
+          const mat = new THREE.Mesh(matGeo, matMat);
+          mat.rotation.x = -Math.PI / 2;
+          mat.position.set(vanityX, 0.0022, -roomDepth / 2 + 0.92);
+          mat.receiveShadow = true;
+          themeAccentsGroup.add(mat);
         }
-        themeAccentsGroup.add(slatsG);
-
-        // Natural woven tatami / jute runner mat in front of console
-        const matGeo = new THREE.PlaneGeometry(1.40, 0.65);
-        const matMat = new THREE.MeshStandardMaterial({ color: 0xc4a47c, roughness: 0.95 });
-        const mat = new THREE.Mesh(matGeo, matMat);
-        mat.rotation.x = -Math.PI / 2;
-        mat.position.set(vanityX, 0.0022, -roomDepth / 2 + 0.92);
-        mat.receiveShadow = true;
-        themeAccentsGroup.add(mat);
 
         // Potted Japanese Bamboo plant in ceramic vase (dynamic collision-free corner selection)
         const plantG = new THREE.Group();
