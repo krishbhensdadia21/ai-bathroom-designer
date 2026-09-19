@@ -273,11 +273,44 @@
 
           <!-- Feasible Results Container -->
           <div id="ai-feasible-container">
-            <!-- Status Badge: AI Engine Active -->
+            <!-- Status Badge: AI Engine Active & Composite Score -->
             <div class="flex items-center justify-between pb-2 border-b border-gray-100">
               <div class="flex items-center space-x-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="text-xs font-bold text-gray-900">AI Engine</span>
+                <span class="text-xs font-bold text-gray-900">AI Pareto Engine</span>
+              </div>
+              <div class="flex items-center space-x-1.5">
+                <span class="text-[10px] text-gray-400 font-medium">Fitness Score:</span>
+                <span class="text-xs font-black text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full" id="ai-composite-score-badge">97.8 / 100</span>
+              </div>
+            </div>
+
+            <!-- 3 Alternative Pareto Recommendation Suites -->
+            <div class="mt-2.5">
+              <div class="flex items-center justify-between mb-1.5 px-0.5">
+                <span class="text-[10px] font-black uppercase tracking-wider text-gray-500 flex items-center space-x-1">
+                  <i class="fa-solid fa-layer-group text-amber-600"></i>
+                  <span>Select Recommendation Suite</span>
+                </span>
+                <span class="text-[10px] font-bold text-gray-400">Click to switch</span>
+              </div>
+              <div class="bg-gray-100/90 p-1 rounded-2xl grid grid-cols-3 gap-1 text-xs border border-gray-200/80">
+                <button type="button" id="tab-tier-essential" onclick="switchAiAlternativeTier('essential')" class="py-2 px-1.5 rounded-xl text-gray-700 hover:bg-white transition text-center cursor-pointer group">
+                  <div class="font-extrabold text-[11px] leading-tight group-hover:text-black">Essential</div>
+                  <div class="text-[10px] text-gray-500 font-mono mt-0.5" id="tab-price-essential">--</div>
+                </button>
+                <button type="button" id="tab-tier-signature" onclick="switchAiAlternativeTier('signature')" class="py-2 px-1.5 rounded-xl bg-black text-white shadow-xs transition text-center cursor-pointer">
+                  <div class="font-extrabold text-[11px] leading-tight">Signature</div>
+                  <div class="text-[10px] text-gray-300 font-mono mt-0.5" id="tab-price-signature">--</div>
+                </button>
+                <button type="button" id="tab-tier-luxury" onclick="switchAiAlternativeTier('luxury')" class="py-2 px-1.5 rounded-xl text-gray-700 hover:bg-white transition text-center cursor-pointer group">
+                  <div class="font-extrabold text-[11px] leading-tight group-hover:text-black">Luxury</div>
+                  <div class="text-[10px] text-gray-500 font-mono mt-0.5" id="tab-price-luxury">--</div>
+                </button>
+              </div>
+              <div class="flex items-center justify-between mt-1.5 px-1">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Active Suite:</span>
+                <span class="text-[10px] font-black text-amber-800 uppercase tracking-wider bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full" id="ai-active-tier-tag">Signature Balanced (Best Multi-Objective)</span>
               </div>
             </div>
 

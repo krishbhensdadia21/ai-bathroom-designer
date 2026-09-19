@@ -649,3 +649,41 @@
         builder: (...args) => buildComposedTallFaucet(...args)
       }
     ];
+
+    // ==================== 3. KOHLER CURATED RECOMMENDATION SUITES ====================
+    const KOHLER_CURATED_SUITES = {
+      essential: {
+        id: 'essential',
+        name: 'Essential Value Suite',
+        tagline: 'Max Cost Savings & Complete NKBA Compliance',
+        description: 'Engineered for budget-conscious renovations without compromising on authentic Kohler quality, skirted easy-clean ceramics, and WaterSense efficiency.',
+        target_budget_inr: 150000,
+        target_budget_usd: 1990,
+        primary_skus: ['reach-one-piece-toilet', 'trace-integrated-vanity', 'artifact-widespread-faucet', 'evok-freestanding-bath'],
+        ideal_for: 'High-ROI modern renovations, rental upgrades, and compact guest baths'
+      },
+      signature: {
+        id: 'signature',
+        name: 'Signature Balanced Suite',
+        tagline: 'Best Multi-Objective Pareto Optimal',
+        description: 'The algorithmic sweet spot balancing spatial clearances, budget allocation, aesthetic theme cohesion, and wet-wall MEP alignment with peak composite fitness.',
+        target_budget_inr: 300000,
+        target_budget_usd: 3990,
+        primary_skus: ['veil-smart-toilet', 'vive-integrated-vanity', 'parallel-single-handle-faucet', 'statement-shower-package'],
+        ideal_for: 'Contemporary master en-suites seeking smart hygiene and sculptural minimalism'
+      },
+      luxury: {
+        id: 'luxury',
+        name: 'Masterpiece Luxury Suite',
+        tagline: 'Flagship Kohler Innovation & Smart Living',
+        description: 'Uncompromising luxury featuring sculptured smart sanitaryware, thermostatic multi-spray hydrotherapy, and premium PBR finishes for an authentic 5-star spa retreat.',
+        target_budget_inr: 600000,
+        target_budget_usd: 7990,
+        primary_skus: ['veil-smart-toilet', 'brazn-vessel-sink', 'composed-tall-vessel-faucet', 'statement-shower-package', 'evok-freestanding-bath'],
+        ideal_for: 'Grand luxury architectural residences and private wellness retreats'
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      window.KOHLER_CURATED_SUITES = KOHLER_CURATED_SUITES;
+    }

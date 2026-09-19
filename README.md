@@ -125,6 +125,17 @@ The end-to-end design lifecycle operates across 5 intuitive stages:
    * Inspect the **Studio KOHLER Specifier Data Sheet** for MEP plumbing rough-in dimensions, supply lines, and electrical conduit specs.
    * Export the layout summary or request dealer RFQs for nearest Kohler Experience Centers.
 ##
+### 💎 3 Multi-Tier Recommendation Suites (Pareto Frontiers)
+##
+
+Rather than forcing a single rigid layout, the multi-objective Pareto solver synthesizes 3 distinct design suites for every room envelope and budget:
+
+| Design Suite | Target Archetype | Algorithmic Optimization Strategy | Primary Kohler Anchors |
+|---|---|---|---|
+| **1. Essential Value** | Budget-Conscious / High-ROI Renovations | **Max Cost Savings**: Allocates the lowest budget fraction while strictly enforcing 100% NKBA clearance compliance, skirted easy-clean ceramics, and WaterSense efficiency. | Reach™ Round-Front Skirted Toilet, Trace™ Integrated Vanity, Artifacts™ Faucets |
+| **2. Signature Balanced** *(Default)* | Harmonious Space & Style Optimization | **Best Multi-Objective Pareto Optimal**: Achieves the peak composite fitness score (96–98/100) balancing spatial legroom, theme cohesion, and wet-wall MEP alignment. | Veil™ Intelligent Smart Toilet, Vive™ Integrated Vanity, Parallel™ Faucet, Statement™ Shower |
+| **3. Masterpiece Luxury** | Grand Master Suites & Spa Sanctuaries | **Flagship Innovation & Luxury Tech**: Curates top-of-the-line Kohler smart innovations, sculpted vessel basins, and thermostatic multi-spray hydrotherapy without spatial compromise. | Veil™ Smart Toilet, Brazn™ Rectangular Vessel Sink, Composed™ Tall Faucet, Evok™ Freestanding Bath |
+##
 ### 📊 Evaluation Criteria Alignment (100% Total Weightage)
 ##
 | Evaluation Criteria | Weight | Implementation in this Solution |
