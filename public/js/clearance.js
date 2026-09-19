@@ -68,17 +68,26 @@
         const effW = fw * cosR + fd * sinR;
         const effD = fw * sinR + fd * cosR;
 
-        // 1. Boundary Overflow Check (Product dimensions vs room dimensions)
-        const isOutOfBounds = (
-          Math.abs(pos.x) + effW / 2 > halfRoomW + 0.03 ||
-          Math.abs(pos.z) + effD / 2 > halfRoomD + 0.03
-        );
+        // For toilets, the tank rear is at -0.15m from origin, bowl extends forward
+        let rearD = effD / 2;
+        let frontD = effD / 2;
+        if (cat === 'toilets' && Math.abs(rotY) < 0.1) {
+          rearD = 0.15;
+          frontD = fd - 0.15;
+        }
 
-        // 2. Door Collision Check (Inward 90° door swing arc collision)
         const fixMinX = pos.x - effW / 2;
         const fixMaxX = pos.x + effW / 2;
-        const fixMinZ = pos.z - effD / 2;
-        const fixMaxZ = pos.z + effD / 2;
+        const fixMinZ = pos.z - rearD;
+        const fixMaxZ = pos.z + frontD;
+
+        // 1. Boundary Overflow Check (Product dimensions vs room dimensions)
+        const isOutOfBounds = (
+          fixMinX < -halfRoomW - 0.03 ||
+          fixMaxX > halfRoomW + 0.03 ||
+          fixMinZ < -halfRoomD - 0.03 ||
+          fixMaxZ > halfRoomD + 0.03
+        );
 
         const closestX = Math.max(fixMinX, Math.min(doorHingeX, fixMaxX));
         const closestZ = Math.max(fixMinZ, Math.min(doorHingeZ, fixMaxZ));
