@@ -15,7 +15,7 @@ This project is submitted as an individual case study solution for the selection
 | Deliverable | Description | File / Access Link |
 |---|---|---|
 | **1. Working Model** | Live interactive 3D WebGL space planner & AI assistant deployed to production | 🔗 **[Live Vercel Application](https://kohler-ai-bathroom-designer.vercel.app/)** |
-| **2. Prompts & Workflows PDF** | Comprehensive 6-page publication-quality technical report detailing all AI prompts, system instructions, Llama Guard rules, NLP parsers, and multi-objective workflows | 📄 **[KOHLER_AI_Prompts_System_Instructions_Workflows.pdf](./KOHLER_AI_Prompts_System_Instructions_Workflows.pdf)** |
+| **2. Prompts & Workflows** | Complete documentation of AI prompts, system instructions, Llama Guard rules, and multi-objective workflows | 📖 **[System Architecture & Prompts](#-ai-prompts-system-instructions--workflows)** |
 | **3. Video Walkthrough** | Demonstration of the 3D space planner and generative AI recommendation engine | 🎥 **[Video Walkthrough Documentation](#-video-walkthrough)** |
 | **4. Presentation Deck** | Structured presentation deck on system approach, architecture, innovation, and business impact | 📊 **[Presentation Deck Summary](#-presentation-deck)** |
 ##
@@ -23,7 +23,6 @@ This project is submitted as an individual case study solution for the selection
 ##
 ```text
 kohler-ai-bathroom-designer/
-├── KOHLER_AI_Prompts_System_Instructions_Workflows.pdf  # Deliverable 2: Complete Prompts & Workflows Report
 ├── components/                   # Modular HTML Component Partials (12 files)
 │   ├── header.html               # Platform header, logo, currency selector, and investment counter
 │   ├── workspace_nav.html        # Viewport switcher (3D/2D/Walk-in), clear room, dimensions, finishes
