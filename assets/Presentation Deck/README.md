@@ -1,7 +1,7 @@
 # 📊 Pitch & Presentation Deck
 
 **Project:** KOHLER AI Bathroom Designer & Planner  
-**File:** `KOHLER_AI_Bathroom_Designer_Pitch.pptx`
+**File:** `KOHLER_AI_Bathroom_Designer.pptx`
 
 ---
 
