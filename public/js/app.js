@@ -296,6 +296,11 @@
         setFixtureNightEmissives(true, 3.0);
         showToast('Ambiance: Night Mode (Smart Mirror & Under-Vanity Glow)');
       }
+
+      // Re-evaluate clearance visualization to adapt glow luminosity to active day/dusk/night ambiance
+      if (typeof updateClearanceVisualizer === 'function') {
+        updateClearanceVisualizer();
+      }
     }
 
     function setLightingKelvin(k) {

@@ -257,59 +257,93 @@
           reason: statusReason
         });
 
-        // Render clearance plane on floor (y = 0.009)
+        // Render clearance plane on floor (elevated to y = 0.015 to permanently prevent z-fighting/clipping)
+        const isDarkAmbiance = (typeof currentLightingMode === 'string') && (currentLightingMode === 'night' || currentLightingMode === 'dusk');
         const planeGeo = new THREE.PlaneGeometry(fw * 1.2, minFrontClearanceM);
-        const colorHex = fixtureStatus === 'invalid' ? 0xef4444 : (fixtureStatus === 'warning' ? 0xf59e0b : 0x10b981);
-        const opacityVal = fixtureStatus === 'invalid' ? 0.48 : (fixtureStatus === 'warning' ? 0.35 : 0.22);
+
+        let colorHex, opacityVal;
+        if (fixtureStatus === 'invalid') {
+          colorHex = isDarkAmbiance ? 0xf87171 : 0xef4444; // High-vis Neon Rose
+          opacityVal = isDarkAmbiance ? 0.65 : 0.45;
+        } else if (fixtureStatus === 'warning') {
+          colorHex = isDarkAmbiance ? 0xfbbf24 : 0xf59e0b; // Luminous Amber
+          opacityVal = isDarkAmbiance ? 0.55 : 0.38;
+        } else {
+          colorHex = isDarkAmbiance ? 0x34d399 : 0x10b981; // Neon Mint / Emerald
+          opacityVal = isDarkAmbiance ? 0.45 : 0.28;
+        }
 
         const planeMat = new THREE.MeshBasicMaterial({
           color: colorHex,
           transparent: true,
           opacity: opacityVal,
           side: THREE.DoubleSide,
-          depthWrite: false
+          depthWrite: false,
+          polygonOffset: true,
+          polygonOffsetFactor: -2.0,
+          polygonOffsetUnits: -4.0
         });
         const planeMesh = new THREE.Mesh(planeGeo, planeMat);
         planeMesh.rotation.x = -Math.PI / 2;
         planeMesh.rotation.z = effectiveRotY;
-        planeMesh.position.set(clearanceCenter.x, 0.009, clearanceCenter.z);
+        planeMesh.position.set(clearanceCenter.x, 0.015, clearanceCenter.z);
+        planeMesh.renderOrder = 998;
         clearanceGroup.add(planeMesh);
 
-        // Dashed border outline
+        // Dashed border outline with z-fighting guard
         const edges = new THREE.EdgesGeometry(planeGeo);
         const lineMat = new THREE.LineBasicMaterial({
           color: colorHex,
           linewidth: 2,
           transparent: true,
-          opacity: 0.85
+          opacity: isDarkAmbiance ? 0.98 : 0.88,
+          depthWrite: false,
+          polygonOffset: true,
+          polygonOffsetFactor: -3.0,
+          polygonOffsetUnits: -6.0
         });
         const wireframe = new THREE.LineSegments(edges, lineMat);
         wireframe.rotation.x = -Math.PI / 2;
-        wireframe.rotation.z = rotY;
-        wireframe.position.set(clearanceCenter.x, 0.0095, clearanceCenter.z);
+        wireframe.rotation.z = effectiveRotY;
+        wireframe.position.set(clearanceCenter.x, 0.016, clearanceCenter.z);
+        wireframe.renderOrder = 999;
         clearanceGroup.add(wireframe);
       });
 
       // Render Architectural Door Swing Arc on floor
+      const isDarkAmbiance = (typeof currentLightingMode === 'string') && (currentLightingMode === 'night' || currentLightingMode === 'dusk');
       const doorArcPoints = [];
-      const segments = 24;
+      const segments = 32;
       for (let i = 0; i <= segments; i++) {
         const theta = (i / segments) * (Math.PI / 2);
         doorArcPoints.push(new THREE.Vector3(
           doorHingeX + doorRadius * Math.sin(theta),
-          0.008,
+          0.015,
           doorHingeZ + doorRadius * Math.cos(theta)
         ));
       }
       const doorArcGeo = new THREE.BufferGeometry().setFromPoints(doorArcPoints);
+      const doorArcColor = anyDoorCollision ? (isDarkAmbiance ? 0xf87171 : 0xef4444) : (isDarkAmbiance ? 0xfbbf24 : 0xd97706);
       const doorArcMat = new THREE.LineBasicMaterial({
-        color: anyDoorCollision ? 0xef4444 : 0xb45309,
+        color: doorArcColor,
         linewidth: 2,
         transparent: true,
-        opacity: anyDoorCollision ? 0.95 : 0.45
+        opacity: anyDoorCollision ? 0.95 : (isDarkAmbiance ? 0.90 : 0.65),
+        depthWrite: false,
+        polygonOffset: true,
+        polygonOffsetFactor: -3.0,
+        polygonOffsetUnits: -6.0
       });
       const doorArcLine = new THREE.Line(doorArcGeo, doorArcMat);
+      doorArcLine.renderOrder = 999;
       clearanceGroup.add(doorArcLine);
+
+      // Preserve user visibility preference
+      if (clearanceGroup) {
+        clearanceGroup.visible = isClearanceVisible;
+      }
+      const chk = document.getElementById('toggle-clearance-chk');
+      if (chk) chk.checked = isClearanceVisible;
 
       const overallStatus = hasCollision ? 'invalid' : (hasWarning ? 'warning' : 'valid');
       latestClearanceReport = {
