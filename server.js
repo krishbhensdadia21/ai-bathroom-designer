@@ -730,9 +730,14 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     luxuryItems.push(formatCatalogFixture(tubLux, 'bathtub', 'Freestanding ergonomic soaking tub with softened modern corners and integrated slotted overflow.'));
   }
 
-  // Include walk-in glass shower enclosure in luxury suites with space
-  if (showerDoorLux) {
+  const wantsGlassDoor = nLow.includes('glass door') || nLow.includes('pivot door') || nLow.includes('sliding door') || nLow.includes('enclosure');
+  const canAffordDoor = budgetNum >= 280000 || wantsGlassDoor;
+
+  // Include walk-in glass shower enclosure in luxury suites with space and budget headroom
+  if (showerDoorLux && canAffordDoor) {
     luxuryItems.push(formatCatalogFixture(showerDoorLux, 'shower', 'Architectural pivot shower door with 8 mm CleanCoat tempered glass and solid brass hardware.'));
+  }
+  if (showerHeadLux) {
     luxuryItems.push(formatCatalogFixture(showerHeadLux, 'shower', 'Multifunction rainhead shower system with Full Coverage and Cloud spray indulgence.'));
   }
 
@@ -774,8 +779,10 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   if (tubSig) {
     signatureItems.push(formatCatalogFixture(tubSig, 'bathtub', 'Seamless rectangular freestanding soaking tub with softened corners and double-ended lumbar support.'));
   }
-  if (showerSig) {
+  if (showerSig && canAffordDoor) {
     signatureItems.push(formatCatalogFixture(showerSig, 'shower', 'Architectural pivot shower door with 8 mm CleanCoat tempered glass and high-polish tubular handle.'));
+  }
+  if (showerHeadSig) {
     signatureItems.push(formatCatalogFixture(showerHeadSig, 'shower', 'Three-function showerhead with Full Coverage and Katalyst air-induction technology.'));
   }
 
@@ -814,14 +821,74 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     formatCatalogFixture(mirrorEss, 'mirror', 'Mirrored cabinet with dual-sided mirror door and adjustable interior shelving.')
   ].filter(Boolean);
 
+  // ==================== AUTOMATED BUDGET CEILING CONFORMANCE ====================
+  // Guarantees that neither Signature nor Luxury ever spills over the user's hard budget cap!
+  function enforceBudgetCeiling(rawItems, maxBudget) {
+    let list = [...rawItems];
+    let currentTotal = list.reduce((s, i) => s + (i.price_inr || 0), 0);
+    if (currentTotal <= maxBudget) return list;
+
+    // Step 1: Remove luxury accessories if any
+    list = list.filter(i => i.category !== 'accessories');
+    currentTotal = list.reduce((s, i) => s + (i.price_inr || 0), 0);
+    if (currentTotal <= maxBudget) return list;
+
+    // Step 2: If there's an expensive glass shower door and user didn't explicitly demand it, omit the door (keeping the showerhead for walk-in wet room)
+    if (!wantsGlassDoor) {
+      const doorIdx = list.findIndex(i => i.category === 'shower' && (i.id.includes('door') || (i.price_inr || 0) > 50000));
+      if (doorIdx !== -1) {
+        list.splice(doorIdx, 1);
+        currentTotal = list.reduce((s, i) => s + (i.price_inr || 0), 0);
+        if (currentTotal <= maxBudget) return list;
+      }
+    }
+
+    // Step 3: Downgrade mirror if still over budget
+    const mirIdx = list.findIndex(i => i.category === 'mirror' && (i.price_inr || 0) > 30000);
+    if (mirIdx !== -1) {
+      list[mirIdx] = formatCatalogFixture(findCatalogItem('archer', 'mirrors', 'rcher-rcher-51-78-7-cm-irrored-abine-k3073inn'), 'mirror', 'Mirrored cabinet with dual-sided mirror door and adjustable interior shelving.');
+      currentTotal = list.reduce((s, i) => s + (i.price_inr || 0), 0);
+      if (currentTotal <= maxBudget) return list;
+    }
+
+    // Step 4: Downgrade vanity if still over budget
+    const vanIdx = list.findIndex(i => i.category === 'vanity' && (i.price_inr || 0) > 40000);
+    if (vanIdx !== -1) {
+      list[vanIdx] = formatCatalogFixture(findCatalogItem('trace', 'vanities', 'trace-integrated-vanity'), 'vanity', 'Integrated vanity top and basin in lustrous vitreous china.');
+      currentTotal = list.reduce((s, i) => s + (i.price_inr || 0), 0);
+      if (currentTotal <= maxBudget) return list;
+    }
+
+    // Step 5: Downgrade faucet if still over budget
+    const fctIdx = list.findIndex(i => i.category === 'faucet' && (i.price_inr || 0) > 18000);
+    if (fctIdx !== -1) {
+      list[fctIdx] = formatCatalogFixture(findCatalogItem('parallel', 'faucets', 'parallel-pillar-tap'), 'faucet', 'Faceted geometric pillar tap with precise angular contours.');
+      currentTotal = list.reduce((s, i) => s + (i.price_inr || 0), 0);
+      if (currentTotal <= maxBudget) return list;
+    }
+
+    // Step 6: Downgrade toilet if still over budget
+    const tltIdx = list.findIndex(i => i.category === 'toilet' && (i.price_inr || 0) > 30000);
+    if (tltIdx !== -1) {
+      list[tltIdx] = formatCatalogFixture(findCatalogItem('reach', 'toilets', 'reach-one-piece-toilet'), 'toilet', 'One-piece round-front toilet with clean skirted trapway.');
+      currentTotal = list.reduce((s, i) => s + (i.price_inr || 0), 0);
+    }
+
+    return list;
+  }
+
+  const boundedEssItems = enforceBudgetCeiling(essentialItems, budgetNum);
+  const boundedSigItems = enforceBudgetCeiling(signatureItems, budgetNum);
+  const boundedLuxItems = enforceBudgetCeiling(luxuryItems, budgetNum);
+
   const calcTotal = (items) => ({
     inr: items.reduce((s, i) => s + (i.price_inr || 0), 0),
     usd: items.reduce((s, i) => s + (i.price_usd || 0), 0)
   });
 
-  const sigTotals = calcTotal(signatureItems);
-  const essTotals = calcTotal(essentialItems);
-  const luxTotals = calcTotal(luxuryItems);
+  const sigTotals = calcTotal(boundedSigItems);
+  const essTotals = calcTotal(boundedEssItems);
+  const luxTotals = calcTotal(boundedLuxItems);
 
   const spatialScore = Math.min(99, Math.max(88, Math.round(91 + Math.min(8, (roomArea - 5.0) * 1.5))));
 
@@ -871,12 +938,12 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     };
   };
 
-  const sigTier = calcTierMetrics(signatureItems, sigTotals, "Signature Balanced", "Recommended Best Multi-Objective Score");
-  const essTier = calcTierMetrics(essentialItems, essTotals, "Essential Value", "Budget-Optimized");
-  const luxTier = calcTierMetrics(luxuryItems, luxTotals, "Masterpiece Luxury", "Feature-Maximized");
+  const sigTier = calcTierMetrics(boundedSigItems, sigTotals, "Signature Balanced", "Recommended Best Multi-Objective Score");
+  const essTier = calcTierMetrics(boundedEssItems, essTotals, "Essential Value", "Budget-Optimized");
+  const luxTier = calcTierMetrics(boundedLuxItems, luxTotals, "Masterpiece Luxury", "Feature-Maximized");
 
   const dimensionsStr = `${(roomW * 3.28084).toFixed(1)}ft x ${(roomD * 3.28084).toFixed(1)}ft`;
-  const mainItemName = (signatureItems[0] && signatureItems[0].name) ? signatureItems[0].name : 'Kohler suite';
+  const mainItemName = (boundedSigItems[0] && boundedSigItems[0].name) ? boundedSigItems[0].name : 'Kohler suite';
 
   const understoodTags = parsePromptPreferences(customerNotes, roomW, roomD, theme, autoDim, autoBudget);
   const trimmedNotes = (customerNotes || '').trim();
@@ -896,7 +963,7 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     activeTierKey = 'essential';
   }
 
-  let defaultActiveItems = activeTierKey === 'luxury' ? luxuryItems : (activeTierKey === 'essential' ? essentialItems : signatureItems);
+  let defaultActiveItems = activeTierKey === 'luxury' ? boundedLuxItems : (activeTierKey === 'essential' ? boundedEssItems : boundedSigItems);
   let defaultTotals = activeTierKey === 'luxury' ? luxTotals : (activeTierKey === 'essential' ? essTotals : sigTotals);
   let defaultTierObj = activeTierKey === 'luxury' ? luxTier : (activeTierKey === 'essential' ? essTier : sigTier);
 
