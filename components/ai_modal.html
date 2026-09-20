@@ -349,7 +349,7 @@
                 </div>
               </div>
 
-              <div class="space-y-3 max-h-[460px] overflow-y-auto custom-scroll pr-1.5 pb-1" id="ai-bundle-items-container">
+              <div class="space-y-3 max-h-[260px] overflow-y-auto custom-scroll pr-1.5 pb-1" id="ai-bundle-items-container">
                 <!-- Injected via JavaScript with spacious, un-congested cards -->
               </div>
             </div>
@@ -364,8 +364,8 @@
             </div>
           </div>
 
-          <!-- Bottom: Budget Tracker & Apply Button -->
-          <div id="ai-apply-section" class="pt-4 border-t border-gray-100 space-y-3">
+          <!-- Bottom: Sticky Budget Tracker & Apply Button (Always 100% Visible) -->
+          <div id="ai-apply-section" class="sticky bottom-0 bg-white/95 backdrop-blur-md pt-3 pb-1 border-t border-gray-200/90 z-20 space-y-2.5 shadow-sm">
             <div class="flex justify-between items-center text-xs">
               <span class="text-gray-500 font-medium">Budget Utilization:</span>
               <span class="font-extrabold text-gray-900 font-mono" id="ai-utilization-label">84% (Savings: ₹56,300)</span>
@@ -374,8 +374,8 @@
               <div id="ai-utilization-bar" class="h-full bg-black rounded-full" style="width: 84%"></div>
             </div>
 
-            <button id="btn-apply-ai-bundle" onclick="applyAiBundleToBathroom()" class="w-full bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700 hover:from-amber-800 hover:to-amber-800 text-white border border-amber-400/40 py-3.5 rounded-2xl font-black text-sm shadow-xl flex items-center justify-center space-x-2 transition transform hover:-translate-y-0.5 cursor-pointer">
-              <i class="fa-solid fa-wand-magic"></i>
+            <button id="btn-apply-ai-bundle" onclick="applyAiBundleToBathroom()" class="w-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-700 text-white font-black text-sm py-3.5 px-4 rounded-2xl shadow-xl flex items-center justify-center space-x-2 border border-amber-300/40 transition-all transform hover:-translate-y-0.5 cursor-pointer animate-pulse">
+              <i class="fa-solid fa-wand-magic-sparkles text-white text-base"></i>
               <span>Apply AI Bundle to 3D & 2D Bathroom</span>
             </button>
           </div>

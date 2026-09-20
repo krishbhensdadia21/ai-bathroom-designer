@@ -19,7 +19,12 @@
       }
     }
     function closeAiAssistantModal() {
-      document.getElementById('modal-ai-assistant').classList.add('hidden');
+      const modal = document.getElementById('modal-ai-assistant');
+      if (modal) modal.classList.add('hidden');
+      // If a valid AI suite was generated, apply it to the 3D scene upon closing so the user never sees only 2 starter products
+      if (currentAiRecommendation && currentAiRecommendation.feasible && currentAiRecommendation.bundle && currentAiRecommendation.bundle.length > 2 && placedProducts.length <= 2) {
+        applyAiBundleToBathroom();
+      }
     }
 
     function setAiNeedsRegeneration(message) {
