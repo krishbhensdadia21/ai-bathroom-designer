@@ -700,14 +700,29 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     tubEss = findCatalogItem('evok', 'bathtubs', 'evok-2-bathtub');
   }
 
-  // 4. Resolve Showers
-  let showerDoorLux = null, showerHeadLux = null, showerSig = null, showerHeadSig = null, showerEss = null;
+  // 4. Resolve Showers: Single product selection (DO NOT COMBINE shower products!)
+  const wantsDoor = nLow.includes('shower door') || nLow.includes('glass door') || nLow.includes('pivot door') || nLow.includes('sliding door');
+  const wantsEnclosure = nLow.includes('shower enclosure') || nLow.includes('enclosure');
+  const wantsShowerheadExplicit = nLow.includes('showerhead') || nLow.includes('shower head') || nLow.includes('rainhead');
+
+  let chosenShowerLux = null, chosenShowerSig = null, chosenShowerEss = null;
   if (incShower) {
-    showerDoorLux = findCatalogItem(nLow.includes('singulier') ? 'singulier' : (nLow.includes('elate') ? 'elate' : (nLow.includes('contra') ? 'contra' : 'new-trilogy')), 'showers', 'new-trilogy-pivot-door');
-    showerHeadLux = findCatalogItem('statement', 'showers', 'statement-round-showerhead');
-    showerSig = findCatalogItem(nLow.includes('elate') ? 'elate' : 'new-trilogy', 'showers', 'new-trilogy-pivot-door');
-    showerHeadSig = findCatalogItem('statement', 'showers', 'statement-round-showerhead');
-    showerEss = findCatalogItem('statement', 'showers', 'statement-round-showerhead');
+    if (wantsEnclosure) {
+      // User specifically requested a Shower Enclosure (5 available Kohler enclosures)
+      chosenShowerLux = findCatalogItem(nLow.includes('singulier') ? 'singulier' : (nLow.includes('contra') ? '705116' : (nLow.includes('elate') ? '39060' : '708066')), 'showers', 'ingulier-ingulier-200-212-1-cm-ivot-k708066i');
+      chosenShowerSig = findCatalogItem(nLow.includes('contra') ? '705116' : (nLow.includes('trilogy') ? '704702' : (nLow.includes('elate') ? '39060' : '704702')), 'showers', 'ew-rilogy-ew-rilogy-2000-mm-ivot-how-k704702i');
+      chosenShowerEss = findCatalogItem('39060', 'showers', 'late-late-200-cm-liding-hower-oor-k39060in');
+    } else if (wantsDoor && !wantsShowerheadExplicit) {
+      // User specifically requested a Shower Door (5 available Kohler shower doors)
+      chosenShowerLux = findCatalogItem(nLow.includes('matte black') || nLow.includes('2bl') ? '704796' : (nLow.includes('levity') ? '709076' : (nLow.includes('elate') ? '39061' : 'new-trilogy-pivot-door')), 'showers', 'new-trilogy-pivot-door');
+      chosenShowerSig = findCatalogItem(nLow.includes('levity') ? '709076' : (nLow.includes('contra') ? '705115' : (nLow.includes('elate') ? '39061' : 'new-trilogy-pivot-door')), 'showers', 'new-trilogy-pivot-door');
+      chosenShowerEss = findCatalogItem('39061', 'showers', 'late-late-200-cm-liding-hower-oor-k39061in');
+    } else {
+      // Default & Showerhead requests: Statement™ Round Multifunction Showerhead
+      chosenShowerLux = findCatalogItem('statement', 'showers', 'statement-round-showerhead');
+      chosenShowerSig = findCatalogItem('statement', 'showers', 'statement-round-showerhead');
+      chosenShowerEss = findCatalogItem('statement', 'showers', 'statement-round-showerhead');
+    }
   }
 
   // 5. Resolve Faucets
@@ -732,9 +747,6 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     }
   }
 
-  const wantsGlassDoor = nLow.includes('glass door') || nLow.includes('pivot door') || nLow.includes('sliding door') || nLow.includes('enclosure');
-  const canAffordDoor = budgetNum >= 280000 || wantsGlassDoor;
-
   // ==================== COMPOSE TIER 3: MASTERPIECE LUXURY ====================
   const luxuryItems = [
     incToilet ? formatCatalogFixture(toiletLux, 'toilet', 'Flagship sculptural smart toilet with hands-free sensor flush, heated Quiet-Close seat, and UV bidet cleansing.') : null,
@@ -742,8 +754,7 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     incFaucet ? formatCatalogFixture(faucetLux, 'faucet', 'Solid brass luxury valve construction with laminar stream and architectural ceramic disc cartridges.') : null,
     incMirror ? formatCatalogFixture(mirrorLux, 'mirror', 'Premium lighted smart mirror with proximity sensor, perimeter frosted halo illumination, and defogger.') : null,
     (wantsTub && tubLux) ? formatCatalogFixture(tubLux, 'bathtub', 'Freestanding ergonomic soaking tub with softened modern corners and integrated slotted overflow.') : null,
-    (incShower && showerDoorLux && canAffordDoor) ? formatCatalogFixture(showerDoorLux, 'shower', 'Architectural pivot shower door with 8 mm CleanCoat tempered glass and solid brass hardware.') : null,
-    (incShower && showerHeadLux) ? formatCatalogFixture(showerHeadLux, 'shower', 'Multifunction rainhead shower system with Full Coverage and Cloud spray indulgence.') : null
+    (incShower && chosenShowerLux) ? formatCatalogFixture(chosenShowerLux, 'shower', 'Architectural Kohler shower fixture engineered with premium precision tolerances.') : null
   ].filter(Boolean);
 
   // ==================== COMPOSE TIER 1: SIGNATURE BALANCED ====================
@@ -753,8 +764,7 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     incFaucet ? formatCatalogFixture(faucetSig, 'faucet', 'Solid brass construction with ceramic disc valves and laminar water flow stream.') : null,
     incMirror ? formatCatalogFixture(mirrorSig, 'mirror', 'Circular lighted smart mirror with proximity sensor, perimeter frosted halo, and defogger.') : null,
     (wantsTub && tubSig) ? formatCatalogFixture(tubSig, 'bathtub', 'Seamless rectangular freestanding soaking tub with softened corners and double-ended lumbar support.') : null,
-    (incShower && showerSig && canAffordDoor) ? formatCatalogFixture(showerSig, 'shower', 'Architectural pivot shower door with 8 mm CleanCoat tempered glass and high-polish tubular handle.') : null,
-    (incShower && showerHeadSig) ? formatCatalogFixture(showerHeadSig, 'shower', 'Three-function showerhead with Full Coverage and Katalyst air-induction technology.') : null
+    (incShower && chosenShowerSig) ? formatCatalogFixture(chosenShowerSig, 'shower', 'Performance Kohler shower fixture with durable CleanCoat surface and water-efficient engineering.') : null
   ].filter(Boolean);
 
   // ==================== COMPOSE TIER 2: ESSENTIAL VALUE ====================
@@ -764,7 +774,7 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
     incFaucet ? formatCatalogFixture(faucetEss, 'faucet', 'Faceted geometric pillar tap with precise angular contours and quarter-turn ceramic cartridge.') : null,
     incMirror ? formatCatalogFixture(mirrorEss, 'mirror', 'Premium mirror with high-clarity reflective coating.') : null,
     (wantsTub && tubEss) ? formatCatalogFixture(tubEss, 'bathtub', 'Seamless freestanding ergonomic soaking tub with integrated slotted overflow.') : null,
-    (incShower && showerEss) ? formatCatalogFixture(showerEss, 'shower', 'Three-function showerhead with Full Coverage, Deep Massage, and Katalyst air-induction technology.') : null
+    (incShower && chosenShowerEss) ? formatCatalogFixture(chosenShowerEss, 'shower', 'Reliable high-performance Kohler shower engineering.') : null
   ].filter(Boolean);
 
   // ==================== AUTOMATED BUDGET CEILING CONFORMANCE ====================

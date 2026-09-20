@@ -733,14 +733,16 @@
       const mirrorEntry = rec.find(i => (i.category || '').toLowerCase().includes('mirror'));
       const tubEntry = rec.find(i => (i.category || '').toLowerCase().includes('tub') || (i.category || '').toLowerCase().includes('bath'));
 
-      // Differentiate Shower Door Enclosure vs Showerhead/Column
-      const showerDoorEntry = rec.find(i => (i.category || '').toLowerCase().includes('shower') &&
-        (i.name.toLowerCase().includes('door') || i.name.toLowerCase().includes('pivot') || i.name.toLowerCase().includes('sliding') || i.name.toLowerCase().includes('enclosure')));
-      const showerHeadEntry = rec.find(i => (i.category || '').toLowerCase().includes('shower') &&
-        (i.name.toLowerCase().includes('head') || i.name.toLowerCase().includes('column') || i.name.toLowerCase().includes('mult') || i.name.toLowerCase().includes('statement')) &&
-        i !== showerDoorEntry);
-      const genericShowerEntry = (!showerDoorEntry && !showerHeadEntry) ? rec.find(i => (i.category || '').toLowerCase().includes('shower')) : null;
-      const hasShower = !!(showerDoorEntry || showerHeadEntry || genericShowerEntry);
+      // Resolve single shower fixture (DO NOT COMBINE multiple shower fixtures!)
+      const showerEntry = rec.find(i => (i.category || '').toLowerCase().includes('shower'));
+      const isShowerHead = showerEntry && (
+        (showerEntry.subcategory && showerEntry.subcategory === 'showerhead') ||
+        showerEntry.name.toLowerCase().includes('showerhead') ||
+        showerEntry.name.toLowerCase().includes('statement') ||
+        (showerEntry.id && showerEntry.id.includes('statement'))
+      );
+      const isShowerDoorOrEnclosure = showerEntry && !isShowerHead;
+      const hasShower = !!showerEntry;
 
       // ================= ARCHITECTURAL 4-ZONE SPATIAL PLACEMENT =================
       const backWallZ = -roomDepth / 2;
@@ -757,7 +759,7 @@
       const vanityW = (vanityCat && vanityCat.width_m) || 1.15;
       const vanityD = (vanityCat && vanityCat.depth_m) || 0.56;
 
-      const showerCat = showerDoorEntry ? findCatalogFixture(showerDoorEntry) : null;
+      const showerCat = showerEntry ? findCatalogFixture(showerEntry) : null;
       const showerW = (showerCat && showerCat.width_m) || 1.12;
       const showerD = (showerCat && showerCat.depth_m) || 0.96;
 
@@ -871,15 +873,15 @@
         spawnedVanity.userData.attachedFaucet = spawnedFaucet;
       }
 
-      // Spawn Shower
-      if (showerDoorEntry) {
-        spawnAiFixture(showerDoorEntry, showerX, showerZ, showerRotY);
-      }
-      if (showerHeadEntry) {
-        // Mount showerhead INSIDE the shower zone on the back wall
-        spawnAiFixture(showerHeadEntry, showerX, backWallZ + 0.02, 0);
-      } else if (genericShowerEntry) {
-        spawnAiFixture(genericShowerEntry, showerX, showerZ, showerRotY);
+      // Spawn Shower (Single fixture only, never combining door and showerhead together!)
+      if (showerEntry) {
+        if (isShowerHead) {
+          // Mount showerhead on back wall inside shower zone
+          spawnAiFixture(showerEntry, showerX, backWallZ + 0.02, 0, { elevation: 2.10, y: 2.10 });
+        } else {
+          // Place architectural shower door or enclosure
+          spawnAiFixture(showerEntry, showerX, showerZ, showerRotY);
+        }
       }
 
       // Spawn Freestanding Bathtub

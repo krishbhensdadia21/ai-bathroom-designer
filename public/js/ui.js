@@ -21,7 +21,7 @@
         toilets: 'Smart & Classic Toilets (7)',
         vanities: 'Tailored Vanities & Consoles (14)',
         faucets: 'Luxury Faucets & Brassware (17)',
-        showers: 'Thermostatic Showers & Systems (11)',
+        showers: 'Showers, Enclosures & Doors (11)',
         bathtubs: 'Freestanding & Drop-in Bathtubs (2)',
         mirrors: 'Lighted Smart Mirrors (9)'
       };
@@ -51,33 +51,58 @@
       // Base pool by category (or all 60 products)
       let pool = (cat === 'all') ? KOHLER_CATALOG : KOHLER_CATALOG.filter(p => p.category === cat);
 
-      // Populate dynamic series filter pills
+      // Populate dynamic subcategory or series filter pills
       if (filterStrip) {
-        const seriesSet = new Set();
-        pool.forEach(p => { if (p.series) seriesSet.add(p.series); });
-        const distinctSeries = Array.from(seriesSet).sort();
+        if (cat === 'showers') {
+          const subcats = [
+            { key: 'all', label: `All (${pool.length})` },
+            { key: 'showerhead', label: `🚿 Showerhead (${pool.filter(p => p.subcategory === 'showerhead').length})` },
+            { key: 'shower_enclosure', label: `🚪 Shower Enclosure (${pool.filter(p => p.subcategory === 'shower_enclosure').length})` },
+            { key: 'shower_door', label: `🚪 Shower Door (${pool.filter(p => p.subcategory === 'shower_door').length})` }
+          ];
+          let stripHtml = '';
+          subcats.forEach(sc => {
+            const isSel = (seriesFilter === sc.key);
+            stripHtml += `
+              <button onclick="renderCatalogDrawerList('${cat}', '${sc.key}', '${searchQuery.replace(/'/g, "\\'")}')" class="px-3 py-1 rounded-full text-xs font-bold transition shrink-0 ${isSel ? 'bg-amber-600 text-white shadow-xs' : 'bg-white text-gray-700 hover:bg-gray-200 border border-gray-200'}">
+                ${sc.label}
+              </button>
+            `;
+          });
+          filterStrip.innerHTML = stripHtml;
+        } else {
+          const seriesSet = new Set();
+          pool.forEach(p => { if (p.series) seriesSet.add(p.series); });
+          const distinctSeries = Array.from(seriesSet).sort();
 
-        let stripHtml = `
-          <button onclick="renderCatalogDrawerList('${cat}', 'all', '${searchQuery.replace(/'/g, "\\'")}')" class="px-2.5 py-1 rounded-full text-xs font-bold transition shrink-0 ${seriesFilter === 'all' ? 'bg-black text-white shadow-xs' : 'bg-white text-gray-700 hover:bg-gray-200 border border-gray-200'}">
-            All (${pool.length})
-          </button>
-        `;
-
-        distinctSeries.forEach(s => {
-          const count = pool.filter(p => p.series === s).length;
-          const isSel = (seriesFilter === s);
-          stripHtml += `
-            <button onclick="renderCatalogDrawerList('${cat}', '${s.replace(/'/g, "\\'")}', '${searchQuery.replace(/'/g, "\\'")}')" class="px-2.5 py-1 rounded-full text-xs font-bold transition shrink-0 ${isSel ? 'bg-amber-600 text-white shadow-xs' : 'bg-white text-gray-700 hover:bg-gray-200 border border-gray-200'}">
-              ${s} (${count})
+          let stripHtml = `
+            <button onclick="renderCatalogDrawerList('${cat}', 'all', '${searchQuery.replace(/'/g, "\\'")}')" class="px-2.5 py-1 rounded-full text-xs font-bold transition shrink-0 ${seriesFilter === 'all' ? 'bg-black text-white shadow-xs' : 'bg-white text-gray-700 hover:bg-gray-200 border border-gray-200'}">
+              All (${pool.length})
             </button>
           `;
-        });
-        filterStrip.innerHTML = stripHtml;
+
+          distinctSeries.forEach(s => {
+            const count = pool.filter(p => p.series === s).length;
+            const isSel = (seriesFilter === s);
+            stripHtml += `
+              <button onclick="renderCatalogDrawerList('${cat}', '${s.replace(/'/g, "\\'")}', '${searchQuery.replace(/'/g, "\\'")}')" class="px-2.5 py-1 rounded-full text-xs font-bold transition shrink-0 ${isSel ? 'bg-amber-600 text-white shadow-xs' : 'bg-white text-gray-700 hover:bg-gray-200 border border-gray-200'}">
+                ${s} (${count})
+              </button>
+            `;
+          });
+          filterStrip.innerHTML = stripHtml;
+        }
       }
 
-      // Filter by series and search query
+      // Filter by subcategory or series, and search query
       let items = pool;
-      if (seriesFilter !== 'all') items = items.filter(p => p.series === seriesFilter);
+      if (seriesFilter !== 'all') {
+        if (cat === 'showers') {
+          items = items.filter(p => p.subcategory === seriesFilter);
+        } else {
+          items = items.filter(p => p.series === seriesFilter);
+        }
+      }
       if (searchQuery) {
         const q = searchQuery.toLowerCase().trim();
         items = items.filter(p =>
@@ -85,6 +110,7 @@
           p.desc.toLowerCase().includes(q) ||
           p.art.toLowerCase().includes(q) ||
           p.series.toLowerCase().includes(q) ||
+          (p.subcat_label && p.subcat_label.toLowerCase().includes(q)) ||
           (p.dim && p.dim.toLowerCase().includes(q))
         );
       }
@@ -99,8 +125,29 @@
         card.className = 'group border border-gray-200 rounded-2xl p-4 hover:border-black hover:shadow-xl transition bg-white cursor-pointer transform hover:-translate-y-0.5';
         card.onclick = () => {
           setPlannerConfigurationState('modified');
-          spawnProductById(p.id, 0, 0, 0);
-          showToast(`Added ${p.name} to room`);
+
+          // If adding a shower product, replace existing shower in room to avoid overlapping collisions!
+          if (p.category === 'showers') {
+            const existingShowerIdx = placedProducts.findIndex(item => item.userData && item.userData.category === 'showers');
+            if (existingShowerIdx !== -1) {
+              const oldShower = placedProducts[existingShowerIdx];
+              scene.remove(oldShower);
+              placedProducts.splice(existingShowerIdx, 1);
+            }
+            const backWallZ = -roomDepth / 2;
+            const leftWallX = -roomWidth / 2;
+            const showerX = leftWallX + (p.width_m || 0.9) / 2 + 0.15;
+            if (p.subcategory === 'showerhead') {
+              spawnProductById(p.id, showerX, backWallZ + 0.02, 0, { elevation: 2.10, y: 2.10 });
+            } else {
+              const showerZ = backWallZ + (p.depth_m || 0.9) / 2 + 0.05;
+              spawnProductById(p.id, showerX, showerZ, 0);
+            }
+            showToast(`Placed ${p.name}`);
+          } else {
+            spawnProductById(p.id, 0, 0, 0);
+            showToast(`Added ${p.name} to room`);
+          }
         };
 
         const iconMap = {
@@ -109,11 +156,19 @@
         };
 
         const priceFormatted = formatCurrency(currentCurrency === 'INR' ? p.price_inr : p.price_usd);
+        const subcatBadge = p.subcat_label ? `
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-extrabold ${p.subcategory === 'showerhead' ? 'bg-blue-100 text-blue-800' : (p.subcategory === 'shower_enclosure' ? 'bg-purple-100 text-purple-800' : 'bg-teal-100 text-teal-800')} ml-1.5">
+            ${p.subcategory === 'showerhead' ? '🚿' : '🚪'} ${p.subcat_label}
+          </span>
+        ` : '';
 
         card.innerHTML = `
           <div class="w-full h-24 bg-gray-50 rounded-xl mb-3 flex items-center justify-center p-3 relative overflow-hidden group-hover:bg-amber-50/40 transition">
             <i class="fa-solid ${iconMap[p.category] || 'fa-cube'} text-3xl text-gray-300 group-hover:text-black group-hover:scale-110 transition duration-300"></i>
-            <span class="absolute top-2 right-2 bg-black text-white px-2 py-0.5 rounded-full text-[9px] font-bold shadow-sm">${p.series}</span>
+            <div class="absolute top-2 right-2 flex items-center space-x-1">
+              <span class="bg-black text-white px-2 py-0.5 rounded-full text-[9px] font-bold shadow-sm">${p.series}</span>
+              ${subcatBadge}
+            </div>
           </div>
           <div class="flex justify-between items-start">
             <div>
