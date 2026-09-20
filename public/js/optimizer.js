@@ -762,29 +762,37 @@
       let tubX, tubZ, tubRotY;
 
       if (tubEntry && roomWidth >= 2.6 && roomDepth >= 2.3) {
-        // ================= 4-ZONE MASTER SPA SUITE (GENUINE PERIMETER LAYOUT) =================
-        // Zone 1: Toilet on Front-Left Wall (facing East +X into corridor)
-        toiletX = leftWallX + 0.165;
-        toiletZ = Math.min(frontWallZ - 0.75, 0.65);
-        toiletRotY = Math.PI / 2;
+        // ================= 4-ZONE MASTER SPA SUITE (DOOR WALL KEPT 100% CLEAR) =================
+        // The Entry Door is on the Left Wall (-roomWidth/2).
+        // To maintain authentic architecture and prevent door collisions, ZERO fixtures are attached to the door wall!
 
-        // Zone 2: Vanity + Mirror + Faucet + Slat Accent Wall on Center-Left Wall (facing East +X)
-        vanityX = leftWallX + vanityD / 2;
-        vanityZ = Math.max(backWallZ + showerD + vanityW / 2 + 0.15, -0.25);
-        vanityRotY = Math.PI / 2;
-        mirrorX = leftWallX + 0.055;
-        mirrorZ = vanityZ;
-        mirrorRotY = Math.PI / 2;
-        faucetX = vanityX + 0.14;
-        faucetZ = vanityZ;
+        // Zone 1: Toilet tucked on Back Wall in Back-Left area (facing South +Z into room)
+        toiletX = leftWallX + Math.max(0.65, toiletW / 2 + 0.35);
+        toiletZ = backWallZ + 0.165;
+        toiletRotY = 0;
 
-        // Zone 3: Walk-in Glass Shower Enclosure in Back-Left Corner (facing South +Z)
-        showerX = leftWallX + showerW / 2 + 0.08;
+        // Zone 3: Walk-in Glass Shower Enclosure in Back-Right Corner (facing South +Z)
+        showerX = rightWallX - showerW / 2 - 0.08;
         showerZ = backWallZ + showerD / 2 + 0.02;
+        showerRotY = 0;
 
-        // Zone 4: Freestanding Bathtub longitudinally along Right Wall (facing West -X)
+        // Zone 2: Vanity + Faucet + Slat Accent Wall + Lighted Mirror centered on Back Wall
+        const toiletRightEdge = toiletX + toiletW / 2 + 0.20;
+        const showerLeftEdge = showerX - showerW / 2 - 0.20;
+        vanityX = (toiletRightEdge + showerLeftEdge) / 2;
+        vanityZ = backWallZ + vanityD / 2;
+        vanityRotY = 0;
+        mirrorX = vanityX;
+        mirrorZ = backWallZ + 0.055;
+        mirrorRotY = 0;
+        faucetX = vanityX;
+        faucetZ = vanityZ - 0.14;
+
+        // Zone 4: Freestanding Bathtub longitudinally along Right Wall (facing West -X into room)
         tubX = rightWallX - tubD / 2 - 0.08;
-        tubZ = 0.10;
+        // Position tub along right wall comfortably in front of the shower enclosure
+        const minTubZ = (hasShower ? (showerZ + showerD / 2 + tubW / 2 + 0.25) : 0.20);
+        tubZ = Math.min(frontWallZ - tubW / 2 - 0.20, Math.max(0.40, minTubZ));
         tubRotY = -Math.PI / 2;
       } else {
         // ================= 3-PIECE BATHROOM & POWDER ROOM LAYOUT =================
