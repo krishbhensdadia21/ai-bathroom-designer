@@ -723,8 +723,7 @@
           renderAiRecommendationResults(data);
           if (data.feasible) {
             const roomMsg = (currentInputMode === 'natural' && data.auto_adjusted_dimensions) ? ` (Room auto-set to ${data.auto_adjusted_dimensions.widthFt}ft × ${data.auto_adjusted_dimensions.depthFt}ft)` : '';
-            showToast(`✨ Generated and applying Kohler suite (${data.bundle ? data.bundle.length : 0} fixtures)${roomMsg}...`);
-            applyAiBundleToBathroom();
+            showToast(`✨ Groq Multi-Objective Bundle generated (${data.bundle ? data.bundle.length : 0} fixtures)${roomMsg}! Click "Apply AI Bundle" below to place.`);
           } else {
             showToast('No feasible configuration found for constraints');
           }
@@ -737,13 +736,12 @@
         currentAiRecommendation = clientBundle;
         renderAiRecommendationResults(clientBundle);
         if (clientBundle.feasible) {
-          showToast(`✨ Applying bundle (${clientBundle.bundle ? clientBundle.bundle.length : 0} fixtures) into 3D bathroom...`);
-          applyAiBundleToBathroom();
+          showToast(`✨ Generated bundle (${clientBundle.bundle ? clientBundle.bundle.length : 0} fixtures)! Click "Apply AI Bundle" to place.`);
         } else {
           showToast('No feasible configuration found for constraints');
         }
       } finally {
-        btn.innerHTML = '<i class="fa-solid fa-bolt text-amber-500"></i><span>Generate & Jump to 3D WebGL</span>';
+        btn.innerHTML = '<i class="fa-solid fa-bolt text-amber-500"></i><span>Generate Optimized Kohler Bundle (Groq AI)</span>';
         btn.disabled = false;
       }
     }
