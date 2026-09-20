@@ -866,10 +866,9 @@
         spawnedMirror = spawnAiFixture(mirrorEntry, mirrorX, mirrorZ, mirrorRotY);
       }
 
-      // Link vanity, faucet, and mirror together
-      if (spawnedVanity) {
-        if (spawnedFaucet) spawnedVanity.userData.attachedFaucet = spawnedFaucet;
-        if (spawnedMirror) spawnedVanity.userData.attachedMirror = spawnedMirror;
+      // Link deck faucet to vanity (mirrors remain completely independent)
+      if (spawnedVanity && spawnedFaucet) {
+        spawnedVanity.userData.attachedFaucet = spawnedFaucet;
       }
 
       // Spawn Shower

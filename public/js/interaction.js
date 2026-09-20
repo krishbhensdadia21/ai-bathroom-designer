@@ -276,19 +276,17 @@
         activeSelectedObject.position.x = targetPos.x;
         activeSelectedObject.position.z = targetPos.z;
 
-        // Synchronously move hosted faucet and mirror when vanity is dragged
+        // Synchronously move hosted faucet when vanity is dragged (faucet is physically deck-mounted)
         if (activeSelectedObject.userData && activeSelectedObject.userData.category === 'vanities') {
           placedProducts.forEach(p => {
             if (p !== activeSelectedObject && p.userData) {
               const distToVanity = Math.hypot(p.position.x - prevX, p.position.z - prevZ);
               if (p.userData.category === 'faucets' && distToVanity < 0.60) {
-                // Faucet is mounted on vanity deck: follows vanity in both X and Z
+                // Faucet is mounted directly on the vanity deck: tracks vanity in both X and Z
                 p.position.x += dx;
                 p.position.z += dz;
-              } else if (p.userData.category === 'mirrors' && Math.abs(p.position.x - prevX) < 0.50) {
-                // Wall mirror: tracks vanity laterally along wall (X), NEVER pulls into room or wall (Z)!
-                p.position.x += dx;
               }
+              // Mirrors are independent wall-mounted fixtures: they remain stationary when vanity is dragged!
             }
           });
         }
