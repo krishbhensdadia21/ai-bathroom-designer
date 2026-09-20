@@ -126,16 +126,18 @@
         card.onclick = () => {
           setPlannerConfigurationState('modified');
 
-          // If adding a shower product, replace existing shower in room to avoid overlapping collisions!
+          const backWallZ = -roomDepth / 2;
+          const leftWallX = -roomWidth / 2;
+          const rightWallX = roomWidth / 2;
+
           if (p.category === 'showers') {
+            // If adding a shower product, replace existing shower in room to avoid overlapping collisions!
             const existingShowerIdx = placedProducts.findIndex(item => item.userData && item.userData.category === 'showers');
             if (existingShowerIdx !== -1) {
               const oldShower = placedProducts[existingShowerIdx];
               scene.remove(oldShower);
               placedProducts.splice(existingShowerIdx, 1);
             }
-            const backWallZ = -roomDepth / 2;
-            const rightWallX = roomWidth / 2;
             const showerX = rightWallX - (p.width_m || 0.9) / 2 - 0.08;
             if (p.subcategory === 'showerhead') {
               spawnProductById(p.id, showerX, backWallZ + 0.02, 0);
@@ -143,6 +145,42 @@
               const showerZ = backWallZ + (p.depth_m || 0.9) / 2 + 0.05;
               spawnProductById(p.id, showerX, showerZ, 0);
             }
+            showToast(`Placed ${p.name}`);
+          } else if (p.category === 'toilets') {
+            // Place in Back-Left toilet zone on back wall
+            const tx = leftWallX + Math.max(0.45, (p.width_m || 0.41) / 2 + 0.18);
+            const tz = backWallZ + 0.165;
+            spawnProductById(p.id, tx, tz, 0);
+            showToast(`Placed ${p.name}`);
+          } else if (p.category === 'vanities') {
+            // Place centered on back wall
+            const vz = backWallZ + (p.depth_m || 0.56) / 2;
+            spawnProductById(p.id, 0, vz, 0);
+            showToast(`Placed ${p.name}`);
+          } else if (p.category === 'faucets') {
+            // Deck mount onto vanity if present, or at countertop height
+            const vanity = placedProducts.find(item => item.userData && item.userData.category === 'vanities');
+            if (vanity) {
+              const vBox = new THREE.Box3().setFromObject(vanity);
+              const fx = vanity.position.x;
+              const fz = vanity.position.z - 0.14;
+              const fy = vBox.max.y;
+              spawnProductById(p.id, fx, fz, vanity.rotation.y, { elevation: fy, y: fy });
+            } else {
+              spawnProductById(p.id, 0, backWallZ + 0.35, 0, { elevation: 0.85, y: 0.85 });
+            }
+            showToast(`Placed ${p.name}`);
+          } else if (p.category === 'mirrors') {
+            // Mount flush to back wall at eye level (y=1.50m built-in), aligned with vanity if present
+            const vanity = placedProducts.find(item => item.userData && item.userData.category === 'vanities');
+            const mx = vanity ? vanity.position.x : 0;
+            const mz = backWallZ + 0.055;
+            spawnProductById(p.id, mx, mz, 0);
+            showToast(`Placed ${p.name}`);
+          } else if (p.category === 'bathtubs') {
+            // Place along Right Wall in dedicated bathing zone
+            const bx = rightWallX - (p.depth_m || 0.80) / 2 - 0.08;
+            spawnProductById(p.id, bx, 0.40, -Math.PI / 2);
             showToast(`Placed ${p.name}`);
           } else {
             spawnProductById(p.id, 0, 0, 0);

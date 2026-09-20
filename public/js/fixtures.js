@@ -1428,12 +1428,14 @@
     function buildMirroredCabinet() {
       const g = new THREE.Group();
       const body = new THREE.Mesh(new THREE.BoxGeometry(0.51, 0.79, 0.13), chromeMat);
-      body.position.set(0, 0.395, -0.065);
+      body.position.set(0, 1.50, -0.065);
       body.castShadow = true;
+      body.userData.role = 'mirror';
       g.add(body);
 
       const mirror = new THREE.Mesh(new THREE.BoxGeometry(0.50, 0.78, 0.01), mirrorMat);
-      mirror.position.set(0, 0.395, 0.005);
+      mirror.position.set(0, 1.50, 0.005);
+      mirror.userData.role = 'mirror';
       g.add(mirror);
       return g;
     }
@@ -1445,10 +1447,12 @@
       const box = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.52, 0.46), vanityMat);
       box.position.set(0, 0.58, 0);
       box.castShadow = true;
+      box.userData.role = 'vanity';
       g.add(box);
 
       const top = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.03, 0.47), porcelainMat);
       top.position.set(0, 0.855, 0);
+      top.userData.role = 'sink';
       g.add(top);
 
       const seam = new THREE.Mesh(new THREE.BoxGeometry(0.78, 0.006, 0.01), matteBlackMat);
@@ -1461,11 +1465,13 @@
     function buildCapsuleLightedMirror() {
       const g = new THREE.Group();
       const mirror = new THREE.Mesh(new THREE.BoxGeometry(0.50, 1.00, 0.03), mirrorMat);
-      mirror.position.set(0, 0.50, 0);
+      mirror.position.set(0, 1.50, 0);
+      mirror.userData.role = 'mirror';
       g.add(mirror);
 
       const glow = new THREE.Mesh(new THREE.BoxGeometry(0.52, 1.02, 0.01), new THREE.MeshBasicMaterial({ color: 0xfff4e6 }));
-      glow.position.set(0, 0.50, -0.01);
+      glow.position.set(0, 1.50, -0.01);
+      glow.userData.role = 'mirror';
       g.add(glow);
       return g;
     }
@@ -1474,11 +1480,13 @@
     function buildForefrontLiteMirror() {
       const g = new THREE.Group();
       const mirror = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.65, 0.03), mirrorMat);
-      mirror.position.set(0, 0.325, 0);
+      mirror.position.set(0, 1.50, 0);
+      mirror.userData.role = 'mirror';
       g.add(mirror);
 
       const halo = new THREE.Mesh(new THREE.BoxGeometry(0.83, 0.68, 0.01), new THREE.MeshBasicMaterial({ color: 0xfafafa }));
-      halo.position.set(0, 0.325, -0.01);
+      halo.position.set(0, 1.50, -0.01);
+      halo.userData.role = 'mirror';
       g.add(halo);
       return g;
     }
@@ -1487,11 +1495,13 @@
     function buildArchedFramedMirror() {
       const g = new THREE.Group();
       const frame = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.92, 0.03), matteBlackMat);
-      frame.position.set(0, 0.46, 0);
+      frame.position.set(0, 1.50, 0);
+      frame.userData.role = 'mirror';
       g.add(frame);
 
       const mirror = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.88, 0.01), mirrorMat);
-      mirror.position.set(0, 0.46, 0.015);
+      mirror.position.set(0, 1.50, 0.015);
+      mirror.userData.role = 'mirror';
       g.add(mirror);
       return g;
     }

@@ -856,9 +856,14 @@
       // Spawn Faucet
       let spawnedFaucet = null;
       if (faucetEntry) {
+        let deckElevation = faucetElevation;
+        if (spawnedVanity) {
+          const vBox = new THREE.Box3().setFromObject(spawnedVanity);
+          deckElevation = vBox.max.y;
+        }
         spawnedFaucet = spawnAiFixture(faucetEntry, faucetX, faucetZ, vanityRotY, {
-          elevation: faucetElevation,
-          y: faucetElevation
+          elevation: deckElevation,
+          y: deckElevation
         });
       }
 
