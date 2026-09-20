@@ -876,8 +876,8 @@
       // Spawn Shower (Single fixture only, never combining door and showerhead together!)
       if (showerEntry) {
         if (isShowerHead) {
-          // Mount showerhead on back wall inside shower zone
-          spawnAiFixture(showerEntry, showerX, backWallZ + 0.02, 0, { elevation: 2.10, y: 2.10 });
+          // Mount showerhead on back wall inside shower zone (geometry already modeled at authentic 2.15m height)
+          spawnAiFixture(showerEntry, showerX, backWallZ + 0.02, 0);
         } else {
           // Place architectural shower door or enclosure
           spawnAiFixture(showerEntry, showerX, showerZ, showerRotY);

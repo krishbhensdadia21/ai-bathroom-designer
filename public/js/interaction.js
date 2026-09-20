@@ -231,8 +231,13 @@
             let offset = depth / 2 + 0.015;
             if (cat === 'mirrors') offset = 0.055; // 5.5cm clears 5cm wood slat feature wall cleanly
             else if (cat === 'toilets') offset = 0.165;
-            else if (cat === 'vanities') offset = 0.245;
-            else if (cat === 'showers') offset = Math.min(width, depth) / 2 + 0.02;
+            else if (cat === 'showers') {
+              const isHead = activeSelectedObject.userData && (
+                activeSelectedObject.userData.subcategory === 'showerhead' ||
+                (activeSelectedObject.userData.name && activeSelectedObject.userData.name.toLowerCase().includes('showerhead'))
+              );
+              offset = isHead ? 0.02 : (Math.min(width, depth) / 2 + 0.02);
+            }
             else if (cat === 'bathtubs') offset = 0.42;
 
             if (minDist === distBack) {

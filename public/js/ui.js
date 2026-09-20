@@ -135,10 +135,10 @@
               placedProducts.splice(existingShowerIdx, 1);
             }
             const backWallZ = -roomDepth / 2;
-            const leftWallX = -roomWidth / 2;
-            const showerX = leftWallX + (p.width_m || 0.9) / 2 + 0.15;
+            const rightWallX = roomWidth / 2;
+            const showerX = rightWallX - (p.width_m || 0.9) / 2 - 0.08;
             if (p.subcategory === 'showerhead') {
-              spawnProductById(p.id, showerX, backWallZ + 0.02, 0, { elevation: 2.10, y: 2.10 });
+              spawnProductById(p.id, showerX, backWallZ + 0.02, 0);
             } else {
               const showerZ = backWallZ + (p.depth_m || 0.9) / 2 + 0.05;
               spawnProductById(p.id, showerX, showerZ, 0);
