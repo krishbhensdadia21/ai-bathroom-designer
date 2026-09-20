@@ -756,58 +756,76 @@
       const tubW = (tubCat && tubCat.width_m) || 1.70; // length
       const tubD = (tubCat && tubCat.depth_m) || 0.80; // width
 
-      // 1. Zone 3: Walk-in Shower Enclosure (Wet Corner Zone)
-      // Placed in Back-Right corner flush against back & right walls
-      const showerX = rightWallX - showerW / 2;
-      const showerZ = backWallZ + showerD / 2;
+      let toiletX, toiletZ, toiletRotY;
+      let vanityX, vanityZ, vanityRotY, mirrorX, mirrorZ, mirrorRotY, faucetX, faucetZ, faucetElevation = 0.508;
+      let showerX, showerZ, showerRotY = 0;
+      let tubX, tubZ, tubRotY;
 
-      // 2. Zone 1: Toilet / Commode Zone
-      // Placed along back-left wall respecting NKBA 15" (0.38m) centerline minimum from left wall
-      const toiletX = leftWallX + Math.max(0.45, toiletW / 2 + 0.18);
-      const toiletFlushZ = backWallZ + 0.165; // Back of tank sits flush against back wall tile
+      if (tubEntry && roomWidth >= 2.6 && roomDepth >= 2.3) {
+        // ================= 4-ZONE MASTER SPA SUITE (GENUINE PERIMETER LAYOUT) =================
+        // Zone 1: Toilet on Front-Left Wall (facing East +X into corridor)
+        toiletX = leftWallX + 0.165;
+        toiletZ = Math.min(frontWallZ - 0.75, 0.65);
+        toiletRotY = Math.PI / 2;
 
-      // 3. Zone 2: Vanity & Grooming Zone
-      // Calculate remaining back wall space between toilet and shower
-      const toiletRightEdge = toiletX + toiletW / 2 + 0.10;
-      const showerLeftEdge = hasShower ? (showerX - showerW / 2 - 0.10) : (rightWallX - 0.20);
-      const availableBackWallSpace = showerLeftEdge - toiletRightEdge;
-
-      let vanityX = 0;
-      let vanityZ = backWallZ + vanityD / 2;
-      let vanityRotY = 0;
-      let mirrorX = 0;
-      let mirrorZ = backWallZ + 0.055;
-      let mirrorRotY = 0;
-      let faucetX = 0;
-      let faucetZ = vanityZ - 0.14;
-      let faucetElevation = 0.508;
-
-      if (vanityW <= availableBackWallSpace) {
-        // Fits comfortably on the back wall between toilet and shower
-        vanityX = (toiletRightEdge + showerLeftEdge) / 2;
-        vanityZ = backWallZ + vanityD / 2;
-        vanityRotY = 0;
-        mirrorX = vanityX;
-        mirrorZ = backWallZ + 0.055;
-        mirrorRotY = 0;
-        faucetX = vanityX;
-        faucetZ = vanityZ - 0.14;
-      } else {
-        // Lateral 4-Zone Master Placement: Position vanity along Left Wall
-        // This gives wide vanities (e.g. 60" dual vanity) unlimited space without crowding!
+        // Zone 2: Vanity + Mirror + Faucet + Slat Accent Wall on Center-Left Wall (facing East +X)
         vanityX = leftWallX + vanityD / 2;
-        vanityZ = Math.min(-0.25, backWallZ + vanityW / 2 + 0.35);
+        vanityZ = Math.max(backWallZ + showerD + vanityW / 2 + 0.15, -0.25);
         vanityRotY = Math.PI / 2;
         mirrorX = leftWallX + 0.055;
         mirrorZ = vanityZ;
         mirrorRotY = Math.PI / 2;
         faucetX = vanityX + 0.14;
         faucetZ = vanityZ;
+
+        // Zone 3: Walk-in Glass Shower Enclosure in Back-Left Corner (facing South +Z)
+        showerX = leftWallX + showerW / 2 + 0.08;
+        showerZ = backWallZ + showerD / 2 + 0.02;
+
+        // Zone 4: Freestanding Bathtub longitudinally along Right Wall (facing West -X)
+        tubX = rightWallX - tubD / 2 - 0.08;
+        tubZ = 0.10;
+        tubRotY = -Math.PI / 2;
+      } else {
+        // ================= 3-PIECE BATHROOM & POWDER ROOM LAYOUT =================
+        // Zone 3: Shower Enclosure in Back-Right Corner
+        showerX = rightWallX - showerW / 2 - 0.08;
+        showerZ = backWallZ + showerD / 2 + 0.02;
+
+        // Zone 1: Toilet in Back-Left
+        toiletX = leftWallX + Math.max(0.45, toiletW / 2 + 0.18);
+        toiletZ = backWallZ + 0.165;
+        toiletRotY = 0;
+
+        // Zone 2: Vanity & Grooming
+        const toiletRightEdge = toiletX + toiletW / 2 + 0.10;
+        const showerLeftEdge = hasShower ? (showerX - showerW / 2 - 0.10) : (rightWallX - 0.20);
+        const availableBackSpace = showerLeftEdge - toiletRightEdge;
+
+        if (vanityW <= availableBackSpace) {
+          vanityX = (toiletRightEdge + showerLeftEdge) / 2;
+          vanityZ = backWallZ + vanityD / 2;
+          vanityRotY = 0;
+          mirrorX = vanityX;
+          mirrorZ = backWallZ + 0.055;
+          mirrorRotY = 0;
+          faucetX = vanityX;
+          faucetZ = vanityZ - 0.14;
+        } else {
+          vanityX = leftWallX + vanityD / 2;
+          vanityZ = Math.min(-0.20, backWallZ + vanityW / 2 + 0.35);
+          vanityRotY = Math.PI / 2;
+          mirrorX = leftWallX + 0.055;
+          mirrorZ = vanityZ;
+          mirrorRotY = Math.PI / 2;
+          faucetX = vanityX + 0.14;
+          faucetZ = vanityZ;
+        }
       }
 
       // Spawn Toilet
       if (toiletEntry) {
-        spawnAiFixture(toiletEntry, toiletX, toiletFlushZ, 0);
+        spawnAiFixture(toiletEntry, toiletX, toiletZ, toiletRotY);
       }
 
       // Spawn Vanity
@@ -839,29 +857,18 @@
 
       // Spawn Shower
       if (showerDoorEntry) {
-        spawnAiFixture(showerDoorEntry, showerX, showerZ, 0);
+        spawnAiFixture(showerDoorEntry, showerX, showerZ, showerRotY);
       }
       if (showerHeadEntry) {
         // Mount showerhead INSIDE the shower zone on the back wall
         spawnAiFixture(showerHeadEntry, showerX, backWallZ + 0.02, 0);
       } else if (genericShowerEntry) {
-        spawnAiFixture(genericShowerEntry, showerX, showerZ, 0);
+        spawnAiFixture(genericShowerEntry, showerX, showerZ, showerRotY);
       }
 
-      // 4. Zone 4: Freestanding Bathtub & Spa Zone (Dedicated along Right Wall)
-      if (tubEntry && roomWidth >= 2.5 && roomDepth >= 2.3) {
-        // Oriented along the right wall with rotY = -Math.PI / 2 (filler on wall side, step-in into room)
-        const tubX = rightWallX - tubD / 2 - 0.05;
-        let tubZ = 0.45;
-        if (hasShower) {
-          // Position tub along right wall in front of the shower, leaving comfortable walking gap
-          tubZ = Math.max(showerZ + showerD / 2 + tubW / 2 + 0.18, frontWallZ - tubW / 2 - 0.18);
-          // Safety clamp within room boundaries
-          if (tubZ + tubW / 2 > frontWallZ - 0.05) {
-            tubZ = frontWallZ - tubW / 2 - 0.06;
-          }
-        }
-        spawnAiFixture(tubEntry, tubX, tubZ, -Math.PI / 2);
+      // Spawn Freestanding Bathtub
+      if (tubEntry && tubX !== undefined) {
+        spawnAiFixture(tubEntry, tubX, tubZ, tubRotY);
       }
 
       // Architectural Safeguard: No random floor dumping at (0,0,0)!
