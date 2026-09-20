@@ -46,7 +46,23 @@
 
       const finishToUse = (customData && customData.currentFinish) || p.defaultFinish;
       const group = p.builder(finishToUse);
-      const elevation = (customData && (customData.elevation !== undefined ? customData.elevation : customData.y)) || 0;
+      // Architectural Safeguard: Showerheads and Lighted Mirrors are already modeled with authentic wall-mount heights (Showerhead at 2.15m, Mirrors at 1.50m).
+      // Any externally passed elevation (e.g. 2.10m) must NEVER double-elevate them into outer space!
+      let elevation = (customData && (customData.elevation !== undefined ? customData.elevation : customData.y)) || 0;
+      if (p.subcategory === 'showerhead' || p.id === 'statement-round-showerhead') {
+        elevation = 0;
+        // If spawned with default (0,0), route to dedicated Back-Right shower zone flush to back wall
+        if (x === 0 && z === 0) {
+          x = (roomWidth / 2) - (p.width_m || 0.30) / 2 - 0.08;
+          z = (-roomDepth / 2) + 0.02;
+        }
+      } else if (p.category === 'mirrors') {
+        elevation = 0;
+        if (z === 0) {
+          z = (-roomDepth / 2) + 0.055;
+        }
+      }
+
       group.position.set(x, elevation, z);
       group.rotation.y = rotY;
 
