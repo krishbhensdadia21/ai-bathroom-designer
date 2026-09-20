@@ -767,24 +767,36 @@
       drain.position.set(0, 0.12, 0);
       g.add(drain);
 
-      // Freestanding floor-mounted bath filler (Positioned on the WALL side z = -0.44m)
-      // Leaving the front step-in corridor (z > 0) 100% unobstructed!
-      const fillerPipe = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.88, 20), chromeMat);
-      fillerPipe.position.set(0, 0.44, -0.44);
+      // Freestanding floor-mounted luxury bath filler (Integrated on corner deck x = -0.70m, z = -0.25m)
+      // Strictly inside tub boundary envelope so it NEVER clips into walls or corridor!
+      const fillerBase = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.045, 0.02, 20), chromeMat);
+      fillerBase.position.set(-0.70, 0.01, -0.25);
+      fillerBase.userData.role = 'faucet';
+      g.add(fillerBase);
+
+      const fillerPipe = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.82, 20), chromeMat);
+      fillerPipe.position.set(-0.70, 0.42, -0.25);
       fillerPipe.userData.role = 'faucet';
       g.add(fillerPipe);
 
-      // Arched gooseneck spout arching forward from the wall into the tub
-      const fillerSpout = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.24, 16), chromeMat);
-      fillerSpout.rotation.x = Math.PI / 2;
-      fillerSpout.position.set(0, 0.86, -0.32);
+      // Single-lever ceramic disc mixer handle
+      const fillerHandle = new THREE.Mesh(new THREE.BoxGeometry(0.016, 0.08, 0.016), chromeMat);
+      fillerHandle.position.set(-0.66, 0.78, -0.25);
+      fillerHandle.userData.role = 'faucet';
+      g.add(fillerHandle);
+
+      // Handshower wand holster
+      const wandHolder = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.06, 16), chromeMat);
+      wandHolder.position.set(-0.74, 0.74, -0.25);
+      wandHolder.userData.role = 'faucet';
+      g.add(wandHolder);
+
+      // Arched gooseneck spout curving gracefully over the rim into the tub well
+      const fillerSpout = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.20, 16), chromeMat);
+      fillerSpout.rotation.z = -Math.PI / 4;
+      fillerSpout.position.set(-0.60, 0.81, -0.20);
       fillerSpout.userData.role = 'faucet';
       g.add(fillerSpout);
-
-      // Mixer lever handle on filler
-      const fillerHandle = new THREE.Mesh(new THREE.BoxGeometry(0.018, 0.08, 0.018), chromeMat);
-      fillerHandle.position.set(0.04, 0.82, -0.44);
-      g.add(fillerHandle);
 
       return g;
     }

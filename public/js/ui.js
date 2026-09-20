@@ -17,18 +17,22 @@
       document.getElementById('vertical-dock').style.marginRight = '420px';
 
       const titles = {
-        toilets: 'Smart & Classic Toilets',
-        vanities: 'Tailored Vanities & Consoles',
-        faucets: 'Luxury Faucets & Brassware',
-        showers: 'Thermostatic Showers & Systems',
-        bathtubs: 'Freestanding Soaking Bathtubs',
-        mirrors: 'Verdera Voice Smart Mirrors'
+        all: 'All Official KOHLER Products (60)',
+        toilets: 'Smart & Classic Toilets (7)',
+        vanities: 'Tailored Vanities & Consoles (14)',
+        faucets: 'Luxury Faucets & Brassware (17)',
+        showers: 'Thermostatic Showers & Systems (11)',
+        bathtubs: 'Freestanding & Drop-in Bathtubs (2)',
+        mirrors: 'Lighted Smart Mirrors (9)'
       };
       document.getElementById('drawer-category-title').innerText = titles[cat] || 'KOHLER Fixtures';
 
       document.querySelectorAll('#vertical-dock button').forEach(b => b.classList.remove('active'));
       const dockBtn = document.getElementById('dock-' + cat);
       if (dockBtn) dockBtn.classList.add('active');
+
+      const searchInput = document.getElementById('catalog-search');
+      if (searchInput) searchInput.value = '';
 
       renderCatalogDrawerList(cat);
     }
@@ -39,16 +43,54 @@
       document.querySelectorAll('#vertical-dock button').forEach(b => b.classList.remove('active'));
     }
 
-    function renderCatalogDrawerList(cat, seriesFilter = 'all', searchQuery = '') {
+    function renderCatalogDrawerList(cat = 'all', seriesFilter = 'all', searchQuery = '') {
       const container = document.getElementById('catalog-card-container');
+      const filterStrip = document.getElementById('series-filter-strip');
       container.innerHTML = '';
 
-      let items = KOHLER_CATALOG.filter(p => p.category === cat);
+      // Base pool by category (or all 60 products)
+      let pool = (cat === 'all') ? KOHLER_CATALOG : KOHLER_CATALOG.filter(p => p.category === cat);
+
+      // Populate dynamic series filter pills
+      if (filterStrip) {
+        const seriesSet = new Set();
+        pool.forEach(p => { if (p.series) seriesSet.add(p.series); });
+        const distinctSeries = Array.from(seriesSet).sort();
+
+        let stripHtml = `
+          <button onclick="renderCatalogDrawerList('${cat}', 'all', '${searchQuery.replace(/'/g, "\\'")}')" class="px-2.5 py-1 rounded-full text-xs font-bold transition shrink-0 ${seriesFilter === 'all' ? 'bg-black text-white shadow-xs' : 'bg-white text-gray-700 hover:bg-gray-200 border border-gray-200'}">
+            All (${pool.length})
+          </button>
+        `;
+
+        distinctSeries.forEach(s => {
+          const count = pool.filter(p => p.series === s).length;
+          const isSel = (seriesFilter === s);
+          stripHtml += `
+            <button onclick="renderCatalogDrawerList('${cat}', '${s.replace(/'/g, "\\'")}', '${searchQuery.replace(/'/g, "\\'")}')" class="px-2.5 py-1 rounded-full text-xs font-bold transition shrink-0 ${isSel ? 'bg-amber-600 text-white shadow-xs' : 'bg-white text-gray-700 hover:bg-gray-200 border border-gray-200'}">
+              ${s} (${count})
+            </button>
+          `;
+        });
+        filterStrip.innerHTML = stripHtml;
+      }
+
+      // Filter by series and search query
+      let items = pool;
       if (seriesFilter !== 'all') items = items.filter(p => p.series === seriesFilter);
-      if (searchQuery) items = items.filter(p => p.name.toLowerCase().includes(searchQuery) || p.desc.toLowerCase().includes(searchQuery));
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase().trim();
+        items = items.filter(p =>
+          p.name.toLowerCase().includes(q) ||
+          p.desc.toLowerCase().includes(q) ||
+          p.art.toLowerCase().includes(q) ||
+          p.series.toLowerCase().includes(q) ||
+          (p.dim && p.dim.toLowerCase().includes(q))
+        );
+      }
 
       if (items.length === 0) {
-        container.innerHTML = `<div class="text-center py-12 text-gray-400 font-bold text-xs">No Kohler products match your search.</div>`;
+        container.innerHTML = `<div class="text-center py-12 text-gray-400 font-bold text-xs">No Kohler products match "${searchQuery}".</div>`;
         return;
       }
 
@@ -58,6 +100,7 @@
         card.onclick = () => {
           setPlannerConfigurationState('modified');
           spawnProductById(p.id, 0, 0, 0);
+          showToast(`Added ${p.name} to room`);
         };
 
         const iconMap = {
@@ -95,7 +138,7 @@
     function filterCatalogProducts() {
       const q = document.getElementById('catalog-search').value.toLowerCase();
       const activeDockBtn = document.querySelector('#vertical-dock button.active');
-      const cat = activeDockBtn ? activeDockBtn.id.replace('dock-', '') : 'toilets';
+      const cat = activeDockBtn ? activeDockBtn.id.replace('dock-', '') : 'all';
       renderCatalogDrawerList(cat, 'all', q);
     }
 

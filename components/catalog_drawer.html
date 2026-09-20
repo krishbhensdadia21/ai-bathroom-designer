@@ -6,14 +6,25 @@
         Catalog
       </div>
 
+      <!-- 0. All 60 Products -->
+      <button onclick="openCatalogCategory('all')" id="dock-all" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="All 60 KOHLER Products">
+        <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+        </svg>
+        <span class="text-[9px] font-semibold tracking-tight text-gray-300 group-hover:text-white transition-colors dock-text mt-1">All (60)</span>
+      </button>
+
       <!-- 1. Toilets -->
-      <button onclick="openCatalogCategory('toilets')" id="dock-toilets" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Smart & Classic Toilets">
-        <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <button onclick="openCatalogCategory('toilets')" id="dock-toilets" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Smart & Classic Toilets (7)">
+        <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M7 11h10c1.8 0 3 1.4 3 3.5 0 3.2-2.5 5.5-8 5.5s-8-2.3-8-5.5C4 12.4 5.2 11 7 11z"/>
           <path d="M8 11V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"/>
           <circle cx="12" cy="15" r="1.2" fill="currentColor"/>
         </svg>
-        <span class="text-[9px] font-semibold tracking-tight text-gray-300 group-hover:text-white transition-colors dock-text mt-1">Toilets</span>
+        <span class="text-[9px] font-semibold tracking-tight text-gray-300 group-hover:text-white transition-colors dock-text mt-1">Toilets (7)</span>
       </button>
 
       <!-- 2. Vanities -->
@@ -25,11 +36,11 @@
           <path d="M12 4v3"/>
           <path d="M10.5 4h3"/>
         </svg>
-        <span class="text-[9px] font-semibold tracking-tight text-gray-300 group-hover:text-white transition-colors dock-text mt-1">Vanities</span>
+        <span class="text-[9px] font-semibold tracking-tight text-gray-300 group-hover:text-white transition-colors dock-text mt-1">Vanities (14)</span>
       </button>
 
       <!-- 3. Faucets -->
-      <button onclick="openCatalogCategory('faucets')" id="dock-faucets" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Luxury Faucets & Brassware">
+      <button onclick="openCatalogCategory('faucets')" id="dock-faucets" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Luxury Faucets & Brassware (17)">
         <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6 20h6"/>
           <path d="M9 20V9a5 5 0 0 1 5-5h1a3 3 0 0 1 3 3v2"/>
@@ -37,11 +48,11 @@
           <path d="M18 13v2"/>
           <circle cx="18" cy="18.5" r="0.75" fill="currentColor"/>
         </svg>
-        <span class="text-[9px] font-semibold tracking-tight text-gray-300 group-hover:text-white transition-colors dock-text mt-1">Faucets</span>
+        <span class="text-[9px] font-semibold tracking-tight text-gray-300 group-hover:text-white transition-colors dock-text mt-1">Faucets (17)</span>
       </button>
 
       <!-- 4. Showers -->
-      <button onclick="openCatalogCategory('showers')" id="dock-showers" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Thermostatic Showers & Systems">
+      <button onclick="openCatalogCategory('showers')" id="dock-showers" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Thermostatic Showers & Systems (11)">
         <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M5 4h7a4 4 0 0 1 4 4v3"/>
           <path d="M12 11h8"/>
@@ -50,28 +61,28 @@
           <line x1="19" y1="14" x2="19" y2="16.5"/>
           <line x1="16" y1="19.5" x2="16" y2="21"/>
         </svg>
-        <span class="text-[9px] font-semibold tracking-tight text-gray-300 group-hover:text-white transition-colors dock-text mt-1">Showers</span>
+        <span class="text-[9px] font-semibold tracking-tight text-gray-300 group-hover:text-white transition-colors dock-text mt-1">Showers (11)</span>
       </button>
 
       <!-- 5. Bathtubs -->
-      <button onclick="openCatalogCategory('bathtubs')" id="dock-bathtubs" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Freestanding Soaking Tubs">
+      <button onclick="openCatalogCategory('bathtubs')" id="dock-bathtubs" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Freestanding & Drop-in Bathtubs (2)">
         <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 11h18c0 4.2-2.8 7.5-9 7.5S3 15.2 3 11z"/>
           <path d="M5 18.5v2"/>
           <path d="M19 18.5v2"/>
           <path d="M5 8a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v3"/>
         </svg>
-        <span class="text-[9px] font-semibold tracking-tight text-gray-300 group-hover:text-white transition-colors dock-text mt-1">Bathtubs</span>
+        <span class="text-[9px] font-semibold tracking-tight text-gray-300 group-hover:text-white transition-colors dock-text mt-1">Bathtubs (2)</span>
       </button>
 
       <!-- 6. Mirrors -->
-      <button onclick="openCatalogCategory('mirrors')" id="dock-mirrors" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Verdera Smart Mirrors">
+      <button onclick="openCatalogCategory('mirrors')" id="dock-mirrors" class="dock-btn w-14 h-14 rounded-2xl flex flex-col items-center justify-center p-1 hover:bg-white/10 transition group" title="Lighted Smart Mirrors (9)">
         <svg class="w-5 h-5 transition-transform group-hover:scale-110 text-gray-300 group-hover:text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <rect x="4" y="3" width="16" height="18" rx="2.5"/>
           <rect x="6.5" y="5.5" width="11" height="13" rx="1.5" stroke-dasharray="2 1.5"/>
           <circle cx="12" cy="15" r="1.1" fill="currentColor"/>
         </svg>
-        <span class="text-[9px] font-semibold tracking-tight text-gray-300 group-hover:text-white transition-colors dock-text mt-1">Mirrors</span>
+        <span class="text-[9px] font-semibold tracking-tight text-gray-300 group-hover:text-white transition-colors dock-text mt-1">Mirrors (9)</span>
       </button>
     </div>
 
