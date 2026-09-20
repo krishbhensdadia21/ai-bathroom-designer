@@ -104,20 +104,22 @@ The end-to-end design lifecycle operates across 5 intuitive stages:
    * Real-time parametric rebuilding automatically updates floor area, perimeter walls, baseboards, and entrance door.
 
 2. **Specify AI Design Constraints**:
-   * **Predefined Constraints Mode**: Adjust the budget slider (₹1.0L to ₹12.0L+), select a design theme (*Modern Minimalist*, *Classic Elegance*, *Architectural Zen*, *Luxury Spa*), and pick desired fixture priorities (*Toilet*, *Shower*, *Vanity*, *Mirror*).
+   * **Predefined Constraints Mode**: Adjust the budget slider (₹1.0L to ₹12.0L+), select a design theme (*Modern Minimalist*, *Classic Elegance*, *Architectural Zen*, *Luxury Spa*), and pick desired fixture priorities (*Toilet*, *Shower Enclosure*, *Vanity & Basin*, *Mirror*, *Bathtub (Soaking/Whirlpool)*).
    * **Natural-Language Prompt Mode**: Enter a freeform text or voice wishlist (e.g., *"Design a 12x9 ft luxury master bathroom with freestanding tub and black finishes under 6 lakhs"*).
-   * Real-time NLP extracts dimensional and budget limits, validated against Meta Llama Prompt Guard 22M.
+   * Real-time NLP extracts dimensional, fixture inclusion, and budget limits, validated against Meta Llama Prompt Guard 22M.
 
 3. **Generate & Optimize Bundle (Groq AI & Pareto Engine)**:
    * Click **`⚡ Generate Optimized Kohler Bundle (Groq AI)`** to trigger spatial reasoning.
    * Multi-objective combinatorial Pareto optimizer ranks authentic Kohler fixtures by spatial clearance, budget allocation, theme synergy, and MEP wet-wall alignment.
+   * Out of the box, the **Signature Balanced Suite** is selected and rendered as the primary recommendation, with 1-click alternative switching to Essential or Luxury.
    * Transparent Explainable AI (XAI) decision cards show exact fit metrics and rationale for each recommended product.
 
 4. **Interactive 3D WebGL Space Planning**:
-   * Fixtures are rendered with authentic geometric contours and procedural PBR materials.
+   * All 60 Kohler catalog fixtures are rendered with authentic geometric contours and procedural PBR materials.
+   * Explore specialized subcategories: **🚿 Showerheads**, **🚪 Shower Enclosures**, and **🚪 Shower Doors** with single-shower placement rules preventing NKBA overlap collisions.
    * Switch between **3D Orbit**, **2D Orthographic CAD Floorplan**, and **First-Person Walk-In** perspectives.
-   * Drag, snap to walls, rotate 90°, or add/delete items directly from the categorized Kohler catalog dock.
-   * Real-time NKBA / ADA clearance indicators and live MEP wet-wall alignment score update instantly without intrusive banners.
+   * Drag, snap to walls, rotate 90°, or add/delete items directly from the categorized Kohler catalog dock with automatic wall-height elevation (mirrors at 1.50m eye level, faucets deck-mounted onto vanities, showerhead at 2.15m).
+   * Real-time NKBA / ADA clearance visualizer with mode-aware neon luminance (Neon Emerald, Luminous Amber, Neon Rose) elevated at $y = 0.015$ with `polygonOffset` preventing WebGL z-fighting during Dusk and Night ambiance.
    * Customize ambiance with Circadian lighting (Day 5000K, Dusk 2700K, Night) and surface finishes (Calacatta, Marquina, Slate, Carrara, Teak).
 
 5. **Consolidated Quote, BOM & Specification Export**:
@@ -132,16 +134,16 @@ Rather than forcing a single rigid layout, the multi-objective Pareto solver syn
 
 | Design Suite | Target Archetype | Algorithmic Optimization Strategy | Primary Kohler Anchors |
 |---|---|---|---|
-| **1. Essential Value** | Budget-Conscious / High-ROI Renovations | **Max Cost Savings**: Allocates the lowest budget fraction while strictly enforcing 100% NKBA clearance compliance, skirted easy-clean ceramics, and WaterSense efficiency. | Reach™ Round-Front Skirted Toilet, Trace™ Integrated Vanity, Artifacts™ Faucets |
-| **2. Signature Balanced** *(Default)* | Harmonious Space & Style Optimization | **Best Multi-Objective Pareto Optimal**: Achieves the peak composite fitness score (96–98/100) balancing spatial legroom, theme cohesion, and wet-wall MEP alignment. | Veil™ Intelligent Smart Toilet, Vive™ Integrated Vanity, Parallel™ Faucet, Statement™ Shower |
-| **3. Masterpiece Luxury** | Grand Master Suites & Spa Sanctuaries | **Flagship Innovation & Luxury Tech**: Curates top-of-the-line Kohler smart innovations, sculpted vessel basins, and thermostatic multi-spray hydrotherapy without spatial compromise. | Veil™ Smart Toilet, Brazn™ Rectangular Vessel Sink, Composed™ Tall Faucet, Evok™ Freestanding Bath |
+| **1. Essential Value** | Budget-Conscious / High-ROI Renovations | **Max Cost Savings**: Allocates the lowest budget fraction while strictly enforcing 100% NKBA clearance compliance, skirted easy-clean ceramics, and WaterSense efficiency. | Reach™ Round-Front Skirted Toilet, Trace™ Integrated Vanity, Artifacts™ Faucets, Elate™ Sliding Door |
+| **2. Signature Balanced** *(Default Active Tier)* | Harmonious Space & Style Optimization | **Best Multi-Objective Pareto Optimal**: Default suite selected out-of-the-box achieving the peak composite fitness score (96–98/100) balancing spatial legroom, theme cohesion, and wet-wall MEP alignment. | Veil™ Intelligent Smart Toilet, Vive™ Integrated Vanity, Parallel™ Faucet, Statement™ Shower, Evok™ Bath |
+| **3. Masterpiece Luxury** | Grand Master Suites & Spa Sanctuaries | **Flagship Innovation & Luxury Tech**: Curates top-of-the-line Kohler smart innovations, sculpted vessel basins, and thermostatic multi-spray hydrotherapy without spatial compromise. | Innate™ Smart Toilet, Brazn™ Rectangular Vessel Sink, Composed™ Tall Faucet, Ove™ Whirlpool Bath |
 ##
 ### 📊 Evaluation Criteria Alignment (100% Total Weightage)
 ##
 | Evaluation Criteria | Weight | Implementation in this Solution |
 |---|:---:|---|
-| **Approach & Innovation** | **45%** | Dual-mode AI (Predefined & Natural-Language), NLP dimension & budget extraction, Meta Llama Prompt Guard 22M, multi-objective Pareto-scoring engine, and Explainable AI (XAI) transparent cards. |
-| **Technical Execution** | **25%** | Client-side Three.js WebGL rendering, dynamic architectural envelope rebuilding, zero pricing discrepancy, real-time collision detection, and Vercel edge deployment with offline fallbacks. |
+| **Approach & Innovation** | **45%** | Dual-mode AI (Predefined & Natural-Language), NLP dimension, inclusion & budget extraction, Meta Llama Prompt Guard 22M, multi-objective Pareto-scoring engine, and Explainable AI (XAI) transparent cards. |
+| **Technical Execution** | **25%** | Client-side Three.js WebGL rendering, modular architecture (12 HTML partials, 15 JS modules), dynamic architectural envelope rebuilding, zero pricing discrepancy, real-time collision detection, and Vercel edge deployment with offline fallbacks. |
 | **User Experience & Feasibility** | **20%** | Clean default empty room on load, 1-click Clear Room with automated dimension reset, manual generate trigger, unified quote BOM with multi-currency (INR, USD, CAD), and Studio Kohler specifier data sheet. |
 | **Business & Sustainability Impact** | **10%** | Alignment with Kohler's water conservation initiatives (WaterSense annual savings, carbon offset tracking) and MEP plumbing wet-wall alignment optimization reducing labor costs. |
 
@@ -150,9 +152,9 @@ Rather than forcing a single rigid layout, the multi-objective Pareto solver syn
 ##
 ### 1. Approach & Innovation (45% Weight)
 * **Dual-Pathway AI Architecture**:
-  * **Tab 1: Predefined Constraints**: Interactive dimension inputs (Width, Depth, Ceiling Height with live area calculation), budget slider (₹1.0L to ₹12.0L+), 4 curated themes, and 4 priority checkboxes (*Toilet*, *Shower*, *Vanity*, *Mirror*).
+  * **Tab 1: Predefined Constraints**: Interactive dimension inputs (Width, Depth, Ceiling Height with live area calculation), budget slider (₹1.0L to ₹12.0L+), 4 curated themes, and 5 priority inclusion checkboxes (*Toilet*, *Shower*, *Vanity*, *Mirror*, *Bathtub*).
   * **Tab 2: Custom AI Prompt (Natural-Language)**: Freeform wishlist prompt supporting voice or text requests (e.g., *"Design a 14x10 ft master spa with a freestanding tub and teak vanity under 5 lakhs"*).
-* **Real-Time NLP Intent Extraction**: Automatically detects room size dimensions, room types (*Powder Room*, *Master Spa*), and budget ceilings from raw natural text, generating dynamic preview badges before execution.
+* **Real-Time NLP Intent Extraction**: Automatically detects room size dimensions, room types (*Powder Room*, *Master Spa*), explicit fixture inclusions/omissions (*Bathtub*, *Shower*), and budget ceilings from raw natural text, generating dynamic preview badges before execution.
 * **Enterprise Security (Meta Llama Prompt Guard 22M)**: Every customer prompt passes through `meta-llama/llama-prompt-guard-2-22m` on Groq Cloud to sanitize prompt injection, jailbreaks, and out-of-domain requests before entering the spatial reasoning model.
 * **Multi-Objective Weighted Optimization**:
   Scores candidate configurations across physical and economic dimensions:
@@ -161,10 +163,16 @@ Rather than forcing a single rigid layout, the multi-objective Pareto solver syn
 ##
 ### 2. Technical Execution (25% Weight)
 * **High-Performance 3D WebGL Engine (Three.js r128)**: Complete client-side rendering pipeline featuring procedural PBR textures, soft directional shadows, and responsive canvas resizing.
+* **Modular Clean-Code Architecture**: Fully decomposed into **12 HTML component partials** in `components/` and **15 modular JavaScript engines** in `public/js/`, assembled automatically via `node build.js`.
 * **Dynamic Architectural Rebuilding**: Changing room width, depth, or ceiling height dynamically triggers `buildRoomArchitecture()`, reconstructing wall meshes, baseboards, floor tiles, and door geometry in real time.
-* **Interactive Fixture Manipulation**: Drag fixtures along wall planes, rotate 90°, duplicate, or delete with instant bounding-box collision detection.
+* **Intelligent Wall-Snapping & Elevation Safeguards**:
+  * Faucets dynamically detect the bounding box of the active vanity (`vBox.max.y`) and mount directly onto the vanity deck surface.
+  * Mirrors are uniformly modeled at eye-level ($y = 1.50\text{ m}$ / 5 ft).
+  * Showerheads mount flush to the Back Wall at authentic 2.15m height with built-in anti-elevation safeguards preventing sky-floating.
+  * Dragging vanities automatically translates deck-mounted faucets while leaving independent wall-hung mirrors stationary.
+* **Night/Dusk Mode Luminous Clearance Rings**: Clearance planes are elevated to $y = 0.015$ with `polygonOffset: true` and `renderOrder: 998/999` to permanently eliminate WebGL z-fighting and camera clipping, dynamically shifting to high-contrast neon luminescence during evening ambiance.
 * **Single Source of Truth (Zero Pricing Discrepancy)**: The AI candidate bundle total and the 3D planner's live Investment counter strictly reference the same underlying catalog data (`customData`), guaranteeing $0 discrepancy.
-* **Resilient Multi-Platform Hosting**: Configured for instant deployment on **Vercel** (`vercel.json` + `/public`), **GitHub Pages**, or a local **Node.js** HTTP server (`server.js`) with fail-safe offline fallbacks.
+* **Resilient Multi-Platform Hosting**: Configured for instant deployment on **Vercel** (`vercel.json` + `/public`), **GitHub Pages**, or a local **Node.js** HTTP server (`server.js`) with fail-safe offline fallbacks and strict no-cache HTTP headers.
 ##
 ### 3. User Experience & Feasibility (20% Weight)
 * **Default Clean Architectural Canvas**: Upon initial visit, users start with a clean, empty room (`placedProducts = []`, `Investment: ₹0`, `Theme: None`, `Wet-Wall: N/A`, `NKBA: 100% Pass`), mirroring professional CAD design workflows.
