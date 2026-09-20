@@ -80,6 +80,7 @@
 
       const vanityObj = placedProducts.find(p => p.userData && p.userData.category === 'vanities');
       const vanityX = vanityObj ? vanityObj.position.x : 0.20;
+      const vanityZ = vanityObj ? vanityObj.position.z : -0.20;
 
       if (isMinimalist) {
         // Soft textured sand/grey floor runner rug in front of vanity
