@@ -51,8 +51,20 @@ const MIME = {
   '.svg': 'image/svg+xml'
 };
 
+function getGroqApiKey() {
+  if (fs.existsSync(envPath)) {
+    try {
+      const envContent = fs.readFileSync(envPath, 'utf8');
+      const match = envContent.match(/GROQ_API_KEY\s*=\s*(.*)/);
+      if (match) return match[1].trim().replace(/^['"]|['"]$/g, '');
+    } catch (e) {}
+  }
+  return process.env.GROQ_API_KEY || GROQ_API_KEY || '';
+}
+
 function callGroq(model, messages, temperature = 0.2) {
   return new Promise((resolve, reject) => {
+    const currentKey = getGroqApiKey();
     const postData = JSON.stringify({
       model,
       messages,
@@ -64,7 +76,7 @@ function callGroq(model, messages, temperature = 0.2) {
       path: '/openai/v1/chat/completions',
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${GROQ_API_KEY}`,
+        'Authorization': `Bearer ${currentKey}`,
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(postData)
       },
