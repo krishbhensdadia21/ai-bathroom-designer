@@ -183,8 +183,9 @@
       const mentionsVanity = nLow.includes('vanity') || nLow.includes('sink') || nLow.includes('basin') || nLow.includes('console') || nLow.includes('brazn') || nLow.includes('jacquard') || nLow.includes('tailored');
       const mentionsShower = nLow.includes('shower') || nLow.includes('wet room') || nLow.includes('wet-room') || nLow.includes('rainhead') || nLow.includes('revel') || nLow.includes('hydrorail');
       const mentionsMirror = nLow.includes('mirror') || nLow.includes('verdera');
-      const mentionsTub = nLow.includes('tub') || nLow.includes('bathtub') || nLow.includes('soak') || nLow.includes('evok');
+      const mentionsTub = nLow.includes('tub') || nLow.includes('bathtub') || nLow.includes('soak') || nLow.includes('evok') || nLow.includes('jacuzzi') || nLow.includes('whirlpool');
       const noShower = nLow.includes('no shower') || nLow.includes('without shower') || nLow.includes('no-shower') || nLow.includes('remove shower') || nLow.includes('omit shower');
+      const noTub = nLow.includes('no tub') || nLow.includes('without tub') || nLow.includes('no-tub') || nLow.includes('no bathtub') || nLow.includes('without bathtub') || nLow.includes('remove tub') || nLow.includes('omit tub');
 
       if (isPowder) {
         return {
@@ -196,24 +197,27 @@
         };
       }
 
+      // Detect explicit user product list (e.g. "with a bathtub, double vanity, smart toilet, and large mirror" or "1 toilet + 1 mirror + 1 vanity" or "toilet, basin, shower")
+      const hasExplicitList = nLow.includes('with ') || nLow.includes('having ') || nLow.includes('includes ') || nLow.includes('including ') || nLow.includes('+') || nLow.includes('only ') || nLow.includes('just ') || (mentionsTub && !mentionsShower);
+      const anyExplicitMention = mentionsToilet || mentionsVanity || mentionsShower || mentionsMirror || mentionsTub;
+
+      if (hasExplicitList && anyExplicitMention) {
+        return {
+          toilet: mentionsToilet,
+          vanity: mentionsVanity,
+          mirror: mentionsMirror || mentionsVanity,
+          shower: mentionsShower && !noShower,
+          tub: mentionsTub && !noTub
+        };
+      }
+
       if (noShower) {
         return {
           toilet: mentionsToilet || true,
           vanity: mentionsVanity || true,
           mirror: mentionsMirror || true,
           shower: false,
-          tub: mentionsTub
-        };
-      }
-
-      // If user specified targeted fixtures without shower (e.g. "toilet, vanity, and mirror")
-      if ((mentionsToilet || mentionsVanity) && !mentionsShower && (nLow.includes('only') || nLow.includes('just') || nLow.includes('toilet and vanity') || nLow.includes('toilet, vanity') || nLow.includes('with toilet') || nLow.includes('vanity, and mirror') || nLow.includes('vanity and mirror'))) {
-        return {
-          toilet: mentionsToilet,
-          vanity: mentionsVanity,
-          mirror: mentionsMirror || true,
-          shower: false,
-          tub: mentionsTub
+          tub: mentionsTub && !noTub
         };
       }
 
@@ -221,9 +225,9 @@
       return {
         toilet: true,
         vanity: true,
-        shower: true,
+        shower: !noShower,
         mirror: true,
-        tub: mentionsTub
+        tub: (!noTub && (mentionsTub || (nLow.includes('spa') || nLow.includes('master') || nLow.includes('luxury') || nLow.includes('zen'))))
       };
     }
 
