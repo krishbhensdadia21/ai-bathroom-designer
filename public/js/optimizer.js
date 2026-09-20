@@ -551,6 +551,15 @@
       const countBadge = document.getElementById('ai-bundle-count-badge');
       if (countBadge) countBadge.innerText = `${(alt.bundle || []).length} items`;
 
+      // Dynamically update budget utilization bar & percentage for selected tier
+      const targetBudget = (currentAiRecommendation.auto_adjusted_budget && currentAiRecommendation.auto_adjusted_budget.amountINR)
+        || (document.getElementById('ai-budget-slider') ? parseInt(document.getElementById('ai-budget-slider').value) : 350000);
+      const tierPct = alt.budget_utilization_pct || Math.min(100, Math.round(((alt.total_price_inr || 0) / targetBudget) * 100));
+      const bar = document.getElementById('ai-utilization-bar');
+      if (bar) bar.style.width = Math.min(100, tierPct) + '%';
+      const utilLabel = document.getElementById('ai-utilization-label');
+      if (utilLabel) utilLabel.innerText = `${tierPct}% of target budget`;
+
       // Render items with the 4 explainable badges
       const container = document.getElementById('ai-bundle-items-container');
       if (container) {

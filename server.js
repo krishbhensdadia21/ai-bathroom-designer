@@ -646,18 +646,42 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
 
   // 1. Resolve Pinned or Best-Fit Toilets
   let toiletLux = null, toiletSig = null, toiletEss = null;
+  const isWallHungPrompt = nLow.includes('wall-hung') || nLow.includes('wall hung') || nLow.includes('wallhung');
+  const isBudgetUnder350k = budgetNum <= 350000;
+  const isBudgetUnder300k = budgetNum <= 300000;
+
   if (incToilet) {
-    toiletLux = findCatalogItem(nLow.includes('innate') ? 'innate' : (nLow.includes('veil') ? 'veil' : (nLow.includes('reach') ? 'reach' : (nLow.includes('ove') ? 'ove' : (nLow.includes('vive') ? 'vive' : 'innate')))), 'toilets', 'veil-smart-toilet');
-    if (nLow.includes('veil') || !toiletLux) toiletLux = findCatalogItem('veil', 'toilets', 'veil-smart-toilet');
-    toiletSig = findCatalogItem(nLow.includes('reach') ? 'reach' : (nLow.includes('ove') ? 'ove' : (nLow.includes('vive') ? 'vive' : 'veil')), 'toilets', 'veil-smart-toilet');
+    toiletLux = findCatalogItem(
+      nLow.includes('innate') ? 'innate' : (nLow.includes('veil') ? 'veil' : (isBudgetUnder300k ? 'ove' : (nLow.includes('reach') ? 'reach' : (nLow.includes('ove') ? 'ove' : (nLow.includes('vive') ? 'vive' : 'veil'))))),
+      'toilets',
+      isBudgetUnder300k ? 'ove-one-piece-toilet' : 'veil-smart-toilet'
+    );
+    if ((nLow.includes('veil') && !isBudgetUnder300k) || !toiletLux) toiletLux = findCatalogItem('veil', 'toilets', 'veil-smart-toilet');
+
+    toiletSig = findCatalogItem(
+      (nLow.includes('reach') || isWallHungPrompt || (isBudgetUnder350k && !nLow.includes('veil')))
+        ? 'reach'
+        : (nLow.includes('ove') ? 'ove' : (nLow.includes('vive') ? 'vive' : 'veil')),
+      'toilets',
+      (isBudgetUnder350k || isWallHungPrompt) ? 'reach-one-piece-toilet' : 'veil-smart-toilet'
+    );
+
     toiletEss = findCatalogItem(nLow.includes('ove') ? 'ove' : 'reach', 'toilets', 'reach-one-piece-toilet');
   }
 
   // 2. Resolve Pinned or Best-Fit Vanities & Basins
   let vanityLux = null, vanitySig = null, vanityEss = null;
   if (incVanity) {
-    vanityLux = findCatalogItem(nLow.includes('brazn') ? 'brazn' : (nLow.includes('vessel') ? 'brazn' : (nLow.includes('forefront') ? 'forefront' : (nLow.includes('vive') ? 'vive' : (nLow.includes('trace') ? 'trace' : 'vive')))), 'vanities', 'vive-integrated-vanity');
-    vanitySig = findCatalogItem(nLow.includes('trace') ? 'trace' : (nLow.includes('brazn') ? 'brazn' : (nLow.includes('forefront') ? 'forefront' : 'vive')), 'vanities', 'vive-integrated-vanity');
+    vanityLux = findCatalogItem(
+      nLow.includes('brazn') ? 'brazn' : (nLow.includes('vessel') ? 'brazn' : (nLow.includes('forefront') ? 'forefront' : ((isBudgetUnder300k || nLow.includes('trace')) ? 'trace' : 'vive'))),
+      'vanities',
+      isBudgetUnder300k ? 'trace-integrated-vanity' : 'vive-integrated-vanity'
+    );
+    vanitySig = findCatalogItem(
+      (nLow.includes('trace') || (isBudgetUnder350k && !nLow.includes('vive'))) ? 'trace' : (nLow.includes('brazn') ? 'brazn' : (nLow.includes('forefront') ? 'forefront' : 'vive')),
+      'vanities',
+      isBudgetUnder350k ? 'trace-integrated-vanity' : 'vive-integrated-vanity'
+    );
     vanityEss = findCatalogItem('trace', 'vanities', 'trace-integrated-vanity');
   }
 
