@@ -585,12 +585,13 @@
         toilet: document.getElementById('prio-smart-toilet') ? document.getElementById('prio-smart-toilet').checked : false,
         shower: document.getElementById('prio-thermo-shower') ? document.getElementById('prio-thermo-shower').checked : false,
         vanity: document.getElementById('prio-dual-vanity') ? document.getElementById('prio-dual-vanity').checked : false,
-        mirror: document.getElementById('prio-smart-mirror') ? document.getElementById('prio-smart-mirror').checked : false
+        mirror: document.getElementById('prio-smart-mirror') ? document.getElementById('prio-smart-mirror').checked : false,
+        tub: document.getElementById('prio-soaking-tub') ? document.getElementById('prio-soaking-tub').checked : false
       };
       const notes = (document.getElementById('ai-custom-notes') ? document.getElementById('ai-custom-notes').value : '').trim();
 
       // If user unchecked everything and has no custom prompt, keep in empty state
-      if (!inclusions.toilet && !inclusions.shower && !inclusions.vanity && !inclusions.mirror && !notes) {
+      if (!inclusions.toilet && !inclusions.shower && !inclusions.vanity && !inclusions.mirror && !inclusions.tub && !notes) {
         isAiEngineReset = true;
         currentAiRecommendation = null;
         const emptyContainer = document.getElementById('ai-empty-container');
@@ -613,7 +614,8 @@
         toilet: document.getElementById('prio-smart-toilet') ? document.getElementById('prio-smart-toilet').checked : false,
         shower: document.getElementById('prio-thermo-shower') ? document.getElementById('prio-thermo-shower').checked : false,
         vanity: document.getElementById('prio-dual-vanity') ? document.getElementById('prio-dual-vanity').checked : false,
-        mirror: document.getElementById('prio-smart-mirror') ? document.getElementById('prio-smart-mirror').checked : false
+        mirror: document.getElementById('prio-smart-mirror') ? document.getElementById('prio-smart-mirror').checked : false,
+        tub: document.getElementById('prio-soaking-tub') ? document.getElementById('prio-soaking-tub').checked : false
       };
 
       // In Custom AI Prompt mode with notes entered, dynamically extract theme & inclusions from prompt
@@ -636,11 +638,12 @@
           if (document.getElementById('prio-thermo-shower')) document.getElementById('prio-thermo-shower').checked = !!inclusions.shower;
           if (document.getElementById('prio-dual-vanity')) document.getElementById('prio-dual-vanity').checked = !!inclusions.vanity;
           if (document.getElementById('prio-smart-mirror')) document.getElementById('prio-smart-mirror').checked = !!inclusions.mirror;
+          if (document.getElementById('prio-soaking-tub')) document.getElementById('prio-soaking-tub').checked = !!inclusions.tub;
         }
       }
 
       // Check if user has entered NO inputs at all
-      if (!inclusions.toilet && !inclusions.shower && !inclusions.vanity && !inclusions.mirror && !notes) {
+      if (!inclusions.toilet && !inclusions.shower && !inclusions.vanity && !inclusions.mirror && !inclusions.tub && !notes) {
         renderAiRecommendationResults({
           feasible: false,
           empty_selection: true,
@@ -681,6 +684,7 @@
       if (inclusions.shower) priorities.push('Thermostatic Shower');
       if (inclusions.vanity) priorities.push('Master Dual Vanity');
       if (inclusions.mirror) priorities.push('Alexa Voice Mirror');
+      if (inclusions.tub) priorities.push('Soaking Bathtub');
 
       const slider = document.getElementById('ai-budget-slider');
       let budgetNum = slider ? parseInt(slider.value) : 350000;
@@ -766,7 +770,8 @@
         toilet: document.getElementById('prio-smart-toilet') ? document.getElementById('prio-smart-toilet').checked : true,
         shower: document.getElementById('prio-thermo-shower') ? document.getElementById('prio-thermo-shower').checked : true,
         vanity: document.getElementById('prio-dual-vanity') ? document.getElementById('prio-dual-vanity').checked : true,
-        mirror: document.getElementById('prio-smart-mirror') ? document.getElementById('prio-smart-mirror').checked : false
+        mirror: document.getElementById('prio-smart-mirror') ? document.getElementById('prio-smart-mirror').checked : false,
+        tub: document.getElementById('prio-soaking-tub') ? document.getElementById('prio-soaking-tub').checked : false
       };
       return optimizeKohlerBundle(roomW, roomD, budgetNum, theme, [], '', inclusions);
     }

@@ -232,6 +232,8 @@
       if (chkVanity) chkVanity.checked = false;
       const chkMirror = document.getElementById('prio-smart-mirror');
       if (chkMirror) chkMirror.checked = false;
+      const chkTub = document.getElementById('prio-soaking-tub');
+      if (chkTub) chkTub.checked = false;
 
       // Reset Dimensions inputs in AI modal
       const aiW = document.getElementById('ai-input-width');

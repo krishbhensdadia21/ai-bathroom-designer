@@ -703,6 +703,7 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   // 4. Resolve Showers: Single product selection (DO NOT COMBINE shower products!)
   const wantsDoor = nLow.includes('shower door') || nLow.includes('glass door') || nLow.includes('pivot door') || nLow.includes('sliding door');
   const wantsEnclosure = nLow.includes('shower enclosure') || nLow.includes('enclosure');
+  const wantsGlassDoor = wantsDoor || wantsEnclosure;
   const wantsShowerheadExplicit = nLow.includes('showerhead') || nLow.includes('shower head') || nLow.includes('rainhead');
 
   let chosenShowerLux = null, chosenShowerSig = null, chosenShowerEss = null;
@@ -913,9 +914,11 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   }
 
   // Active default tier selection:
-  // Default to Signature tier (or Luxury if user explicitly asked for luxury in prompt)
-  let activeTierKey = (nLow.includes('luxury') || nLow.includes('premium') || nLow.includes('flagship')) ? 'luxury' : 'signature';
-  if (budgetNum < sigTotals.inr && essTotals.inr <= budgetNum) {
+  // Default to Signature Suite by default as requested
+  let activeTierKey = 'signature';
+  if (nLow.includes('luxury') || nLow.includes('flagship') || nLow.includes('opulent')) {
+    activeTierKey = 'luxury';
+  } else if (nLow.includes('essential') || nLow.includes('budget') || nLow.includes('economy')) {
     activeTierKey = 'essential';
   }
 
