@@ -3,7 +3,7 @@
 
 ### 🏛️ Program & Challenge Overview
 ##
-This project is submitted as an individual case study solution for the selection process of the **KOHLER-MITWPU AI Research Lab Program**.
+This project is submitted as an individual case study solution for the selection process of the **AI Research Lab Program**.
 
 * **Challenge Track**: **Track 1: AI Bathroom Designer & Planner**
 * **Core Objective**: Build an interactive AI design assistant that takes a customer's constraints (dimensions, budget limits, aesthetic themes, and device catalog specifications) and automates personalized product bundle recommendations.
@@ -303,7 +303,4 @@ node server.js
 
 ### 4. Open in Browser
 Navigate to **`http://localhost:3000`** in any web browser.
-##
-### 📄 License & Attribution
-##
-This project is open-source under the **MIT License**. Genuine Kohler product models, names, and design trademarks are property of **Kohler Co.** Submitted for the **KOHLER-MITWPU AI Research Lab Program**.
+
