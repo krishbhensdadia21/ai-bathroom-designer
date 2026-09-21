@@ -1,7 +1,7 @@
 # 📜 Prompts & System Instructions Documentation
 
 **Project:** KOHLER AI Bathroom Designer & Planner  
-**File:** `KOHLER_AI_Prompts_System_Instructions_Workflows.pdf`
+**File:** `AI_Prompts_System_Instructions_Workflows.pdf`
 
 ---
 
