@@ -971,7 +971,12 @@ function generateOfflineKohlerBundle(theme = 'Minimalist Modern', budgetNum = 35
   };
 }
 
-const PORT = 3000;
-server.listen(PORT, () => {
-  console.log(`KOHLER AI Bathroom Designer Server running on http://localhost:${PORT}`);
-});
+const PORT = process.env.PORT || 3000;
+if (require.main === module) {
+  server.listen(PORT, () => {
+    console.log(`AI Bathroom Designer Server running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = server;
+

@@ -5,6 +5,12 @@
       "includeFiles": "{public/**,components/**}"
     }
   },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/server.js"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

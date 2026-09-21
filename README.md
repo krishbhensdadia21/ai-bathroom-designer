@@ -1,11 +1,11 @@
-# KOHLER AI Bathroom Designer & Planner 
+# AI Bathroom Designer & 3D Space Planner 
 
 
 ### 🏛️ Program & Challenge Overview
 ##
 This project is submitted as an individual case study solution for the selection process of the **KOHLER-MITWPU AI Research Lab Program**.
 
-* **Challenge Track**: **Track 1: KOHLER AI Bathroom Designer & Planner**
+* **Challenge Track**: **Track 1: AI Bathroom Designer & Planner**
 * **Core Objective**: Build an interactive AI design assistant that takes a customer's constraints (dimensions, budget limits, aesthetic themes, and device catalog specifications) and automates personalized product bundle recommendations.
 * **Expected Outcome**: An intelligent recommendation engine that outputs optimized product combinations (smart toilets, vanities, thermostatic showers, mirrors, bathtubs) fitting exact physical space and budget parameters, accompanied by an interactive 3D WebGL representation
 ##
@@ -22,7 +22,7 @@ This project is submitted as an individual case study solution for the selection
 ### 📁 Repository Structure
 ##
 ```text
-kohler-ai-bathroom-designer/
+ai-bathroom-designer/
 ├── assets/                       # Official Submission Deliverables & Media
 │   ├── Prompts Documentation/    # Comprehensive AI system prompts & Pareto workflows PDF
 │   │   ├── KOHLER_AI_Prompts_System_Instructions_Workflows.pdf
@@ -84,7 +84,7 @@ kohler-ai-bathroom-designer/
 │   └── groq_client.py            # Zero-dependency Groq Cloud LLM client (Llama 3.3 70B)
 ├── tests/                        # Automated Python unit test suite (9 test cases)
 │   └── test_ai_engine.py         # Catalog, NLP, clearance & Pareto mathematical verification
-├── main.py                       # Python CLI runner & HTTP API microservice
+├── cli.py                        # Standalone Python CLI runner & evaluation utility
 ├── requirements.txt              # Zero-dependency Python specification (Standard Library only)
 ├── vercel.json                   # Vercel deployment routing & edge cache headers
 ├── package.json                  # Dependencies, test scripts & build lifecycle
@@ -267,7 +267,7 @@ Every product model in the planner corresponds to an authentic, production Kohle
 ##
 * **Frontend**: HTML5, Vanilla JavaScript (ES6+), CSS3, Tailwind CSS, Three.js (r128), FontAwesome 6 Pro
 * **Node.js Web Server**: Node.js HTTP Server (`server.js`) with Groq Llama 3.3 proxy & Prompt Guard
-* **Python AI Spatial Engine**: Python 3.8+ modular microservice & standalone CLI (`ai_engine/`, `main.py`)
+* **Python AI Spatial Engine**: Python 3.8+ modular microservice & standalone CLI (`ai_engine/`, `cli.py`)
 * **AI Model Engine**: Groq Cloud API (`llama-3.3-70b-versatile`)
 * **Security & Prompt Safety**: Meta Llama Prompt Guard 22M (`meta-llama/llama-prompt-guard-2-22m`)
 * **Testing & Quality Assurance**: Python `unittest` suite (9 test cases, 100% pass rate in <5ms)
@@ -281,8 +281,8 @@ Every product model in the planner corresponds to an authentic, production Kohle
 
 ### 1. Clone & Navigate
 ```bash
-git clone https://github.com/krishbhensdadia21/kohler-ai-bathroom-designer.git
-cd kohler-ai-bathroom-designer
+git clone https://github.com/krishbhensdadia21/ai-bathroom-designer.git
+cd ai-bathroom-designer
 ```
 
 ### 2. Configure Environment (Optional)
