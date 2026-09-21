@@ -1,0 +1,8 @@
+# Vercel deployment exclusions (keeps GitHub repository intact)
+main.py
+requirements.txt
+tests/
+docs/
+assets/
+*.pptx
+*.pdf

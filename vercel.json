@@ -1,5 +1,6 @@
 {
   "cleanUrls": true,
+  "buildCommand": "node build.js",
   "functions": {
     "server.js": {
       "includeFiles": "{public/**,components/**}"

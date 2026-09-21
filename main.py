@@ -26,6 +26,17 @@ from ai_engine import (
     KOHLER_CATALOG
 )
 
+# Standalone ASGI / WSGI application handler for serverless & cloud framework detection
+def app(environ_or_scope, start_response=None, receive=None, send=None):
+    """Top-level callable for serverless / ASGI / WSGI runtime detectors."""
+    if callable(start_response):
+        start_response("200 OK", [("Content-Type", "application/json; charset=utf-8")])
+        return [b'{"status":"active","service":"AI Bathroom Designer Python Engine"}']
+    async def asgi_handler(receive, send):
+        await send({"type": "http.response.start", "status": 200, "headers": [[b"content-type", b"application/json"]]})
+        await send({"type": "http.response.body", "body": b'{"status":"active","service":"AI Bathroom Designer Python Engine"}'})
+    return asgi_handler(receive, send)
+
 
 def run_cli(args):
     """Executes design suite generation in command-line mode."""

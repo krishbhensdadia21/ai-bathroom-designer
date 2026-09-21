@@ -84,7 +84,7 @@ ai-bathroom-designer/
 │   └── groq_client.py            # Zero-dependency Groq Cloud LLM client (Llama 3.3 70B)
 ├── tests/                        # Automated Python unit test suite (9 test cases)
 │   └── test_ai_engine.py         # Catalog, NLP, clearance & Pareto mathematical verification
-├── cli.py                        # Standalone Python CLI runner & evaluation utility
+├── main.py                       # Python CLI runner & evaluation utility
 ├── requirements.txt              # Zero-dependency Python specification (Standard Library only)
 ├── vercel.json                   # Vercel deployment routing & edge cache headers
 ├── package.json                  # Dependencies, test scripts & build lifecycle
@@ -267,7 +267,7 @@ Every product model in the planner corresponds to an authentic, production Kohle
 ##
 * **Frontend**: HTML5, Vanilla JavaScript (ES6+), CSS3, Tailwind CSS, Three.js (r128), FontAwesome 6 Pro
 * **Node.js Web Server**: Node.js HTTP Server (`server.js`) with Groq Llama 3.3 proxy & Prompt Guard
-* **Python AI Spatial Engine**: Python 3.8+ modular microservice & standalone CLI (`ai_engine/`, `cli.py`)
+* **Python AI Spatial Engine**: Python 3.8+ modular microservice & standalone CLI (`ai_engine/`, `main.py`)
 * **AI Model Engine**: Groq Cloud API (`llama-3.3-70b-versatile`)
 * **Security & Prompt Safety**: Meta Llama Prompt Guard 22M (`meta-llama/llama-prompt-guard-2-22m`)
 * **Testing & Quality Assurance**: Python `unittest` suite (9 test cases, 100% pass rate in <5ms)
