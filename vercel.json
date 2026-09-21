@@ -1,17 +1,7 @@
 {
-  "cleanUrls": true,
   "buildCommand": "node build.js",
-  "functions": {
-    "server.js": {
-      "includeFiles": "{public/**,components/**}"
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/server.js"
-    }
-  ],
+  "outputDirectory": "public",
+  "cleanUrls": true,
   "headers": [
     {
       "source": "/(.*)",
